@@ -1,19 +1,119 @@
+#Titan Robotics Team 2022: Data Analysis Module
+#Written by Arthur Lu & Jacob Levine
+#Notes:
+#   this should be imported as a python module using 'import analysis'
+#   this should be included in the local directory or environment variable
+#   this module has not been optimized for multhreaded computing
+#Number of easter eggs: 2
 
-#this should be imported as a python module using 'import analysis'
+#setup:
 
+__all__ = [
+    '_init_device',
+    'c_entities',
+    'nc_entities',
+    'obstacles',
+    'objectives',
+    'load_csv',
+    'basic_stats',
+    'z_score',
+    'stdev_z_split',
+    'histo_analysis', #histo_analysis_old is intentionally left out
+    'poly_regression',
+    'r_squared',
+    'rms',
+    'basic_analysis',
+    ]
+
+#now back to your regularly scheduled programming:
+
+
+import warnings
 import statistics
 import math
 import csv
 import functools
+import numpy as np
+import time
+import torch
+import scipy
+import matplotlib
+from sklearn import *
+
+def _init_device (setting, arg): #initiates computation device for ANNs
+    if setting == "cuda":
+        temp = setting + ":" + arg
+        the_device_woman = torch.device(temp if torch.cuda.is_available() else "cpu")
+        return the_device_woman #name that reference
+    elif setting == "cpu":
+        the_device_woman = torch.device("cpu")
+        return the_device_woman #name that reference
+    else:
+        return "error:specified device does not exist"
 
 class c_entities:
 
     c_names = []
     c_ids = []
     c_pos = []
-    c_porperties = []
+    c_properties = []
     c_logic = []
 
+    def debug(self):
+        print("c_entities has attributes names, ids, positions, properties, and logic. __init__ takes self, 1d array of names, 1d array of ids, 2d array of positions, nd array of properties, and nd array of logic")
+        return[self.c_names, self.c_ids, self.c_pos, self.c_properties, self.c_logic]
+    
+    def __init__(self, names, ids, pos, properties, logic):
+        self.c_names = names
+        self.c_ids = ids
+        self.c_pos = pos
+        self.c_properties = properties
+        self.c_logic = logic
+        return None
+        
+
+    def append(self, n_name, n_id, n_pos, n_property, n_logic):
+        self.c_names.append(n_name)
+        self.c_ids.append(n_id)
+        self.c_pos.append(n_pos)
+        self.c_properties.append(n_property)
+        self.c_logic.append(n_logic)
+        return None
+    
+    def edit(self, search, n_name, n_id, n_pos, n_property, n_logic):
+        position = 0
+        for i in range(0, len(self.c_ids), 1):
+            if self.c_ids[i] == search:
+                position = i
+        if n_name != "null":
+            self.c_names[position] = n_name
+    
+        if n_id != "null":
+            self.c_ids[position] = n_id
+    
+        if n_pos != "null":
+            self.c_pos[position] = n_pos
+    
+        if n_property != "null":
+            self.c_properties[position] = n_property
+    
+        if n_logic != "null":
+            self.c_logic[position] = n_logic
+    
+        return None
+    
+    def search(self, search):
+        position = 0
+        for i in range(0, len(self.c_ids), 1):
+            if self.c_ids[i] == search:
+                position = i
+
+        return [self.c_names[position], self.c_ids[position], self.c_pos[position], self.c_properties[position], self.c_logic[position]]    
+
+    def regurgitate(self):
+
+        return[self.c_names, self.c_ids, self.c_pos, self.c_properties, self.c_logic]
+    
 class nc_entities:
 
     c_names = []
@@ -23,7 +123,7 @@ class nc_entities:
     c_effects = []
 
     def debug(self):
-        print ("nc_entities (non-controlable entities) has attributes names, ids, positions, properties, and effects. __init__ takes self, 1d array of names, 1d array of ids, 2d array of psoitions, 2d array of properties, and 2d array of effects.")
+        print ("nc_entities (non-controlable entities) has attributes names, ids, positions, properties, and effects. __init__ takes self, 1d array of names, 1d array of ids, 2d array of positions, 2d array of properties, and 2d array of effects.")
         return[self.c_names, self.c_ids, self.c_pos, self.c_properties, self.c_effects]
 
     def __init__(self, names, ids, pos, properties, effects):
@@ -40,6 +140,8 @@ class nc_entities:
         self.c_pos.append(n_pos)
         self.c_properties.append(n_property)
         self.c_effects.append(n_effect)
+        
+        return None
 
     def edit(self, search, n_name, n_id, n_pos, n_property, n_effect):
         position = 0
@@ -70,6 +172,10 @@ class nc_entities:
                 position = i
 
         return [self.c_names[position], self.c_ids[position], self.c_pos[position], self.c_properties[position], self.c_effects[position]]        
+
+    def regurgitate(self):
+
+        return[self.c_names, self.c_ids, self.c_pos, self.c_properties, self.c_effects]
 
 class obstacles:
 
@@ -123,6 +229,10 @@ class obstacles:
                 position = i
 
         return [self.c_names[position], self.c_ids[position], self.c_perim[position], self.c_effects[position]]
+
+    def regurgitate(self):
+
+        return[self.c_names, self.c_ids, self.c_perim, self.c_effects]
 
 class objectives:
     
@@ -178,6 +288,10 @@ class objectives:
 
         return [self.c_names[position], self.c_ids[position], self.c_pos[position], self.c_effects[position]]
 
+    def regurgitate(self):
+
+        return[self.c_names, self.c_ids, self.c_pos, self.c_effects]
+    
 def load_csv(filepath):
     with open(filepath, newline = '') as csvfile:
         file_array = list(csv.reader(csvfile))
@@ -203,8 +317,17 @@ def basic_stats(data, mode, arg): # data=array, mode = ['1d':1d_basic_stats, 'co
             mode = statistics.mode(data_t)
         except:
             mode = None
-        stdev = statistics.stdev(data_t)
-        variance = statistics.variance(data_t)
+        try:
+            stdev = statistics.stdev(data)
+            
+        except:
+            
+            stdev = None
+        
+        try:
+            variance = statistics.variance(data_t)
+        except:
+            variance = None
         
         out = [mean, median, mode, stdev, variance]
 
@@ -216,7 +339,10 @@ def basic_stats(data, mode, arg): # data=array, mode = ['1d':1d_basic_stats, 'co
         c_data_sorted = []
         
         for i in data:
-            c_data.append(float(i[arg]))
+            try:
+                c_data.append(float(i[arg]))
+            except:
+                pass
             
         mean = statistics.mean(c_data)
         median = statistics.median(c_data)
@@ -224,8 +350,14 @@ def basic_stats(data, mode, arg): # data=array, mode = ['1d':1d_basic_stats, 'co
             mode = statistics.mode(c_data)
         except:
             mode = None
-        stdev = statistics.stdev(c_data)
-        variance = statistics.variance(c_data)
+        try:
+            stdev = statistics.stdev(c_data)
+        except:
+            stdev = None
+        try:
+            variance = statistics.variance(c_data)
+        except:
+            variance = None
         
         out = [mean, median, mode, stdev, variance]
 
@@ -244,8 +376,14 @@ def basic_stats(data, mode, arg): # data=array, mode = ['1d':1d_basic_stats, 'co
             mode = statistics.mode(r_data)
         except:
             mode = None
-        stdev = statistics.stdev(r_data)
-        variance = statistics.variance(r_data)
+        try:
+            stdev = statistics.stdev(r_data)
+        except:
+            stdev = None
+        try:
+            variance = statistics.variance(r_data)
+        except:
+            variance = None
         
         out = [mean, median, mode, stdev, variance]
 
@@ -253,11 +391,11 @@ def basic_stats(data, mode, arg): # data=array, mode = ['1d':1d_basic_stats, 'co
     else:
         return ["mode_error", "mode_error"]
     
-def z_score(point, mean, stdev):
+def z_score(point, mean, stdev): #returns z score with inputs of point, mean and standard deviation of spread
     score = (point - mean)/stdev
     return score
 
-def stdev_z_split(mean, stdev, delta, low_bound, high_bound):
+def stdev_z_split(mean, stdev, delta, low_bound, high_bound): #returns n-th percentile of spread given mean, standard deviation, lower z-score, and upper z-score
 
     z_split = []
 
@@ -275,7 +413,7 @@ def stdev_z_split(mean, stdev, delta, low_bound, high_bound):
 
     return z_split
 
-def histo_analysis(hist_data): #note: depreciated
+def histo_analysis_old(hist_data): #note: depreciated
 
     if hist_data == 'debug':
         return['lower estimate (5%)', 'lower middle estimate (25%)', 'middle estimate (50%)', 'higher middle estimate (75%)', 'high estimate (95%)', 'standard deviation', 'note: this has been depreciated']
@@ -286,6 +424,8 @@ def histo_analysis(hist_data): #note: depreciated
         
     derivative_sorted = sorted(derivative, key=int)
     mean_derivative = basic_stats(derivative_sorted, "1d", 0)[0]
+    
+    print(mean_derivative)
     stdev_derivative = basic_stats(derivative_sorted, "1d", 0)[3]
 
     low_bound = mean_derivative + -1.645 * stdev_derivative
@@ -302,10 +442,10 @@ def histo_analysis(hist_data): #note: depreciated
 
     return [low_est, lm_est, mid_est, hm_est, high_est, stdev_derivative]
 
-def histo_analysis_2(hist_data, delta, low_bound, high_bound):
+def histo_analysis(hist_data, delta, low_bound, high_bound):
 
     if hist_data == 'debug':
-        return ('returns list of predicted values based on historical data; input delta for delta step in z-score and lower and igher bounds in number for standard deviations')
+        return ('returns list of predicted values based on historical data; input delta for delta step in z-score and lower and higher bounds in number for standard deviations')
 
     derivative = []
 
@@ -322,15 +462,108 @@ def histo_analysis_2(hist_data, delta, low_bound, high_bound):
     i = low_bound
 
     while True:
+        
+        if i > high_bound:
+            break
 
-        pred_change = mean_derivative + i * stdev_derivative
+        try:
+            pred_change = mean_derivative + i * stdev_derivative
+            
+        except:
+            
+            pred_change = mean_derivative
 
         predictions.append(float(hist_data[-1:][0]) + pred_change)
 
         i = i + delta
 
-        if i > high_bound:
-
-            break
-
     return predictions
+
+def poly_regression(x, y, power):
+
+    if x == "null":
+
+        x = []
+
+        for i in range(len(y)):
+
+            x.append(i)
+
+    reg_eq = scipy.polyfit(x, y, deg = power)
+
+    print(reg_eq)
+
+    eq_str = ""
+
+    for i in range(0, len(reg_eq), 1):
+
+        if i < len(reg_eq)- 1:
+            eq_str = eq_str + str(reg_eq[i]) + "*(z**" + str(len(reg_eq) - i - 1) + ")+"
+        else:
+            eq_str = eq_str + str(reg_eq[i]) + "*(z**" + str(len(reg_eq) - i - 1) + ")"
+
+    vals = []
+
+    for i in range(0, len(x), 1):
+        print(x[i])
+        z = x[i]
+
+        exec("vals.append(" + eq_str + ")")
+
+    print(vals)
+
+    _rms = rms(vals, y)
+
+    r2_d2 = r_squared(vals, y) 
+
+    return [eq_str, _rms, r2_d2]
+
+def r_squared(predictions, targets): # assumes equal size inputs
+
+    out = metrics.r2_score(targets, predictions)
+
+    return out
+
+def rms(predictions, targets): # assumes equal size inputs
+
+    out = 0
+
+    _sum = 0
+
+    avg = 0
+
+    for i in range(0, len(targets), 1):
+
+        _sum = (targets[i] - predictions[i]) ** 2
+
+    avg = _sum/len(targets)
+
+    out = math.sqrt(avg)
+
+    return float(out)
+
+def basic_analysis(filepath): #assumes that rows are the independent variable and columns are the dependant. also assumes that time flows from lowest column to highest column.
+    
+    data = load_csv(filepath)
+    row = len(data)
+    
+    column = []
+    
+    for i in range(0, row, 1):
+        
+        column.append(len(data[i]))
+        
+    column_max = max(column)
+    row_b_stats = []
+    row_histo = []
+    
+    for i in range(0, row, 1):
+        row_b_stats.append(basic_stats(data, "row", i))
+        row_histo.append(histo_analysis(data[i], 0.67449, -0.67449, 0.67449))
+    
+    column_b_stats = []
+    
+    for i in range(0, column_max, 1):
+        column_b_stats.append(basic_stats(data, "column", i))
+    
+    return[row_b_stats, column_b_stats, row_histo]

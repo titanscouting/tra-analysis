@@ -4,7 +4,7 @@ def generate(filename, x, y, low, high):
 
     file = open(filename, "w")
 
-    for i in range (0, y - 1, 1):
+    for i in range (0, y, 1):
 
         temp = ""
         
