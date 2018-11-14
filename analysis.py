@@ -8,6 +8,13 @@
 
 #setup:
 
+__version__ = "1.0.3.001"
+
+__author__ = (
+    "Arthur Lu <arthurlu@ttic.edu>, "
+    "Jacob Levine <jlevine@ttic.edu>,"
+    )
+
 __all__ = [
     '_init_device',
     'c_entities',
@@ -18,7 +25,7 @@ __all__ = [
     'basic_stats',
     'z_score',
     'stdev_z_split',
-    'histo_analysis', #histo_analysis_old is intentionally left out
+    'histo_analysis', #histo_analysis_old is intentionally left out as it has been depreciated
     'poly_regression',
     'r_squared',
     'rms',
@@ -27,8 +34,6 @@ __all__ = [
 
 #now back to your regularly scheduled programming:
 
-
-import warnings
 import statistics
 import math
 import csv
