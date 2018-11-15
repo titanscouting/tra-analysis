@@ -45,6 +45,15 @@ import scipy
 import matplotlib
 from sklearn import *
 
+import collections
+import numbers
+
+from fractions import Fraction
+from decimal import Decimal
+from itertools import groupby
+from bisect import bisect_left, bisect_right
+
+
 def _init_device (setting, arg): #initiates computation device for ANNs
     if setting == "cuda":
         temp = setting + ":" + arg
