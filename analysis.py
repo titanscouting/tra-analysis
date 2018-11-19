@@ -8,7 +8,7 @@
 
 #setup:
 
-__version__ = "1.0.3.005"
+__version__ = "1.0.3.006"
 
 __author__ = (
     "Arthur Lu <arthurlu@ttic.edu>, "
@@ -35,23 +35,24 @@ __all__ = [
 
 #now back to your regularly scheduled programming:
 
-#import statistics <-- statistics.py functions have been integrated into analysis.py as of v 1.0.3.002
-import math
+#imports (now in alphabetical order! v 1.0.3.006):
+
+from bisect import bisect_left, bisect_right
+import collections
 import csv
+from decimal import Decimal
 import functools
+from fractions import Fraction
+from itertools import groupby
+import math
+import matplotlib
+import numbers
 import numpy as np
+import scipy
+from sklearn import *
+#import statistics <-- statistics.py functions have been integrated into analysis.py as of v 1.0.3.002
 import time
 import torch
-import scipy
-import matplotlib
-from sklearn import *
-import collections
-import numbers
-from fractions import Fraction
-from decimal import Decimal
-from itertools import groupby
-from bisect import bisect_left, bisect_right
-
 
 def _init_device (setting, arg): #initiates computation device for ANNs
     if setting == "cuda":
