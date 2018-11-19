@@ -64,7 +64,7 @@ def _init_device (setting, arg): #initiates computation device for ANNs
         the_device_woman = torch.device("cpu")
         return the_device_woman #name that reference
     else:
-        return "error:specified device does not exist"
+        return "error: specified device does not exist"
 
 class c_entities:
 
@@ -611,7 +611,6 @@ def generate_data(filename, x, y, low, high):
 
         temp = temp + str(random.uniform(low, high))
         file.write(temp + "\n")
-
 
 #statistics def below------------------------------------------------------------------------------------------------------------------------------------------------------
 
