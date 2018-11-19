@@ -8,7 +8,7 @@
 
 #setup:
 
-__version__ = "1.0.3.006"
+__version__ = "1.0.3.007"
 
 __author__ = (
     "Arthur Lu <arthurlu@ttic.edu>, "
@@ -48,6 +48,7 @@ import math
 import matplotlib
 import numbers
 import numpy as np
+import random
 import scipy
 from sklearn import *
 #import statistics <-- statistics.py functions have been integrated into analysis.py as of v 1.0.3.002
@@ -583,6 +584,34 @@ def basic_analysis(filepath): #assumes that rows are the independent variable an
         column_b_stats.append(basic_stats(data, "column", i))
     
     return[row_b_stats, column_b_stats, row_histo]
+
+def benchmark(x, y):
+
+    start_g = time.time()
+    generate_data("benchmark_data.csv", x, y, -10, 10)
+    end_g = time.time()
+
+    start_a = time.time()
+    basic_analysis("benchmark_data.csv")
+    end_a = time.time()
+
+    return [(end_g - start_g), (end_a - start_a)]
+
+def generate_data(filename, x, y, low, high):
+
+    file = open(filename, "w")
+
+    for i in range (0, y, 1):
+
+        temp = ""
+        
+        for j in range (0, x - 1, 1):
+
+            temp = str(random.uniform(low, high)) +  ","  + temp
+
+        temp = temp + str(random.uniform(low, high))
+        file.write(temp + "\n")
+
 
 #statistics def below------------------------------------------------------------------------------------------------------------------------------------------------------
 
