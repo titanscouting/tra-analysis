@@ -64,7 +64,7 @@ def _init_device (setting, arg): #initiates computation device for ANNs
         the_device_woman = torch.device("cpu")
         return the_device_woman #name that reference
     else:
-        return "error: specified device does not exist"
+        return "error: specified device does not exist (this is a bad error, either a non existent device was selected or the current device does not have a CPU."
 
 class c_entities:
 
