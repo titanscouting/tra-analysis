@@ -10,6 +10,51 @@
 
 __version__ = "1.0.4.001"
 
+__changelog__ = """changelog:
+1.0.4.002:
+    - added __changelog__
+    - updated debug function with log and exponential regressions
+1.0.4.001:
+    - added log regressions
+    - added exponential regressions
+    - added log_regression and exp_regression to __all__
+1.0.3.008:
+    - added debug function to further consolidate functions
+1.0.3.007:
+    - added builtin benchmark function
+    - added builtin random (linear) data generation function
+    - added device initialization (_init_device)
+1.0.3.006:
+    - reorganized the imports list to be in alphabetical order
+    - added search and regurgitate functions to c_entities, nc_entities, obstacles, objectives
+1.0.3.005:
+    - major bug fixes
+    - updated historical analysis
+    - depreciated old historical analysis
+1.0.3.004:
+    - added __version__, __author__, __all__
+    - added polynomial regression
+    - added root mean squared function
+    - added r squared function
+1.0.3.003:
+    - bug fixes
+    - added c_entities
+1.0.3.002:
+    - bug fixes
+    - added nc_entities, obstacles, objectives
+    - consolidated statistics.py to analysis.py
+1.0.3.001:
+    - compiled 1d, column, and row basic stats into basic stats function
+1.0.3.000:
+    - added historical analysis function
+1.0.2.xxx:
+    - added z score test
+1.0.1.xxx:
+    - major bug fixes
+1.0.0.xxx:
+    - added loading csv
+    - added 1d, column, row basic stats""" #changelog should be viewed using print(analysis.__changelog__)
+
 __author__ = (
     "Arthur Lu <arthurlu@ttic.edu>, "
     "Jacob Levine <jlevine@ttic.edu>,"
@@ -564,7 +609,7 @@ def exp_regression(x, y, base):
 
     for i in range(len(y)):
 
-        y_fit.append(np.log(y[i]) / np.log(base))
+        y_fit.append(np.log(y[i]) / np.log(base)) #change of base for logs
 
     reg_eq = np.polyfit(x, y_fit, 1, w=np.sqrt(y)) # y = base ^ (reg_eq[0] * x) * base ^ (reg_eq[1])
 
@@ -713,6 +758,10 @@ def debug():
     print("--------------------------------")
 
     print(poly_regression([1, 2, 3, 4, 5], [1, 2, 4, 8, 16], 2))
+
+    print(log_regression([1, 2, 3, 4], [2, 4, 8, 16], 2.717))
+
+    print(exp_regression([1, 2, 3, 4], [2, 4, 8, 16], 2.717))
 
 #statistics def below------------------------------------------------------------------------------------------------------------------------------------------------------
 
