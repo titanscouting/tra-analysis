@@ -8,7 +8,7 @@
 
 #setup:
 
-__version__ = "1.0.3.008"
+__version__ = "1.0.4.001"
 
 __author__ = (
     "Arthur Lu <arthurlu@ttic.edu>, "
@@ -27,6 +27,8 @@ __all__ = [
     'stdev_z_split',
     'histo_analysis', #histo_analysis_old is intentionally left out as it has been depreciated since v 1.0.1.005
     'poly_regression',
+    'log_regression',
+    'exp_regression',
     'r_squared',
     'rms',
     'basic_analysis',
@@ -508,8 +510,6 @@ def poly_regression(x, y, power):
 
     reg_eq = scipy.polyfit(x, y, deg = power)
 
-    print(reg_eq)
-
     eq_str = ""
 
     for i in range(0, len(reg_eq), 1):
@@ -522,12 +522,9 @@ def poly_regression(x, y, power):
     vals = []
 
     for i in range(0, len(x), 1):
-        print(x[i])
         z = x[i]
 
         exec("vals.append(" + eq_str + ")")
-
-    print(vals)
 
     _rms = rms(vals, y)
 
@@ -535,6 +532,58 @@ def poly_regression(x, y, power):
 
     return [eq_str, _rms, r2_d2]
 
+def log_regression(x, y, base):
+
+    x_fit = []
+
+    for i in range(len(x)):
+
+        x_fit.append(np.log(x[i]) / np.log(base)) #change of base for logs
+
+    reg_eq = np.polyfit(x_fit, y, 1) # y = reg_eq[0] * log(x, base) + reg_eq[1]
+
+    eq_str = str(reg_eq[0]) + "* (np.log(z) / np.log(" + str(base) +"))+" + str(reg_eq[1])
+
+    vals = []
+
+    for i in range(len(x)):
+
+        z = x[i]
+
+        exec("vals.append(" + eq_str + ")")
+
+    _rms = rms(vals, y)
+
+    r2_d2 = r_squared(vals, y)
+
+    return [eq_str, _rms, r2_d2]
+
+def exp_regression(x, y, base):
+
+    y_fit = []
+
+    for i in range(len(y)):
+
+        y_fit.append(np.log(y[i]) / np.log(base))
+
+    reg_eq = np.polyfit(x, y_fit, 1, w=np.sqrt(y)) # y = base ^ (reg_eq[0] * x) * base ^ (reg_eq[1])
+
+    eq_str = "(" + str(base) + "**(" + str(reg_eq[0]) + "*z))*(" + str(base) + "**(" + str(reg_eq[1]) + "))"
+
+    vals = []
+
+    for i in range(len(x)):
+
+        z = x[i]
+
+        exec("vals.append(" + eq_str + ")")
+
+    _rms = rms(vals, y)
+
+    r2_d2 = r_squared(vals, y)
+
+    return [eq_str, _rms, r2_d2]
+    
 def r_squared(predictions, targets): # assumes equal size inputs
 
     out = metrics.r2_score(targets, predictions)
