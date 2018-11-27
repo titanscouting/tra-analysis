@@ -102,16 +102,26 @@ from sklearn import *
 import time
 import torch
 
+class error(ValueError):
+
+    pass
+
 def _init_device (setting, arg): #initiates computation device for ANNs
     if setting == "cuda":
         temp = setting + ":" + str(arg)
-        the_device_woman = torch.device(temp if torch.cuda.is_available() else "cpu")
-        return the_device_woman #name that reference
+        try:
+            the_device_woman = torch.device(temp if torch.cuda.is_available() else "cpu")
+            return the_device_woman #name that reference
+        except:
+            raise error("could not assign cuda or cpu")
     elif setting == "cpu":
-        the_device_woman = torch.device("cpu")
-        return the_device_woman #name that reference
+        try:
+            the_device_woman = torch.device("cpu")
+            return the_device_woman #name that reference
+        except:
+            raise error("could not assign cpu")
     else:
-        return "error: specified device does not exist (this is a bad error, either a non existent device was selected or the current device does not have a CPU."
+        raise error("specified device does not exist")
 
 class c_entities:
 
@@ -359,6 +369,8 @@ def load_csv(filepath):
         file_array = list(csv.reader(csvfile))
     return file_array
 
+def load_csv():
+
 def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, 'column':c_basic_stats, 'row':r_basic_stats], arg for mode 1 or mode 2 for column or row
     
     if method == 'debug':
@@ -451,7 +463,7 @@ def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, '
 
         return out
     else:
-        return ["ERROR: method error"]
+        raise error("method error")
     
 def z_score(point, mean, stdev): #returns z score with inputs of point, mean and standard deviation of spread
     score = (point - mean)/stdev
