@@ -8,9 +8,12 @@
 
 #setup:
 
-__version__ = "1.0.6.001"
+__version__ = "1.0.6.002"
 
+#changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.0.6.002:
+	- bug fixes
 1.0.6.001:
     - corrected __all__ to contain all of the functions
 1.0.6.000:
@@ -62,7 +65,7 @@ __changelog__ = """changelog:
     - major bug fixes
 1.0.0.xxx:
     - added loading csv
-    - added 1d, column, row basic stats""" #changelog should be viewed using print(analysis.__changelog__)
+    - added 1d, column, row basic stats""" 
 
 __author__ = (
     "Arthur Lu <arthurlu@ttic.edu>, "
@@ -392,7 +395,6 @@ def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, '
         data_t = []
 
         for i in range (0, len(data) - 1, 1):
-
             data_t.append(float(data[i]))
     
         _mean = mean(data_t)
@@ -402,20 +404,15 @@ def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, '
         except:
             _mode = None
         try:
-            _stdev = stdev(data_t)
-            
+            _stdev = stdev(data_t)  
         except:
-            
             _stdev = None
-        
         try:
             _variance = variance(data_t)
         except:
             _variance = None
-        
-        out = [_mean, _median, _mode, _stdev, _variance]
 
-        return out
+        return [_mean, _median, _mode, _stdev, _variance]
     
     elif method == "column" or method == 1:
 
@@ -442,10 +439,8 @@ def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, '
             _variance = variance(c_data)
         except:
             _variance = None
-        
-        out = [_mean, _median, _mode, _stdev, _variance]
 
-        return out
+        return [_mean, _median, _mode, _stdev, _variance]
 
     elif method == "row" or method == 2:
 
@@ -469,9 +464,8 @@ def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, '
         except:
             _variance = None
         
-        out = [_mean, _median, _mode, _stdev, _variance]
+        return [_mean, _median, _mode, _stdev, _variance]
 
-        return out
     else:
         raise error("method error")
     
@@ -482,17 +476,12 @@ def z_score(point, mean, stdev): #returns z score with inputs of point, mean and
 def stdev_z_split(mean, stdev, delta, low_bound, high_bound): #returns n-th percentile of spread given mean, standard deviation, lower z-score, and upper z-score
 
     z_split = []
-
     i = low_bound
 
     while True:
-
         z_split.append(float((1 / (stdev * math.sqrt(2 * math.pi))) * math.e ** (-0.5 * (((i - mean) / stdev) ** 2))))
-
         i = i + delta
-
         if i > high_bound:
-
             break
 
     return z_split
@@ -546,15 +535,12 @@ def histo_analysis(hist_data, delta, low_bound, high_bound):
     i = low_bound
 
     while True:
-        
         if i > high_bound:
             break
 
         try:
             pred_change = mean_derivative + i * stdev_derivative
-            
-        except:
-            
+        except:  
             pred_change = mean_derivative
 
         predictions.append(float(hist_data[-1:][0]) + pred_change)
@@ -566,21 +552,16 @@ def histo_analysis(hist_data, delta, low_bound, high_bound):
 def poly_regression(x, y, power):
 
     if x == "null": #if x is 'null', then x will be filled with integer points between 1 and the size of y
-
         x = []
 
         for i in range(len(y)):
-
             print(i)
-
             x.append(i+1)
 
     reg_eq = scipy.polyfit(x, y, deg = power)
-
     eq_str = ""
 
     for i in range(0, len(reg_eq), 1):
-
         if i < len(reg_eq)- 1:
             eq_str = eq_str + str(reg_eq[i]) + "*(z**" + str(len(reg_eq) - i - 1) + ")+"
         else:
@@ -590,11 +571,9 @@ def poly_regression(x, y, power):
 
     for i in range(0, len(x), 1):
         z = x[i]
-
         exec("vals.append(" + eq_str + ")")
 
     _rms = rms(vals, y)
-
     r2_d2 = r_squared(vals, y) 
 
     return [eq_str, _rms, r2_d2]
@@ -604,23 +583,17 @@ def log_regression(x, y, base):
     x_fit = []
 
     for i in range(len(x)):
-
         x_fit.append(np.log(x[i]) / np.log(base)) #change of base for logs
 
     reg_eq = np.polyfit(x_fit, y, 1) # y = reg_eq[0] * log(x, base) + reg_eq[1]
-
     eq_str = str(reg_eq[0]) + "* (np.log(z) / np.log(" + str(base) +"))+" + str(reg_eq[1])
-
     vals = []
 
     for i in range(len(x)):
-
         z = x[i]
-
         exec("vals.append(" + eq_str + ")")
 
     _rms = rms(vals, y)
-
     r2_d2 = r_squared(vals, y)
 
     return [eq_str, _rms, r2_d2]
@@ -629,24 +602,18 @@ def exp_regression(x, y, base):
 
     y_fit = []
 
-    for i in range(len(y)):
-        
+    for i in range(len(y)):       
         y_fit.append(np.log(y[i]) / np.log(base)) #change of base for logs
 
     reg_eq = np.polyfit(x, y_fit, 1, w=np.sqrt(y_fit)) # y = base ^ (reg_eq[0] * x) * base ^ (reg_eq[1])
-
     eq_str = "(" + str(base) + "**(" + str(reg_eq[0]) + "*z))*(" + str(base) + "**(" + str(reg_eq[1]) + "))"
-
     vals = []
 
     for i in range(len(x)):
-
         z = x[i]
-
         exec("vals.append(" + eq_str + ")")
 
     _rms = rms(vals, y)
-
     r2_d2 = r_squared(vals, y)
 
     return [eq_str, _rms, r2_d2]
@@ -660,25 +627,17 @@ def r_squared(predictions, targets): # assumes equal size inputs
 def rms(predictions, targets): # assumes equal size inputs
 
     out = 0
-
     _sum = 0
 
-    avg = 0
-
     for i in range(0, len(targets), 1):
-
         _sum = (targets[i] - predictions[i]) ** 2
 
-    avg = _sum/len(targets)
-
-    out = math.sqrt(avg)
-
-    return float(out)
+    return float(math.sqrt(_sum/len(targets)))
 
 def calc_overfit(equation, rms_train, r2_train, x_test, y_test):
 
-    #overfit = performance(train) - performance(test) where performance is r^2
-    #overfir = error(train) - error(test) where error is rms
+    #performance overfit = performance(train) - performance(test) where performance is r^2
+    #error overfit = error(train) - error(test) where error is rms; biased towards smaller values
 
     vals = []
 
@@ -696,107 +655,79 @@ def calc_overfit(equation, rms_train, r2_train, x_test, y_test):
 def strip_data(data, mode):
 
     if mode == "adam": #x is the row number, y are the data
-
         pass
 
     if mode == "eve": #x are the data, y is the column number
-
         pass
 
     else:
-
         raise error("mode error")
 
 def optimize_regression(x, y, _range, resolution):#_range in poly regression is the range of powers tried, and in log/exp it is the inverse of the stepsize taken from -1000 to 1000
 #usage not: for demonstration purpose only, performance is shit
     if type(resolution) != int:
-
         raise error("resolution must be int")
-    x = x
-    y = y
 
-    x_train = []
-    y_train = []
+    x_train = x
+    y_train = y
 
     x_test = []
     y_test = []
 
     for i in range (0, math.floor(len(x) * 0.4), 1):
-
         index = random.randint(0, len(x) - 1)
 
         x_test.append(x[index])
         y_test.append(y[index])
 
-        x.pop(index)
-        y.pop(index)
-
-    x_train = x
-    y_train = y
+        x_train.pop(index)
+        y_train.pop(index)
 
     #print(x_train, x_test)
     #print(y_train, y_test)
     
     eqs = []
-
     rmss = []
-
     r2s = []
 
     for i in range (0, _range + 1, 1):
-
         eqs.append(poly_regression(x_train, y_train, i)[0])
         rmss.append(poly_regression(x_train, y_train, i)[1])
         r2s.append(poly_regression(x_train, y_train, i)[2])
 
     for i in range (1, 100 * resolution + 1):
-
         try:
-        
             eqs.append(exp_regression(x_train, y_train, float(i / resolution))[0])
             rmss.append(exp_regression(x_train, y_train, float(i / resolution))[1])
             r2s.append(exp_regression(x_train, y_train, float(i / resolution))[2])
-
         except:
-
             pass
 
     for i in range (1, 100 * resolution + 1):
-
         try:
-
             eqs.append(log_regression(x_train, y_train, float(i / resolution))[0])
             rmss.append(log_regression(x_train, y_train, float(i / resolution))[1])
             r2s.append(log_regression(x_train, y_train, float(i / resolution))[2])
-
         except:
-
             pass
     
     for i in range (0, len(eqs), 1): #marks all equations where r2 = 1 as they 95% of the time overfit the data
-
         if r2s[i] == 1:
-
             eqs[i] = ""
             rmss[i] = ""
             r2s[i] = ""
 
     while True: #removes all equations marked for removal
-
-        try:
-        
+        try:        
             eqs.remove('')
             rmss.remove('')
             r2s.remove('')
-
         except:
-
             break
 
     overfit = []
 
     for i in range (0, len(eqs), 1):
-
         overfit.append(calc_overfit(eqs[i], rmss[i], r2s[i], x_test, y_test))
             
     return eqs, rmss, r2s, overfit
@@ -808,8 +739,7 @@ def basic_analysis(filepath): #assumes that rows are the independent variable an
     
     column = []
     
-    for i in range(0, row, 1):
-        
+    for i in range(0, row, 1):        
         column.append(len(data[i]))
         
     column_max = max(column)
@@ -844,11 +774,9 @@ def generate_data(filename, x, y, low, high):
     file = open(filename, "w")
 
     for i in range (0, y, 1):
-
         temp = ""
         
         for j in range (0, x - 1, 1):
-
             temp = str(random.uniform(low, high)) +  ","  + temp
 
         temp = temp + str(random.uniform(low, high))
@@ -906,18 +834,15 @@ def debug():
     print("--------------------------------")
 
     print(poly_regression([1, 2, 3, 4, 5], [1, 2, 4, 8, 16], 2))
-
     print(log_regression([1, 2, 3, 4], [2, 4, 8, 16], 2.717))
-
     print(exp_regression([1, 2, 3, 4], [2, 4, 8, 16], 2.717))
 
     x, y, z = optimize_regression([0, 1, 2, 3, 4], [1, 2, 4, 7, 19], 10, 100)
 
     for i in range(0, len(x), 1):
-
         print(str(x[i]) + " | " + str(y[i]) + " | " + str(z[i]))
 
-#statistics def below------------------------------------------------------------------------------------------------------------------------------------------------------
+#statistics def below
 
 class StatisticsError(ValueError):
     pass
