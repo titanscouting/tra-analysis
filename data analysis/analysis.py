@@ -7,10 +7,13 @@
 #number of easter eggs: 2
 #setup:
 
-__version__ = "1.0.6.005"
+__version__ = "1.0.7.000"
 
 #changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.0.7.000:
+	- added tanh_regression (logistical regression)
+	- bug fixes
 1.0.6.005:
 	- added z_normalize function to normalize dataset
 	- bug fixes
@@ -119,6 +122,7 @@ import numbers
 import numpy as np
 import random
 import scipy
+from scipy.optimize import curve_fit
 from sklearn import *
 #import statistics <-- statistics.py functions have been integrated into analysis.py as of v 1.0.3.002
 import time
@@ -640,7 +644,7 @@ def log_regression(x, y, base):
     _rms = rms(vals, y)
     r2_d2 = r_squared(vals, y)
 
-    return [eq_str, _rms, r2_d2]
+    return eq_str, _rms, r2_d2
 
 def exp_regression(x, y, base):
 
@@ -660,7 +664,26 @@ def exp_regression(x, y, base):
     _rms = rms(vals, y)
     r2_d2 = r_squared(vals, y)
 
-    return [eq_str, _rms, r2_d2]
+    return eq_str, _rms, r2_d2
+
+def tanh_regression(x, y):
+
+	def tanh (x, a, b, c, d):
+
+		return a * np.tanh(b * (x - c)) + d
+
+	reg_eq = np.float64(curve_fit(tanh, np.array(x), np.array(y))[0]).tolist()
+	eq_str = str(reg_eq[0]) + " * np.tanh(" + str(reg_eq[1]) + "*(z - " + str(reg_eq[2]) + ")) + " + str(reg_eq[3])
+	vals = []
+
+	for i in range(len(x)):
+		z = x[i]
+		exec("vals.append(" + eq_str + ")")
+
+	_rms = rms(vals, y)
+	r2_d2 = r_squared(vals, y)
+
+	return eq_str, _rms, r2_d2
     
 def r_squared(predictions, targets): # assumes equal size inputs
 
@@ -735,25 +758,36 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
     r2s = []
 
     for i in range (0, _range + 1, 1):
-        eqs.append(poly_regression(x_train, y_train, i)[0])
-        rmss.append(poly_regression(x_train, y_train, i)[1])
-        r2s.append(poly_regression(x_train, y_train, i)[2])
+    	x, y, z = poly_regression(x_train, y_train, i)
+    	eqs.append(x)
+    	rmss.append(y)
+    	r2s.append(z)
 
     for i in range (1, 100 * resolution + 1):
         try:
-            eqs.append(exp_regression(x_train, y_train, float(i / resolution))[0])
-            rmss.append(exp_regression(x_train, y_train, float(i / resolution))[1])
-            r2s.append(exp_regression(x_train, y_train, float(i / resolution))[2])
+        	x, y, z = exp_regression(x_train, y_train, float(i / resolution))
+        	eqs.append(x)
+        	rmss.append(y)
+        	r2s.append(z)
         except:
             pass
 
     for i in range (1, 100 * resolution + 1):
         try:
-            eqs.append(log_regression(x_train, y_train, float(i / resolution))[0])
-            rmss.append(log_regression(x_train, y_train, float(i / resolution))[1])
-            r2s.append(log_regression(x_train, y_train, float(i / resolution))[2])
+        	x, y, z = log_regression(x_train, y_train, float(i / resolution))
+        	eqs.append(x)
+        	rmss.append(y)
+        	r2s.append(z)
         except:
             pass
+
+    x, y, z = tanh_regression(x_train, y_train)
+
+    eqs.append(x)
+    rmss.append(y)
+    r2s.append(z)
+
+    print (eqs[::-1])
     
     for i in range (0, len(eqs), 1): #marks all equations where r2 = 1 as they 95% of the time overfit the data
         if r2s[i] == 1:
