@@ -8,9 +8,11 @@
 
 #setup:
 
-__version__ = "1.0.6.000"
+__version__ = "1.0.6.001"
 
 __changelog__ = """changelog:
+1.0.6.001:
+    - corrected __all__ to contain all of the functions
 1.0.6.000:
     - added calc_overfit, which calculates two measures of overfit, error and performance
     - added calculating overfit to optimize_regression
@@ -83,6 +85,9 @@ __all__ = [
     'exp_regression',
     'r_squared',
     'rms',
+    'calc_overfit',
+    'strip_data',
+    'optimize_regression',
     'basic_analysis',
     #all statistics functions left out due to integration in other functions
     ]
