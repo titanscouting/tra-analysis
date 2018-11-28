@@ -4,14 +4,17 @@
 #   this should be imported as a python module using 'import analysis'
 #   this should be included in the local directory or environment variable
 #   this module has not been optimized for multhreaded computing
-#Number of easter eggs: 2
-
+#number of easter eggs: 2
 #setup:
 
-__version__ = "1.0.6.002"
+__version__ = "1.0.6.004"
 
 #changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.0.6.004:
+	- bug fixes
+1.0.6.003:
+	- bug fixes
 1.0.6.002:
 	- bug fixes
 1.0.6.001:
@@ -65,7 +68,8 @@ __changelog__ = """changelog:
     - major bug fixes
 1.0.0.xxx:
     - added loading csv
-    - added 1d, column, row basic stats""" 
+    - added 1d, column, row basic stats
+""" 
 
 __author__ = (
     "Arthur Lu <arthurlu@ttic.edu>, "
@@ -118,7 +122,6 @@ import time
 import torch
 
 class error(ValueError):
-
     pass
 
 def _init_device (setting, arg): #initiates computation device for ANNs
@@ -198,7 +201,6 @@ class c_entities:
         return [self.c_names[position], self.c_ids[position], self.c_pos[position], self.c_properties[position], self.c_logic[position]]    
 
     def regurgitate(self):
-
         return[self.c_names, self.c_ids, self.c_pos, self.c_properties, self.c_logic]
     
 class nc_entities:
@@ -318,7 +320,6 @@ class obstacles:
         return [self.c_names[position], self.c_ids[position], self.c_perim[position], self.c_effects[position]]
 
     def regurgitate(self):
-
         return[self.c_names, self.c_ids, self.c_perim, self.c_effects]
 
 class objectives:
@@ -376,7 +377,6 @@ class objectives:
         return [self.c_names[position], self.c_ids[position], self.c_pos[position], self.c_effects[position]]
 
     def regurgitate(self):
-
         return[self.c_names, self.c_ids, self.c_pos, self.c_effects]
     
 def load_csv(filepath):
@@ -784,7 +784,7 @@ def generate_data(filename, x, y, low, high):
 
 def debug():
 
-    data = load_csv('data.txt')
+    data = load_csv('data.csv')
 
     print("--------------------------------")
 
