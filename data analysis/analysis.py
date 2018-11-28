@@ -618,10 +618,10 @@ def exp_regression(x, y, base):
     y_fit = []
 
     for i in range(len(y)):
-
+        
         y_fit.append(np.log(y[i]) / np.log(base)) #change of base for logs
 
-    reg_eq = np.polyfit(x, y_fit, 1, w=np.sqrt(y)) # y = base ^ (reg_eq[0] * x) * base ^ (reg_eq[1])
+    reg_eq = np.polyfit(x, y_fit, 1, w=np.sqrt(y_fit)) # y = base ^ (reg_eq[0] * x) * base ^ (reg_eq[1])
 
     eq_str = "(" + str(base) + "**(" + str(reg_eq[0]) + "*z))*(" + str(base) + "**(" + str(reg_eq[1]) + "))"
 
@@ -662,6 +662,64 @@ def rms(predictions, targets): # assumes equal size inputs
     out = math.sqrt(avg)
 
     return float(out)
+
+def strip_data(data, mode):
+
+    if mode == "adam": #x is the row number, y are the data
+
+        pass
+
+    if mode == "eve": #x are the data, y is the column number
+
+        pass
+
+    else:
+
+        raise error("mode error")
+
+def optimize_regression(x, y, _range, resolution):#_range in poly regression is the range of powers tried, and in log/exp it is the inverse of the stepsize taken from -1000 to 1000
+
+    if type(resolution) != int:
+
+        raise error("resolution must be int")
+
+    eqs = []
+
+    rmss = []
+
+    r2s = []
+
+    for i in range (0, _range + 1, 1):
+
+        eqs.append(poly_regression(x, y, i)[0])
+        rmss.append(poly_regression(x, y, i)[1])
+        r2s.append(poly_regression(x, y, i)[2])
+
+    for i in range (1, 100 * resolution + 1):
+
+        try:
+        
+            eqs.append(exp_regression(x, y, float(i / resolution))[0])
+            rmss.append(exp_regression(x, y, float(i / resolution))[1])
+            r2s.append(exp_regression(x, y, float(i / resolution))[2])
+
+        except:
+
+            pass
+
+    for i in range (1, 100 * resolution + 1):
+
+        try:
+
+            eqs.append(log_regression(x, y, float(i / resolution))[0])
+            rmss.append(log_regression(x, y, float(i / resolution))[1])
+            r2s.append(log_regression(x, y, float(i / resolution))[2])
+
+        except:
+
+            pass
+
+    return [eqs, rmss, r2s]
 
 def basic_analysis(filepath): #assumes that rows are the independent variable and columns are the dependant. also assumes that time flows from lowest column to highest column.
     
