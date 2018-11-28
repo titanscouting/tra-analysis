@@ -8,9 +8,12 @@
 
 #setup:
 
-__version__ = "1.0.5.000"
+__version__ = "1.0.6.000"
 
 __changelog__ = """changelog:
+1.0.6.000:
+    - added calc_overfit, which calculates two measures of overfit, error and performance
+    - added calculating overfit to optimize_regression
 1.0.5.000:
     - added optimize_regression function, which is a sample function to find the optimal regressions
     - optimize_regression function filters out some overfit funtions (functions with r^2 = 1)
@@ -667,6 +670,24 @@ def rms(predictions, targets): # assumes equal size inputs
 
     return float(out)
 
+def calc_overfit(equation, rms_train, r2_train, x_test, y_test):
+
+    #overfit = performance(train) - performance(test) where performance is r^2
+    #overfir = error(train) - error(test) where error is rms
+
+    vals = []
+
+    for i in range(0, len(x_test), 1):
+
+        z = x_test[i]
+
+        exec("vals.append(" + equation + ")")
+        
+    r2_test = r_squared(vals, y_test)
+    rms_test = rms(vals, y_test)
+
+    return rms_train - rms_test, r2_train - r2_test
+
 def strip_data(data, mode):
 
     if mode == "adam": #x is the row number, y are the data
@@ -686,7 +707,31 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
     if type(resolution) != int:
 
         raise error("resolution must be int")
+    x = x
+    y = y
 
+    x_train = []
+    y_train = []
+
+    x_test = []
+    y_test = []
+
+    for i in range (0, math.floor(len(x) * 0.4), 1):
+
+        index = random.randint(0, len(x) - 1)
+
+        x_test.append(x[index])
+        y_test.append(y[index])
+
+        x.pop(index)
+        y.pop(index)
+
+    x_train = x
+    y_train = y
+
+    #print(x_train, x_test)
+    #print(y_train, y_test)
+    
     eqs = []
 
     rmss = []
@@ -695,17 +740,17 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
 
     for i in range (0, _range + 1, 1):
 
-        eqs.append(poly_regression(x, y, i)[0])
-        rmss.append(poly_regression(x, y, i)[1])
-        r2s.append(poly_regression(x, y, i)[2])
+        eqs.append(poly_regression(x_train, y_train, i)[0])
+        rmss.append(poly_regression(x_train, y_train, i)[1])
+        r2s.append(poly_regression(x_train, y_train, i)[2])
 
     for i in range (1, 100 * resolution + 1):
 
         try:
         
-            eqs.append(exp_regression(x, y, float(i / resolution))[0])
-            rmss.append(exp_regression(x, y, float(i / resolution))[1])
-            r2s.append(exp_regression(x, y, float(i / resolution))[2])
+            eqs.append(exp_regression(x_train, y_train, float(i / resolution))[0])
+            rmss.append(exp_regression(x_train, y_train, float(i / resolution))[1])
+            r2s.append(exp_regression(x_train, y_train, float(i / resolution))[2])
 
         except:
 
@@ -715,9 +760,9 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
 
         try:
 
-            eqs.append(log_regression(x, y, float(i / resolution))[0])
-            rmss.append(log_regression(x, y, float(i / resolution))[1])
-            r2s.append(log_regression(x, y, float(i / resolution))[2])
+            eqs.append(log_regression(x_train, y_train, float(i / resolution))[0])
+            rmss.append(log_regression(x_train, y_train, float(i / resolution))[1])
+            r2s.append(log_regression(x_train, y_train, float(i / resolution))[2])
 
         except:
 
@@ -742,8 +787,14 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
         except:
 
             break
+
+    overfit = []
+
+    for i in range (0, len(eqs), 1):
+
+        overfit.append(calc_overfit(eqs[i], rmss[i], r2s[i], x_test, y_test))
             
-    return eqs, rmss, r2s
+    return eqs, rmss, r2s, overfit
 
 def basic_analysis(filepath): #assumes that rows are the independent variable and columns are the dependant. also assumes that time flows from lowest column to highest column.
     
@@ -854,6 +905,12 @@ def debug():
     print(log_regression([1, 2, 3, 4], [2, 4, 8, 16], 2.717))
 
     print(exp_regression([1, 2, 3, 4], [2, 4, 8, 16], 2.717))
+
+    x, y, z = optimize_regression([0, 1, 2, 3, 4], [1, 2, 4, 7, 19], 10, 100)
+
+    for i in range(0, len(x), 1):
+
+        print(str(x[i]) + " | " + str(y[i]) + " | " + str(z[i]))
 
 #statistics def below------------------------------------------------------------------------------------------------------------------------------------------------------
 
