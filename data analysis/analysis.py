@@ -7,10 +7,13 @@
 #number of easter eggs: 2
 #setup:
 
-__version__ = "1.0.6.004"
+__version__ = "1.0.6.005"
 
 #changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.0.6.005:
+	- added z_normalize function to normalize dataset
+	- bug fixes
 1.0.6.004:
 	- bug fixes
 1.0.6.003:
@@ -412,7 +415,7 @@ def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, '
         except:
             _variance = None
 
-        return [_mean, _median, _mode, _stdev, _variance]
+        return _mean, _median, _mode, _stdev, _variance
     
     elif method == "column" or method == 1:
 
@@ -440,7 +443,7 @@ def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, '
         except:
             _variance = None
 
-        return [_mean, _median, _mode, _stdev, _variance]
+        return _mean, _median, _mode, _stdev, _variance
 
     elif method == "row" or method == 2:
 
@@ -464,7 +467,7 @@ def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, '
         except:
             _variance = None
         
-        return [_mean, _median, _mode, _stdev, _variance]
+        return _mean, _median, _mode, _stdev, _variance
 
     else:
         raise error("method error")
@@ -472,6 +475,47 @@ def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, '
 def z_score(point, mean, stdev): #returns z score with inputs of point, mean and standard deviation of spread
     score = (point - mean)/stdev
     return score
+
+def z_normalize(x, y, mode): #mode is either 'x' or 'y' or 'both' depending on the variable(s) to be normalized
+
+	x_norm = []
+	y_norm = []
+
+	mean = 0
+	stdev = 0
+
+	if mode == 'x':
+		_mean, _median, _mode, _stdev, _variance = basic_stats(x, "1d", 0)
+
+		for i in range (0, len(x), 1):
+			x_norm.append(z_score(x[i], _mean, _stdev))
+
+		return x_norm, y
+
+	if mode == 'y': 
+		_mean, _median, _mode, _stdev, _variance = basic_stats(y, "1d", 0)
+
+		for i in range (0, len(y), 1):
+			y_norm.append(z_score(y[i], _mean, _stdev))
+
+		return x, y_norm
+
+	if mode == 'both':
+		_mean, _median, _mode, _stdev, _variance = basic_stats(x, "1d", 0)
+
+		for i in range (0, len(x), 1):
+			x_norm.append(z_score(x[i], _mean, _stdev))
+
+		_mean, _median, _mode, _stdev, _variance = basic_stats(y, "1d", 0)
+
+		for i in range (0, len(y), 1):
+			y_norm.append(z_score(y[i], _mean, _stdev))
+
+		return x_norm, y_norm
+
+	else:
+
+		return error('method error')
 
 def stdev_z_split(mean, stdev, delta, low_bound, high_bound): #returns n-th percentile of spread given mean, standard deviation, lower z-score, and upper z-score
 
@@ -837,10 +881,10 @@ def debug():
     print(log_regression([1, 2, 3, 4], [2, 4, 8, 16], 2.717))
     print(exp_regression([1, 2, 3, 4], [2, 4, 8, 16], 2.717))
 
-    x, y, z = optimize_regression([0, 1, 2, 3, 4], [1, 2, 4, 7, 19], 10, 100)
+    x, y, z, o = optimize_regression([0, 1, 2, 3, 4], [1, 2, 4, 7, 19], 10, 100)
 
     for i in range(0, len(x), 1):
-        print(str(x[i]) + " | " + str(y[i]) + " | " + str(z[i]))
+        print(str(x[i]) + " | " + str(y[i]) + " | " + str(z[i]) + " | " + str(o[i][0]) + " | " + str(o[i][1]))
 
 #statistics def below
 
