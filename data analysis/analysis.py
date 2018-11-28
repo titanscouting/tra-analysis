@@ -8,9 +8,13 @@
 
 #setup:
 
-__version__ = "1.0.4.001"
+__version__ = "1.0.5.000"
 
 __changelog__ = """changelog:
+1.0.5.000:
+    - added optimize_regression function, which is a sample function to find the optimal regressions
+    - optimize_regression function filters out some overfit funtions (functions with r^2 = 1)
+    - planned addition: overfit detection in the optimize_regression function
 1.0.4.002:
     - added __changelog__
     - updated debug function with log and exponential regressions
@@ -678,7 +682,7 @@ def strip_data(data, mode):
         raise error("mode error")
 
 def optimize_regression(x, y, _range, resolution):#_range in poly regression is the range of powers tried, and in log/exp it is the inverse of the stepsize taken from -1000 to 1000
-
+#usage not: for demonstration purpose only, performance is shit
     if type(resolution) != int:
 
         raise error("resolution must be int")
@@ -718,8 +722,28 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
         except:
 
             pass
+    
+    for i in range (0, len(eqs), 1): #marks all equations where r2 = 1 as they 95% of the time overfit the data
 
-    return [eqs, rmss, r2s]
+        if r2s[i] == 1:
+
+            eqs[i] = ""
+            rmss[i] = ""
+            r2s[i] = ""
+
+    while True: #removes all equations marked for removal
+
+        try:
+        
+            eqs.remove('')
+            rmss.remove('')
+            r2s.remove('')
+
+        except:
+
+            break
+            
+    return eqs, rmss, r2s
 
 def basic_analysis(filepath): #assumes that rows are the independent variable and columns are the dependant. also assumes that time flows from lowest column to highest column.
     
