@@ -120,6 +120,7 @@ import math
 import matplotlib
 import numbers
 import numpy as np
+import pandas
 import random
 import scipy
 from scipy.optimize import curve_fit
