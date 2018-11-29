@@ -7,10 +7,12 @@
 #number of easter eggs: 2
 #setup:
 
-__version__ = "1.0.7.001"
+__version__ = "1.0.7.002"
 
 #changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.0.7.002:
+	- bug fixes
 1.0.7.001:
 	- bug fixes
 1.0.7.000:
@@ -622,7 +624,11 @@ def poly_regression(x, y, power):
 
     for i in range(0, len(x), 1):
         z = x[i]
-        exec("vals.append(" + eq_str + ")")
+
+        try:
+        	exec("vals.append(" + eq_str + ")")
+        except:
+        	pass
 
     _rms = rms(vals, y)
     r2_d2 = r_squared(vals, y) 
@@ -631,43 +637,57 @@ def poly_regression(x, y, power):
 
 def log_regression(x, y, base):
 
-    x_fit = []
+	x_fit = []
+	
+	for i in range(len(x)):
+		try:
+			x_fit.append(np.log(x[i]) / np.log(base)) #change of base for logs
+		except:
+			pass
 
-    for i in range(len(x)):
-        x_fit.append(np.log(x[i]) / np.log(base)) #change of base for logs
+	reg_eq = np.polyfit(x_fit, y, 1) # y = reg_eq[0] * log(x, base) + reg_eq[1]
+	q_str = str(reg_eq[0]) + "* (np.log(z) / np.log(" + str(base) +"))+" + str(reg_eq[1])
+	vals = []
 
-    reg_eq = np.polyfit(x_fit, y, 1) # y = reg_eq[0] * log(x, base) + reg_eq[1]
-    eq_str = str(reg_eq[0]) + "* (np.log(z) / np.log(" + str(base) +"))+" + str(reg_eq[1])
-    vals = []
+	for i in range(len(x)):
+		z = x[i]
 
-    for i in range(len(x)):
-        z = x[i]
-        exec("vals.append(" + eq_str + ")")
+		try:
+			exec("vals.append(" + eq_str + ")")
+		except:
+			pass
 
-    _rms = rms(vals, y)
-    r2_d2 = r_squared(vals, y)
+	_rms = rms(vals, y)
+	r2_d2 = r_squared(vals, y)
 
-    return eq_str, _rms, r2_d2
+	return eq_str, _rms, r2_d2
 
 def exp_regression(x, y, base):
 
-    y_fit = []
+	y_fit = []
 
-    for i in range(len(y)):       
-        y_fit.append(np.log(y[i]) / np.log(base)) #change of base for logs
+	for i in range(len(y)):
+		try:       
+			y_fit.append(np.log(y[i]) / np.log(base)) #change of base for logs
+		except:
+			pass
 
-    reg_eq = np.polyfit(x, y_fit, 1, w=np.sqrt(y_fit)) # y = base ^ (reg_eq[0] * x) * base ^ (reg_eq[1])
-    eq_str = "(" + str(base) + "**(" + str(reg_eq[0]) + "*z))*(" + str(base) + "**(" + str(reg_eq[1]) + "))"
-    vals = []
+	reg_eq = np.polyfit(x, y_fit, 1, w=np.sqrt(y_fit)) # y = base ^ (reg_eq[0] * x) * base ^ (reg_eq[1])
+	eq_str = "(" + str(base) + "**(" + str(reg_eq[0]) + "*z))*(" + str(base) + "**(" + str(reg_eq[1]) + "))"
+	vals = []
 
-    for i in range(len(x)):
-        z = x[i]
-        exec("vals.append(" + eq_str + ")")
+	for i in range(len(x)):
+		z = x[i]
 
-    _rms = rms(vals, y)
-    r2_d2 = r_squared(vals, y)
+		try:
+			exec("vals.append(" + eq_str + ")")
+		except:
+			pass
 
-    return eq_str, _rms, r2_d2
+	_rms = rms(vals, y)
+	r2_d2 = r_squared(vals, y)
+
+	return eq_str, _rms, r2_d2
 
 def tanh_regression(x, y):
 
@@ -681,7 +701,11 @@ def tanh_regression(x, y):
 
 	for i in range(len(x)):
 		z = x[i]
-		exec("vals.append(" + eq_str + ")")
+		try:
+			exec("vals.append(" + eq_str + ")")
+		except:
+			pass
+
 	_rms = rms(vals, y)
 	r2_d2 = r_squared(vals, y)
 
@@ -785,8 +809,6 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
     eqs.append(x)
     rmss.append(y)
     r2s.append(z)
-
-    print (eqs[::-1])
     
     for i in range (0, len(eqs), 1): #marks all equations where r2 = 1 as they 95% of the time overfit the data
         if r2s[i] == 1:
@@ -914,7 +936,7 @@ def debug():
     print(log_regression([1, 2, 3, 4], [2, 4, 8, 16], 2.717))
     print(exp_regression([1, 2, 3, 4], [2, 4, 8, 16], 2.717))
 
-    x, y, z, o = optimize_regression([0, 1, 2, 3, 4], [1, 2, 4, 7, 19], 10, 100)
+    x, y, z, o = optimize_regression([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [1, 2, 4, 7, 19, 22, 30, 50, 60, 80], 10, 10)
 
     for i in range(0, len(x), 1):
         print(str(x[i]) + " | " + str(y[i]) + " | " + str(z[i]) + " | " + str(o[i][0]) + " | " + str(o[i][1]))
