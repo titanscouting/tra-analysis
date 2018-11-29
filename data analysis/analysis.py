@@ -678,7 +678,7 @@ def tanh_regression(x, y):
 
 	for i in range(len(x)):
 		z = x[i]
-		exec("vals.append(" + eq_str + ")")
+		exec("vals.append(" + eq_str + ")") in globals(), locals()
 
 	_rms = rms(vals, y)
 	r2_d2 = r_squared(vals, y)
@@ -838,11 +838,11 @@ def basic_analysis(filepath): #assumes that rows are the independent variable an
 def benchmark(x, y):
 
     start_g = time.time()
-    generate_data("benchmark_data.csv", x, y, -10, 10)
+    generate_data("data.csv", x, y, -10, 10)
     end_g = time.time()
 
     start_a = time.time()
-    basic_analysis("benchmark_data.csv")
+    basic_analysis("data.csv")
     end_a = time.time()
 
     return [(end_g - start_g), (end_a - start_a)]
