@@ -7,10 +7,12 @@
 #number of easter eggs: 2
 #setup:
 
-__version__ = "1.0.7.000"
+__version__ = "1.0.7.001"
 
 #changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.0.7.001:
+	- bug fixes
 1.0.7.000:
 	- added tanh_regression (logistical regression)
 	- bug fixes
@@ -687,13 +689,10 @@ def tanh_regression(x, y):
     
 def r_squared(predictions, targets): # assumes equal size inputs
 
-    out = metrics.r2_score(targets, predictions)
-
-    return out
+    return metrics.r2_score(targets, predictions)
 
 def rms(predictions, targets): # assumes equal size inputs
 
-    out = 0
     _sum = 0
 
     for i in range(0, len(targets), 1):
