@@ -679,8 +679,7 @@ def tanh_regression(x, y):
 
 	for i in range(len(x)):
 		z = x[i]
-		exec("vals.append(" + eq_str + ")") in globals(), locals()
-
+		exec("vals.append(" + eq_str + ")")
 	_rms = rms(vals, y)
 	r2_d2 = r_squared(vals, y)
 
