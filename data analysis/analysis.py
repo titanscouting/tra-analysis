@@ -859,11 +859,11 @@ def basic_analysis(filepath): #assumes that rows are the independent variable an
 def benchmark(x, y):
 
     start_g = time.time()
-    generate_data("data.csv", x, y, -10, 10)
+    generate_data("data/data.csv", x, y, -10, 10)
     end_g = time.time()
 
     start_a = time.time()
-    basic_analysis("data.csv")
+    basic_analysis("data/data.csv")
     end_a = time.time()
 
     return [(end_g - start_g), (end_a - start_a)]
@@ -883,7 +883,7 @@ def generate_data(filename, x, y, low, high):
 
 def debug():
 
-    data = load_csv('data.csv')
+    data = load_csv('data/data.csv')
 
     print("--------------------------------")
 
