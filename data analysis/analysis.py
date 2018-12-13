@@ -122,6 +122,7 @@ from fractions import Fraction
 from itertools import groupby
 import math
 import matplotlib
+from multiprocessing import Process
 import numbers
 import numpy as np
 import pandas
@@ -833,28 +834,28 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
 
 def basic_analysis(filepath): #assumes that rows are the independent variable and columns are the dependant. also assumes that time flows from lowest column to highest column.
     
-    data = load_csv(filepath)
-    row = len(data)
+	data = load_csv(filepath)
+	row = len(data)
     
-    column = []
+	column = []
     
-    for i in range(0, row, 1):        
-        column.append(len(data[i]))
+	for i in range(0, row, 1):        
+		column.append(len(data[i]))
         
-    column_max = max(column)
-    row_b_stats = []
-    row_histo = []
+	column_max = max(column)
+	row_b_stats = []
+	row_histo = []
     
-    for i in range(0, row, 1):
-        row_b_stats.append(basic_stats(data, "row", i))
-        row_histo.append(histo_analysis(data[i], 0.67449, -0.67449, 0.67449))
+	for i in range(0, row, 1):
+		row_b_stats.append(basic_stats(data, "row", i))
+		row_histo.append(histo_analysis(data[i], 0.67449, -0.67449, 0.67449))
     
-    column_b_stats = []
+	column_b_stats = []
     
-    for i in range(0, column_max, 1):
-        column_b_stats.append(basic_stats(data, "column", i))
+	for i in range(0, column_max, 1):
+		column_b_stats.append(basic_stats(data, "column", i))
     
-    return[row_b_stats, column_b_stats, row_histo]
+	return[row_b_stats, column_b_stats, row_histo]
 
 def benchmark(x, y):
 
