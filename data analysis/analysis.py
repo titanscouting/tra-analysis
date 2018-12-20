@@ -145,9 +145,8 @@ class error(ValueError):
 
 def _init_device (setting, arg): #initiates computation device for ANNs
     if setting == "cuda":
-        temp = setting + ":" + str(arg)
         try: 
-            return torch.device(temp if torch.cuda.is_available() else "cpu")
+            return torch.device(setting + ":" + str(arg) if torch.cuda.is_available() else "cpu")
         except:
             raise error("could not assign cuda or cpu")
     elif setting == "cpu":
