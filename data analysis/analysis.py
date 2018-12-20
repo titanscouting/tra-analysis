@@ -7,10 +7,16 @@
 #number of easter eggs: 2
 #setup:
 
-__version__ = "1.0.7.002"
+__version__ = "1.0.8.000"
 
 #changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.0.8.000:
+	- depreciated histo_analysis_old
+	- depreciated debug
+	- altered basic_analysis to take array data instead of filepath
+	- refactor
+	- optimization
 1.0.7.002:
 	- bug fixes
 1.0.7.001:
@@ -140,15 +146,13 @@ class error(ValueError):
 def _init_device (setting, arg): #initiates computation device for ANNs
     if setting == "cuda":
         temp = setting + ":" + str(arg)
-        try:
-            the_device_woman = torch.device(temp if torch.cuda.is_available() else "cpu")
-            return the_device_woman #name that reference
+        try: 
+            return torch.device(temp if torch.cuda.is_available() else "cpu")
         except:
             raise error("could not assign cuda or cpu")
     elif setting == "cpu":
         try:
-            the_device_woman = torch.device("cpu")
-            return the_device_woman #name that reference
+            return torch.device("cpu")
         except:
             raise error("could not assign cpu")
     else:
@@ -400,8 +404,7 @@ def load_csv(filepath):
 def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, 'column':c_basic_stats, 'row':r_basic_stats], arg for mode 1 or mode 2 for column or row
     
     if method == 'debug':
-        out = "basic_stats requires 3 args: data, mode, arg; where data is data to be analyzed, mode is an int from 0 - 2 depending on type of analysis (by column or by row) and is only applicable to 2d arrays (for 1d arrays use mode 1), and arg is row/column number for mode 1 or mode 2; function returns: [mean, median, mode, stdev, variance]"
-        return out
+        return "basic_stats requires 3 args: data, mode, arg; where data is data to be analyzed, mode is an int from 0 - 2 depending on type of analysis (by column or by row) and is only applicable to 2d arrays (for 1d arrays use mode 1), and arg is row/column number for mode 1 or mode 2; function returns: [mean, median, mode, stdev, variance]"
 
     if method == "1d" or method == 0:
 
@@ -540,6 +543,7 @@ def stdev_z_split(mean, stdev, delta, low_bound, high_bound): #returns n-th perc
 
     return z_split
 
+"""
 def histo_analysis_old(hist_data): #note: depreciated since v 1.0.1.005
 
     if hist_data == 'debug':
@@ -568,6 +572,7 @@ def histo_analysis_old(hist_data): #note: depreciated since v 1.0.1.005
     high_est = float(hist_data[-1:][0]) + high_bound
 
     return [low_est, lm_est, mid_est, hm_est, high_est, stdev_derivative]
+""" 
 
 def histo_analysis(hist_data, delta, low_bound, high_bound):
 
@@ -832,11 +837,39 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
             
     return eqs, rmss, r2s, overfit
 
-def basic_analysis(filepath): #assumes that rows are the independent variable and columns are the dependant. also assumes that time flows from lowest column to highest column.
-    
-	data = load_csv(filepath)
+def select_best_regression(eqs, rmss, r2s, overfit, selector):
+
+	b_eq = ""
+	b_rms = 0
+	b_r2 = 0
+	b_overfit = 0
+
+	ind = 0
+
+	if selector == "min_overfit":
+
+		ind = np.argmax(overfit)
+
+		b_eq = eqs[ind]
+		b_rms = rmss[ind]
+		b_r2 = r2s[ind]
+		b_overfit = overfit[ind]
+
+	if selector == "max_rmss":
+
+		ind = np.argmax(rmss)
+
+		b_eq = eqs[ind]
+		b_rms = rmss[ind]
+		b_r2 = r2s[ind]
+		b_overfit = overfit[ind]
+
+	return b_eq, b_rms, b_r2, b_overfit
+
+
+def basic_analysis(data): #assumes that rows are the independent variable and columns are the dependant. also assumes that time flows from lowest column to highest column.
+
 	row = len(data)
-    
 	column = []
     
 	for i in range(0, row, 1):        
@@ -856,6 +889,7 @@ def basic_analysis(filepath): #assumes that rows are the independent variable an
 		column_b_stats.append(basic_stats(data, "column", i))
     
 	return[row_b_stats, column_b_stats, row_histo]
+
 
 def benchmark(x, y):
 
@@ -882,6 +916,7 @@ def generate_data(filename, x, y, low, high):
         temp = temp + str(random.uniform(low, high))
         file.write(temp + "\n")
 
+"""
 def debug():
 
     data = load_csv('data/data.csv')
@@ -941,6 +976,7 @@ def debug():
 
     for i in range(0, len(x), 1):
         print(str(x[i]) + " | " + str(y[i]) + " | " + str(z[i]) + " | " + str(o[i][0]) + " | " + str(o[i][1]))
+"""
 
 #statistics def below
 
