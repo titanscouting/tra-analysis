@@ -7,10 +7,13 @@
 #number of easter eggs: 2
 #setup:
 
-__version__ = "1.0.8.000"
+__version__ = "1.0.8.001"
 
 #changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.0.8.001:
+	- refactors
+	- bugfixes
 1.0.8.000:
 	- depreciated histo_analysis_old
 	- depreciated debug
