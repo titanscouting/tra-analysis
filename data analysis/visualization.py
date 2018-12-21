@@ -125,6 +125,7 @@ def kmeans(data, num_clusters):
 #Spectral Clustering- Seems to work really well
 def spectral(data, num_clusters):
     td_norm=StandardScaler().fit_transform(data)
-    db = SpectralClustering(n_clusters=num_clusters).fit(td)
+    db = SpectralClustering(n_clusters=num_clusters, eigen_solver='arpack',
+        affinity="nearest_neighbors").fit(td)
     y=db.labels_.astype(np.int)
     return y
