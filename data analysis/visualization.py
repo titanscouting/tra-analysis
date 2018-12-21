@@ -34,7 +34,6 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA, KernelPCA, IncrementalPCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import AffinityPropagation, DBSCAN, KMeans, SpectralClustering
-import statistics
 
 #bar of x,y
 def bar_graph(x,y):
@@ -125,7 +124,6 @@ def kmeans(data, num_clusters):
 #Spectral Clustering- Seems to work really well
 def spectral(data, num_clusters):
     td_norm=StandardScaler().fit_transform(data)
-    db = SpectralClustering(n_clusters=num_clusters, eigen_solver='arpack',
-        affinity="nearest_neighbors").fit(td)
+    db = SpectralClustering(n_clusters=num_clusters).fit(td)
     y=db.labels_.astype(np.int)
     return y
