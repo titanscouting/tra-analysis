@@ -1,7 +1,7 @@
 #Titan Robotics Team 2022: TBA Requests Module
 #Written by Arthur Lu & Jacob Levine
 #Notes:
-#   this should be imported as a python module using 'import visualization'
+#   this should be imported as a python module using 'import tbarequest'
 #   this should be included in the local directory or environment variable
 #   this module has not been optimized for multhreaded computing
 #Number of easter eggs: none yet
