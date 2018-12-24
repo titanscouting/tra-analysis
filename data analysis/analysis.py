@@ -7,10 +7,12 @@
 #number of easter eggs: 2
 #setup:
 
-__version__ = "1.0.8.001"
+__version__ = "1.0.8.002"
 
 #changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.0.8.002:
+	- updated __all__ correctly to contain changes made in v 1.0.8.000 and v 1.0.8.001
 1.0.8.001:
 	- refactors
 	- bugfixes
@@ -104,6 +106,7 @@ __all__ = [
     'load_csv',
     'basic_stats',
     'z_score',
+    'z_normalize',
     'stdev_z_split',
     'histo_analysis', #histo_analysis_old is intentionally left out as it has been depreciated since v 1.0.1.005
     'poly_regression',
@@ -114,6 +117,7 @@ __all__ = [
     'calc_overfit',
     'strip_data',
     'optimize_regression',
+    'select_best_regression',
     'basic_analysis',
     #all statistics functions left out due to integration in other functions
     ]
