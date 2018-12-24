@@ -60,7 +60,7 @@ def line_plot(x,y):
 def regression_comp(x,y,reg):
     x=np.asarray(x)
     y=np.asarray(y)
-    regx=np.arange(x.min(),x.max(),(x.max()-x.min())/1000))
+    regx=np.arange(x.min(),x.max(),(x.max()-x.min())/1000)
     regy=[]
     for i in regx:
         regy.append(eval(reg[0].replace("z",str(i))))
