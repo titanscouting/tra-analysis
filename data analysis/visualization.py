@@ -31,6 +31,7 @@ __all__ = [
     ]
 #imports
 import matplotlib.pyplot as plt
+import numpy as np
 from sklearn.decomposition import PCA, KernelPCA, IncrementalPCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import AffinityPropagation, DBSCAN, KMeans, SpectralClustering
