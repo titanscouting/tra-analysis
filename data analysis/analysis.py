@@ -7,10 +7,12 @@
 #number of easter eggs: 2
 #setup:
 
-__version__ = "1.0.8.002"
+__version__ = "1.0.8.003"
 
 #changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.0.8.003:
+	- added p_value function
 1.0.8.002:
 	- updated __all__ correctly to contain changes made in v 1.0.8.000 and v 1.0.8.001
 1.0.8.001:
@@ -142,6 +144,7 @@ import pandas
 import random
 import scipy
 from scipy.optimize import curve_fit
+from scipy import stats
 from sklearn import *
 #import statistics <-- statistics.py functions have been integrated into analysis.py as of v 1.0.3.002
 import time
@@ -872,6 +875,9 @@ def select_best_regression(eqs, rmss, r2s, overfit, selector):
 
 	return b_eq, b_rms, b_r2, b_overfit
 
+def p_value(x, y): #takes 2 1d arrays
+	
+	return stats.ttest_ind(x, y)[1]
 
 def basic_analysis(data): #assumes that rows are the independent variable and columns are the dependant. also assumes that time flows from lowest column to highest column.
 
