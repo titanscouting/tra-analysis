@@ -1,6 +1,6 @@
 // Initialize Firebase
 var config = {
-  apiKey: "AIzaSyBTuq1Xvp6c8quCspd-1HEJu2GHnd3UKQc",
+  apiKey: "(insert the TitanScout Api Key Here)",
   authDomain: "titanscoutandroid.firebaseapp.com",
   databaseURL: "https://titanscoutandroid.firebaseio.com",
   projectId: "titanscoutandroid",
