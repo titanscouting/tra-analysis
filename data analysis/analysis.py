@@ -552,37 +552,6 @@ def stdev_z_split(mean, stdev, delta, low_bound, high_bound): #returns n-th perc
 
     return z_split
 
-"""
-def histo_analysis_old(hist_data): #note: depreciated since v 1.0.1.005
-
-    if hist_data == 'debug':
-        return['lower estimate (5%)', 'lower middle estimate (25%)', 'middle estimate (50%)', 'higher middle estimate (75%)', 'high estimate (95%)', 'standard deviation', 'note: this has been depreciated']
-    
-    derivative = []
-    for i in range(0, len(hist_data) - 1, 1):
-        derivative.append(float(hist_data[i+1]) - float(hist_data[i]))
-        
-    derivative_sorted = sorted(derivative, key=int)
-    mean_derivative = basic_stats(derivative_sorted, "1d", 0)[0]
-    
-    print(mean_derivative)
-    stdev_derivative = basic_stats(derivative_sorted, "1d", 0)[3]
-
-    low_bound = mean_derivative + -1.645 * stdev_derivative
-    lm_bound = mean_derivative + -0.674 * stdev_derivative
-    mid_bound = mean_derivative * 0 * stdev_derivative
-    hm_bound = mean_derivative + 0.674 * stdev_derivative
-    high_bound = mean_derivative + 1.645 * stdev_derivative
-
-    low_est = float(hist_data[-1:][0]) + low_bound
-    lm_est = float(hist_data[-1:][0]) + lm_bound
-    mid_est = float(hist_data[-1:][0]) + mid_bound
-    hm_est = float(hist_data[-1:][0]) + hm_bound
-    high_est = float(hist_data[-1:][0]) + high_bound
-
-    return [low_est, lm_est, mid_est, hm_est, high_est, stdev_derivative]
-""" 
-
 def histo_analysis(hist_data, delta, low_bound, high_bound):
 
     if hist_data == 'debug':
