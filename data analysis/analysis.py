@@ -7,10 +7,12 @@
 #number of easter eggs: 2
 #setup:
 
-__version__ = "1.0.8.003"
+__version__ = "1.0.8.004"
 
 #changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.0.8.004:
+    - removed a few unused dependencies
 1.0.8.003:
 	- added p_value function
 1.0.8.002:
@@ -137,7 +139,6 @@ from fractions import Fraction
 from itertools import groupby
 import math
 import matplotlib
-from multiprocessing import Process
 import numbers
 import numpy as np
 import pandas
