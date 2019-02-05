@@ -7,10 +7,12 @@
 #number of easter eggs: 2
 #setup:
 
-__version__ = "1.0.8.004"
+__version__ = "1.0.8.005"
 
 #changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.0.8.005:
+    - minor fixes
 1.0.8.004:
     - removed a few unused dependencies
 1.0.8.003:
@@ -112,7 +114,7 @@ __all__ = [
     'z_score',
     'z_normalize',
     'stdev_z_split',
-    'histo_analysis', #histo_analysis_old is intentionally left out as it has been depreciated since v 1.0.1.005
+    'histo_analysis',
     'poly_regression',
     'log_regression',
     'exp_regression',
