@@ -4,7 +4,7 @@ import ordereddict
 import collections
 import unicodecsv
 
-content = open("realtimeDatabaseExport2018.json").read()
+content = open("data/realtimeDatabaseExport2018.json").read()
 
 dict_content = json.loads(content)
 list_of_new_data = []

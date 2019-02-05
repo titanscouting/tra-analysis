@@ -9,8 +9,10 @@
 
 __version__ = "1.0.0.001"
 
-#changelog should be viewed using print(analysis.__changelog__)
+#changelog should be viewed using print(tbarequest.__changelog__)
 __changelog__ = """changelog:
+1.0.1.000:
+    - fixed a simple error
 1.0.0.xxx:
     -added common requests and JSON processing"""
 __author__ = (
