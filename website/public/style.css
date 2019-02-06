@@ -20,11 +20,6 @@ body{
   display: none;
   width:30px;
 }
-#topbar{
-  height: 30px;
-  position: fixed;
-  background-color:black;
-}
 
 /* The side navigation menu */
 .sidenav {
