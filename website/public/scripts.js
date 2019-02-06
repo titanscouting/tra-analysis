@@ -107,6 +107,7 @@ function loadupdpi() {
 
 function upProfileInfo() {
   if (firebase.auth().currentUser != null) {
+    var user = firebase.auth().currentUser;
     if (document.getElementById('newDN').value != '') {
       user.updateProfile({
         displayName: document.getElementById('newDN').value
