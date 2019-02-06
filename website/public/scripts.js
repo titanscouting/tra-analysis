@@ -13,7 +13,7 @@ var uiConfig = {
   callbacks: {
     signInSuccessWithAuthResult: function(authResult, redirectUrl) {
       if (authResult.user) {
-        handleSignedInUser(authResult.user);
+        SignedInUser(authResult.user);
       }
       return false;
     }
@@ -194,13 +194,13 @@ function upProfileInfo() {
       }
     }
     if (si) {
-      handleSignedInUser();
+      handleSignedInUser(user);
     }
 
   } else {
     setTimeout(function() {
       alert('Please sign in to change your account info.');
     }, 1);
-    handleSignedOutUser();
+    SignedOutUser();
   }
 }
