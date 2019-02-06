@@ -90,11 +90,11 @@ function signout() {
 }
 function loadupdpi(){
   if(firebase.auth().currentUser != null){
-    document.getElementById('ProfileUpdate').display='block';
+    document.getElementById('profileupd').display='block';
   }else {
     setTimeout(function() {
         alert('Please sign in to change your account info.');
       }, 1);
-    handleSignedOutUser();    
+    handleSignedOutUser();
   }
 }
