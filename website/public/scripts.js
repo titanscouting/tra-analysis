@@ -194,7 +194,7 @@ function upProfileInfo() {
       }
     }
     if (si) {
-      handleSignedInUser(user);
+        setTimeout(function(){handleSignedInUser(user);},1)
     }
 
   } else {
