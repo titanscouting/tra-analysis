@@ -50,12 +50,14 @@ var handleSignedInUser = function(user) {
     document.getElementById('status').innerHTML = "You are signed in.";
   }
   document.getElementById('signout').style.display='inline-block';
+  document.getElementById('updpi').style.display='inline-block';
   document.getElementById('deleteacc').style.display='inline-block';
 }
 var handleSignedOutUser = function() {
   document.getElementById("mainhead").innerHTML = "TitanScout- Sign In";
   document.getElementById('status').innerHTML = "You are not signed in.";
   document.getElementById('signout').style.display='none';
+  document.getElementById('updpi').style.display='none';
   document.getElementById('deleteacc').style.display='none';
   ui.start('#firebaseui-auth-container', uiConfig);
 };
@@ -85,4 +87,14 @@ function signout() {
   var user = firebase.auth().currentUser;
   firebase.auth().signOut()
   handleSignedOutUser()
+}
+function loadupdpi(){
+  if(firebase.auth().currentUser != null){
+    document.getElementById('ProfileUpdate').display='block';
+  }else {
+    setTimeout(function() {
+        alert('Please sign in to change your account info.');
+      }, 1);
+    handleSignedOutUser();    
+  }
 }
