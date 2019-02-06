@@ -16,7 +16,9 @@ body{
 #profileupd{
   display: none;
 }
-
+#sideload{
+  display: none;
+}
 /* The side navigation menu */
 .sidenav {
   height: 100%; /* 100% Full-height */

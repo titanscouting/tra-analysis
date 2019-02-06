@@ -55,6 +55,7 @@ var handleSignedInUser = function(user) {
   document.getElementById('updpi').style.display = 'inline-block';
   document.getElementById('deleteacc').style.display = 'inline-block';
   document.getElementById('profileupd').style.display = 'none';
+  document.getElementById('sideload').style.display = 'block';
 }
 var handleSignedOutUser = function() {
   document.getElementById("mainhead").innerHTML = "TitanScout- Sign In";
@@ -63,6 +64,7 @@ var handleSignedOutUser = function() {
   document.getElementById('updpi').style.display = 'none';
   document.getElementById('deleteacc').style.display = 'none';
   document.getElementById('profileupd').style.display = 'none';
+  document.getElementById('sideload').style.display = 'none';
   ui.start('#firebaseui-auth-container', uiConfig);
 };
 
