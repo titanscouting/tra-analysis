@@ -41,7 +41,7 @@ var uiConfig = {
   }
 };
 var handleSignedInUser = function(user) {
-  document.getElementById("mainhead").innerHTML = "TitanScout- Create Form";
+  document.getElementById("mainhead").innerHTML = "TitanScout- User Info";
   if (user.displayName != null) {
     document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;
   } else if (user.email != null) {
@@ -218,4 +218,7 @@ function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
   document.getElementById("main").style.marginLeft = "0";
   document.body.style.backgroundColor = "white";
+}
+if(firebase.auth().currentUser!=null){
+  handleSignedInUser(firebase.auth().currentUser)
 }
