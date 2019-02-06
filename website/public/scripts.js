@@ -129,7 +129,7 @@ function upProfileInfo() {
                     alert('Please sign in again to change your account info.');
                   }, 1);
                 } else {
-                  alert("An Error Occurred: " + error.code)
+                  alert("An Error Occurred: " +error)
                 }
               });
             } else {
@@ -145,7 +145,7 @@ function upProfileInfo() {
                 alert('Please sign in again to change your account info.');
               }, 1);
             } else {
-              alert("An Error Occurred: " + error.code)
+              alert("An Error Occurred: " +error)
             }
           });
         } else {
@@ -162,7 +162,7 @@ function upProfileInfo() {
                   alert('Please sign in again to change your account info.');
                 }, 1);
               } else {
-                alert("An Error Occurred: " + error.code)
+                alert("An Error Occurred: " +error)
               }
             });
           } else {
@@ -179,7 +179,7 @@ function upProfileInfo() {
             alert('Please sign in again to change your account info.');
           }, 1);
         } else {
-          alert("An Error Occurred: " + error.code)
+          alert("An Error Occurred: " +error)
         }
       });
     } else {
@@ -200,7 +200,7 @@ function upProfileInfo() {
                   alert('Please sign in again to change your account info.');
                 }, 1);
               } else {
-                alert("An Error Occurred: " + error.code)
+                alert("An Error Occurred: " +error)
               }
             });
           } else {
@@ -216,7 +216,7 @@ function upProfileInfo() {
               alert('Please sign in again to change your account info.');
             }, 1);
           } else {
-            alert("An Error Occurred: " + error.code)
+            alert("An Error Occurred: " +error)
           }
         });
       } else {
@@ -233,7 +233,7 @@ function upProfileInfo() {
                 alert('Please sign in again to change your account info.');
               }, 1);
             } else {
-              alert("An Error Occurred: " + error.code)
+              alert("An Error Occurred: " +error)
             }
           });
         } else {
