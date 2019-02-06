@@ -21,6 +21,8 @@ body{
   width:30px;
 }
 #topbar{
+  height: 30px;
+  position: fixed;
   background-color:black;
 }
 
