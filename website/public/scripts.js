@@ -10,8 +10,8 @@ var config = {
 firebase.initializeApp(config);
 // FirebaseUI config.
 var uiConfig = {
-  callbacks:{
-    signInSuccessWithAuthResult:function(authResult, redirectUrl) {
+  callbacks: {
+    signInSuccessWithAuthResult: function(authResult, redirectUrl) {
       if (authResult.user) {
         handleSignedInUser(authResult.user);
       }
@@ -27,12 +27,14 @@ var uiConfig = {
     firebase.auth.GithubAuthProvider.PROVIDER_ID,
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
     firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-  //  firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
+    //  firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
   ],
   // tosUrl and privacyPolicyUrl accept either url string or a callback
   // function.
   // Terms of service url/callback.
-  tosUrl: function(){alert("this is a test app. don't use it");},
+  tosUrl: function() {
+    alert("this is a test app. don't use it");
+  },
   // Privacy policy url/callback.
   privacyPolicyUrl: function() {
     alert("we will steal all of the data");
@@ -40,27 +42,27 @@ var uiConfig = {
 };
 var handleSignedInUser = function(user) {
   document.getElementById("mainhead").innerHTML = "TitanScout- Create Form";
-  if (user.displayName != null){
+  if (user.displayName != null) {
     document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;
-  }else if (user.email != null) {
+  } else if (user.email != null) {
     document.getElementById('status').innerHTML = "You are signed in as: " + user.email;
-  }else if (user.phoneNumber != null) {
+  } else if (user.phoneNumber != null) {
     document.getElementById('status').innerHTML = "You are signed in as: " + user.phoneNumber;
-  }else{
+  } else {
     document.getElementById('status').innerHTML = "You are signed in.";
   }
-  document.getElementById('signout').style.display='inline-block';
-  document.getElementById('updpi').style.display='inline-block';
-  document.getElementById('deleteacc').style.display='inline-block';
-  document.getElementById('profileupd').style.display='none';
+  document.getElementById('signout').style.display = 'inline-block';
+  document.getElementById('updpi').style.display = 'inline-block';
+  document.getElementById('deleteacc').style.display = 'inline-block';
+  document.getElementById('profileupd').style.display = 'none';
 }
 var handleSignedOutUser = function() {
   document.getElementById("mainhead").innerHTML = "TitanScout- Sign In";
   document.getElementById('status').innerHTML = "You are not signed in.";
-  document.getElementById('signout').style.display='none';
-  document.getElementById('updpi').style.display='none';
-  document.getElementById('deleteacc').style.display='none';
-  document.getElementById('profileupd').style.display='none';
+  document.getElementById('signout').style.display = 'none';
+  document.getElementById('updpi').style.display = 'none';
+  document.getElementById('deleteacc').style.display = 'none';
+  document.getElementById('profileupd').style.display = 'none';
   ui.start('#firebaseui-auth-container', uiConfig);
 };
 
@@ -77,165 +79,171 @@ var deleteAccount = function() {
     if (error.code == 'auth/requires-recent-login') {
       // The user's credential is too old. She needs to sign in again.
       signout()
-        // The timeout allows the message to be displayed after the UI has
-        // changed to the signed out state.
+      // The timeout allows the message to be displayed after the UI has
+      // changed to the signed out state.
       setTimeout(function() {
-          alert('Please sign in again to delete your account.');
-        }, 1);
-      }
+        alert('Please sign in again to delete your account.');
+      }, 1);
+    }
   }
 };
+
 function signout() {
   var user = firebase.auth().currentUser;
   firebase.auth().signOut()
   handleSignedOutUser()
 }
-function loadupdpi(){
-  if(firebase.auth().currentUser != null){
-    document.getElementById('profileupd').style.display='block';
-  }else {
+
+function loadupdpi() {
+  if (firebase.auth().currentUser != null) {
+    document.getElementById('profileupd').style.display = 'block';
+  } else {
     setTimeout(function() {
-        alert('Please sign in to change your account info.');
-      }, 1);
+      alert('Please sign in to change your account info.');
+    }, 1);
     handleSignedOutUser();
   }
 }
+
 function upProfileInfo() {
-  if(firebase.auth().currentUser != null){
-      if(document.getElementById('newDN').value != ''){
-        user.updateProfile({
+  if (firebase.auth().currentUser != null) {
+    if (document.getElementById('newDN').value != '') {
+      user.updateProfile({
         displayName: document.getElementById('newDN').value
-        }).then(function() {
-          if (document.getElementById('newPP').value != '') {
-              user.updateProfile({
-                photoURL: document.getElementById('newPP').value
-              }).then(function() {
-                if(document.getElementById('newEM').value != ''){
-                  user.updateEmail(document.getElementById('newEM').value).then(function() {
-                    handleSignedInUser();
-                  }).catch(function(error) {
-                      if (error.code == 'auth/requires-recent-login') {
-                        // The user's credential is too old. She needs to sign in again.
-                        signout()
-                          // The timeout allows the message to be displayed after the UI has
-                          // changed to the signed out state.
-                        setTimeout(function() {
-                            alert('Please sign in again to change your account info.');
-                          }, 1);
-                      } else {
-                        alert("An Error Occurred: "+error.code)
-                      }
-                  });
-                }else{
-                  handleSignedInUser();
-                }
+      }).then(function() {
+        if (document.getElementById('newPP').value != '') {
+          user.updateProfile({
+            photoURL: document.getElementById('newPP').value
+          }).then(function() {
+            if (document.getElementById('newEM').value != '') {
+              user.updateEmail(document.getElementById('newEM').value).then(function() {
+                handleSignedInUser();
               }).catch(function(error) {
                 if (error.code == 'auth/requires-recent-login') {
                   // The user's credential is too old. She needs to sign in again.
                   signout()
-                    // The timeout allows the message to be displayed after the UI has
-                    // changed to the signed out state.
+                  // The timeout allows the message to be displayed after the UI has
+                  // changed to the signed out state.
                   setTimeout(function() {
-                      alert('Please sign in again to change your account info.');
-                    }, 1);
+                    alert('Please sign in again to change your account info.');
+                  }, 1);
                 } else {
-                  alert("An Error Occurred: "+error.code)
+                  alert("An Error Occurred: " + error.code)
                 }
               });
-          }else{
-            if(document.getElementById('newEM').value != ''){
-              user.updateEmail(document.getElementById('newEM').value).then(function() {
+            } else {
               handleSignedInUser();
-              }).catch(function(error) {
-                if (error.code == 'auth/requires-recent-login') {
-                  // The user's credential is too old. She needs to sign in again.
-                  signout()
-                    // The timeout allows the message to be displayed after the UI has
-                    // changed to the signed out state.
-                  setTimeout(function() {
-                      alert('Please sign in again to change your account info.');
-                    }, 1);
-                } else {
-                  alert("An Error Occurred: "+error.code)
-                }
+            }
+          }).catch(function(error) {
+            if (error.code == 'auth/requires-recent-login') {
+              // The user's credential is too old. She needs to sign in again.
+              signout()
+              // The timeout allows the message to be displayed after the UI has
+              // changed to the signed out state.
+              setTimeout(function() {
+                alert('Please sign in again to change your account info.');
+              }, 1);
+            } else {
+              alert("An Error Occurred: " + error.code)
+            }
+          });
+        } else {
+          if (document.getElementById('newEM').value != '') {
+            user.updateEmail(document.getElementById('newEM').value).then(function() {
+              handleSignedInUser();
+            }).catch(function(error) {
+              if (error.code == 'auth/requires-recent-login') {
+                // The user's credential is too old. She needs to sign in again.
+                signout()
+                // The timeout allows the message to be displayed after the UI has
+                // changed to the signed out state.
+                setTimeout(function() {
+                  alert('Please sign in again to change your account info.');
+                }, 1);
+              } else {
+                alert("An Error Occurred: " + error.code)
+              }
             });
-          }else{
-            handleSignedInUser();}
+          } else {
+            handleSignedInUser();
+          }
+        }
+      }).catch(function(error) {
+        if (error.code == 'auth/requires-recent-login') {
+          // The user's credential is too old. She needs to sign in again.
+          signout()
+          // The timeout allows the message to be displayed after the UI has
+          // changed to the signed out state.
+          setTimeout(function() {
+            alert('Please sign in again to change your account info.');
+          }, 1);
+        } else {
+          alert("An Error Occurred: " + error.code)
+        }
+      });
+    } else {
+      if (document.getElementById('newPP').value != '') {
+        user.updateProfile({
+          photoURL: document.getElementById('newPP').value
+        }).then(function() {
+          if (document.getElementById('newEM').value != '') {
+            user.updateEmail(document.getElementById('newEM').value).then(function() {
+              handleSignedInUser();
+            }).catch(function(error) {
+              if (error.code == 'auth/requires-recent-login') {
+                // The user's credential is too old. She needs to sign in again.
+                signout()
+                // The timeout allows the message to be displayed after the UI has
+                // changed to the signed out state.
+                setTimeout(function() {
+                  alert('Please sign in again to change your account info.');
+                }, 1);
+              } else {
+                alert("An Error Occurred: " + error.code)
+              }
+            });
+          } else {
+            handleSignedInUser();
           }
         }).catch(function(error) {
           if (error.code == 'auth/requires-recent-login') {
             // The user's credential is too old. She needs to sign in again.
             signout()
-              // The timeout allows the message to be displayed after the UI has
-              // changed to the signed out state.
+            // The timeout allows the message to be displayed after the UI has
+            // changed to the signed out state.
             setTimeout(function() {
-                alert('Please sign in again to change your account info.');
-              }, 1);
+              alert('Please sign in again to change your account info.');
+            }, 1);
           } else {
-            alert("An Error Occurred: "+error.code)
+            alert("An Error Occurred: " + error.code)
           }
         });
-      }else{
-        if (document.getElementById('newPP').value != '') {
-            user.updateProfile({
-              photoURL: document.getElementById('newPP').value
-            }).then(function() {
-              if(document.getElementById('newEM').value != ''){
-                user.updateEmail(document.getElementById('newEM').value).then(function() {
-                  handleSignedInUser();
-                }).catch(function(error) {
-                    if (error.code == 'auth/requires-recent-login') {
-                      // The user's credential is too old. She needs to sign in again.
-                      signout()
-                        // The timeout allows the message to be displayed after the UI has
-                        // changed to the signed out state.
-                      setTimeout(function() {
-                          alert('Please sign in again to change your account info.');
-                        }, 1);
-                    } else {
-                      alert("An Error Occurred: "+error.code)
-                    }
-                });
-              }else{
-                handleSignedInUser();
-              }
-            }).catch(function(error) {
-              if (error.code == 'auth/requires-recent-login') {
-                // The user's credential is too old. She needs to sign in again.
-                signout()
-                  // The timeout allows the message to be displayed after the UI has
-                  // changed to the signed out state.
-                setTimeout(function() {
-                    alert('Please sign in again to change your account info.');
-                  }, 1);
-              } else {
-                alert("An Error Occurred: "+error.code)
-              }
-            });
-        }else{
-          if(document.getElementById('newEM').value != ''){
-            user.updateEmail(document.getElementById('newEM').value).then(function() {
+      } else {
+        if (document.getElementById('newEM').value != '') {
+          user.updateEmail(document.getElementById('newEM').value).then(function() {
             handleSignedInUser();
-            }).catch(function(error) {
-              if (error.code == 'auth/requires-recent-login') {
-                // The user's credential is too old. She needs to sign in again.
-                signout()
-                  // The timeout allows the message to be displayed after the UI has
-                  // changed to the signed out state.
-                setTimeout(function() {
-                    alert('Please sign in again to change your account info.');
-                  }, 1);
-              } else {
-                alert("An Error Occurred: "+error.code)
-              }
+          }).catch(function(error) {
+            if (error.code == 'auth/requires-recent-login') {
+              // The user's credential is too old. She needs to sign in again.
+              signout()
+              // The timeout allows the message to be displayed after the UI has
+              // changed to the signed out state.
+              setTimeout(function() {
+                alert('Please sign in again to change your account info.');
+              }, 1);
+            } else {
+              alert("An Error Occurred: " + error.code)
+            }
           });
-        }else{
-          handleSignedInUser();}
+        } else {
+          handleSignedInUser();
+        }
       }
+    }
   }else {
     setTimeout(function() {
-        alert('Please sign in to change your account info.');
-      }, 1);
+      alert('Please sign in to change your account info.');
+    }, 1);
     handleSignedOutUser();
   }
 }
