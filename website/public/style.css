@@ -20,6 +20,10 @@ body{
   display: none;
   width:30px;
 }
+#topbar{
+  background-color:black;
+}
+
 /* The side navigation menu */
 .sidenav {
   height: 100%; /* 100% Full-height */

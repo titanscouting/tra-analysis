@@ -21,12 +21,14 @@
     <a href="#">Contact</a>
   </div>
   <div id="main">
+    <span onclick="openNav()" id="topbar">
+      <img id="sideload" src="hamicon.png">
+    </span>
     <h1 id="mainhead">TitanScout- Sign In</h1>
     <p id="status">You are not signed in.</p>
     <input type="button" name="Sign Out" value="Sign Out" onclick="signout();" id="signout">
     <input type="button" name="Update Profile" onClick="loadupdpi();" value='Update Profile Info' id="updpi">
     <input type="button" name="DelAcc" value="Delete Account" onclick="deleteAccount();" id="deleteacc">
-      <span onclick="openNav()"><img id="sideload" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/1200px-Hamburger_icon.svg.png"></span>
     <div id="profileupd">
       <div class="profupdopt">
         New Username: <input type="text" name="NewDN" value="" id="newDN">
