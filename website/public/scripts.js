@@ -219,6 +219,8 @@ function closeNav() {
   document.getElementById("main").style.marginLeft = "0";
   document.body.style.backgroundColor = "white";
 }
-if(firebase.auth().currentUser!=null){
-  handleSignedInUser(firebase.auth().currentUser)
+window.onload=function{
+  if(firebase.auth().currentUser!=null){
+    handleSignedInUser(firebase.auth().currentUser)
+  }
 }
