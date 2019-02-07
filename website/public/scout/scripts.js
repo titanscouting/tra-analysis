@@ -11,3 +11,5 @@ function closeNav() {
   document.getElementById("main").style.marginLeft = "0";
   document.body.style.backgroundColor = "white";
 }
+
+document.getElementById('sideload').style.display = 'block';
