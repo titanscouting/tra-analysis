@@ -219,7 +219,7 @@ function closeNav() {
   document.getElementById("main").style.marginLeft = "0";
   document.body.style.backgroundColor = "white";
 }
-window.onload=function{
+window.onload=function(){
   if(firebase.auth().currentUser!=null){
     handleSignedInUser(firebase.auth().currentUser)
   }

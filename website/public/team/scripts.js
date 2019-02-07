@@ -12,6 +12,6 @@ function closeNav() {
   document.body.style.backgroundColor = "white";
 }
 
-window.onload=function{
+window.onload=function(){
   document.getElementById('sideload').style.display = 'block';
 }
