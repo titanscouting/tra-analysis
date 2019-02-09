@@ -16,9 +16,12 @@ td{
   margin: 10px;
 }
 #newEM, #newDN{
-  border: 3px black;
+  border: 1px solid black;
+  border-radius: 5px;
   font-family: 'Roboto', sans-serif;
   overflow-x: visible;
+  width: auto;
+  size: auto;
 }
 /* The side navigation menu */
 .sidenav {
