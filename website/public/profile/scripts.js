@@ -77,18 +77,19 @@ function updun() {
 function updem() {
   var user = firebase.auth().currentUser;
   user.updateEmail("user@example.com").then(function() {
-      document.getElementById('newDN').value = firebase.auth().currentUser.email;
-      if (user.displayName != null) {
-        document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;
-        document.getElementById('newDN').value = user.displayName;
-      } else if (user.email != null) {
-        document.getElementById('status').innerHTML = "You are signed in as: " + user.email;
-      }).catch(function(error) {
-      if (error.code == 'auth/requires-recent-login') {
-        alert("Please sign in again to delete your account.")
-        window.location.href = '../';
-      } else {
-        alert("there was a problem: " + error)
-      }
-    });
-  }
+    document.getElementById('newDN').value = firebase.auth().currentUser.email;
+    if (user.displayName != null) {
+      document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;
+      document.getElementById('newDN').value = user.displayName;
+    } else if (user.email != null) {
+      document.getElementById('status').innerHTML = "You are signed in as: " + user.email;
+    }
+  }).catch(function(error) {
+    if (error.code == 'auth/requires-recent-login') {
+      alert("Please sign in again to delete your account.")
+      window.location.href = '../';
+    } else {
+      alert("there was a problem: " + error)
+    }
+  });
+}
