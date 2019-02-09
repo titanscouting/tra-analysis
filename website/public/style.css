@@ -17,7 +17,8 @@ input,#newDN, #newEM{
   font-family: 'Roboto', sans-serif;
 }
 #newDN,#newEM{
-  padding: 3px;
+  padding-left: 3px;
+  padding-right: 3px;
 }
 td{
   text-align: left;
