@@ -1,12 +1,4 @@
-var config = {
-  apiKey: "(insert the TitanScout Api Key Here)",
-  authDomain: "titanscoutandroid.firebaseapp.com",
-  databaseURL: "https://titanscoutandroid.firebaseio.com",
-  projectId: "titanscoutandroid",
-  storageBucket: "titanscoutandroid.appspot.com",
-  messagingSenderId: "1097635313476"
-};
-firebase.initializeApp(config);
+
 /* Set the width of the side navigation to 250px and the left margin of the page content to 250px and add a black background color to body */
 function openNav() {
   document.getElementById("mySidenav").style.width = "250px";
@@ -23,6 +15,15 @@ function closeNav() {
 
 window.onload=function(){
   document.getElementById('sideload').style.display = 'block';
+  var config = {
+    apiKey: "(insert the TitanScout Api Key Here)",
+    authDomain: "titanscoutandroid.firebaseapp.com",
+    databaseURL: "https://titanscoutandroid.firebaseio.com",
+    projectId: "titanscoutandroid",
+    storageBucket: "titanscoutandroid.appspot.com",
+    messagingSenderId: "1097635313476"
+  };
+  firebase.initializeApp(config);
   user= firebase.auth().currentUser
   if (user != null) {
     if (user.displayName != null) {
