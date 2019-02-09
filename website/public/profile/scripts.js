@@ -3,8 +3,8 @@ function openNav() {
   document.getElementById("mySidenav").style.width = "250px";
   document.getElementById("main").style.marginLeft = "250px";
   document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
-  for (var i = 0; i < document.getElementsByClass("btn").length; i++) {
-    document.getElementsByClass("btn")[i].style.backgroundColor="rgba(0,0,0,.2)"
+  for (var i = 0; i < document.getElementsByClassName("btn").length; i++) {
+    document.getElementsByClassName("btn")[i].style.backgroundColor="rgba(0,0,0,.2)"
   }
 }
 
@@ -13,8 +13,8 @@ function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
   document.getElementById("main").style.marginLeft = "0";
   document.body.style.backgroundColor = "white";
-  for (var i = 0; i < document.getElementsByClass("btn").length; i++) {
-    document.getElementsByClass("btn")[i].style.backgroundColor="buttonface"
+  for (var i = 0; i < document.getElementsByClassName("btn").length; i++) {
+    document.getElementsByClassName("btn")[i].style.backgroundColor="buttonface"
   }
 }
 
