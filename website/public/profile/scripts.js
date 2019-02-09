@@ -25,11 +25,15 @@ window.onload = function() {
     };
     //eventually find a less-jank way to do this tho
     firebase.initializeApp(config);
-    setTimeout(function(){
-      user = firebase.auth().currentUser
+    promise2 = new Promise(function(resolve,reject){
+      setTimeout(function(){
+        user = firebase.auth().currentUser
+        resolve(user)
+      },10)
+    });
+    promise2.then(function(user){
       resolve(user)
-    },10)
-
+    })
   });
   promise1.then(function(user) {
     if (user != null) {
