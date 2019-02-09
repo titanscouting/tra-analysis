@@ -24,23 +24,18 @@
     <span onclick="openNav()" id="topbar">
       <img id="sideload" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/1200px-Hamburger_icon.svg.png">
     </span>
-    <h1 id="mainhead">TitanScout- Sign In</h1>
+    <h1 id="mainhead">TitanScout- Your Profile</h1>
     <p id="status">Loading...</p>
     <input type="button" name="Sign Out" value="Sign Out" onclick="signout();" id="signout">
-    <input type="button" name="Update Profile" onClick="loadupdpi();" value='Update Profile Info' id="updpi">
     <input type="button" name="DelAcc" value="Delete Account" onclick="deleteAccount();" id="deleteacc">
     <div id="profileupd">
       <div class="profupdopt">
-        New Username: <input type="text" name="NewDN" value="" id="newDN">
-      </div>
-      <div class="profupdopt">
-        New Profile Pic URL: <input type="text" name="NewPP" value="" id='newPP'>
+        Username: <input type="text" name="NewDN" value="" id="newDN">
+        <input type="button" name="upun" value="Update Username" onclick="updun();">
       </div>
       <div class="profileupdopt">
-        New Email: <input type="text" name="NewEM" value="" id="newEM">
-      </div>
-      <div class="profileupdopt">
-        <input type='button' name="upd" value="Update Profile" id="upd" onclick="upProfileInfo();">
+        Email: <input type="text" name="NewEM" value="" id="newEM">
+        <input type="button" name="updem" value="updem();">
       </div>
     </div>
     <div id="firebaseui-auth-container"></div>

@@ -3,16 +3,6 @@ body{
   text-align: center;
   font-family: 'Roboto', sans-serif;
 }
-#signout{
-  display: none;
-}
-#deleteacc{
-  display: none;
-}
-#updpi{
-  display: none;
-}
-
 #profileupd{
   display: none;
 }

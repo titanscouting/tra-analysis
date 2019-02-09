@@ -22,12 +22,12 @@ window.onload = function() {
     storageBucket: "titanscoutandroid.appspot.com",
     messagingSenderId: "1097635313476"
   };
-  //eventually find a less-jank way to do this tho
   firebase.initializeApp(config);
   firebase.auth().onAuthStateChanged(function(user) {
     if (user != null) {
       if (user.displayName != null) {
         document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;
+        document.getElementById('newDN').value = user.displayName;
       } else if (user.email != null) {
         document.getElementById('status').innerHTML = "You are signed in as: " + user.email;
       } else if (user.phoneNumber != null) {
@@ -35,8 +35,60 @@ window.onload = function() {
       } else {
         document.getElementById('status').innerHTML = "You are signed in.";
       }
+      if (user.email != null) {
+        document.getElementById('newEM').value = user.email;
+      }
     } else {
       window.location.replace('../');
     }
   });
 }
+
+function signout() {
+  var user = firebase.auth().currentUser;
+  firebase.auth().signOut()
+  window.location.href = '../';
+}
+
+function deleteAccount() {
+  try {
+    firebase.auth().currentUser.delete()
+    window.location.href = '../';
+  } catch (error) {
+    if (error.code == 'auth/requires-recent-login') {
+      alert("Please sign in again to delete your account.")
+      window.location.href = '../';
+    }
+  }
+}
+
+function updun() {
+  var user = firebase.auth().currentUser;
+  user.updateProfile({
+    displayName: document.getElementById('newDN').value,
+  }).then(function() {
+    document.getElementById('newDN').value = firebase.auth().currentUser.displayName;
+    document.getElementById('status').innerHTML = "You are signed in as: " + firebase.auth().currentUser.displayName;
+  }).catch(function(error) {
+    alert("there was a problem: " + error)
+  });
+}
+
+function updem() {
+  var user = firebase.auth().currentUser;
+  user.updateEmail("user@example.com").then(function() {
+      document.getElementById('newDN').value = firebase.auth().currentUser.email;
+      if (user.displayName != null) {
+        document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;
+        document.getElementById('newDN').value = user.displayName;
+      } else if (user.email != null) {
+        document.getElementById('status').innerHTML = "You are signed in as: " + user.email;
+      }).catch(function(error) {
+      if (error.code == 'auth/requires-recent-login') {
+        alert("Please sign in again to delete your account.")
+        window.location.href = '../';
+      } else {
+        alert("there was a problem: " + error)
+      }
+    });
+  }
