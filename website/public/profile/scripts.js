@@ -92,7 +92,7 @@ function updem() {
     }
   });
 }
-var input = document.getElementsByTagName('input')[0];
+var input = document.getElementById('newEM');
 
 input.onkeypress = input.onkeydown = function() {
     this.size = ( this.value.length > 10 ) ? this.value.length : 10;
