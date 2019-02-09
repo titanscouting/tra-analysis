@@ -13,25 +13,18 @@ function closeNav() {
 }
 
 window.onload = function() {
-  var promise1 = new Promise(function(resolve, reject) {
-    document.getElementById('sideload').style.display = 'block';
-    var config = {
-      apiKey: "(insert the TitanScout Api Key Here)",
-      authDomain: "titanscoutandroid.firebaseapp.com",
-      databaseURL: "https://titanscoutandroid.firebaseio.com",
-      projectId: "titanscoutandroid",
-      storageBucket: "titanscoutandroid.appspot.com",
-      messagingSenderId: "1097635313476"
-    };
-    //eventually find a less-jank way to do this tho
-    firebase.initializeApp(config);
-    setTimeout(function(){
-      user = firebase.auth().currentUser
-      resolve(user)
-    },10)
-
-  });
-  promise1.then(function(user) {
+  document.getElementById('sideload').style.display = 'block';
+  var config = {
+    apiKey: "(insert the TitanScout Api Key Here)",
+    authDomain: "titanscoutandroid.firebaseapp.com",
+    databaseURL: "https://titanscoutandroid.firebaseio.com",
+    projectId: "titanscoutandroid",
+    storageBucket: "titanscoutandroid.appspot.com",
+    messagingSenderId: "1097635313476"
+  };
+  //eventually find a less-jank way to do this tho
+  firebase.initializeApp(config);
+  firebase.auth().onAuthStateChanged(function(user) {
     if (user != null) {
       if (user.displayName != null) {
         document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;
