@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>titanscout</title>
+  <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+  <script src="https://cdn.firebase.com/libs/firebaseui/3.5.1/firebaseui.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.1/firebaseui.css" />
+  <link rel="stylesheet" href="style.css" type="text/css" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <script type="text/javascript" src="scripts.js"></script>
+</head>
+
+<body>
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="#">Profile</a>
+    <a href="team">Team</a>
+    <a href="scout">Scout Matches</a>
+    <a href="stats">Torunament Stats</a>
+  </div>
+  <div id="main">
+    <span onclick="openNav()" id="topbar">
+      <img id="sideload" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/1200px-Hamburger_icon.svg.png">
+    </span>
+    <h1 id="mainhead">TitanScout- Sign In</h1>
+    <p id="status">You are not signed in.</p>
+    <input type="button" name="Sign Out" value="Sign Out" onclick="signout();" id="signout">
+    <input type="button" name="Update Profile" onClick="loadupdpi();" value='Update Profile Info' id="updpi">
+    <input type="button" name="DelAcc" value="Delete Account" onclick="deleteAccount();" id="deleteacc">
+    <div id="profileupd">
+      <div class="profupdopt">
+        New Username: <input type="text" name="NewDN" value="" id="newDN">
+      </div>
+      <div class="profupdopt">
+        New Profile Pic URL: <input type="text" name="NewPP" value="" id='newPP'>
+      </div>
+      <div class="profileupdopt">
+        New Email: <input type="text" name="NewEM" value="" id="newEM">
+      </div>
+      <div class="profileupdopt">
+        <input type='button' name="upd" value="Update Profile" id="upd" onclick="upProfileInfo();">
+      </div>
+    </div>
+    <div id="firebaseui-auth-container"></div>
+  </div>
+</body>
+
+</html>
