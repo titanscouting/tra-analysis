@@ -23,12 +23,15 @@ window.onload = function() {
       storageBucket: "titanscoutandroid.appspot.com",
       messagingSenderId: "1097635313476"
     };
+    //eventually find a less-jank way to do this tho
     firebase.initializeApp(config);
-    user = firebase.auth().currentUser
-    resolve(null)
+    setTimeout(function(){
+      user = firebase.auth().currentUser
+      resolve(user)
+    },10)
+
   });
-  promise1.then(function(a) {
-    user=firebase.auth().currentUser
+  promise1.then(function(user) {
     if (user != null) {
       if (user.displayName != null) {
         document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;

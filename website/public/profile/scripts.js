@@ -23,9 +23,13 @@ window.onload = function() {
       storageBucket: "titanscoutandroid.appspot.com",
       messagingSenderId: "1097635313476"
     };
+    //eventually find a less-jank way to do this tho
     firebase.initializeApp(config);
-    user = firebase.auth().currentUser
-    resolve(user)
+    setTimeout(function(){
+      user = firebase.auth().currentUser
+      resolve(user)
+    },10)
+
   });
   promise1.then(function(user) {
     if (user != null) {
