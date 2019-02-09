@@ -18,6 +18,7 @@ td{
 #newEM, #newDN{
   border: 3px black;
   font-family: 'Roboto', sans-serif;
+  overflow-x: visible;
 }
 /* The side navigation menu */
 .sidenav {
