@@ -25,9 +25,10 @@ window.onload = function() {
     };
     firebase.initializeApp(config);
     user = firebase.auth().currentUser
-    resolve(user)
+    resolve(null)
   });
-  promise1.then(function(user) {
+  promise1.then(function(a) {
+    user=firebase.auth().currentUser
     if (user != null) {
       if (user.displayName != null) {
         document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;
