@@ -13,10 +13,10 @@ table{
 }
 td{
   text-align: left;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 40px;
-  padding-right: 40px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 #newEM, #newDN{
   border: 1px solid black;
