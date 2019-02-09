@@ -26,15 +26,16 @@
     </span>
     <h1 id="mainhead">TitanScout- Your Profile</h1>
     <p id="status">Loading...</p>
-    <input type="button" name="Sign Out" value="Sign Out" onclick="signout();" id="signout">
-    <input type="button" name="DelAcc" value="Delete Account" onclick="deleteAccount();" id="deleteacc">
+    <input type="button" name="Sign Out" value="Sign Out" onclick="signout();" id="signout" class="btn">
+    <input type="button" name="DelAcc" value="Delete Account" onclick="deleteAccount();" id="deleteacc" class="btm">
+    <h2>Profile info</h2>
     <table id="profileupd">
       <tr class="profupdopt">
         <td>
           Username: <span contenteditable="true" id="newDN"></span>
         </td>
         <td>
-          <input type="button" name="upun" value="Update Username" onclick="updun();">
+          <input type="button" name="upun" value="Update Username" onclick="updun();" class="btn">
         </td>
       </tr>
       <tr class="profileupdopt">
@@ -42,11 +43,10 @@
           Email: <span contenteditable="true"  id="newEM"></span>
         </td>
         <td>
-          <input type="button" name="updem" value="Update Email" onclick="updem();">
+          <input type="button" name="updem" value="Update Email" onclick="updem();" class="btn">
         </td>
       </tr>
     </table>
-    <div id="firebaseui-auth-container"></div>
   </div>
 </body>
 
