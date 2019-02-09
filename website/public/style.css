@@ -13,6 +13,11 @@ table{
 }
 td{
   text-align: left;
+  margin: 10px;
+}
+#newEM, #newDN{
+  border: 3px black;
+  font-family: 'Roboto', sans-serif;
 }
 /* The side navigation menu */
 .sidenav {
