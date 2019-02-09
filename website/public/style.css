@@ -7,9 +7,9 @@ body{
   display: none;
   width:30px;
 }
-table,tr{
-  text-align:center;
-
+table{
+  margin-left: auto;
+  margin-right: auto;
 }
 td{
   text-align: left;
