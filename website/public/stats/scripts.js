@@ -14,4 +14,19 @@ function closeNav() {
 
 window.onload=function(){
   document.getElementById('sideload').style.display = 'block';
+  user= firebase.auth().currentUser
+  if (user != null) {
+    if (user.displayName != null) {
+      document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;
+    } else if (user.email != null) {
+      document.getElementById('status').innerHTML = "You are signed in as: " + user.email;
+    } else if (user.phoneNumber != null) {
+      document.getElementById('status').innerHTML = "You are signed in as: " + user.phoneNumber;
+    } else {
+      document.getElementById('status').innerHTML = "You are signed in.";
+    }
+  }else{
+    window.location.replace('../');
+  }
+
 }
