@@ -13,18 +13,21 @@ function closeNav() {
 }
 
 window.onload = function() {
-  document.getElementById('sideload').style.display = 'block';
-  var config = {
-    apiKey: "(insert the TitanScout Api Key Here)",
-    authDomain: "titanscoutandroid.firebaseapp.com",
-    databaseURL: "https://titanscoutandroid.firebaseio.com",
-    projectId: "titanscoutandroid",
-    storageBucket: "titanscoutandroid.appspot.com",
-    messagingSenderId: "1097635313476"
-  };
-  firebase.initializeApp(config);
-  user = firebase.auth().currentUser
-  setTimeout(function() {
+  var promise1 = new Promise(function(resolve, reject) {
+    document.getElementById('sideload').style.display = 'block';
+    var config = {
+      apiKey: "(insert the TitanScout Api Key Here)",
+      authDomain: "titanscoutandroid.firebaseapp.com",
+      databaseURL: "https://titanscoutandroid.firebaseio.com",
+      projectId: "titanscoutandroid",
+      storageBucket: "titanscoutandroid.appspot.com",
+      messagingSenderId: "1097635313476"
+    };
+    firebase.initializeApp(config);
+    user = firebase.auth().currentUser
+    resolve(user)
+  });
+  promise1.then(function(user) {
     if (user != null) {
       if (user.displayName != null) {
         document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;
@@ -38,5 +41,5 @@ window.onload = function() {
     } else {
       window.location.replace('../');
     }
-  }, 10)
+  });
 }
