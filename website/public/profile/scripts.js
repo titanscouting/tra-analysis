@@ -27,7 +27,7 @@ window.onload = function() {
     if (user != null) {
       if (user.displayName != null) {
         document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;
-        document.getElementById('newDN').value = user.displayName;
+        document.getElementById('newDN').innerHTML = user.displayName;
       } else if (user.email != null) {
         document.getElementById('status').innerHTML = "You are signed in as: " + user.email;
       } else if (user.phoneNumber != null) {
@@ -36,7 +36,7 @@ window.onload = function() {
         document.getElementById('status').innerHTML = "You are signed in.";
       }
       if (user.email != null) {
-        document.getElementById('newEM').value = user.email;
+        document.getElementById('newEM').innerHTML = user.email;
       }
     } else {
       window.location.replace('../');
@@ -65,9 +65,9 @@ function deleteAccount() {
 function updun() {
   var user = firebase.auth().currentUser;
   user.updateProfile({
-    displayName: document.getElementById('newDN').value,
+    displayName: document.getElementById('newDN').innerHTML,
   }).then(function() {
-    document.getElementById('newDN').value = firebase.auth().currentUser.displayName;
+    document.getElementById('newDN').innerHTML = firebase.auth().currentUser.displayName;
     document.getElementById('status').innerHTML = "You are signed in as: " + firebase.auth().currentUser.displayName;
   }).catch(function(error) {
     alert("there was a problem: " + error)
@@ -76,10 +76,10 @@ function updun() {
 
 function updem() {
   var user = firebase.auth().currentUser;
-  user.updateEmail(document.getElementById('newEM').value).then(function() {
+  user.updateEmail(document.getElementById('newEM').innerHTML).then(function() {
     if (user.displayName != null) {
       document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;
-      document.getElementById('newDN').value = user.displayName;
+      document.getElementById('newDN').innerHTML = user.displayName;
     } else if (user.email != null) {
       document.getElementById('status').innerHTML = "You are signed in as: " + user.email;
     }
