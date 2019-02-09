@@ -28,16 +28,24 @@
     <p id="status">Loading...</p>
     <input type="button" name="Sign Out" value="Sign Out" onclick="signout();" id="signout">
     <input type="button" name="DelAcc" value="Delete Account" onclick="deleteAccount();" id="deleteacc">
-    <div id="profileupd">
-      <div class="profupdopt">
-        Username: <input type="text" name="NewDN" value="" id="newDN">
-        <input type="button" name="upun" value="Update Username" onclick="updun();">
-      </div>
-      <div class="profileupdopt">
-        Email: <input type="text" name="NewEM" value="" id="newEM">
-        <input type="button" name="updem" value="updem();">
-      </div>
-    </div>
+    <table id="profileupd">
+      <tr class="profupdopt">
+        <td>
+          Username: <input type="text" name="NewDN" value="" id="newDN">
+        </td>
+        <td>
+          <input type="button" name="upun" value="Update Username" onclick="updun();">
+        </td>
+      </tr>
+      <tr class="profileupdopt">
+        <td>
+          Email: <input type="text" name="NewEM" value="" id="newEM">
+        </td>
+        <td>
+          <input type="button" name="updem" value="Update Email" onclick="updem();">
+        </td>
+      </tr>
+    </table>
     <div id="firebaseui-auth-container"></div>
   </div>
 </body>
