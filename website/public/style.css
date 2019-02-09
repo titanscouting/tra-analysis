@@ -3,9 +3,6 @@ body{
   text-align: center;
   font-family: 'Roboto', sans-serif;
 }
-#profileupd{
-  display: none;
-}
 #sideload{
   display: none;
   width:30px;
