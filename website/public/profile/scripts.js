@@ -76,8 +76,7 @@ function updun() {
 
 function updem() {
   var user = firebase.auth().currentUser;
-  user.updateEmail("user@example.com").then(function() {
-    document.getElementById('newDN').value = firebase.auth().currentUser.email;
+  user.updateEmail(document.getElementById('newEM').value).then(function() {
     if (user.displayName != null) {
       document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;
       document.getElementById('newDN').value = user.displayName;
