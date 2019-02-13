@@ -30,37 +30,36 @@ window.onload = function() {
   };
   firebase.initializeApp(config);
   firebase.auth().onAuthStateChanged(function(user) {
-      if (user != null) {
-        if (user.displayName != null) {
-          document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;
-          document.getElementById('newDN').innerHTML = user.displayName;
-        } else if (user.email != null) {
-          document.getElementById('status').innerHTML = "You are signed in as: " + user.email;
-        } else if (user.phoneNumber != null) {
-          document.getElementById('status').innerHTML = "You are signed in as: " + user.phoneNumber;
-        } else {
-          document.getElementById('status').innerHTML = "You are signed in.";
-        }
-        if (user.email != null) {
-          document.getElementById('newEM').innerHTML = user.email;
+    if (user != null) {
+      if (user.displayName != null) {
+        document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;
+        document.getElementById('newDN').innerHTML = user.displayName;
+      } else if (user.email != null) {
+        document.getElementById('status').innerHTML = "You are signed in as: " + user.email;
+      } else if (user.phoneNumber != null) {
+        document.getElementById('status').innerHTML = "You are signed in as: " + user.phoneNumber;
+      } else {
+        document.getElementById('status').innerHTML = "You are signed in.";
+      }
+      if (user.email != null) {
+        document.getElementById('newEM').innerHTML = user.email;
+      }
+    } else {
+      window.location.replace('../');
+    }
+    teamAssoc = firebase.firestore().collections('UserAssociations').doc(user.uid);
+    teamAssoc.get().then(function(doc) {
+      if (doc.exists) {
+        list = doc.data()
+        teamNums = Object.keys(list)
+        document.getElementById(teammem).innerHTML = ""
+        for i in teamNums() {
+          document.getElementById(teammem).innerHTML += "<tr><td>" + i + "</td><td>" + list.i + "</td></tr>"
         }
       } else {
-        window.location.replace('../');
+        document.getElementById(teammem).innerHTML = "<tr><td>You are not part of any teams</td></tr>"
       }
-      teamAssoc = firebase.firestore().collections('UserAssociations').doc(user.uid);
-      teamAssoc.get().then(function(doc) {
-          if (doc.exists)
-        } {
-          list = doc.data()
-          teamNums = Object.keys(list)
-          document.getElementById(teammem).innerHTML = ""
-          for i in teamNums() {
-            document.getElementById(teammem).innerHTML += "<tr><td>" + i + "</td><td>" + list.i + "</td></tr>"
-          }
-        } else {
-          document.getElementById(teammem).innerHTML = "<tr><td>You are not part of any teams</td></tr>"
-        }
-      })
+    })
   });
 }
 
