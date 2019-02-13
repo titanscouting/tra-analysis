@@ -75,7 +75,7 @@ function cnt(tn) {
       if (doc.exists) {
         list = doc.data()
         teamNums = Object.keys(list)
-        document.getElementById(teammem).innerHTML = ""
+        document.getElementById('teammem').innerHTML = ""
         for (var i = 0; i < teamNums.length; i++) {
           document.getElementById('teammem').innerHTML += "<tr><td>" + teamNums[i] + "</td><td>" + list[teamNums[i]] + "</td></tr>"
         }
