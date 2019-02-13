@@ -4,7 +4,7 @@ function openNav() {
   document.getElementById("main").style.marginLeft = "250px";
   document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
   for (var i = 0; i < document.getElementsByClassName("btn").length; i++) {
-    document.getElementsByClassName("btn")[i].style.backgroundColor="rgba(0,0,0,.2)"
+    document.getElementsByClassName("btn")[i].style.backgroundColor = "rgba(0,0,0,.2)"
   }
 }
 
@@ -14,7 +14,7 @@ function closeNav() {
   document.getElementById("main").style.marginLeft = "0";
   document.body.style.backgroundColor = "white";
   for (var i = 0; i < document.getElementsByClassName("btn").length; i++) {
-    document.getElementsByClassName("btn")[i].style.backgroundColor="buttonface"
+    document.getElementsByClassName("btn")[i].style.backgroundColor = "buttonface"
   }
 }
 
@@ -30,65 +30,71 @@ window.onload = function() {
   };
   firebase.initializeApp(config);
   firebase.auth().onAuthStateChanged(function(user) {
-    if (user != null) {
-      if (user.displayName != null) {
-        document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;
-        document.getElementById('newDN').innerHTML = user.displayName;
-      } else if (user.email != null) {
-        document.getElementById('status').innerHTML = "You are signed in as: " + user.email;
-      } else if (user.phoneNumber != null) {
-        document.getElementById('status').innerHTML = "You are signed in as: " + user.phoneNumber;
-      } else {
-        document.getElementById('status').innerHTML = "You are signed in.";
-      }
-      if (user.email != null) {
-        document.getElementById('newEM').innerHTML = user.email;
-      }
-    } else {
-      window.location.replace('../');
-    }
-    teamAssoc=firebase.firestore().collections('UserAssociations').doc(user.uid);
-    teamAssoc.get().then(function(doc){
-      if(doc.exists)}{
-        list=doc.data()
-        teamNums=Object.keys(list)
-        document.getElementById(teammem).innerHTML = ""
-        for i in teamNums(){
-          document.getElementById(teammem).innerHTML +="<tr><td>"+i+"</td><td>"+list.i+"</td></tr>"
+      if (user != null) {
+        if (user.displayName != null) {
+          document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;
+          document.getElementById('newDN').innerHTML = user.displayName;
+        } else if (user.email != null) {
+          document.getElementById('status').innerHTML = "You are signed in as: " + user.email;
+        } else if (user.phoneNumber != null) {
+          document.getElementById('status').innerHTML = "You are signed in as: " + user.phoneNumber;
+        } else {
+          document.getElementById('status').innerHTML = "You are signed in.";
         }
-      }else {
-        document.getElementById(teammem).innerHTML = "<tr><td>You are not part of any teams</td></tr>"
+        if (user.email != null) {
+          document.getElementById('newEM').innerHTML = user.email;
+        }
+      } else {
+        window.location.replace('../');
       }
-    })
+      teamAssoc = firebase.firestore().collections('UserAssociations').doc(user.uid);
+      teamAssoc.get().then(function(doc) {
+          if (doc.exists)
+        } {
+          list = doc.data()
+          teamNums = Object.keys(list)
+          document.getElementById(teammem).innerHTML = ""
+          for i in teamNums() {
+            document.getElementById(teammem).innerHTML += "<tr><td>" + i + "</td><td>" + list.i + "</td></tr>"
+          }
+        } else {
+          document.getElementById(teammem).innerHTML = "<tr><td>You are not part of any teams</td></tr>"
+        }
+      })
   });
 }
+
 function cnt(tn) {
-  firebase.firestore().collection("UserAssociations").doc(user.id).set({tn : 'captain'} , { merge: true }).then(
-    teamAssoc=firebase.firestore().collections('UserAssociations').doc(user.uid);
-    teamAssoc.get().then(function(doc){
-      if(doc.exists)}{
-        list=doc.data()
-        teamNums=Object.keys(list)
+  firebase.firestore().collection("UserAssociations").doc(user.id).set({
+    tn: 'captain'
+  }, {
+    merge: true
+  }).then(
+    teamAssoc = firebase.firestore().collections('UserAssociations').doc(user.uid) teamAssoc.get().then(function(doc) {
+      if (doc.exists) {
+        list = doc.data()
+        teamNums = Object.keys(list)
         document.getElementById(teammem).innerHTML = ""
-        for i in teamNums(){
-          document.getElementById(teammem).innerHTML +="<tr><td>"+i+"</td><td>"+list.i+"</td></tr>"
+        for i in teamNums() {
+          document.getElementById(teammem).innerHTML += "<tr><td>" + i + "</td><td>" + list.i + "</td></tr>"
         }
-      }else {
+      } else {
         document.getElementById(teammem).innerHTML = "<tr><td>You are not part of any teams</td></tr>"
       }
     })
   )
 }
+
 function signout() {
   var user = firebase.auth().currentUser;
   firebase.auth().signOut().then(
-  window.location.href = '../');
+    window.location.href = '../');
 }
 
 function deleteAccount() {
   try {
     firebase.auth().currentUser.delete().then(
-    window.location.href = '../');
+      window.location.href = '../');
   } catch (error) {
     if (error.code == 'auth/requires-recent-login') {
       alert("Please sign in again to delete your account.")
