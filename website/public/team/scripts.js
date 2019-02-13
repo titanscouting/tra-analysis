@@ -47,7 +47,7 @@ window.onload = function() {
     } else {
       window.location.replace('../');
     }
-    teamAssoc = firebase.firestore().collections('UserAssociations').doc(user.uid);
+    teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid);
     teamAssoc.get().then(function(doc) {
       if (doc.exists) {
         list = doc.data()
@@ -69,7 +69,7 @@ function cnt(tn) {
   }, {
     merge: true
   }).then(
-    teamAssoc = firebase.firestore().collections('UserAssociations').doc(user.uid);
+    teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid);
     teamAssoc.get().then(function(doc) {
       if (doc.exists) {
         list = doc.data()
