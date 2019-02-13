@@ -52,12 +52,12 @@ window.onload = function() {
       if (doc.exists) {
         list = doc.data()
         teamNums = Object.keys(list)
-        document.getElementById(teammem).innerHTML = ""
-        for (var i = 0; i < teammem.length; i++) {
-          document.getElementById(teammem).innerHTML += "<tr><td>" + teammem[i] + "</td><td>" + list.teammem[i] + "</td></tr>"
+        document.getElementById('teammem').innerHTML = ""
+        for (var i = 0; i < teamNums.length; i++) {
+          document.getElementById('teammem').innerHTML += "<tr><td>" + teamNums[i] + "</td><td>" + list[teamNums[i]] + "</td></tr>"
         }
       } else {
-        document.getElementById(teammem).innerHTML = "<tr><td>You are not part of any teams</td></tr>"
+        document.getElementById('teammem').innerHTML = "<tr><td>You are not part of any teams</td></tr>"
       }
     })
   });
@@ -75,11 +75,11 @@ function cnt(tn) {
         list = doc.data()
         teamNums = Object.keys(list)
         document.getElementById(teammem).innerHTML = ""
-        for (var i = 0; i < teammem.length; i++) {
-          document.getElementById(teammem).innerHTML += "<tr><td>" + teammem[i] + "</td><td>" + list.teammem[i] + "</td></tr>"
+        for (var i = 0; i < teamNums.length; i++) {
+          document.getElementById('teammem').innerHTML += "<tr><td>" + teamNums[i] + "</td><td>" + list[teamNums[i]] + "</td></tr>"
         }
       } else {
-        document.getElementById(teammem).innerHTML = "<tr><td>You are not part of any teams</td></tr>"
+        document.getElementById('teammem').innerHTML = "<tr><td>You are not part of any teams</td></tr>"
       }
     })
   })
