@@ -53,8 +53,8 @@ window.onload = function() {
         list = doc.data()
         teamNums = Object.keys(list)
         document.getElementById(teammem).innerHTML = ""
-        for i in teamNums() {
-          document.getElementById(teammem).innerHTML += "<tr><td>" + i + "</td><td>" + list.i + "</td></tr>"
+        for (var i = 0; i < teammem.length; i++) {
+          document.getElementById(teammem).innerHTML += "<tr><td>" + teammem[i] + "</td><td>" + list.teammem[i] + "</td></tr>"
         }
       } else {
         document.getElementById(teammem).innerHTML = "<tr><td>You are not part of any teams</td></tr>"
@@ -74,8 +74,8 @@ function cnt(tn) {
         list = doc.data()
         teamNums = Object.keys(list)
         document.getElementById(teammem).innerHTML = ""
-        for i in teamNums() {
-          document.getElementById(teammem).innerHTML += "<tr><td>" + i + "</td><td>" + list.i + "</td></tr>"
+        for (var i = 0; i < teammem.length; i++) {
+          document.getElementById(teammem).innerHTML += "<tr><td>" + teammem[i] + "</td><td>" + list.teammem[i] + "</td></tr>"
         }
       } else {
         document.getElementById(teammem).innerHTML = "<tr><td>You are not part of any teams</td></tr>"
