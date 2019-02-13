@@ -64,6 +64,7 @@ window.onload = function() {
 }
 
 function cnt(tn) {
+  user=firebase.auth().currentUser;
   firebase.firestore().collection("UserAssociations").doc(user.id).set({
     tn: 'captain'
   }, {
