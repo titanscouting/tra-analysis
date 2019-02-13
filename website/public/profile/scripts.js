@@ -52,14 +52,14 @@ window.onload = function() {
 
 function signout() {
   var user = firebase.auth().currentUser;
-  firebase.auth().signOut()
-  window.location.href = '../';
+  firebase.auth().signOut().then(
+  window.location.href = '../');
 }
 
 function deleteAccount() {
   try {
-    firebase.auth().currentUser.delete()
-    window.location.href = '../';
+    firebase.auth().currentUser.delete().then(
+    window.location.href = '../');
   } catch (error) {
     if (error.code == 'auth/requires-recent-login') {
       alert("Please sign in again to delete your account.")
@@ -67,6 +67,7 @@ function deleteAccount() {
     }
   }
 }
+
 
 function updun() {
   var user = firebase.auth().currentUser;
