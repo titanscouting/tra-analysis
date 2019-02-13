@@ -65,7 +65,7 @@ window.onload = function() {
 
 function cnt(tn) {
   user=firebase.auth().currentUser;
-  firebase.firestore().collection("UserAssociations").doc(user.id).set({
+  firebase.firestore().collection("UserAssociations").doc(user.uid).set({
     tn: 'captain'
   }, {
     merge: true
