@@ -68,8 +68,8 @@ function cnt(tn) {
     tn: 'captain'
   }, {
     merge: true
-  }).then(
-    teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid);
+  }).then(function() {
+    teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid)
     teamAssoc.get().then(function(doc) {
       if (doc.exists) {
         list = doc.data()
@@ -82,7 +82,7 @@ function cnt(tn) {
         document.getElementById(teammem).innerHTML = "<tr><td>You are not part of any teams</td></tr>"
       }
     })
-  )
+  })
 }
 
 function signout() {
