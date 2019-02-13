@@ -69,7 +69,8 @@ function cnt(tn) {
   }, {
     merge: true
   }).then(
-    teamAssoc = firebase.firestore().collections('UserAssociations').doc(user.uid) teamAssoc.get().then(function(doc) {
+    teamAssoc = firebase.firestore().collections('UserAssociations').doc(user.uid);
+    teamAssoc.get().then(function(doc) {
       if (doc.exists) {
         list = doc.data()
         teamNums = Object.keys(list)
