@@ -36,5 +36,5 @@ for file_path in file_list:
     data.append(analysis.load_csv(file_path))
 
 #unhelpful comment
-#for d in data:
+#for d in data: #unpacks 3d array into 2d
 #    print (d)
