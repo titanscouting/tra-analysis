@@ -4,9 +4,12 @@
 #Notes:
 #setup:
 
-__version__ = "1.0.1.000"
+__version__ = "1.0.2.000"
 
 __changelog__ = """changelog:
+1.0.2.000:
+	- added data reading from folder
+	- nearly crashed computer reading from 20 GiB of data
 1.0.1.000:
 	- added data reading from file
 	- added superstructure to code
@@ -22,5 +25,16 @@ __author__ = (
 import analysis
 import titanlearn
 import visualization
+import os
+import glob
 
-data = analysis.load_csv("data/data.csv")
+#get all the data
+source_dir = 'data'
+file_list = glob.glob(source_dir + '/*.CSV')
+data = []
+for file_path in file_list:
+    data.append(analysis.load_csv(file_path))
+
+#unhelpful comment
+#for d in data:
+#    print (d)

@@ -411,6 +411,7 @@ class objectives:
 def load_csv(filepath):
     with open(filepath, newline = '') as csvfile:
         file_array = list(csv.reader(csvfile))
+        csvfile.close()
     return file_array
 
 def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, 'column':c_basic_stats, 'row':r_basic_stats], arg for mode 1 or mode 2 for column or row
