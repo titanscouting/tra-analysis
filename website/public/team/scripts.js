@@ -3,6 +3,9 @@ function openNav() {
   document.getElementById("mySidenav").style.width = "250px";
   document.getElementById("main").style.marginLeft = "250px";
   document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+  for (var i = 0; i < document.getElementsByClassName("btn").length; i++) {
+    document.getElementsByClassName("btn")[i].style.backgroundColor = "rgba(0,0,0,.2)"
+  }
 }
 
 /* Set the width of the side navigation to 0 and the left margin of the page content to 0, and the background color of body to white */
@@ -10,6 +13,9 @@ function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
   document.getElementById("main").style.marginLeft = "0";
   document.body.style.backgroundColor = "white";
+  for (var i = 0; i < document.getElementsByClassName("btn").length; i++) {
+    document.getElementsByClassName("btn")[i].style.backgroundColor = "buttonface"
+  }
 }
 
 window.onload = function() {
@@ -22,12 +28,12 @@ window.onload = function() {
     storageBucket: "titanscoutandroid.appspot.com",
     messagingSenderId: "1097635313476"
   };
-  //eventually find a less-jank way to do this tho
   firebase.initializeApp(config);
   firebase.auth().onAuthStateChanged(function(user) {
     if (user != null) {
       if (user.displayName != null) {
         document.getElementById('status').innerHTML = "You are signed in as: " + user.displayName;
+        document.getElementById('newDN').innerHTML = user.displayName;
       } else if (user.email != null) {
         document.getElementById('status').innerHTML = "You are signed in as: " + user.email;
       } else if (user.phoneNumber != null) {
@@ -35,8 +41,65 @@ window.onload = function() {
       } else {
         document.getElementById('status').innerHTML = "You are signed in.";
       }
+      if (user.email != null) {
+        document.getElementById('newEM').innerHTML = user.email;
+      }
     } else {
       window.location.replace('../');
     }
+    teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid);
+    teamAssoc.get().then(function(doc) {
+      if (doc.exists) {
+        list = doc.data()
+        teamNums = Object.keys(list)
+        document.getElementById('teammem').innerHTML = ""
+        for (var i = 0; i < teamNums.length; i++) {
+          document.getElementById('teammem').innerHTML += "<tr><td>" + teamNums[i] + "</td><td>" + list[teamNums[i]] + "</td></tr>"
+        }
+      } else {
+        document.getElementById('teammem').innerHTML = "<tr><td>You are not part of any teams</td></tr>"
+      }
+    })
   });
+}
+
+function cnt(tn) {
+  user=firebase.auth().currentUser;
+  push={}
+  push[tn]='captian'
+  firebase.firestore().collection("UserAssociations").doc(user.uid).set(push, {
+    merge: true
+  }).then(function() {
+    teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid)
+    teamAssoc.get().then(function(doc) {
+      if (doc.exists) {
+        list = doc.data()
+        teamNums = Object.keys(list)
+        document.getElementById('teammem').innerHTML = ""
+        for (var i = 0; i < teamNums.length; i++) {
+          document.getElementById('teammem').innerHTML += "<tr><td>" + teamNums[i] + "</td><td>" + list[teamNums[i]] + "</td></tr>"
+        }
+      } else {
+        document.getElementById('teammem').innerHTML = "<tr><td>You are not part of any teams</td></tr>"
+      }
+    })
+  })
+}
+
+function signout() {
+  var user = firebase.auth().currentUser;
+  firebase.auth().signOut().then(
+    window.location.href = '../');
+}
+
+function deleteAccount() {
+  try {
+    firebase.auth().currentUser.delete().then(
+      window.location.href = '../');
+  } catch (error) {
+    if (error.code == 'auth/requires-recent-login') {
+      alert("Please sign in again to delete your account.")
+      window.location.href = '../';
+    }
+  }
 }

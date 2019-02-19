@@ -1,30 +1,48 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title><meta charset="utf-8">
-    <title>titanscout</title>
-    <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
-    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.1/firebaseui.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.1/firebaseui.css" />
-    <link rel="stylesheet" href="../style.css" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-    <script type="text/javascript" src="scripts.js"></script>
-  </head>
-  <body>
-    <div id="mySidenav" class="sidenav">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <a href="../profile">Profile</a>
-      <a href="#">Team</a>
-      <a href="../scout">Scout Matches</a>
-      <a href="../stats">Torunament Stats</a>
+
+<head>
+  <meta charset="utf-8">
+  <title>titanscout</title>
+  <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.8.0/firebase-firestore.js"></script>
+  <script src="https://cdn.firebase.com/libs/firebaseui/3.5.1/firebaseui.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.1/firebaseui.css" />
+  <link rel="stylesheet" href="../style.css" type="text/css" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <script type="text/javascript" src="scripts.js"></script>
+</head>
+
+<body>
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="../profile">Profile</a>
+    <a href="#">Team</a>
+    <a href="../scout">Scout Matches</a>
+    <a href="../stats">Torunament Stats</a>
+  </div>
+  <div id="main">
+    <span onclick="openNav()" id="topbar">
+      <img id="sideload" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/1200px-Hamburger_icon.svg.png">
+    </span>
+    <h1 id="mainhead">TitanScout- Your Teams</h1>
+    <p id="status">Loading...</p>
+    <input type="button" name="Sign Out" value="Sign Out" onclick="signout();" id="signout" class="btn">
+    <input type="button" name="DelAcc" value="Delete Account" onclick="deleteAccount();" id="deleteacc" class="btn">
+    <h2>Team Membership</h2>
+    <div id="newstuff">
+      <div>
+        <input type="button" name="CNT" value="Create New Team" class="btn" onclick="cnt(document.getElementById('ntn').value);">
+        <input type="text" name="TMN" value="" placeholder="Team Name" id="ntn">
+      </div>
+      <div>
+        <input type="button" name="CNT" value="Request to Join a Team" class="btn" onclick="reqjt(document.getElementById('etn').value);">
+        <input type="text" name="TMN" value="" placeholder="Team Name" id="etn">
+      </div>
     </div>
-    <div id="main">
-      <span onclick="openNav()" id="topbar">
-        <img id="sideload" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/1200px-Hamburger_icon.svg.png">
-      </span>
-      <h1 id="mainhead">TitanScout- Your Teams</h1>
-      <p id="status">Loading...</p>
-    </div>
-  </body>
+    <table id="teammem">
+    </table>
+  </div>
+</body>
+
 </html>
