@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "titanscoutandroid",
+  "private_key_id": "4fa61815e17c0b5c4dfe48445d87f8fc6d07a5d8",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDZCkE1rcJnk7Cf\n/cWlQoOTl/L4qUmUSOgeG9yGDYLEhedSCaR79xKMZQdVWkGGI3FXS2E4OQVXJwUy\nDh/iiIOOPvRvHeDsK2hBPmy8P3MIkbrUDFeD1HrhgKAsxOmaAswUhZxua2Dkn8+p\nqnF2fs1I3tBTyNehGTi0Jz8uLTYH8iIprOb27eOBLR+qkSSP9qUOgZjP76+Kk5WA\niur9EFk/ZCDjb6vgxNwrkQ6oKaH31A3bNeLNYW6+hqOQgYJpX/WwNCLLbtLs+Ywf\nnuk3pHZyw+y4xgKWagDbh8joaGt4s2jUYwvIVSQwy0UAzdd9HnVsi24vXhxbPpcu\nwjFPVMMDAgMBAAECggEAHCUGyMG0FH9j55Nedmw2KMULBnDZcEe2BfWB9sY4v2hH\n020ZrdOfzaHqPgi6t3zQHUxSmppWVXNjapbHTrZ6LM+AHgqnWKjWV6OTMSQfNCzF\np+rDzH4YwzZNTxDn5AdZ1I1w+CanhW4t3SgTl5Sg5UKzjDHeuG7PWhk+yaumNohU\nAHHSNjfF+CCuRlSswU6IpZP9x5bG5jT9UivGvB1u6E/5I1oDlplQIzEnay/QDd2p\nePYw+/QsvkLChSI7igsnXzGqwRSfql/4qk4hkmTY02j4V32uOEgXiA0ysDGC5SEy\nuSc996LF36r3iQE9WVqmmlVT7/wAtUIjxGuB6rBcEQKBgQDsViqX2bszdQt0Hx8g\nF4L2q8Fv0GJOK2JKy9nxvMa6xg1esf0vHzcovICUy4tznFB6BKQbeKlI5A0t3BdL\nWLec1+l1001DJLQFbAWlMp7NrCMZ9McWIDSyM0DgN1cZg0ijJegJgRz8ZmW933U+\n/D8wPtrGm114ynhq5Pkt8tWYUQKBgQDrGRVVom6sA46ZAPEHQefSWWSuVcroKFOw\n/6JhxBnAwvaIQcTviUWQedrLJ0VLyEBZEIVmVKOkrEu9XtfP8iMhe8SR3b8/eXsZ\nQaorG2+gEAdqHp68Fd2YRgYnBPQ/syyDMImVtCMCQlndOPghnsygGukU8fkOpREH\nHVxRwBrlEwKBgDQiWej/fd0/D5TBHMOejCRQBS7eQCFQTrGDQIOkCg6/i8l86AYS\nE7/nvVGViSCqtdIE3hK1Tlqm/AVGzNixLGfr9TMptpx+Jzwe9SvY+9ERDPk31wcZ\neaZpygDsFEmrfUWIIiSel79R81WsSpfnWyUQaIBxW3A+8cta0WECdX3RAoGAUGed\nwlHxY+c7h9yokoDZ1jk4k99HrCrOpMRpNuKopCKJyoQj5ICgSA9E4yIlMwvj5hIe\nbacY6KL8rGGZkccQeM0pp3GdjQnxLewlVOTnQmj5ADREubMIvKGGTSYGmxqeaKfb\nBlY7evRSY7SuOGFlPoS1nrI7KeUOc8542oTHLf0CgYB0jE+FZAX+mtQViddS9IkA\nsOTtAYArA7GlGZNGzShOUghJIFZk37+9TeryzYga4bTto0yAHUWbjD6kzbkEGFPj\nwwOHb1w3UdVRGh2ruEQxN59wHvCrrAqRrtJ7sKFsfKea4/twPv/CRnGhMa645Dbo\nSBMA/OHEodv06XqibcgovA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-wpsvx@titanscoutandroid.iam.gserviceaccount.com",
+  "client_id": "114864465329268712237",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-wpsvx%40titanscoutandroid.iam.gserviceaccount.com"
+}
