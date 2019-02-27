@@ -3,9 +3,11 @@
 #Notes:
 #setup:
 
-__version__ = "1.0.5.000"
+__version__ = "1.0.5.001"
 
 __changelog__ = """changelog:
+1.0.5.001:
+    - grammar
 1.0.5.000:
     - service now iterates forever
     - ready for production other than pulling json data
@@ -46,16 +48,16 @@ import numpy as np
 import time
 
 def titanservice():
+    
+    print("[OK] loading data")
 
+    start = time.time()
+    
     source_dir = 'data'
     file_list = glob.glob(source_dir + '/*.csv') #supposedly sorts by alphabetical order, skips reading teams.csv because of redundancy
     data = []
     files = [fn for fn in glob.glob('data/*.csv') 
              if not os.path.basename(fn).startswith('teams')]
-
-    #for file_path in file_list:
-    #	if not os.path.basename(file_list).startswith("teams")
-    #		data.append(analysis.load_csv(file_path))
 
     for i in files:
             data.append(analysis.load_csv(i))
@@ -63,6 +65,10 @@ def titanservice():
     stats = []
     measure_stats = []
     teams = analysis.load_csv("data/teams.csv")
+
+    end = time.time()
+
+    print("[OK] loaded data in " + str(end - start) + "seconds")
 
     #assumes that team number is in the first column, and that the order of teams is the same across all files
     #unhelpful comment
