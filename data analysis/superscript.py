@@ -121,8 +121,6 @@ def service():
 
     while True:
 
-        print("\n")
-
         start = time.time()
 
         print("[OK] starting calculations")
@@ -135,7 +133,7 @@ def service():
                 break
             except:
                 if (i != 4):
-                    print("[WARN] failed, trying " + str(5 - i - 1) + " more times")
+                    print("[WAR] failed, trying " + str(5 - i - 1) + " more times")
                 else:
                     print("[ERR] failed to compute data, skipping")
                     fucked = True
@@ -149,7 +147,7 @@ def service():
             
             print("[OK] finished calculations")
 
-        print("[OK] waiting: " + str(300 - (end - start)) + " seconds")
+        print("[OK] waiting: " + str(300 - (end - start)) + " seconds" + "\n")
 
         time.sleep(300 - (end - start)) #executes once every 5 minutes
 
