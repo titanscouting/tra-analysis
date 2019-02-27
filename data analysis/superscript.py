@@ -3,21 +3,23 @@
 #Notes:
 #setup:
 
-__version__ = "1.0.3.000"
+__version__ = "1.0.4.000"
 
 __changelog__ = """changelog:
+1.0.4.000:
+    - actually pushes to firebase
 1.0.3.001:
-        - processes data more efficiently
+    - processes data more efficiently
 1.0.3.000:
-	- actually processes data
+    - actually processes data
 1.0.2.000:
-	- added data reading from folder
-	- nearly crashed computer reading from 20 GiB of data
+    - added data reading from folder
+    - nearly crashed computer reading from 20 GiB of data
 1.0.1.000:
-	- added data reading from file
-	- added superstructure to code
+    - added data reading from file
+    - added superstructure to code
 1.0.0.000:
-	- added import statements (revolutionary)
+    - added import statements (revolutionary)
 """ 
 
 __author__ = (
@@ -36,7 +38,7 @@ import glob
 import numpy as np
 
 # Use a service account
-cred = credentials.Certificate('keys/titanscoutandroid_firebase.json')
+cred = credentials.Certificate('keys/firebasekey.json')
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -109,6 +111,8 @@ for measure in data: #unpacks 3d array into 2ds
 json_out = {}
 		
 for i in range(len(stats)):
-        json_out[files[i]]=stats[i]
+        json_out[files[i]]=str(stats[i])
+
+print(json_out)
 
 db.collection(u'stats').document(u'stats-noNN').set(json_out)
