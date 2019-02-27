@@ -3,9 +3,12 @@
 #Notes:
 #setup:
 
-__version__ = "1.0.5.001"
+__version__ = "1.0.5.002"
 
 __changelog__ = """changelog:
+1.0.5.002:
+    - more information given
+    - performance improvements
 1.0.5.001:
     - grammar
 1.0.5.000:
