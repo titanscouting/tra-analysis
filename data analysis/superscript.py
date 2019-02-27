@@ -3,9 +3,12 @@
 #Notes:
 #setup:
 
-__version__ = "1.0.4.001"
+__version__ = "1.0.5.000"
 
 __changelog__ = """changelog:
+1.0.5.000:
+    - service now iterates forever
+    - ready for production other than pulling json data
 1.0.4.001:
     - grammar fixes
 1.0.4.000:
@@ -36,20 +39,13 @@ import analysis
 import titanlearn
 import visualization
 import os
+import sys
+import warnings
 import glob
 import numpy as np
+import time
 
 def titanservice():
-    
-    # Use a service account
-    cred = credentials.Certificate('keys/firebasekey.json')
-    firebase_admin.initialize_app(cred)
-
-    db = firestore.client()
-
-    #get all the data
-
-    analysis.generate_data("data/bdata.csv", 100, 5, -10, 10)
 
     source_dir = 'data'
     file_list = glob.glob(source_dir + '/*.csv') #supposedly sorts by alphabetical order, skips reading teams.csv because of redundancy
@@ -117,6 +113,54 @@ def titanservice():
     for i in range(len(stats)):
             json_out[files[i]]=str(stats[i])
 
-    print(json_out)
+    #print(json_out)
 
     db.collection(u'stats').document(u'stats-noNN').set(json_out)
+
+def service():
+
+    while True:
+
+        print("\n")
+
+        start = time.time()
+
+        print("[OK] starting calculations")
+
+        fucked = False
+        
+        for i in range(0, 5):
+            try:
+                titanservice()
+                break
+            except:
+                if (i != 4):
+                    print("[WARN] failed, trying " + str(5 - i - 1) + " more times")
+                else:
+                    print("[ERR] failed to compute data, skipping")
+                    fucked = True
+
+        end = time.time()
+        if (fucked == True):
+
+            break
+
+        else:
+            
+            print("[OK] finished calculations")
+
+        print("[OK] waiting: " + str(300 - (end - start)) + " seconds")
+
+        time.sleep(300 - (end - start)) #executes once every 5 minutes
+
+warnings.simplefilter("ignore")
+# Use a service account
+cred = credentials.Certificate('keys/firebasekey.json')
+firebase_admin.initialize_app(cred)
+
+db = firestore.client()
+
+#get all the data
+
+analysis.generate_data("data/bdata.csv", 100, 5, -10, 10)
+service() #finally we write something that isn't a function definition
