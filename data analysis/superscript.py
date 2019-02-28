@@ -126,6 +126,10 @@ def titanservice():
 
     db.collection(u'stats').document(u'stats-noNN').set(json_out)
 
+def pulldata():
+    #TODO
+    pass
+
 def service():
 
     while True:
@@ -167,7 +171,4 @@ firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
-#get all the data
-
-analysis.generate_data("data/bdata.csv", 100, 5, -10, 10)
 service() #finally we write something that isn't a function definition
