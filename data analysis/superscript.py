@@ -146,9 +146,9 @@ def service():
                 break
             except:
                 if (i != 4):
-                    print("[WAR] failed, trying " + str(5 - i - 1) + " more times")
+                    print("[WARNING] failed, trying " + str(5 - i - 1) + " more times")
                 else:
-                    print("[ERR] failed to compute data, skipping")
+                    print("[ERROR] failed to compute data, skipping")
                     fucked = True
 
         end = time.time()
