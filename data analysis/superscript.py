@@ -134,6 +134,8 @@ def service():
 
     while True:
 
+        pulldata()
+
         start = time.time()
 
         print("[OK] starting calculations")
