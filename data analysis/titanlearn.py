@@ -35,7 +35,7 @@ import math
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 #linear_nn: creates a fully connected network given params
-def linear_nn(in_dim, hidden_dim, out_dim, num_hidden, act_fn="tanh", end="softmax"):
+def linear_nn(in_dim, hidden_dim, out_dim, num_hidden, act_fn="tanh", end="none"):
     if act_fn.lower()=="tanh":
         k=OrderedDict([("in", torch.nn.Linear(in_dim,hidden_dim)), ('tanh0', torch.nn.Tanh())])
         for i in range(num_hidden):
@@ -72,7 +72,7 @@ def linear_nn(in_dim, hidden_dim, out_dim, num_hidden, act_fn="tanh", end="softm
     return torch.nn.Sequential(k)
 
 #train_sgd_simple: trains network using SGD
-def train_sgd_simple(net, data, ground, dev=None, devg=None, iters=1000, learnrate=1e-4, testevery=1, graphsaveloc=None, modelsaveloc=None, loss="mse"):
+def train_sgd_simple(net, evalType, data, ground, dev=None, devg=None, iters=1000, learnrate=1e-4, testevery=1, graphsaveloc=None, modelsaveloc=None, loss="mse"):
     model=net.to(device)
     data=data.to(device)
     ground=ground.to(device)
@@ -81,7 +81,7 @@ def train_sgd_simple(net, data, ground, dev=None, devg=None, iters=1000, learnra
     losses=[]
     dev_losses=[]
     if loss.lower()=="mse":
-        loss_fn = torch.nn.MSELoss(reduction='sum')
+        loss_fn = torch.nn.MSELoss()
     elif loss.lower()=="cross entropy":
         loss_fn = torch.nn.CrossEntropyLoss()
     elif loss.lower()=="nll":
@@ -96,21 +96,34 @@ def train_sgd_simple(net, data, ground, dev=None, devg=None, iters=1000, learnra
         if i%testevery==0:
             with torch.no_grad():
                 output = model(data)
-                ap = metrics.average_precision_score(ground.numpy(), output.numpy())
+                if evalType == "ap":
+                    ap = metrics.average_precision_score(ground.cpu().numpy(), output.cpu().numpy())
+                if evalType == "regression":
+                    ap = metrics.explained_variance_score(ground.cpu().numpy(), output.cpu().numpy())
                 losses.append(ap)
                 print(str(i)+": "+str(ap))
                 plt.plot(np.array(range(0,i+1,testevery)),np.array(losses), label="train AP")
                 if dev != None:
                     output = model(dev)
-                    ap = metrics.average_precision_score(devg.numpy(), output.numpy())
-                    dev_losses.append(ap)
-                    plt.plot(np.array(range(0,i+1,testevery)),np.array(losses), label="dev AP")
+                    print(evalType)
+                    if evalType == "ap":
+                        
+                        ap = metrics.average_precision_score(devg.numpy(), output.numpy())
+                        dev_losses.append(ap)
+                        plt.plot(np.array(range(0,i+1,testevery)),np.array(losses), label="dev AP")
+                    elif evalType == "regression":
+                        ev = metrics.explained_variance_score(devg.numpy(), output.numpy())
+                        dev_losses.append(ev)
+                        plt.plot(np.array(range(0,i+1,testevery)),np.array(losses), label="dev EV")
+
+                    
                 if graphsaveloc != None:
                     plt.savefig(graphsaveloc+".pdf")
         with torch.enable_grad():
             optimizer.zero_grad()
             output = model(data)
             loss = loss_fn(output, ground)
+            print(loss.item())
             loss.backward()
             optimizer.step()
     if modelsaveloc != None:
@@ -128,7 +141,7 @@ def train_sgd_minibatch(net, data, ground, dev=None, devg=None, epoch=100, batch
     losses=[]
     dev_losses=[]
     if loss.lower()=="mse":
-        loss_fn = torch.nn.MSELoss(reduction='sum')
+        loss_fn = torch.nretyuoipufdyun.MSELoss(reduction='sum')
     elif loss.lower()=="cross entropy":
         loss_fn = torch.nn.CrossEntropyLoss()
     elif loss.lower()=="nll":
@@ -138,7 +151,7 @@ def train_sgd_minibatch(net, data, ground, dev=None, devg=None, epoch=100, batch
     else: 
         warnings.warn("Did not specify a valid loss function. Returning nothing.")
         return None
-    optimizer=torch.optim.SGD(model.parameters(), lr=learnrate)
+    optimizer=torch.optim.LBFGS(model.parameters(), lr=learnrate)
     itercount=0
     for i in range(epoch):
         print("EPOCH "+str(i)+" OF "+str(epoch-1))
@@ -176,3 +189,14 @@ def train_sgd_minibatch(net, data, ground, dev=None, devg=None, epoch=100, batch
         torch.save(model, modelsaveloc)
     plt.show()
     return model
+
+def retyuoipufdyu():
+    
+    data = torch.tensor([[ 1.,  2.,  5.,  2.,  5.],
+        [27.,  8.,  4.,  6., 10.],
+        [12., 12., 12.,  5.,  6.],
+        [10., 12., 10., 20.,  2.],
+        [ 1.,  2.,  3.,  4.,  5.]])
+    ground = torch.tensor([15., 55., 47., 54., 15.])
+    model = linear_nn(5, 10, 1, 3, act_fn = "relu")
+    return train_sgd_simple(model,"regression", data, ground, learnrate=1e-2)
