@@ -30,6 +30,7 @@ from sklearn import metrics
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+from sklearn import datasets
 
 #enable CUDA if possible
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -112,8 +113,8 @@ def train_sgd_simple(net, evalType, data, ground, dev=None, devg=None, iters=100
                         dev_losses.append(ap)
                         plt.plot(np.array(range(0,i+1,testevery)),np.array(losses), label="dev AP")
                     elif evalType == "regression":
-                        ev = metrics.explained_variance_score(devg.numpy(), output.numpy())
-                        dev_losses.append(ev)
+                        ap = metrics.explained_variance_score(devg.numpy(), output.numpy())
+                        dev_losses.append(ap)
                         plt.plot(np.array(range(0,i+1,testevery)),np.array(losses), label="dev EV")
 
                     
@@ -190,13 +191,9 @@ def train_sgd_minibatch(net, data, ground, dev=None, devg=None, epoch=100, batch
     plt.show()
     return model
 
-def retyuoipufdyu():
-    
-    data = torch.tensor([[ 1.,  2.,  5.,  2.,  5.],
-        [27.,  8.,  4.,  6., 10.],
-        [12., 12., 12.,  5.,  6.],
-        [10., 12., 10., 20.,  2.],
-        [ 1.,  2.,  3.,  4.,  5.]])
-    ground = torch.tensor([15., 55., 47., 54., 15.])
-    model = linear_nn(5, 10, 1, 3, act_fn = "relu")
-    return train_sgd_simple(model,"regression", data, ground, learnrate=1e-2)
+data = datasets.load_diabetes()
+print(data["data"], data["target"])
+ground = torch.tensor(data["target"]).to(torch.float)
+data = torch.tensor(data["data"]).to(torch.float)
+model = linear_nn(10, 100, 1, 20, act_fn = "tanh")
+model = train_sgd_simple(model,"regression", data, ground, learnrate=1e-4)
