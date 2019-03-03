@@ -16,34 +16,34 @@ __changelog__ = """changelog:
 1.0.8.004:
     - removed a few unused dependencies
 1.0.8.003:
-	- added p_value function
+    - added p_value function
 1.0.8.002:
-	- updated __all__ correctly to contain changes made in v 1.0.8.000 and v 1.0.8.001
+    - updated __all__ correctly to contain changes made in v 1.0.8.000 and v 1.0.8.001
 1.0.8.001:
-	- refactors
-	- bugfixes
+    - refactors
+    - bugfixes
 1.0.8.000:
-	- depreciated histo_analysis_old
-	- depreciated debug
-	- altered basic_analysis to take array data instead of filepath
-	- refactor
-	- optimization
+    - depreciated histo_analysis_old
+    - depreciated debug
+    - altered basic_analysis to take array data instead of filepath
+    - refactor
+    - optimization
 1.0.7.002:
-	- bug fixes
+    - bug fixes
 1.0.7.001:
-	- bug fixes
+    - bug fixes
 1.0.7.000:
-	- added tanh_regression (logistical regression)
-	- bug fixes
+    - added tanh_regression (logistical regression)
+    - bug fixes
 1.0.6.005:
-	- added z_normalize function to normalize dataset
-	- bug fixes
+    - added z_normalize function to normalize dataset
+    - bug fixes
 1.0.6.004:
-	- bug fixes
+    - bug fixes
 1.0.6.003:
-	- bug fixes
+    - bug fixes
 1.0.6.002:
-	- bug fixes
+    - bug fixes
 1.0.6.001:
     - corrected __all__ to contain all of the functions
 1.0.6.000:
