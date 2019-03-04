@@ -41,7 +41,6 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 import analysis
-import titanlearn
 import visualization
 import os
 import sys
@@ -168,7 +167,7 @@ def service():
 
 warnings.simplefilter("ignore")
 # Use a service account
-cred = credentials.Certificate('keys/firebasekey.json')
+cred = credentials.Certificate('keys/keytemp.json')
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
