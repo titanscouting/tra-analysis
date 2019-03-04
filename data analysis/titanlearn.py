@@ -198,4 +198,4 @@ def retyuoipufdyu():
     model = linear_nn(8, 100, 1, 20, act_fn = "relu")
     print(model)
     return train_sgd_simple(model,"regression", data, ground, learnrate=1e-4, iters=1000)
-retyuoipufdyu()
+#retyuoipufdyu()

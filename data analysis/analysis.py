@@ -758,7 +758,7 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
     x_test = []
     y_test = []
 
-    for i in range (0, math.floor(len(x) * 0.4), 1):
+    for i in range (0, math.floor(len(x) * 0.5), 1):
         index = random.randint(0, len(x) - 1)
 
         x_test.append(x[index])
