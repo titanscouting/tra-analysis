@@ -41,6 +41,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 import analysis
+import titanlearn
 import visualization
 import os
 import sys
@@ -59,7 +60,7 @@ def titanservice():
     file_list = glob.glob(source_dir + '/*.csv') #supposedly sorts by alphabetical order, skips reading teams.csv because of redundancy
     data = []
     files = [fn for fn in glob.glob('data/*.csv') 
-             if not os.path.basename(fn).startswith('teams')]
+             if not (os.path.basename(fn).startswith('teams'))] #scores will be handled sperately
 
     for i in files:
             data.append(analysis.load_csv(i))
@@ -67,6 +68,7 @@ def titanservice():
     stats = []
     measure_stats = []
     teams = analysis.load_csv("data/teams.csv")
+    scores = analysis.load_csv("data/scores.csv")
 
     end = time.time()
 
@@ -111,19 +113,82 @@ def titanservice():
                     r2best_curve.pop(0)
 
                     #print(r2best_curve)
+
                     
-                    measure_stats.append(teams[i] + ["|"] +  list(analysis.basic_stats(line, 0, 0)) + ["|"] + list(analysis.histo_analysis(line, 1, -3, 3)) + ["|"] + ofbest_curve + ["|"] + r2best_curve)
+                    measure_stats.append(teams[i] + list(analysis.basic_stats(line, 0, 0)) + list(analysis.histo_analysis(line, 1, -3, 3)) + ofbest_curve + r2best_curve)
 
             stats.append(list(measure_stats))
-            
-    json_out = {}
+            nishant = []
+            for i in range(len(scores)):
+
+                    ofbest_curve = [None]
+                    r2best_curve = [None]
+
+                    line = measure[i]
+
+                    #print(line)
+
+                    x = list(range(len(line)))
+                    eqs, rmss, r2s, overfit = analysis.optimize_regression(x, line, 10, 1)
+
+                    beqs, brmss, br2s, boverfit = analysis.select_best_regression(eqs, rmss, r2s, overfit, "min_overfit")
+
+                    #print(eqs, rmss, r2s, overfit)
                     
-    for i in range(len(stats)):
-            json_out[files[i]]=str(stats[i])
+                    ofbest_curve.append(beqs)
+                    ofbest_curve.append(brmss)
+                    ofbest_curve.append(br2s)
+                    ofbest_curve.append(boverfit)
+                    ofbest_curve.pop(0)
 
-    #print(json_out)
+                    #print(ofbest_curve)
 
-    db.collection(u'stats').document(u'stats-noNN').set(json_out)
+                    beqs, brmss, br2s, boverfit = analysis.select_best_regression(eqs, rmss, r2s, overfit, "max_r2s")
+
+                    r2best_curve.append(beqs)
+                    r2best_curve.append(brmss)
+                    r2best_curve.append(br2s)
+                    r2best_curve.append(boverfit)
+                    r2best_curve.pop(0)
+
+                    #print(r2best_curve)
+                    
+                    z = len(scores[0]) + 1
+                    nis_num = []
+
+                    nis_num.append(eval(str(ofbest_curve[0])))
+                    nis_num.append(eval(str(r2best_curve[0])))
+
+                    nis_num.append((eval(ofbest_curve[0]) + eval(r2best_curve[0])) / 2)
+
+                    nishant.append(teams[i] + nis_num)
+                
+    json_out = {}
+    score_out = {}
+
+    #print(stats)
+                    
+    for i in range(len(teams)):
+            json_out[str(teams[i][0])] = (stats[0][i])
+
+    for i in range(len(teams)):
+            score_out[str(teams[i][0])] = (nishant[i])
+
+    print(json_out)
+
+    #print(json_out.get('5'))
+
+    location = db.collection(u'stats').document(u'stats-noNN')
+    for i in range(len(teams)):
+        general_general_stats = location.collection(teams[i][0])
+        for j in range(len(files)):
+            general_general_stats.document(files[j]).set({'stats':json_out.get(teams[i][0])})
+
+    for i in range(len(teams)):
+        nnum = location.collection(teams[i][0]).document(u'nishant_number').set({'nishant':score_out.get(teams[i][0])})
+
+    #general_general_stats.collection().document('stats').set()
+    #db.collection(u'stats').document(u'stats-noNN').set(score_out)
 
 def pulldata():
     #TODO
@@ -173,3 +238,4 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 service() #finally we write something that isn't a function definition
+#titanservice()
