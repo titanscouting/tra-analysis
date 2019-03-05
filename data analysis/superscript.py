@@ -119,6 +119,7 @@ def titanservice():
 
             stats.append(list(measure_stats))
             nishant = []
+            
             for i in range(len(scores)):
 
                     ofbest_curve = [None]
