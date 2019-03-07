@@ -78,9 +78,9 @@ def titanservice():
     #unhelpful comment
     for measure in data: #unpacks 3d array into 2ds
 
-            measure_stats = []
+        measure_stats = []
 
-            for i in range(len(measure)): #unpacks into specific teams
+        for i in range(len(measure)): #unpacks into specific teams
 
                     ofbest_curve = [None]
                     r2best_curve = [None]
