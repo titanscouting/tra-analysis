@@ -138,6 +138,7 @@ function reqjt(tn, tc) {
 }
 
 function leaveTeam(tn) {
+  user = firebase.auth().currentUser;
   teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid)
   teamAssoc.get().then(function(doc) {
     if (doc.exists) {
