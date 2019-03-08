@@ -47,7 +47,6 @@ window.onload = function() {
     } else {
       window.location.replace('../');
     }
-    firebase.firestore.settings({timestampsInSnapshots: true})
     teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid);
     teamAssoc.get().then(function(doc) {
       if (doc.exists) {
@@ -62,6 +61,7 @@ window.onload = function() {
       }
     })
   });
+  firebase.firestore.settings({timestampsInSnapshots: true})
 }
 
 function cnt(tn) {
