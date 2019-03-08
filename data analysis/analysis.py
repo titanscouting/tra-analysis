@@ -16,34 +16,34 @@ __changelog__ = """changelog:
 1.0.8.004:
     - removed a few unused dependencies
 1.0.8.003:
-	- added p_value function
+    - added p_value function
 1.0.8.002:
-	- updated __all__ correctly to contain changes made in v 1.0.8.000 and v 1.0.8.001
+    - updated __all__ correctly to contain changes made in v 1.0.8.000 and v 1.0.8.001
 1.0.8.001:
-	- refactors
-	- bugfixes
+    - refactors
+    - bugfixes
 1.0.8.000:
-	- depreciated histo_analysis_old
-	- depreciated debug
-	- altered basic_analysis to take array data instead of filepath
-	- refactor
-	- optimization
+    - depreciated histo_analysis_old
+    - depreciated debug
+    - altered basic_analysis to take array data instead of filepath
+    - refactor
+    - optimization
 1.0.7.002:
-	- bug fixes
+    - bug fixes
 1.0.7.001:
-	- bug fixes
+    - bug fixes
 1.0.7.000:
-	- added tanh_regression (logistical regression)
-	- bug fixes
+    - added tanh_regression (logistical regression)
+    - bug fixes
 1.0.6.005:
-	- added z_normalize function to normalize dataset
-	- bug fixes
+    - added z_normalize function to normalize dataset
+    - bug fixes
 1.0.6.004:
-	- bug fixes
+    - bug fixes
 1.0.6.003:
-	- bug fixes
+    - bug fixes
 1.0.6.002:
-	- bug fixes
+    - bug fixes
 1.0.6.001:
     - corrected __all__ to contain all of the functions
 1.0.6.000:
@@ -152,7 +152,7 @@ from sklearn import *
 #import statistics <-- statistics.py functions have been integrated into analysis.py as of v 1.0.3.002
 import time
 import torch
-
+    
 class error(ValueError):
     pass
 
@@ -411,6 +411,7 @@ class objectives:
 def load_csv(filepath):
     with open(filepath, newline = '') as csvfile:
         file_array = list(csv.reader(csvfile))
+        csvfile.close()
     return file_array
 
 def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, 'column':c_basic_stats, 'row':r_basic_stats], arg for mode 1 or mode 2 for column or row
@@ -422,7 +423,7 @@ def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, '
 
         data_t = []
 
-        for i in range (0, len(data) - 1, 1):
+        for i in range (0, len(data), 1):
             data_t.append(float(data[i]))
     
         _mean = mean(data_t)
@@ -558,12 +559,15 @@ def stdev_z_split(mean, stdev, delta, low_bound, high_bound): #returns n-th perc
 def histo_analysis(hist_data, delta, low_bound, high_bound):
 
     if hist_data == 'debug':
-        return ('returns list of predicted values based on historical data; input delta for delta step in z-score and lower and higher bounds in number for standard deviations')
+        return ('returns list of predicted values based on historical data; input delta for delta step in z-score and lower and higher bounds in number of standard deviations')
 
     derivative = []
 
-    for i in range(0, len(hist_data) - 1, 1):
-        derivative.append(float(hist_data[i + 1]) - float(hist_data [i]))
+    for i in range(0, len(hist_data), 1):
+        try:
+            derivative.append(float(hist_data[i - 1]) - float(hist_data [i]))
+        except:
+            pass
 
     derivative_sorted = sorted(derivative, key=int)
     mean_derivative = basic_stats(derivative_sorted,"1d", 0)[0]
@@ -700,7 +704,7 @@ def tanh_regression(x, y):
     
 def r_squared(predictions, targets): # assumes equal size inputs
 
-    return metrics.r2_score(targets, predictions)
+    return metrics.r2_score(np.array(targets), np.array(predictions))
 
 def rms(predictions, targets): # assumes equal size inputs
 
@@ -723,11 +727,11 @@ def calc_overfit(equation, rms_train, r2_train, x_test, y_test):
         z = x_test[i]
 
         exec("vals.append(" + equation + ")")
-        
+
     r2_test = r_squared(vals, y_test)
     rms_test = rms(vals, y_test)
 
-    return rms_train - rms_test, r2_train - r2_test
+    return r2_train - r2_test
 
 def strip_data(data, mode):
 
@@ -746,16 +750,19 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
         raise error("resolution must be int")
 
     x_train = x
-    y_train = y
+    y_train = []
+
+    for i in range(len(y)):
+        y_train.append(float(y[i]))
 
     x_test = []
     y_test = []
 
-    for i in range (0, math.floor(len(x) * 0.4), 1):
+    for i in range (0, math.floor(len(x) * 0.5), 1):
         index = random.randint(0, len(x) - 1)
 
         x_test.append(x[index])
-        y_test.append(y[index])
+        y_test.append(float(y[index]))
 
         x_train.pop(index)
         y_train.pop(index)
@@ -768,10 +775,13 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
     r2s = []
 
     for i in range (0, _range + 1, 1):
-    	x, y, z = poly_regression(x_train, y_train, i)
-    	eqs.append(x)
-    	rmss.append(y)
-    	r2s.append(z)
+        try:
+            x, y, z = poly_regression(x_train, y_train, i)
+            eqs.append(x)
+            rmss.append(y)
+            r2s.append(z)
+        except:
+            pass
 
     for i in range (1, 100 * resolution + 1):
         try:
@@ -791,11 +801,14 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
         except:
             pass
 
-    x, y, z = tanh_regression(x_train, y_train)
+    try:
+        x, y, z = tanh_regression(x_train, y_train)
 
-    eqs.append(x)
-    rmss.append(y)
-    r2s.append(z)
+        eqs.append(x)
+        rmss.append(y)
+        r2s.append(z)
+    except:
+        pass
     
     for i in range (0, len(eqs), 1): #marks all equations where r2 = 1 as they 95% of the time overfit the data
         if r2s[i] == 1:
@@ -814,38 +827,38 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
     overfit = []
 
     for i in range (0, len(eqs), 1):
+
         overfit.append(calc_overfit(eqs[i], rmss[i], r2s[i], x_test, y_test))
             
     return eqs, rmss, r2s, overfit
 
 def select_best_regression(eqs, rmss, r2s, overfit, selector):
 
-	b_eq = ""
-	b_rms = 0
-	b_r2 = 0
-	b_overfit = 0
+    b_eq = ""
+    b_rms = 0
+    b_r2 = 0
+    b_overfit = 0
 
-	ind = 0
+    ind = 0
 
-	if selector == "min_overfit":
+    if selector == "min_overfit":
 
-		ind = np.argmax(overfit)
+        ind = np.argmin(overfit)
 
-		b_eq = eqs[ind]
-		b_rms = rmss[ind]
-		b_r2 = r2s[ind]
-		b_overfit = overfit[ind]
+        b_eq = eqs[ind]
+        b_rms = rmss[ind]
+        b_r2 = r2s[ind]
+        b_overfit = overfit[ind]
 
-	if selector == "max_rmss":
+    if selector == "max_r2s":
 
-		ind = np.argmax(rmss)
+        ind = np.argmax(r2s)
+        b_eq = eqs[ind]
+        b_rms = rmss[ind]
+        b_r2 = r2s[ind]
+        b_overfit = overfit[ind]
 
-		b_eq = eqs[ind]
-		b_rms = rmss[ind]
-		b_r2 = r2s[ind]
-		b_overfit = overfit[ind]
-
-	return b_eq, b_rms, b_r2, b_overfit
+    return b_eq, b_rms, b_r2, b_overfit
 
 def p_value(x, y): #takes 2 1d arrays
 	
@@ -877,7 +890,7 @@ def basic_analysis(data): #assumes that rows are the independent variable and co
 
 def benchmark(x, y):
 
-    start_g = time.time()
+    start_g = time.time() 
     generate_data("data/data.csv", x, y, -10, 10)
     end_g = time.time()
 
