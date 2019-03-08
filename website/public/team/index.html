@@ -32,12 +32,9 @@
     <h2>Team Membership</h2>
     <div id="newstuff">
       <div>
-        <input type="button" name="CNT" value="Create New Team" class="btn" onclick="cnt(document.getElementById('ntn').value);">
-        <input type="text" name="TMN" value="" placeholder="Team Name" id="ntn">
-      </div>
-      <div>
-        <input type="button" name="CNT" value="Request to Join a Team" class="btn" onclick="reqjt(document.getElementById('etn').value);">
+        <input type="button" name="CNT" value="Request to Join a Team" class="btn" onclick="reqjt(document.getElementById('etn').value,document.getElementById('jcn').value);">
         <input type="text" name="TMN" value="" placeholder="Team Name" id="etn">
+        <input type="text" name="JC" value="" placeholder="Join Code" id="jcn">
       </div>
     </div>
     <table id="teammem">

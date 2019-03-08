@@ -47,6 +47,7 @@ window.onload = function() {
     } else {
       window.location.replace('../');
     }
+    firebase.firestore.settings({timestampsInSnapshots: true})
     teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid);
     teamAssoc.get().then(function(doc) {
       if (doc.exists) {
@@ -84,6 +85,38 @@ function cnt(tn) {
       }
     })
   })
+}
+function checkKeyMatch(dt,tn,key){
+    for(i=0; i<Object.keys(dt).length; i++){
+        if (Object.keys(dt)[i]=="code-"+key){
+            if (dt[Object.keys(dt)[i]]==tn){
+                return true
+            }
+        }
+    }
+    return false
+}
+function reqjt(tn,tc){
+  user=firebase.auth().currentUser;
+  dict=firebase.firestore().collection('teamData').doc('joinCodes').data();
+  if checkKeyMatch(dict,tn,tc){
+    push={};
+    push[tn]='scout';
+    firebase.firestore().collection("UserAssociations").doc(user.uid).set(push, {
+      merge: true
+    })then(function(doc) {
+      if (doc.exists) {
+        list = doc.data()
+        teamNums = Object.keys(list)
+        document.getElementById('teammem').innerHTML = ""
+        for (var i = 0; i < teamNums.length; i++) {
+          document.getElementById('teammem').innerHTML += "<tr><td>" + teamNums[i] + "</td><td>" + list[teamNums[i]] + "</td></tr>"
+        }
+      } else {
+        document.getElementById('teammem').innerHTML = "<tr><td>You are not part of any teams</td></tr>"
+      }
+    })
+  }
 }
 
 function signout() {
