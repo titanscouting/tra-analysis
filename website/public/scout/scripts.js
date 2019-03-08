@@ -67,26 +67,24 @@ function subRes() {
     push['speed'] = document.getElementById('speed').value
     push['sandstormCross'] = document.getElementById('SCross').value
     push['strategy']= document.getElementById('strat').value
+    push['contrubution'] = document.getElementById('contrib').value
+    push['startingHatch'] = document.getElementById('habs').value
+    push['size'] = document.getElementById('egs').value
 
-    push['sandstormCargoShipHatchSuccess'] = document.getElementById('SCHS').value
-    push['sandstormCargoShipHatchFailure'] = document.getElementById('SCHU').value
-    push['sandstormRocketHatchSuccess'] = document.getElementById('SRHS').value
-    push['sandstormRocketHatchFailure'] = document.getElementById('SRHU').value
-    push['sandstormCargoShipCargoSuccess'] = document.getElementById('SCCS').value
-    push['sandstormCargoShipCargoFailure'] = document.getElementById('SCCU').value
-    push['sandstormRocketCargoSuccess'] = document.getElementById('SRCS').value
-    push['sandstormRocketCargoFailure'] = document.getElementById('SRHU').value
+    push['fillChoice'] = document.getElementById('SFill').value
+    push['functional'] = document.getElementById('DOA').value
+    push['strongMedium'] = document.getElementById('SSO').value
+    push['sandstormCrossBonus'] = document.getElementById('SCross').value
 
-    push['teleOpCargoShipHatchSuccess'] = document.getElementById('TCHS').value
-    push['teleOpCargoShipHatchFailure'] = document.getElementById('TCHU').value
-    push['teleOpRocketHatchSuccess'] = document.getElementById('TRHS').value
-    push['teleOpRocketHatchFailure'] = document.getElementById('TRHU').value
-    push['teleOpCargoShipCargoSuccess'] = document.getElementById('TCCS').value
-    push['teleOpCargoShipCargoFailure'] = document.getElementById('SCCU').value
-    push['teleOpRocketCargoSuccess'] = document.getElementById('TRCS').value
-    push['teleOpRocketCargoFailure'] = document.getElementById('TRHU').value
+    push['fillChoiceTeleop'] = document.getElementById('TFill').value
+    push['strongMediumTeleop'] = document.getElementById('TSO').value
 
-    push['HABClimb'] = document.getElementById('HAB').value
+    push['cargoSuccessTeleop'] = document.getElementById('CSSR').value
+    push['hiRocketSuccessTeleop'] = document.getElementById('HRSR').value
+    push['lowRocketSuccessTeleop'] = document.getElementById('LRSR').value
+
+    push['endingHab'] = document.getElementById('HAB').value
+
     firebase.firestore().collection("teamData").doc('team-' + document.getElementById('tns').value).collection('scouts').doc(user.uid).collection(comp).doc("team-" + document.getElementById('tsn').value + "-match-" + document.getElementById('mn').value).set(push, {
       merge: true
     })
@@ -97,26 +95,24 @@ function subRes() {
       push['teamDBRef'] = 'team-' + document.getElementById('tsn').value
       push['speed'] = document.getElementById('speed').value
       push['sandstormCross'] = document.getElementById('SCross').value
+      push['strategy']= document.getElementById('strat').value
+      push['contrubution'] = document.getElementById('contrib').value
+      push['startingHatch'] = document.getElementById('habs').value
+      push['size'] = document.getElementById('egs').value
 
-      push['sandstormCargoShipHatchSuccess'] = document.getElementById('SCHS').value
-      push['sandstormCargoShipHatchFailure'] = document.getElementById('SCHU').value
-      push['sandstormRocketHatchSuccess'] = document.getElementById('SRHS').value
-      push['sandstormRocketHatchFailure'] = document.getElementById('SRHU').value
-      push['sandstormCargoShipCargoSuccess'] = document.getElementById('SCCS').value
-      push['sandstormCargoShipCargoFailure'] = document.getElementById('SCCU').value
-      push['sandstormRocketCargoSuccess'] = document.getElementById('SRCS').value
-      push['sandstormRocketCargoFailure'] = document.getElementById('SRHU').value
+      push['fillChoice'] = document.getElementById('SFill').value
+      push['functional'] = document.getElementById('DOA').value
+      push['strongMedium'] = document.getElementById('SSO').value
+      push['sandstormCrossBonus'] = document.getElementById('SCross').value
 
-      push['teleOpCargoShipHatchSuccess'] = document.getElementById('TCHS').value
-      push['teleOpCargoShipHatchFailure'] = document.getElementById('TCHU').value
-      push['teleOpRocketHatchSuccess'] = document.getElementById('TRHS').value
-      push['teleOpRocketHatchFailure'] = document.getElementById('TRHU').value
-      push['teleOpCargoShipCargoSuccess'] = document.getElementById('TCCS').value
-      push['teleOpCargoShipCargoFailure'] = document.getElementById('SCCU').value
-      push['teleOpRocketCargoSuccess'] = document.getElementById('TRCS').value
-      push['teleOpRocketCargoFailure'] = document.getElementById('TRHU').value
+      push['fillChoiceTeleop'] = document.getElementById('TFill').value
+      push['strongMediumTeleop'] = document.getElementById('TSO').value
 
-      push['HABClimb'] = document.getElementById('HAB').value
+      push['cargoSuccessTeleop'] = document.getElementById('CSSR').value
+      push['hiRocketSuccessTeleop'] = document.getElementById('HRSR').value
+      push['lowRocketSuccessTeleop'] = document.getElementById('LRSR').value
+
+      push['endingHab'] = document.getElementById('HAB').value
       firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(comp).doc("team-" + document.getElementById('tsn').value).collection('matches').doc('match-' + document.getElementById('mn').value).set(push, {
         merge: true
       })
