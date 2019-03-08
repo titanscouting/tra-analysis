@@ -61,13 +61,15 @@ window.onload = function() {
       }
     })
   });
-  firebase.firestore.settings({timestampsInSnapshots: true})
+  firebase.firestore.settings({
+    timestampsInSnapshots: true
+  })
 }
 
 function cnt(tn) {
-  user=firebase.auth().currentUser;
-  push={}
-  push[tn]='captian'
+  user = firebase.auth().currentUser;
+  push = {}
+  push[tn] = 'captian'
   firebase.firestore().collection("UserAssociations").doc(user.uid).set(push, {
     merge: true
   }).then(function() {
@@ -78,7 +80,7 @@ function cnt(tn) {
         teamNums = Object.keys(list)
         document.getElementById('teammem').innerHTML = ""
         for (var i = 0; i < teamNums.length; i++) {
-          document.getElementById('teammem').innerHTML += "<tr><td>" + teamNums[i] + "</td><td>" + list[teamNums[i]] + "</td></tr>"
+          document.getElementById('teammem').innerHTML += "<tr><td>" + teamNums[i] + "</td><td>" + list[teamNums[i]] + "</td>" + "<td><input type='button' class='btn' value='leave' onclick='leaveTeam(" + teamNums[i] + ")'></td></tr>"
         }
       } else {
         document.getElementById('teammem').innerHTML = "<tr><td>You are not part of any teams</td></tr>"
@@ -86,67 +88,94 @@ function cnt(tn) {
     })
   })
 }
-function checkKeyMatch(dt,tn,key){
-    for(i=0; i<Object.keys(dt).length; i++){
-        if (Object.keys(dt)[i]=="code-"+key){
-            if (dt[Object.keys(dt)[i]]=="team-"+tn){
-                return true
-            }
-        }
+
+function checkKeyMatch(dt, tn, key) {
+  for (i = 0; i < Object.keys(dt).length; i++) {
+    if (Object.keys(dt)[i] == "code-" + key) {
+      if (dt[Object.keys(dt)[i]] == "team-" + tn) {
+        return true
+      }
     }
-    return false
+  }
+  return false
 }
-function reqjt(tn,tc){
-  user=firebase.auth().currentUser;
-  firebase.firestore().collection('teamData').doc('joinCodes').get().then(function(doc){
+
+function reqjt(tn, tc) {
+  user = firebase.auth().currentUser;
+  firebase.firestore().collection('teamData').doc('joinCodes').get().then(function(doc) {
     if (doc.exists) {
-       dict=doc.data();
-       if (checkKeyMatch(dict,tn,tc)){
-         push={};
-         push[tn]='scout';
-         firebase.firestore().collection("UserAssociations").doc(user.uid).set(push, {
-           merge: true
-         }).then(function() {
-           teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid)
-           teamAssoc.get().then(function(doc) {
-             if (doc.exists) {
-               list = doc.data()
-               teamNums = Object.keys(list)
-               document.getElementById('teammem').innerHTML = ""
-               for (var i = 0; i < teamNums.length; i++) {
-                 document.getElementById('teammem').innerHTML += "<tr><td>" + teamNums[i] + "</td><td>" + list[teamNums[i]] + "</td></tr>"
-               }
-             } else {
-               document.getElementById('teammem').innerHTML = "<tr><td>You are not part of any teams</td></tr>"
-             }
-           })
-         })
-       }else{
-         alert("You don't have a correct join key. Please check it and try again.")
-         console.log(dict)
-       }
-   } else {
-       // doc.data() will be undefined in this case
-       console.log("No such document!");
-   }
+      dict = doc.data();
+      if (checkKeyMatch(dict, tn, tc)) {
+        push = {};
+        push[tn] = 'scout';
+        firebase.firestore().collection("UserAssociations").doc(user.uid).set(push, {
+          merge: true
+        }).then(function() {
+          teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid)
+          teamAssoc.get().then(function(doc) {
+            if (doc.exists) {
+              list = doc.data()
+              teamNums = Object.keys(list)
+              document.getElementById('teammem').innerHTML = ""
+              for (var i = 0; i < teamNums.length; i++) {
+                document.getElementById('teammem').innerHTML += "<tr><td>" + teamNums[i] + "</td><td>" + list[teamNums[i]] + "</td>" + "<td><input type='button' class='btn' value='leave' onclick='leaveTeam(" + teamNums[i] + ")'></td></tr>"
+              }
+            } else {
+              document.getElementById('teammem').innerHTML = "<tr><td>You are not part of any teams</td></tr>"
+            }
+          })
+        })
+      } else {
+        alert("You don't have a correct join key. Please check it and try again.")
+        console.log(dict)
+      }
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
   });
 
 }
 
-function signout() {
-  var user = firebase.auth().currentUser;
-  firebase.auth().signOut().then(
-    window.location.href = '../');
-}
-
-function deleteAccount() {
-  try {
-    firebase.auth().currentUser.delete().then(
-      window.location.href = '../');
-  } catch (error) {
-    if (error.code == 'auth/requires-recent-login') {
-      alert("Please sign in again to delete your account.")
-      window.location.href = '../';
+function leaveTeam(tn) {
+  teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid)
+  teamAssoc.get().then(function(doc) {
+      if (doc.exists) {
+        list = doc.data()
+        delete list[tn]
+        firebase.firestore().collection("UserAssociations").doc(user.uid).set(list).then(function() {
+          teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid)
+          teamAssoc.get().then(function(doc) {
+            if (doc.exists) {
+              list = doc.data()
+              teamNums = Object.keys(list)
+              document.getElementById('teammem').innerHTML = ""
+              for (var i = 0; i < teamNums.length; i++) {
+                document.getElementById('teammem').innerHTML += "<tr><td>" + teamNums[i] + "</td><td>" + list[teamNums[i]] + "</td>" + "<td><input type='button' class='btn' value='leave' onclick='leaveTeam(" + teamNums[i] + ")'></td></tr>"
+              }
+            } else {
+              document.getElementById('teammem').innerHTML = "<tr><td>You are not part of any teams</td></tr>"
+            }
+          })
+        })
+      )
     }
   }
-}
+
+  function signout() {
+    var user = firebase.auth().currentUser;
+    firebase.auth().signOut().then(
+      window.location.href = '../');
+  }
+
+  function deleteAccount() {
+    try {
+      firebase.auth().currentUser.delete().then(
+        window.location.href = '../');
+    } catch (error) {
+      if (error.code == 'auth/requires-recent-login') {
+        alert("Please sign in again to delete your account.")
+        window.location.href = '../';
+      }
+    }
+  }

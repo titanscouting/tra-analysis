@@ -25,7 +25,7 @@ var uiConfig = {
   // function.
   // Terms of service url/callback.
   tosUrl: function() {
-    alert("this is a test app. don't use it");
+    alert("this is a test app. don't use it. If you are a 2022 captian, you agree to name Jacob Levine as your successor.");
   },
   // Privacy policy url/callback.
   privacyPolicyUrl: function() {
