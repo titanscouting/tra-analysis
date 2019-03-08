@@ -140,27 +140,26 @@ function reqjt(tn, tc) {
 function leaveTeam(tn) {
   teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid)
   teamAssoc.get().then(function(doc) {
-      if (doc.exists) {
-        list = doc.data()
-        delete list[tn]
-        firebase.firestore().collection("UserAssociations").doc(user.uid).set(list).then(function() {
-          teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid)
-          teamAssoc.get().then(function(doc) {
-            if (doc.exists) {
-              list = doc.data()
-              teamNums = Object.keys(list)
-              document.getElementById('teammem').innerHTML = ""
-              for (var i = 0; i < teamNums.length; i++) {
-                document.getElementById('teammem').innerHTML += "<tr><td>" + teamNums[i] + "</td><td>" + list[teamNums[i]] + "</td>" + "<td><input type='button' class='btn' value='leave' onclick='leaveTeam(" + teamNums[i] + ")'></td></tr>"
-              }
-            } else {
-              document.getElementById('teammem').innerHTML = "<tr><td>You are not part of any teams</td></tr>"
+    if (doc.exists) {
+      list = doc.data()
+      delete list[tn]
+      firebase.firestore().collection("UserAssociations").doc(user.uid).set(list).then(function() {
+        teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid)
+        teamAssoc.get().then(function(doc) {
+          if (doc.exists) {
+            list = doc.data()
+            teamNums = Object.keys(list)
+            document.getElementById('teammem').innerHTML = ""
+            for (var i = 0; i < teamNums.length; i++) {
+              document.getElementById('teammem').innerHTML += "<tr><td>" + teamNums[i] + "</td><td>" + list[teamNums[i]] + "</td>" + "<td><input type='button' class='btn' value='leave' onclick='leaveTeam(" + teamNums[i] + ")'></td></tr>"
             }
-          })
+          } else {
+            document.getElementById('teammem').innerHTML = "<tr><td>You are not part of any teams</td></tr>"
+          }
         })
-      )
+      })
     }
-  }
+  })
 
   function signout() {
     var user = firebase.auth().currentUser;
