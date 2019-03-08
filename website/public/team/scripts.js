@@ -89,7 +89,7 @@ function cnt(tn) {
 function checkKeyMatch(dt,tn,key){
     for(i=0; i<Object.keys(dt).length; i++){
         if (Object.keys(dt)[i]=="code-"+key){
-            if (dt[Object.keys(dt)[i]]==tn){
+            if (dt[Object.keys(dt)[i]]=="team-"+tn){
                 return true
             }
         }
