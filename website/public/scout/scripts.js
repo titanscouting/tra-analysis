@@ -126,5 +126,3 @@ function subRes() {
     window.location.href = '../scout'
   })
 }
-})
-}
