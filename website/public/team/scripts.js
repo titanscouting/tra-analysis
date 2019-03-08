@@ -98,7 +98,15 @@ function checkKeyMatch(dt,tn,key){
 }
 function reqjt(tn,tc){
   user=firebase.auth().currentUser;
-  dict=firebase.firestore().collection('teamData').doc('joinCodes').data();
+  dict={}
+  firebase.firestore().collection('teamData').doc('joinCodes').get().then(function(doc){
+    if (doc.exists) {
+       dict=doc.data();
+   } else {
+       // doc.data() will be undefined in this case
+       console.log("No such document!");
+   }
+  });
   if (checkKeyMatch(dict,tn,tc)){
     push={};
     push[tn]='scout';
@@ -116,6 +124,8 @@ function reqjt(tn,tc){
         document.getElementById('teammem').innerHTML = "<tr><td>You are not part of any teams</td></tr>"
       }
     })
+  }else{
+    alert("You don't have a correct join key. Please check it and try again.")
   }
 }
 
