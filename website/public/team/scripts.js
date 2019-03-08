@@ -126,6 +126,7 @@ function reqjt(tn,tc){
     })
   }else{
     alert("You don't have a correct join key. Please check it and try again.")
+    console.log(dict)
   }
 }
 
