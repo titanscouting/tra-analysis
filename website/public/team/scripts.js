@@ -48,13 +48,13 @@ window.onload = function() {
       window.location.replace('../');
     }
     teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid);
-    teamAssoc.get().then(function(doc) {
+    teamAssoc.get()..then(function(doc) {
       if (doc.exists) {
         list = doc.data()
         teamNums = Object.keys(list)
         document.getElementById('teammem').innerHTML = ""
         for (var i = 0; i < teamNums.length; i++) {
-          document.getElementById('teammem').innerHTML += "<tr><td>" + teamNums[i] + "</td><td>" + list[teamNums[i]] + "</td></tr>"
+          document.getElementById('teammem').innerHTML += "<tr><td>" + teamNums[i] + "</td><td>" + list[teamNums[i]] + "</td>" + "<td><input type='button' class='btn' value='leave' onclick='leaveTeam(" + teamNums[i] + ")'></td></tr>"
         }
       } else {
         document.getElementById('teammem').innerHTML = "<tr><td>You are not part of any teams</td></tr>"
@@ -162,20 +162,20 @@ function leaveTeam(tn) {
   })
 }
 
-  function signout() {
-    var user = firebase.auth().currentUser;
-    firebase.auth().signOut().then(
-      window.location.href = '../');
-  }
+function signout() {
+  var user = firebase.auth().currentUser;
+  firebase.auth().signOut().then(
+    window.location.href = '../');
+}
 
-  function deleteAccount() {
-    try {
-      firebase.auth().currentUser.delete().then(
-        window.location.href = '../');
-    } catch (error) {
-      if (error.code == 'auth/requires-recent-login') {
-        alert("Please sign in again to delete your account.")
-        window.location.href = '../';
-      }
+function deleteAccount() {
+  try {
+    firebase.auth().currentUser.delete().then(
+      window.location.href = '../');
+  } catch (error) {
+    if (error.code == 'auth/requires-recent-login') {
+      alert("Please sign in again to delete your account.")
+      window.location.href = '../';
     }
   }
+}
