@@ -38,5 +38,16 @@ window.onload = function() {
     } else {
       window.location.replace('../');
     }
+    teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid);
+    teamAssoc.get().then(function(doc) {
+      if (doc.exists) {
+        list = doc.data()
+        teamNums = Object.keys(list)
+        document.getElementById(tns).innerHTML = ""
+        for (var i = 0; i < teamNums.length; i++) {
+          document.getElementById(tns).innerHTML += "<option value='" + teamNums[i] + "'>" + teamNums[i] + "</option>"
+        }
+      } else {}
+    })
   });
 }
