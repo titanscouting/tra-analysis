@@ -16,6 +16,9 @@ input,#newDN, #newEM{
   border-radius: 5px;
   font-family: 'Roboto', sans-serif;
 }
+#mn, #tsn{
+  width:50px;
+}
 #newDN,#newEM{
   padding-left: 3px;
   padding-right: 3px;
