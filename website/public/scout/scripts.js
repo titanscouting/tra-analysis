@@ -66,6 +66,7 @@ function subRes() {
     push['teamDBRef'] = 'team-' + document.getElementById('tsn').value
     push['speed'] = document.getElementById('speed').value
     push['sandstormCross'] = document.getElementById('SCross').value
+    push['strategy']= document.getElementById('strat').value
 
     push['sandstormCargoShipHatchSuccess'] = document.getElementById('SCHS').value
     push['sandstormCargoShipHatchFailure'] = document.getElementById('SCHU').value
