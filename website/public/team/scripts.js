@@ -160,6 +160,7 @@ function leaveTeam(tn) {
       })
     }
   })
+}
 
   function signout() {
     var user = firebase.auth().currentUser;
