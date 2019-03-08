@@ -99,7 +99,7 @@ function checkKeyMatch(dt,tn,key){
 function reqjt(tn,tc){
   user=firebase.auth().currentUser;
   dict=firebase.firestore().collection('teamData').doc('joinCodes').data();
-  if checkKeyMatch(dict,tn,tc){
+  if (checkKeyMatch(dict,tn,tc)){
     push={};
     push[tn]='scout';
     firebase.firestore().collection("UserAssociations").doc(user.uid).set(push, {
