@@ -79,7 +79,6 @@ function updun() {
     firebase.firestore().collection("users").doc(user.uid).set({alias:firebase.auth().currentUser.displayName}}, {
       merge: true
     })
-    }
   }).catch(function(error) {
     alert("there was a problem: " + error)
   });
