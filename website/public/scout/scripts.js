@@ -54,76 +54,77 @@ window.onload = function() {
 
 function subRes() {
   firebase.firestore().collection('teamData').doc('team-' + document.getElementById('tns').value).get().then(function(doc) {
-      if (doc.exists) {
-        comp = doc.data()['currentCompetition'];
-      ).then(function() {
+    if (doc.exists) {
+      comp = doc.data()['currentCompetition'];
+    }
+  }).then(function() {
 
 
-        var user = firebase.auth().currentUser;
-        push = {}
-        push['match'] = 'match-' + document.getElementById('mn').value
-        push['teamDBRef'] = 'team-' + document.getElementById('tsn').value
-        push['speed'] = document.getElementById('speed').value
-        push['sandstormCross'] = document.getElementById('SCross').value
+    var user = firebase.auth().currentUser;
+    push = {}
+    push['match'] = 'match-' + document.getElementById('mn').value
+    push['teamDBRef'] = 'team-' + document.getElementById('tsn').value
+    push['speed'] = document.getElementById('speed').value
+    push['sandstormCross'] = document.getElementById('SCross').value
 
-        push['sandstormCargoShipHatchSuccess'] = document.getElementById('SCHS').value
-        push['sandstormCargoShipHatchFailure'] = document.getElementById('SCHU').value
-        push['sandstormRocketHatchSuccess'] = document.getElementById('SRHS').value
-        push['sandstormRocketHatchFailure'] = document.getElementById('SRHU').value
-        push['sandstormCargoShipCargoSuccess'] = document.getElementById('SCCS').value
-        push['sandstormCargoShipCargoFailure'] = document.getElementById('SCCU').value
-        push['sandstormRocketCargoSuccess'] = document.getElementById('SRCS').value
-        push['sandstormRocketCargoFailure'] = document.getElementById('SRHU').value
+    push['sandstormCargoShipHatchSuccess'] = document.getElementById('SCHS').value
+    push['sandstormCargoShipHatchFailure'] = document.getElementById('SCHU').value
+    push['sandstormRocketHatchSuccess'] = document.getElementById('SRHS').value
+    push['sandstormRocketHatchFailure'] = document.getElementById('SRHU').value
+    push['sandstormCargoShipCargoSuccess'] = document.getElementById('SCCS').value
+    push['sandstormCargoShipCargoFailure'] = document.getElementById('SCCU').value
+    push['sandstormRocketCargoSuccess'] = document.getElementById('SRCS').value
+    push['sandstormRocketCargoFailure'] = document.getElementById('SRHU').value
 
-        push['teleOpCargoShipHatchSuccess'] = document.getElementById('TCHS').value
-        push['teleOpCargoShipHatchFailure'] = document.getElementById('TCHU').value
-        push['teleOpRocketHatchSuccess'] = document.getElementById('TRHS').value
-        push['teleOpRocketHatchFailure'] = document.getElementById('TRHU').value
-        push['teleOpCargoShipCargoSuccess'] = document.getElementById('TCCS').value
-        push['teleOpCargoShipCargoFailure'] = document.getElementById('SCCU').value
-        push['teleOpRocketCargoSuccess'] = document.getElementById('TRCS').value
-        push['teleOpRocketCargoFailure'] = document.getElementById('TRHU').value
+    push['teleOpCargoShipHatchSuccess'] = document.getElementById('TCHS').value
+    push['teleOpCargoShipHatchFailure'] = document.getElementById('TCHU').value
+    push['teleOpRocketHatchSuccess'] = document.getElementById('TRHS').value
+    push['teleOpRocketHatchFailure'] = document.getElementById('TRHU').value
+    push['teleOpCargoShipCargoSuccess'] = document.getElementById('TCCS').value
+    push['teleOpCargoShipCargoFailure'] = document.getElementById('SCCU').value
+    push['teleOpRocketCargoSuccess'] = document.getElementById('TRCS').value
+    push['teleOpRocketCargoFailure'] = document.getElementById('TRHU').value
 
-        push['HABClimb'] = document.getElementById('HAB').value
-        firebase.firestore().collection("teamData").doc('team-' + document.getElementById('tns').value).collection('scouts').doc(user.uid).collection(comp).doc("team-" + document.getElementById('tsn').value + "-match-" + document.getElementById('mn').value).set(push, {
-          merge: true
-        })
-      }).then(function() {
-          var user = firebase.auth().currentUser;
-          push = {}
-          push['match'] = 'match-' + document.getElementById('mn').value
-          push['teamDBRef'] = 'team-' + document.getElementById('tsn').value
-          push['speed'] = document.getElementById('speed').value
-          push['sandstormCross'] = document.getElementById('SCross').value
+    push['HABClimb'] = document.getElementById('HAB').value
+    firebase.firestore().collection("teamData").doc('team-' + document.getElementById('tns').value).collection('scouts').doc(user.uid).collection(comp).doc("team-" + document.getElementById('tsn').value + "-match-" + document.getElementById('mn').value).set(push, {
+      merge: true
+    })
+  }).then(function() {
+      var user = firebase.auth().currentUser;
+      push = {}
+      push['match'] = 'match-' + document.getElementById('mn').value
+      push['teamDBRef'] = 'team-' + document.getElementById('tsn').value
+      push['speed'] = document.getElementById('speed').value
+      push['sandstormCross'] = document.getElementById('SCross').value
 
-          push['sandstormCargoShipHatchSuccess'] = document.getElementById('SCHS').value
-          push['sandstormCargoShipHatchFailure'] = document.getElementById('SCHU').value
-          push['sandstormRocketHatchSuccess'] = document.getElementById('SRHS').value
-          push['sandstormRocketHatchFailure'] = document.getElementById('SRHU').value
-          push['sandstormCargoShipCargoSuccess'] = document.getElementById('SCCS').value
-          push['sandstormCargoShipCargoFailure'] = document.getElementById('SCCU').value
-          push['sandstormRocketCargoSuccess'] = document.getElementById('SRCS').value
-          push['sandstormRocketCargoFailure'] = document.getElementById('SRHU').value
+      push['sandstormCargoShipHatchSuccess'] = document.getElementById('SCHS').value
+      push['sandstormCargoShipHatchFailure'] = document.getElementById('SCHU').value
+      push['sandstormRocketHatchSuccess'] = document.getElementById('SRHS').value
+      push['sandstormRocketHatchFailure'] = document.getElementById('SRHU').value
+      push['sandstormCargoShipCargoSuccess'] = document.getElementById('SCCS').value
+      push['sandstormCargoShipCargoFailure'] = document.getElementById('SCCU').value
+      push['sandstormRocketCargoSuccess'] = document.getElementById('SRCS').value
+      push['sandstormRocketCargoFailure'] = document.getElementById('SRHU').value
 
-          push['teleOpCargoShipHatchSuccess'] = document.getElementById('TCHS').value
-          push['teleOpCargoShipHatchFailure'] = document.getElementById('TCHU').value
-          push['teleOpRocketHatchSuccess'] = document.getElementById('TRHS').value
-          push['teleOpRocketHatchFailure'] = document.getElementById('TRHU').value
-          push['teleOpCargoShipCargoSuccess'] = document.getElementById('TCCS').value
-          push['teleOpCargoShipCargoFailure'] = document.getElementById('SCCU').value
-          push['teleOpRocketCargoSuccess'] = document.getElementById('TRCS').value
-          push['teleOpRocketCargoFailure'] = document.getElementById('TRHU').value
+      push['teleOpCargoShipHatchSuccess'] = document.getElementById('TCHS').value
+      push['teleOpCargoShipHatchFailure'] = document.getElementById('TCHU').value
+      push['teleOpRocketHatchSuccess'] = document.getElementById('TRHS').value
+      push['teleOpRocketHatchFailure'] = document.getElementById('TRHU').value
+      push['teleOpCargoShipCargoSuccess'] = document.getElementById('TCCS').value
+      push['teleOpCargoShipCargoFailure'] = document.getElementById('SCCU').value
+      push['teleOpRocketCargoSuccess'] = document.getElementById('TRCS').value
+      push['teleOpRocketCargoFailure'] = document.getElementById('TRHU').value
 
-          push['HABClimb'] = document.getElementById('HAB').value
-          firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(comp).doc("team-" + document.getElementById('tsn').value).collection(comp).doc("team-" + document.getElementById('tsn').value).collection('matches').doc('match-' + document.getElementById('mn').value).set(push, {
-            merge: true
-          })
-        }
-
-      ).then(function() {
-        alert('Submitted!')
-        window.location.href = '../scout'
+      push['HABClimb'] = document.getElementById('HAB').value
+      firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(comp).doc("team-" + document.getElementById('tsn').value).collection(comp).doc("team-" + document.getElementById('tsn').value).collection('matches').doc('match-' + document.getElementById('mn').value).set(push, {
+        merge: true
       })
     }
+
+  ).then(function() {
+    alert('Submitted!')
+    window.location.href = '../scout'
   })
+}
+})
 }
