@@ -106,17 +106,20 @@ function reqjt(tn,tc){
          push[tn]='scout';
          firebase.firestore().collection("UserAssociations").doc(user.uid).set(push, {
            merge: true
-         }).then(function(doc) {
-           if (doc.exists) {
-             list = doc.data()
-             teamNums = Object.keys(list)
-             document.getElementById('teammem').innerHTML = ""
-             for (var i = 0; i < teamNums.length; i++) {
-               document.getElementById('teammem').innerHTML += "<tr><td>" + teamNums[i] + "</td><td>" + list[teamNums[i]] + "</td></tr>"
+         }).then(function() {
+           teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid)
+           teamAssoc.get().then(function(doc) {
+             if (doc.exists) {
+               list = doc.data()
+               teamNums = Object.keys(list)
+               document.getElementById('teammem').innerHTML = ""
+               for (var i = 0; i < teamNums.length; i++) {
+                 document.getElementById('teammem').innerHTML += "<tr><td>" + teamNums[i] + "</td><td>" + list[teamNums[i]] + "</td></tr>"
+               }
+             } else {
+               document.getElementById('teammem').innerHTML = "<tr><td>You are not part of any teams</td></tr>"
              }
-           } else {
-             document.getElementById('teammem').innerHTML = "<tr><td>You are not part of any teams</td></tr>"
-           }
+           })
          })
        }else{
          alert("You don't have a correct join key. Please check it and try again.")
