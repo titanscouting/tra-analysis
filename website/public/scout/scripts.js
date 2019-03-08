@@ -43,9 +43,9 @@ window.onload = function() {
       if (doc.exists) {
         list = doc.data()
         teamNums = Object.keys(list)
-        document.getElementById(tns).innerHTML = ""
+        document.getElementById('tns').innerHTML = ""
         for (var i = 0; i < teamNums.length; i++) {
-          document.getElementById(tns).innerHTML += "<option value='" + teamNums[i] + "'>" + teamNums[i] + "</option>"
+          document.getElementById('tns').innerHTML += "<option value='" + teamNums[i] + "'>" + teamNums[i] + "</option>"
         }
       } else {}
     })
