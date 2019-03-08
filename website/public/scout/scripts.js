@@ -123,6 +123,7 @@ function subRes() {
 
   ).then(function() {
     alert('Submitted!')
-    window.location.href = '../scout'
+    setTimeout(function(){ window.location.href = '../scout'; }, 500);
+
   })
 }
