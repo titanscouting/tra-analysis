@@ -48,7 +48,7 @@
         <option value="Weak">Weak</option>
         <option value="Equal">Equal</option>
         <option value="Strong">Strong</option>
-        <option value="IDK">IDK</option>
+        <option value="IDK" selected>IDK</option>
       </select>
     </div>
     <div>
@@ -57,7 +57,7 @@
         <option value="Medium">Medium</option>
         <option value="Large">Large</option>
         <option value="Jumbo">Jumbo</option>
-        <option value="IDK">IDK</option>
+        <option value="IDK" selected>IDK</option>
       </select>
     </div>
     <div>
@@ -67,7 +67,7 @@
         <option value="Hab I">Hab I</option>
         <option value="Hab II">Hab II</option>
         <option value="Hab III">Hab III</option>
-        <option value="IDK">IDK</option>
+        <option value="IDK" selected>IDK</option>
       </select>
       <div>
         Strategy: <input type="text" name="" value="" id="strat">
@@ -76,14 +76,14 @@
     <h3>Sandstorm:</h3>
     <div>
       Sandstorm Cross Bonus: <select id="SCross">
-        <option value="None">None</option>
+        <option value="None" selected>None</option>
         <option value="L1">Crossed Auto Line</option>
         <option value="L2">Crossed Auto Line from HAB Level 2</option>
       </select>
     </div>
     <div>
       Strongest Object: <select id="SSO">
-        <option value="Neither">Neither</option>
+        <option value="Neither" selected>Neither</option>
         <option value="Ball">Cargo</option>
         <option value="Hatch">Hatch Panels</option>
         <option value="Both">Both</option>
@@ -94,7 +94,7 @@
       <select id="DOA">
         <option value="Yes">Yes</option>
         <option value="Sorta">Sorta</option>
-        <option value="No">No</option>
+        <option value="No" selected>No</option>
         <option value="IDK">IDK</option>
       </select>
     </div>
@@ -103,13 +103,13 @@
         <option value="Low Rocket">Low-Mid Rocket</option>
         <option value="High Rocket">Mid-High Rocket</option>
         <option value="Cargo">Cargo Ship</option>
-        <option value="None">None</option>
+        <option value="None" selected>None</option>
       </select>
     </div>
     <h3>Tele-Op:</h3>
     <div>
       Strongest Object: <select id="TSO">
-        <option value="Neither">Neither</option>
+        <option value="Neither" selected>Neither</option>
         <option value="Ball">Cargo</option>
         <option value="Hatch">Hatch Panels</option>
         <option value="Both">Both</option>
@@ -120,31 +120,38 @@
         <option value="Low Rocket">Low-Mid Rocket</option>
         <option value="High Rocket">Mid-High Rocket</option>
         <option value="Cargo">Cargo Ship</option>
-        <option value="None">None</option>
+        <option value="None" selected>None</option>
       </select>
     </div>
-    Cargo Ship Success Rate: <select id="CSSR">
-      <option value="N/A">N/A</option>
-      <option value="Low">Low</option>
-      <option value="Mid">Medium</option>
-      <option value="High">High</option>
-    </select>
-    Low Rocket Success Rate: <select id="LRSR">
-      <option value="N/A">N/A</option>
-      <option value="Low">Low</option>
-      <option value="Mid">Medium</option>
-      <option value="High">High</option>
-    </select>
-    High Rocket Success Rate: <select id="HRSR">
-      <option value="N/A">N/A</option>
-      <option value="Low">Low</option>
-      <option value="Mid">Medium</option>
-      <option value="High">High</option>
-    </select>
+    <div>
+      Cargo Ship Success Rate: <select id="CSSR">
+        <option value="N/A" selected>N/A</option>
+        <option value="Low">Low</option>
+        <option value="Mid">Medium</option>
+        <option value="High">High</option>
+      </select>
+    </div>
+    <div>
+      Low Rocket Success Rate: <select id="LRSR">
+        <option value="N/A" selected>N/A</option>
+        <option value="Low">Low</option>
+        <option value="Mid">Medium</option>
+        <option value="High">High</option>
+      </select>
+    </div>
+    <div>
+      High Rocket Success Rate: <select id="HRSR">
+        <option value="N/A" selected>N/A</option>
+        <option value="Low">Low</option>
+        <option value="Mid">Medium</option>
+        <option value="High">High</option>
+      </select>
+    </div>
+
     <h3>Endgame:</h3>
     <div>
       HAB Climb: <select id="HAB">
-        <option value="None">None</option>
+        <option value="None" selected>None</option>
         <option value="L1">Level 1</option>
         <option value="L2">Level 2</option>
         <option value="L3">Level 3</option>
