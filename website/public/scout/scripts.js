@@ -116,7 +116,7 @@ function subRes() {
       push['teleOpRocketCargoFailure'] = document.getElementById('TRHU').value
 
       push['HABClimb'] = document.getElementById('HAB').value
-      firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(comp).doc("team-" + document.getElementById('tsn').value).collection(comp).doc("team-" + document.getElementById('tsn').value).collection('matches').doc('match-' + document.getElementById('mn').value).set(push, {
+      firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(comp).doc("team-" + document.getElementById('tsn').value).collection('matches').doc('match-' + document.getElementById('mn').value).set(push, {
         merge: true
       })
     }
