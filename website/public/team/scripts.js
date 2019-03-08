@@ -48,7 +48,7 @@ window.onload = function() {
       window.location.replace('../');
     }
     teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid);
-    teamAssoc.get()..then(function(doc) {
+    teamAssoc.get().then(function(doc) {
       if (doc.exists) {
         list = doc.data()
         teamNums = Object.keys(list)
