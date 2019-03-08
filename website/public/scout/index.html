@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
+
+<head>
+  <meta charset="utf-8">
+  <title>
     <meta charset="utf-8">
-    <title><meta charset="utf-8">
     <title>titanscout</title>
     <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
     <script src="https://cdn.firebase.com/libs/firebaseui/3.5.1/firebaseui.js"></script>
@@ -10,32 +12,105 @@
     <link rel="stylesheet" href="../style.css" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <script type="text/javascript" src="scripts.js"></script>
-  </head>
-  <body>
-    <div id="mySidenav" class="sidenav">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <a href="../profile">Profile</a>
-      <a href="../team">Team</a>
-      <a href="#">Scout Matches</a>
-      <a href="../stats">Torunament Stats</a>
+</head>
+
+<body>
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="../profile">Profile</a>
+    <a href="../team">Team</a>
+    <a href="#">Scout Matches</a>
+    <a href="../stats">Torunament Stats</a>
+  </div>
+  <div id="main">
+    <span onclick="openNav()" id="topbar">
+      <img id="sideload" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/1200px-Hamburger_icon.svg.png">
+    </span>
+    <h1 id="mainhead">TitanScout- Scout Matches</h1>
+    <p id="status">Loading...</p>
+    <div>
+      Scouting For: <select id="tns"></select>
     </div>
-    <div id="main">
-      <span onclick="openNav()" id="topbar">
-        <img id="sideload" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/1200px-Hamburger_icon.svg.png">
-      </span>
-      <h1 id="mainhead">TitanScout- Scout Matches</h1>
-      <p id="status">Loading...</p>
-      <div>
-        Scouting For: <select id="tns"></select>
-      </div>
-      <h2>Submit a Report:</h2>
-      <div>
-        Match Number: <input type="text" name="" value="" id="mn">
-        The Team You're Scouting's Number: <input type="text" name="" value="" id="tsn">
-      </div>
-      <h3>Sandstorm:</h3>
-      <h3>Tele-Op:</h3>
-      <h3>Endgame:</h3>
+    <h2>Submit a Report:</h2>
+    <div>
+      Match Number: <input type="text" name="" value="" id="mn">
+      Team Scouted: <input type="text" name="" value="" id="tsn">
     </div>
-  </body>
+    <h3>General:</h3>
+    Speed: <select id="speed">
+      <option value="slow">Slow</option>
+      <option value="Medium">Meduum</option>
+      <option value="Fast">Fast</option>
+      <option value="Ludicrous">Ludicrous</option>
+    </select>
+    <h3>Sandstorm:</h3>
+    <div>
+      Sandstorm Cross Bonus: <select id="SCross">
+        <option value="None">None</option>
+        <option value="L1">Crossed Auto Line</option>
+        <option value="L2">Crossed Auto Line from HAB Level 2</option>
+      </select>
+    </div>
+    <div>
+      Cargo Ship Hatch Panels Placed Successfully: <input type="number" name="quantity" value="0" min="0" max="3" id="SCHS">
+    </div>
+    <div>
+      Cargo Ship Hatch Panels Placed Unsuccessfully: <input type="number" name="quantity" value="0" min="0" max="3" id="SCHU">
+    </div>
+    <div>
+      Rocket Hatch Panels Placed Successfully: <input type="number" name="quantity" value="0" min="0" max="9" id="SRHS">
+    </div>
+    <div>
+      Rocket Hatch Panels Placed Unsuccessfully: <input type="number" name="quantity" value="0" min="0" max="9" id="SRHU">
+    </div>
+    <div>
+      Cargo Ship Cargo Placed Successfully: <input type="number" name="quantity" value="0" min="0" max="3" id="SCCS">
+    </div>
+    <div>
+      Cargo Ship Cargo Placed Unsuccessfully: <input type="number" name="quantity" value="0" min="0" max="3" id="SCCU">
+    </div>
+    <div>
+      Rocket Cargo Placed Successfully: <input type="number" name="quantity" value="0" min="0" max="18" id="SRCS">
+    </div>
+    <div>
+      Rocket Cargo Placed Unsuccessfully: <input type="number" name="quantity" value="0" min="0" max="18" id="SRCU">
+    </div>
+    <h3>Tele-Op:</h3>
+    <div>
+      Cargo Ship Hatch Panels Placed Successfully: <input type="number" name="quantity" value="0" min="0" max="3" id="TCHS">
+    </div>
+    <div>
+      Cargo Ship Hatch Panels Placed Unsuccessfully: <input type="number" name="quantity" value="0" min="0" max="3" id="TCHU">
+    </div>
+    <div>
+      Rocket Hatch Panels Placed Successfully: <input type="number" name="quantity" value="0" min="0" max="9" id="TRHS">
+    </div>
+    <div>
+      Rocket Hatch Panels Placed Unsuccessfully: <input type="number" name="quantity" value="0" min="0" max="9" id="TRHU">
+    </div>
+    <div>
+      Cargo Ship Cargo Placed Successfully: <input type="number" name="quantity" value="0" min="0" max="3" id="TCCS">
+    </div>
+    <div>
+      Cargo Ship Cargo Placed Unsuccessfully: <input type="number" name="quantity" value="0" min="0" max="3" id="TCCU">
+    </div>
+    <div>
+      Rocket Cargo Placed Successfully: <input type="number" name="quantity" value="0" min="0" max="18" id="TRCS">
+    </div>
+    <div>
+      Rocket Cargo Placed Unsuccessfully: <input type="number" name="quantity" value="0" min="0" max="18" id="TRCU">
+    </div>
+    <h3>Endgame:</h3>
+    <div>
+      HAB Climb: <select id="HAB">
+        <option value="None">None</option>
+        <option value="L1">Level 1</option>
+        <option value="L2">Level 2</option>
+        <option value="L3">Level 3</option>
+      </select>
+    </div>
+    <input type="button" value="Submit" onclick="subRes();">
+  </div>
+</body>
+
 </html>
