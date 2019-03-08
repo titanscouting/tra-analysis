@@ -104,7 +104,7 @@ function reqjt(tn,tc){
     push[tn]='scout';
     firebase.firestore().collection("UserAssociations").doc(user.uid).set(push, {
       merge: true
-    })then(function(doc) {
+    }).then(function(doc) {
       if (doc.exists) {
         list = doc.data()
         teamNums = Object.keys(list)
