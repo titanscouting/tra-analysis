@@ -1,0 +1,36 @@
+sandstormRocketCargoFailure,,,0
+teleOpRocketCargoSuccess,,,0
+strongMediumTeleop,,Both,
+sandstormRocketHatchSuccess,,,0
+teleOpCargoShipHatchFailure,,,0
+nTG6cThsi9TB9mTkcwuo5bKEo9B3,"{'contribution': 'Equal', 'notes': '', 'fillChoice': 'Cargo', 'strategy': 'hatch panels ', 'cargoSuccessTeleop': 'High', 'strongMedium': 'Ball', 'teamDBRef': 'team-5934', 'hiRocketSuccessTeleop': '', 'speed': 'Fast', 'match': 'match-31', 'size': 'Large', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Hatch', 'endingHab': 'Hab 1', 'functional': 'Yes', 'lowRocketSuccessTeleop': '', 'startingHatch': 'Hab I'}",,
+size,,Large,
+sandstormRocketCargoSuccess,,,0
+speed,,Fast,Ludicrous
+strategy,,,
+teamDBRef,,team-5934,team-5934
+sandstormCross,,L1,L1
+sandstormCrossBonus,,L1,
+teleOpCargoShipHatchSuccess,,,2
+teleOpRocketHatchSuccess,,,0
+sandstormCargoShipCargoFailure,,,0
+lowRocketSuccessTeleop,,N/A,
+teleOpRocketHatchFailure,,,0
+teleOpRocketCargoFailure,,,0
+cargoSuccessTeleop,,Mid,
+sandstormCargoShipHatchSuccess,,,0
+teleOpCargoShipCargoSuccess,,,5
+functional,,Yes,
+fillChoice,,Cargo,
+sandstormCargoShipCargoSuccess,,,1
+strongMedium,,Ball,
+teleOpCargoShipCargoFailure,,,0
+sandstormRocketHatchFailure,,,0
+sandstormCargoShipHatchFailure,,,0
+fillChoiceTeleop,,Cargo,
+contrubution,,Equal,
+HABClimb,,,L1
+hiRocketSuccessTeleop,,N/A,
+match,,match-37,match-6
+endingHab,,None,
+startingHatch,,Hab I,

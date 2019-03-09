@@ -1,0 +1,23 @@
+sandstormRocketCargoFailure,0,,,0
+teleOpRocketCargoSuccess,0,,,0
+sandstormRocketHatchSuccess,0,,,0
+teleOpCargoShipHatchFailure,0,,,0
+sandstormRocketCargoSuccess,0,,,0
+jouGPhPF0qME5wNIbd86MzYFsGw2,,"{'contribution': 'Great', 'notes': '', 'fillChoice': 'Cargo', 'strategy': 'good jab climber and hatch placer ', 'strongMedium': 'Hatch', 'cargoSuccessTeleop': 'High', 'teamDBRef': 'team-48', 'speed': 'Fast', 'hiRocketSuccessTeleop': '', 'match': 'match-22', 'size': 'Small', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Hatch', 'endingHab': 'Hab 3', 'functional': 'Yes', 'lowRocketSuccessTeleop': 'Mid', 'startingHatch': 'Hab I'}",,"{'notes': '', 'contribution': 'Great', 'fillChoice': 'Cargo', 'strongMedium': 'Hatch', 'cargoSuccessTeleop': 'High', 'teamDBRef': 'team-48', 'speed': 'Fast', 'hiRocketSuccessTeleop': '', 'size': 'Large', 'match': 'match-9', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Ball', 'endingHab': 'None', 'functional': 'Yes', 'lowRocketSuccessTeleop': 'N/A', 'startingHatch': 'Hab I'}"
+speed,Medium,,,Fast
+teamDBRef,team-48,,,team-48
+sandstormCross,L2,,,None
+teleOpCargoShipHatchSuccess,0,,,0
+teleOpRocketHatchSuccess,1,,,0
+sandstormCargoShipCargoFailure,0,,,0
+teleOpRocketHatchFailure,1,,,0
+teleOpRocketCargoFailure,1,,,0
+sandstormCargoShipHatchSuccess,1,,,1
+e0Q3j2NrXuYvSrgZ5UZQ89UMvXY2,,,"{'contribution': '', 'notes': 'this team is really good, really strong with balls, fast, and has a ramp system to get up to hab 3 ', 'fillChoice': 'Cargo', 'strategy': '', 'cargoSuccessTeleop': '', 'strongMedium': 'Ball', 'teamDBRef': 'team-48', 'hiRocketSuccessTeleop': '', 'speed': 'Fast', 'match': 'match-31', 'size': 'Large', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Ball', 'endingHab': '', 'functional': 'Yes', 'startingHatch': 'idk', 'lowRocketSuccessTeleop': ''}",
+sandstormCargoShipCargoSuccess,0,,,0
+teleOpCargoShipCargoFailure,0,,,0
+sandstormRocketHatchFailure,0,,,0
+sandstormCargoShipHatchFailure,0,,,0
+HABClimb,L1,,,L1
+match,match-17,,,match-9
+teleOpCargoShipCargoSuccess,0,,,1

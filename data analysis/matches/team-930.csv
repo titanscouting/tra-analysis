@@ -1,0 +1,23 @@
+sandstormRocketCargoFailure,,,,0
+teleOpRocketCargoSuccess,,,,2
+sandstormRocketHatchSuccess,,,,0
+teleOpCargoShipHatchFailure,,,,0
+nTG6cThsi9TB9mTkcwuo5bKEo9B3,"{'contribution': 'Great', 'notes': 'hatch did not stick on during storm', 'fillChoice': 'Low Rocket', 'strategy': 'focused on getting hatch and cargo on the rocket', 'cargoSuccessTeleop': '', 'strongMedium': 'Hatch', 'teamDBRef': 'team-930', 'speed': 'Fast', 'hiRocketSuccessTeleop': 'High', 'size': 'Large', 'match': 'match-13', 'fillChoiceTeleop': 'High Rocket', 'strongMediumTeleop': 'Both', 'endingHab': 'None', 'functional': 'Yes', 'startingHatch': 'Hab I', 'lowRocketSuccessTeleop': 'High'}",,"{'contribution': 'Great', 'notes': '', 'fillChoice': 'Low Rocket', 'strategy': 'hatch and ball in rocket. very successful in these areas. then ball in cargo ships', 'cargoSuccessTeleop': 'High', 'strongMedium': 'Hatch', 'teamDBRef': 'team-930', 'hiRocketSuccessTeleop': 'High', 'speed': 'Fast', 'match': 'match-46', 'size': 'Large', 'fillChoiceTeleop': '', 'strongMediumTeleop': 'Hatch', 'endingHab': 'Hab 1', 'functional': 'Yes', 'startingHatch': 'Hab I', 'lowRocketSuccessTeleop': 'High'}",
+sandstormRocketCargoSuccess,,,,0
+speed,,,,slow
+teamDBRef,,,,team-930
+sandstormCross,,,,L1
+teleOpCargoShipHatchSuccess,,,,0
+teleOpRocketHatchSuccess,,,,5
+sandstormCargoShipCargoFailure,,,,0
+teleOpRocketHatchFailure,,,,1
+teleOpRocketCargoFailure,,,,1
+sandstormCargoShipHatchSuccess,,,,1
+e0Q3j2NrXuYvSrgZ5UZQ89UMvXY2,,"{'contribution': 'Equal', 'notes': 'the hatch mechanism is good it can get the high rocket hatch easily', 'fillChoice': 'High Rocket', 'strategy': '', 'strongMedium': 'Hatch', 'cargoSuccessTeleop': '', 'teamDBRef': 'team-930', 'speed': 'Medium', 'hiRocketSuccessTeleop': 'High', 'match': 'match-32', 'size': 'Large', 'fillChoiceTeleop': 'High Rocket', 'strongMediumTeleop': 'Hatch', 'endingHab': '', 'functional': 'Yes', 'lowRocketSuccessTeleop': '', 'startingHatch': 'idk'}",,
+sandstormCargoShipCargoSuccess,,,,0
+teleOpCargoShipCargoFailure,,,,0
+sandstormRocketHatchFailure,,,,0
+sandstormCargoShipHatchFailure,,,,0
+HABClimb,,,,None
+match,,,,match-7
+teleOpCargoShipCargoSuccess,,,,0

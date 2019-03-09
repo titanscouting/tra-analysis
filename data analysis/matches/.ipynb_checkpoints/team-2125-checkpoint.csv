@@ -1,0 +1,35 @@
+sandstormRocketCargoFailure,0,
+teleOpRocketCargoSuccess,0,
+sandstormRocketHatchSuccess,0,
+strongMediumTeleop,,Neither
+teleOpCargoShipHatchFailure,0,
+sandstormRocketCargoSuccess,0,
+size,,IDK
+speed,slow,slow
+strategy,,Flawed defense
+teamDBRef,team-2125,team-2125
+sandstormCross,None,None
+sandstormCrossBonus,,None
+teleOpCargoShipHatchSuccess,0,
+teleOpRocketHatchSuccess,0,
+sandstormCargoShipCargoFailure,0,
+lowRocketSuccessTeleop,,N/A
+teleOpRocketHatchFailure,0,
+teleOpRocketCargoFailure,0,
+cargoSuccessTeleop,,N/A
+sandstormCargoShipHatchSuccess,0,
+startingHatch,,Hab I
+fillChoice,,None
+functional,,No
+sandstormCargoShipCargoSuccess,0,
+strongMedium,,Neither
+teleOpCargoShipCargoFailure,0,
+sandstormRocketHatchFailure,0,
+sandstormCargoShipHatchFailure,0,
+fillChoiceTeleop,,None
+contrubution,,Weak
+HABClimb,None,
+match,match-20,match-27
+hiRocketSuccessTeleop,,N/A
+endingHab,,None
+teleOpCargoShipCargoSuccess,0,
