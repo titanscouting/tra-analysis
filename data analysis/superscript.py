@@ -236,7 +236,7 @@ def service():
         time.sleep(300 - (end - start)) #executes once every 5 minutes
 
 warnings.simplefilter("ignore")
-# Use a service account
+#Use a service account
 cred = credentials.Certificate('keys/keytemp.json')
 firebase_admin.initialize_app(cred)
 
