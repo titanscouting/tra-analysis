@@ -1,36 +1,4 @@
-sandstormRocketCargoFailure,0,,
-teleOpRocketCargoSuccess,0,,
-sandstormRocketHatchSuccess,0,,
-strongMediumTeleop,,,Hatch
-teleOpCargoShipHatchFailure,1,,
-sandstormRocketCargoSuccess,0,,
-size,,,Small
-speed,slow,,slow
-strategy,,,Hatches on bottom level
-teamDBRef,team-3061,,team-3061
-sandstormCross,None,,L2
-sandstormCrossBonus,,,L2
-teleOpCargoShipHatchSuccess,1,,
-teleOpRocketHatchSuccess,1,,
-sandstormCargoShipCargoFailure,0,,
-lowRocketSuccessTeleop,,,Mid
-teleOpRocketHatchFailure,0,,
-teleOpRocketCargoFailure,0,,
-cargoSuccessTeleop,,,Mid
-sandstormCargoShipHatchSuccess,1,,
-startingHatch,,,Hab II
-fillChoice,,,Cargo
-functional,,,Yes
-sandstormCargoShipCargoSuccess,0,,
-strongMedium,,,Hatch
-teleOpCargoShipCargoFailure,0,,
-sandstormRocketHatchFailure,0,,
-sandstormCargoShipHatchFailure,0,,
-fillChoiceTeleop,,,Cargo
-contrubution,,,Equal
-HABClimb,L1,,
-TGTz9IhKPoQnv6CjEyHEJeqwhss1,,"{'notes': '', 'contribution': 'Equal', 'fillChoice': 'Cargo', 'strategy': 'really good at defense', 'strongMedium': 'Hatch', 'cargoSuccessTeleop': '', 'teamDBRef': 'team-3061', 'speed': '', 'hiRocketSuccessTeleop': '', 'size': '', 'match': 'match-16', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': '', 'endingHab': 'Hab 2', 'functional': 'Yes', 'lowRocketSuccessTeleop': 'N/A', 'startingHatch': 'Hab I'}",
-match,match-1,,match-54
-hiRocketSuccessTeleop,,,N/A
-endingHab,,,L2
-teleOpCargoShipCargoSuccess,0,,
+sandstormRocketCargoFailure,teleOpRocketCargoSuccess,sandstormRocketHatchSuccess,strongMediumTeleop,teleOpCargoShipHatchFailure,sandstormRocketCargoSuccess,size,speed,strategy,teamDBRef,sandstormCross,sandstormCrossBonus,teleOpCargoShipHatchSuccess,teleOpRocketHatchSuccess,sandstormCargoShipCargoFailure,lowRocketSuccessTeleop,teleOpRocketHatchFailure,teleOpRocketCargoFailure,cargoSuccessTeleop,sandstormCargoShipHatchSuccess,startingHatch,fillChoice,functional,sandstormCargoShipCargoSuccess,strongMedium,teleOpCargoShipCargoFailure,sandstormRocketHatchFailure,sandstormCargoShipHatchFailure,fillChoiceTeleop,contrubution,HABClimb,TGTz9IhKPoQnv6CjEyHEJeqwhss1,match,hiRocketSuccessTeleop,endingHab,teleOpCargoShipCargoSuccess
+0,0,0,,1,0,,slow,,team-3061,None,,1,1,0,,0,0,,1,,,,0,,0,0,0,,,L1,,match-1,,,0
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"{'notes': '', 'contribution': 'Equal', 'fillChoice': 'Cargo', 'strategy': 'really good at defense', 'strongMedium': 'Hatch', 'cargoSuccessTeleop': '', 'teamDBRef': 'team-3061', 'speed': '', 'hiRocketSuccessTeleop': '', 'size': '', 'match': 'match-16', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': '', 'endingHab': 'Hab 2', 'functional': 'Yes', 'lowRocketSuccessTeleop': 'N/A', 'startingHatch': 'Hab I'}",,,,
+,,,Hatch,,,Small,slow,Hatches on bottom level,team-3061,L2,L2,,,,Mid,,,Mid,,Hab II,Cargo,Yes,,Hatch,,,,Cargo,Equal,,,match-54,N/A,L2,

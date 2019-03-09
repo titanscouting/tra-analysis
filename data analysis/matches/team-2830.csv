@@ -1,37 +1,4 @@
-sandstormRocketCargoFailure,,,0
-teleOpRocketCargoSuccess,,,0
-strongMediumTeleop,,Ball,
-sandstormRocketHatchSuccess,,,0
-teleOpCargoShipHatchFailure,,,0
-nTG6cThsi9TB9mTkcwuo5bKEo9B3,,"{'notes': '', 'contribution': 'Weak', 'fillChoice': 'Cargo', 'strategy': 'cargo balls in cargo ship ', 'strongMedium': 'Hatch', 'cargoSuccessTeleop': 'Low', 'teamDBRef': 'team-2830', 'speed': 'Medium', 'hiRocketSuccessTeleop': '', 'size': 'Medium', 'match': 'match-25', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Ball', 'endingHab': 'Hab 1', 'functional': 'Yes', 'lowRocketSuccessTeleop': '', 'startingHatch': 'Hab II'}",
-size,,IDK,
-sandstormRocketCargoSuccess,,,0
-speed,,Medium,Fast
-strategy,,Cargo ship hatch/fill,
-teamDBRef,,team-2830,team-2830
-sandstormCross,,L2,L1
-sandstormCrossBonus,,L2,
-teleOpCargoShipHatchSuccess,,,0
-teleOpRocketHatchSuccess,,,1
-sandstormCargoShipCargoFailure,,,0
-lowRocketSuccessTeleop,,N/A,
-teleOpRocketHatchFailure,,,0
-teleOpRocketCargoFailure,,,0
-klQQqapPjwO3jnpN8Dieequh3OI3,"{'contribution': 'Equal', 'notes': 'Attempt at hab 3', 'fillChoice': 'Cargo', 'strategy': '', 'strongMedium': 'Ball', 'cargoSuccessTeleop': 'Mid', 'teamDBRef': 'team-2830', 'speed': 'Fast', 'hiRocketSuccessTeleop': '', 'match': 'match-12', 'size': 'Medium', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Ball', 'endingHab': 'Hab 1', 'functional': 'Yes', 'lowRocketSuccessTeleop': 'N/A', 'startingHatch': 'Hab I'}",,
-cargoSuccessTeleop,,Mid,
-sandstormCargoShipHatchSuccess,,,1
-teleOpCargoShipCargoSuccess,,,2
-functional,,Yes,
-fillChoice,,None,
-sandstormCargoShipCargoSuccess,,,0
-strongMedium,,Hatch,
-teleOpCargoShipCargoFailure,,,0
-sandstormRocketHatchFailure,,,0
-sandstormCargoShipHatchFailure,,,0
-fillChoiceTeleop,,Cargo,
-contrubution,,Strong,
-HABClimb,,,L1
-hiRocketSuccessTeleop,,N/A,
-match,,match-25,match-3
-endingHab,,L2,
-startingHatch,,Hab II,
+sandstormRocketCargoFailure,teleOpRocketCargoSuccess,strongMediumTeleop,sandstormRocketHatchSuccess,teleOpCargoShipHatchFailure,nTG6cThsi9TB9mTkcwuo5bKEo9B3,size,sandstormRocketCargoSuccess,speed,strategy,teamDBRef,sandstormCross,sandstormCrossBonus,teleOpCargoShipHatchSuccess,teleOpRocketHatchSuccess,sandstormCargoShipCargoFailure,lowRocketSuccessTeleop,teleOpRocketHatchFailure,teleOpRocketCargoFailure,klQQqapPjwO3jnpN8Dieequh3OI3,cargoSuccessTeleop,sandstormCargoShipHatchSuccess,teleOpCargoShipCargoSuccess,functional,fillChoice,sandstormCargoShipCargoSuccess,strongMedium,teleOpCargoShipCargoFailure,sandstormRocketHatchFailure,sandstormCargoShipHatchFailure,fillChoiceTeleop,contrubution,HABClimb,hiRocketSuccessTeleop,match,endingHab,startingHatch
+,,,,,,,,,,,,,,,,,,,"{'contribution': 'Equal', 'notes': 'Attempt at hab 3', 'fillChoice': 'Cargo', 'strategy': '', 'strongMedium': 'Ball', 'cargoSuccessTeleop': 'Mid', 'teamDBRef': 'team-2830', 'speed': 'Fast', 'hiRocketSuccessTeleop': '', 'match': 'match-12', 'size': 'Medium', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Ball', 'endingHab': 'Hab 1', 'functional': 'Yes', 'lowRocketSuccessTeleop': 'N/A', 'startingHatch': 'Hab I'}",,,,,,,,,,,,,,,,,
+,,Ball,,,"{'notes': '', 'contribution': 'Weak', 'fillChoice': 'Cargo', 'strategy': 'cargo balls in cargo ship ', 'strongMedium': 'Hatch', 'cargoSuccessTeleop': 'Low', 'teamDBRef': 'team-2830', 'speed': 'Medium', 'hiRocketSuccessTeleop': '', 'size': 'Medium', 'match': 'match-25', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Ball', 'endingHab': 'Hab 1', 'functional': 'Yes', 'lowRocketSuccessTeleop': '', 'startingHatch': 'Hab II'}",IDK,,Medium,Cargo ship hatch/fill,team-2830,L2,L2,,,,N/A,,,,Mid,,,Yes,None,,Hatch,,,,Cargo,Strong,,N/A,match-25,L2,Hab II
+0,0,,0,0,,,0,Fast,,team-2830,L1,,0,1,0,,0,0,,,1,2,,,0,,0,0,0,,,L1,,match-3,,
