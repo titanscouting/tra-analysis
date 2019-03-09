@@ -3,9 +3,11 @@
 #Notes:
 #setup:
 
-__version__ = "1.0.5.002"
+__version__ = "1.0.5.003"
 
 __changelog__ = """changelog:
+1.0.5.003:
+    - hotfix: actually pushes data correctly now
 1.0.5.002:
     - more information given
     - performance improvements
@@ -36,7 +38,7 @@ __author__ = (
     "Arthur Lu <arthurlu@ttic.edu>, "
     "Jacob Levine <jlevine@ttic.edu>,"
     )
-
+s
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -72,7 +74,7 @@ def titanservice():
 
     end = time.time()
 
-    print("[OK] loaded data in " + str(end - start) + "seconds")
+    print("[OK] loaded data in " + str(end - start) + " seconds")
 
     #assumes that team number is in the first column, and that the order of teams is the same across all files
     #unhelpful comment
@@ -117,10 +119,10 @@ def titanservice():
                     
                     measure_stats.append(teams[i] + list(analysis.basic_stats(line, 0, 0)) + list(analysis.histo_analysis(line, 1, -3, 3)) + ofbest_curve + r2best_curve)
 
-            stats.append(list(measure_stats))
-            nishant = []
+        stats.append(list(measure_stats))
+        nishant = []
             
-            for i in range(len(scores)):
+        for i in range(len(scores)):
 
                     ofbest_curve = [None]
                     r2best_curve = [None]
@@ -168,21 +170,23 @@ def titanservice():
     score_out = {}
 
     #print(stats)
+
+    #print(stats[0])
                     
-    for i in range(len(teams)):
-            json_out[str(teams[i][0])] = (stats[0][i])
+    #for i in range(len(teams)):
+    #        json_out[str(teams[i][0])] = (stats[0][i])
 
     for i in range(len(teams)):
             score_out[str(teams[i][0])] = (nishant[i])
-
-    print(json_out)
 
     #print(json_out.get('5'))
 
     location = db.collection(u'stats').document(u'stats-noNN')
     for i in range(len(teams)):
         general_general_stats = location.collection(teams[i][0])
+        
         for j in range(len(files)):
+            json_out[str(teams[i][0])] = (stats[j][i])
             general_general_stats.document(files[j]).set({'stats':json_out.get(teams[i][0])})
 
     for i in range(len(teams)):
@@ -232,7 +236,7 @@ def service():
         time.sleep(300 - (end - start)) #executes once every 5 minutes
 
 warnings.simplefilter("ignore")
-# Use a service account
+#Use a service account
 cred = credentials.Certificate('keys/keytemp.json')
 firebase_admin.initialize_app(cred)
 
