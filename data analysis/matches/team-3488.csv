@@ -1,21 +1,7 @@
-strongMediumTeleop,,,Both,,Ball,
-jouGPhPF0qME5wNIbd86MzYFsGw2,,"{'contribution': 'Weak', 'notes': '', 'fillChoice': '', 'strategy': 'quick at reloading from drive station ', 'strongMedium': '', 'cargoSuccessTeleop': 'Mid', 'teamDBRef': 'team-3488', 'hiRocketSuccessTeleop': '', 'speed': '', 'match': 'match-15', 'size': 'Medium', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Both', 'endingHab': 'Hab 1', 'functional': 'Sorta', 'lowRocketSuccessTeleop': 'Low', 'startingHatch': 'Hab I'}",,,,
-size,,,IDK,,Medium,
-nTG6cThsi9TB9mTkcwuo5bKEo9B3,,,,,,"{'notes': '', 'contribution': 'Great', 'fillChoice': 'Cargo', 'strategy': 'fill cargo shuo', 'strongMedium': 'Ball', 'cargoSuccessTeleop': 'High', 'teamDBRef': 'team-3488', 'speed': 'Fast', 'hiRocketSuccessTeleop': '', 'match': 'match-45', 'size': 'Large', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Ball', 'endingHab': 'Hab 1', 'functional': '', 'lowRocketSuccessTeleop': '', 'startingHatch': 'Hab I'}"
-speed,,,Ludicrous,,Medium,
-strategy,,,,,Ship,
-teamDBRef,,,team-3488,,team-3488,
-sandstormCross,,,L1,,L1,
-sandstormCrossBonus,,,L1,,L1,
-lowRocketSuccessTeleop,,,N/A,,N/A,
-cargoSuccessTeleop,,,Mid,,Mid,
-fillChoice,,,Cargo,,Cargo,
-functional,,,No,,Yes,
-9fv7QhcLPsfU59sRrPq7LcJlD8J3,"{'contribution': 'Equal', 'notes': 'sucks at hatches, fast robot with slow driver', 'cargoSuccess': '', 'fillChoice': '', 'cargoSuccessTeleop': 'High', 'strongMedium': '', 'teamDBRef': 'team-3488', 'speed': 'Fast', 'hiRocketSuccessTeleop': '', 'lowRocketSuccess': '', 'size': 'Medium', 'match': 'match-1', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Ball', 'startingHatch': 'None', 'lowRocketSuccessTeleop': '', 'hiRocketSuccess': 'N/A'}",,,"{'notes': '', 'contribution': '', 'fillChoice': 'None', 'strategy': 'have auto drive to fill zone, quickly load cargo', 'strongMedium': '', 'cargoSuccessTeleop': 'High', 'teamDBRef': 'team-3488', 'speed': '', 'hiRocketSuccessTeleop': '', 'size': 'Large', 'match': 'match-28', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Ball', 'endingHab': 'Hab 1', 'functional': 'Yes', 'lowRocketSuccessTeleop': '', 'startingHatch': 'Hab I'}",,
-strongMedium,,,Hatch,,Ball,
-fillChoiceTeleop,,,Cargo,,Cargo,
-contrubution,,,Equal,,Equal,
-hiRocketSuccessTeleop,,,N/A,,N/A,
-match,,,match-24,,match-37,
-endingHab,,,L1,,L1,
-startingHatch,,,Hab I,,Hab I,
+strongMediumTeleop,jouGPhPF0qME5wNIbd86MzYFsGw2,size,nTG6cThsi9TB9mTkcwuo5bKEo9B3,speed,strategy,teamDBRef,sandstormCross,sandstormCrossBonus,lowRocketSuccessTeleop,cargoSuccessTeleop,fillChoice,functional,9fv7QhcLPsfU59sRrPq7LcJlD8J3,strongMedium,fillChoiceTeleop,contrubution,hiRocketSuccessTeleop,match,endingHab,startingHatch
+,,,,,,,,,,,,,"{'contribution': 'Equal', 'notes': 'sucks at hatches, fast robot with slow driver', 'cargoSuccess': '', 'fillChoice': '', 'cargoSuccessTeleop': 'High', 'strongMedium': '', 'teamDBRef': 'team-3488', 'speed': 'Fast', 'hiRocketSuccessTeleop': '', 'lowRocketSuccess': '', 'size': 'Medium', 'match': 'match-1', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Ball', 'startingHatch': 'None', 'lowRocketSuccessTeleop': '', 'hiRocketSuccess': 'N/A'}",,,,,,,
+,"{'contribution': 'Weak', 'notes': '', 'fillChoice': '', 'strategy': 'quick at reloading from drive station ', 'strongMedium': '', 'cargoSuccessTeleop': 'Mid', 'teamDBRef': 'team-3488', 'hiRocketSuccessTeleop': '', 'speed': '', 'match': 'match-15', 'size': 'Medium', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Both', 'endingHab': 'Hab 1', 'functional': 'Sorta', 'lowRocketSuccessTeleop': 'Low', 'startingHatch': 'Hab I'}",,,,,,,,,,,,,,,,,,,
+Both,,IDK,,Ludicrous,,team-3488,L1,L1,N/A,Mid,Cargo,No,,Hatch,Cargo,Equal,N/A,match-24,L1,Hab I
+,,,,,,,,,,,,,"{'notes': '', 'contribution': '', 'fillChoice': 'None', 'strategy': 'have auto drive to fill zone, quickly load cargo', 'strongMedium': '', 'cargoSuccessTeleop': 'High', 'teamDBRef': 'team-3488', 'speed': '', 'hiRocketSuccessTeleop': '', 'size': 'Large', 'match': 'match-28', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Ball', 'endingHab': 'Hab 1', 'functional': 'Yes', 'lowRocketSuccessTeleop': '', 'startingHatch': 'Hab I'}",,,,,,,
+Ball,,Medium,,Medium,Ship,team-3488,L1,L1,N/A,Mid,Cargo,Yes,,Ball,Cargo,Equal,N/A,match-37,L1,Hab I
+,,,"{'notes': '', 'contribution': 'Great', 'fillChoice': 'Cargo', 'strategy': 'fill cargo shuo', 'strongMedium': 'Ball', 'cargoSuccessTeleop': 'High', 'teamDBRef': 'team-3488', 'speed': 'Fast', 'hiRocketSuccessTeleop': '', 'match': 'match-45', 'size': 'Large', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Ball', 'endingHab': 'Hab 1', 'functional': '', 'lowRocketSuccessTeleop': '', 'startingHatch': 'Hab I'}",,,,,,,,,,,,,,,,,

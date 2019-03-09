@@ -1,37 +1,6 @@
-sandstormRocketCargoFailure,,,,0,
-teleOpRocketCargoSuccess,,,,0,
-strongMediumTeleop,,,Ball,,Neither
-sandstormRocketHatchSuccess,,,,0,
-teleOpCargoShipHatchFailure,,,,1,
-sandstormRocketCargoSuccess,,,,0,
-size,,,Large,,Medium
-speed,,,Fast,Fast,Fast
-strategy,,,"Ship, L3 climb via deployed ranp",,
-teamDBRef,,,team-4096,team-4096,team-4096
-sandstormCross,,,L1,L1,L1
-sandstormCrossBonus,,,L1,,L1
-teleOpCargoShipHatchSuccess,,,,1,
-teleOpRocketHatchSuccess,,,,1,
-sandstormCargoShipCargoFailure,,,,0,
-lowRocketSuccessTeleop,,,N/A,,N/A
-teleOpRocketHatchFailure,,,,0,
-teleOpRocketCargoFailure,,,,0,
-cargoSuccessTeleop,,,High,,Low
-sandstormCargoShipHatchSuccess,,,,0,
-teleOpCargoShipCargoSuccess,,,,2,
-9fv7QhcLPsfU59sRrPq7LcJlD8J3,,"{'notes': 'versatile, accurate. of course we want them.', 'contribution': 'Great', 'fillChoice': 'Cargo', 'strategy': 'place hatches on the cargo, balls in rocket', 'strongMedium': 'Hatch', 'cargoSuccessTeleop': 'High', 'teamDBRef': 'team-4096', 'speed': 'Fast', 'hiRocketSuccessTeleop': '', 'size': '', 'match': 'match-30', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Hatch', 'endingHab': 'Hab 1', 'functional': 'Yes', 'lowRocketSuccessTeleop': '', 'startingHatch': ''}",,,
-functional,,,Yes,,No
-fillChoice,,,None,,Cargo
-strongMedium,,,Neither,,Neither
-sandstormCargoShipCargoSuccess,,,,0,
-teleOpCargoShipCargoFailure,,,,0,
-sandstormRocketHatchFailure,,,,0,
-sandstormCargoShipHatchFailure,,,,0,
-fillChoiceTeleop,,,Cargo,,Cargo
-contrubution,,,Strong,,Weak
-HABClimb,,,,L1,
-TGTz9IhKPoQnv6CjEyHEJeqwhss1,"{'notes': '', 'contribution': '', 'fillChoice': 'None', 'strategy': '', 'strongMedium': 'Hatch', 'cargoSuccessTeleop': 'High', 'teamDBRef': 'team-4096', 'speed': 'Fast', 'hiRocketSuccessTeleop': '', 'size': '', 'match': 'match-17', 'fillChoiceTeleop': '', 'strongMediumTeleop': 'Hatch', 'endingHab': 'Hab 1', 'functional': 'Yes', 'lowRocketSuccessTeleop': 'N/A', 'startingHatch': 'Hab I'}",,,,
-hiRocketSuccessTeleop,,,N/A,,N/A
-match,,,match-39,match-4,match-46
-endingHab,,,L3,,None
-startingHatch,,,Hab I,,Hab I
+sandstormRocketCargoFailure,teleOpRocketCargoSuccess,strongMediumTeleop,sandstormRocketHatchSuccess,teleOpCargoShipHatchFailure,sandstormRocketCargoSuccess,size,speed,strategy,teamDBRef,sandstormCross,sandstormCrossBonus,teleOpCargoShipHatchSuccess,teleOpRocketHatchSuccess,sandstormCargoShipCargoFailure,lowRocketSuccessTeleop,teleOpRocketHatchFailure,teleOpRocketCargoFailure,cargoSuccessTeleop,sandstormCargoShipHatchSuccess,teleOpCargoShipCargoSuccess,9fv7QhcLPsfU59sRrPq7LcJlD8J3,functional,fillChoice,strongMedium,sandstormCargoShipCargoSuccess,teleOpCargoShipCargoFailure,sandstormRocketHatchFailure,sandstormCargoShipHatchFailure,fillChoiceTeleop,contrubution,HABClimb,TGTz9IhKPoQnv6CjEyHEJeqwhss1,hiRocketSuccessTeleop,match,endingHab,startingHatch
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"{'notes': '', 'contribution': '', 'fillChoice': 'None', 'strategy': '', 'strongMedium': 'Hatch', 'cargoSuccessTeleop': 'High', 'teamDBRef': 'team-4096', 'speed': 'Fast', 'hiRocketSuccessTeleop': '', 'size': '', 'match': 'match-17', 'fillChoiceTeleop': '', 'strongMediumTeleop': 'Hatch', 'endingHab': 'Hab 1', 'functional': 'Yes', 'lowRocketSuccessTeleop': 'N/A', 'startingHatch': 'Hab I'}",,,,
+,,,,,,,,,,,,,,,,,,,,,"{'notes': 'versatile, accurate. of course we want them.', 'contribution': 'Great', 'fillChoice': 'Cargo', 'strategy': 'place hatches on the cargo, balls in rocket', 'strongMedium': 'Hatch', 'cargoSuccessTeleop': 'High', 'teamDBRef': 'team-4096', 'speed': 'Fast', 'hiRocketSuccessTeleop': '', 'size': '', 'match': 'match-30', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Hatch', 'endingHab': 'Hab 1', 'functional': 'Yes', 'lowRocketSuccessTeleop': '', 'startingHatch': ''}",,,,,,,,,,,,,,,
+,,Ball,,,,Large,Fast,"Ship, L3 climb via deployed ranp",team-4096,L1,L1,,,,N/A,,,High,,,,Yes,None,Neither,,,,,Cargo,Strong,,,N/A,match-39,L3,Hab I
+0,0,,0,1,0,,Fast,,team-4096,L1,,1,1,0,,0,0,,0,2,,,,,0,0,0,0,,,L1,,,match-4,,
+,,Neither,,,,Medium,Fast,,team-4096,L1,L1,,,,N/A,,,Low,,,,No,Cargo,Neither,,,,,Cargo,Weak,,,N/A,match-46,None,Hab I

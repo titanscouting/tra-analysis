@@ -1,36 +1,6 @@
-sandstormRocketCargoFailure,,,,,0
-teleOpRocketCargoSuccess,,,,,0
-strongMediumTeleop,,Ball,Neither,Neither,
-sandstormRocketHatchSuccess,,,,,0
-teleOpCargoShipHatchFailure,,,,,0
-nTG6cThsi9TB9mTkcwuo5bKEo9B3,"{'notes': 'don’t know how accurate storm is', 'contribution': '', 'fillChoice': '', 'strategy': 'i got confused. i didnt really see what the robot did', 'cargoSuccessTeleop': 'N/A', 'strongMedium': 'Ball', 'teamDBRef': 'team-1739', 'speed': '', 'hiRocketSuccessTeleop': '', 'size': 'Large', 'match': 'match-18', 'fillChoiceTeleop': 'Low Rocket', 'strongMediumTeleop': '', 'endingHab': 'Hab 1', 'functional': 'Yes', 'startingHatch': 'Hab I', 'lowRocketSuccessTeleop': ''}",,,,
-size,,Medium,Jumbo,Small,
-sandstormRocketCargoSuccess,,,,,0
-speed,,Medium,Medium,Medium,slow
-strategy,,,,,
-teamDBRef,,team-1739,team-1739,team-1739,team-1739
-sandstormCross,,L1,L1,L1,L1
-sandstormCrossBonus,,L1,L1,L1,
-teleOpCargoShipHatchSuccess,,,,,0
-teleOpRocketHatchSuccess,,,,,0
-sandstormCargoShipCargoFailure,,,,,0
-lowRocketSuccessTeleop,,Low,N/A,N/A,
-teleOpRocketHatchFailure,,,,,0
-teleOpRocketCargoFailure,,,,,0
-cargoSuccessTeleop,,High,Low,Low,
-sandstormCargoShipHatchSuccess,,,,,0
-teleOpCargoShipCargoSuccess,,,,,0
-functional,,Sorta,No,No,
-fillChoice,,Cargo,None,None,
-sandstormCargoShipCargoSuccess,,,,,0
-strongMedium,,Hatch,Neither,Neither,
-teleOpCargoShipCargoFailure,,,,,0
-sandstormRocketHatchFailure,,,,,0
-sandstormCargoShipHatchFailure,,,,,0
-fillChoiceTeleop,,Cargo,Cargo,Cargo,
-contrubution,,Equal,Weak,Weak,
-HABClimb,,,,,L1
-hiRocketSuccessTeleop,,Low,N/A,N/A,
-match,,match-22,match-33,match-52,match-6
-endingHab,,L2,None,L1,
-startingHatch,,Hab I,Hab I,Hab I,
+sandstormRocketCargoFailure,teleOpRocketCargoSuccess,strongMediumTeleop,sandstormRocketHatchSuccess,teleOpCargoShipHatchFailure,nTG6cThsi9TB9mTkcwuo5bKEo9B3,size,sandstormRocketCargoSuccess,speed,strategy,teamDBRef,sandstormCross,sandstormCrossBonus,teleOpCargoShipHatchSuccess,teleOpRocketHatchSuccess,sandstormCargoShipCargoFailure,lowRocketSuccessTeleop,teleOpRocketHatchFailure,teleOpRocketCargoFailure,cargoSuccessTeleop,sandstormCargoShipHatchSuccess,teleOpCargoShipCargoSuccess,functional,fillChoice,sandstormCargoShipCargoSuccess,strongMedium,teleOpCargoShipCargoFailure,sandstormRocketHatchFailure,sandstormCargoShipHatchFailure,fillChoiceTeleop,contrubution,HABClimb,hiRocketSuccessTeleop,match,endingHab,startingHatch
+,,,,,"{'notes': 'don’t know how accurate storm is', 'contribution': '', 'fillChoice': '', 'strategy': 'i got confused. i didnt really see what the robot did', 'cargoSuccessTeleop': 'N/A', 'strongMedium': 'Ball', 'teamDBRef': 'team-1739', 'speed': '', 'hiRocketSuccessTeleop': '', 'size': 'Large', 'match': 'match-18', 'fillChoiceTeleop': 'Low Rocket', 'strongMediumTeleop': '', 'endingHab': 'Hab 1', 'functional': 'Yes', 'startingHatch': 'Hab I', 'lowRocketSuccessTeleop': ''}",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,Ball,,,,Medium,,Medium,,team-1739,L1,L1,,,,Low,,,High,,,Sorta,Cargo,,Hatch,,,,Cargo,Equal,,Low,match-22,L2,Hab I
+,,Neither,,,,Jumbo,,Medium,,team-1739,L1,L1,,,,N/A,,,Low,,,No,None,,Neither,,,,Cargo,Weak,,N/A,match-33,None,Hab I
+,,Neither,,,,Small,,Medium,,team-1739,L1,L1,,,,N/A,,,Low,,,No,None,,Neither,,,,Cargo,Weak,,N/A,match-52,L1,Hab I
+0,0,,0,0,,,0,slow,,team-1739,L1,,0,0,0,,0,0,,0,0,,,0,,0,0,0,,,L1,,match-6,,

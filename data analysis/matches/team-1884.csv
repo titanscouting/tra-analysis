@@ -1,37 +1,5 @@
-sandstormRocketCargoFailure,,0,,
-teleOpRocketCargoSuccess,,0,,
-sandstormRocketHatchSuccess,,0,,
-strongMediumTeleop,,,,Both
-teleOpCargoShipHatchFailure,,0,,
-jouGPhPF0qME5wNIbd86MzYFsGw2,"{'contribution': '', 'notes': 'very unstable ', 'fillChoice': 'Cargo', 'strategy': 'ineffective ', 'cargoSuccessTeleop': 'Low', 'strongMedium': 'Hatch', 'teamDBRef': 'team-1884', 'hiRocketSuccessTeleop': 'N/A', 'speed': 'Fast', 'match': 'match-16', 'size': '', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Hatch', 'endingHab': '', 'functional': 'Yes', 'lowRocketSuccessTeleop': 'N/A', 'startingHatch': 'Hab I'}",,,
-sandstormRocketCargoSuccess,,0,,
-size,,,,Large
-speed,,slow,,Fast
-strategy,,,,
-teamDBRef,,team-1884,,team-1884
-sandstormCross,,L1,,L1
-sandstormCrossBonus,,,,L1
-teleOpCargoShipHatchSuccess,,0,,
-teleOpRocketHatchSuccess,,0,,
-sandstormCargoShipCargoFailure,,0,,
-lowRocketSuccessTeleop,,,,N/A
-teleOpRocketHatchFailure,,0,,
-teleOpRocketCargoFailure,,0,,
-klQQqapPjwO3jnpN8Dieequh3OI3,,,"{'notes': '', 'contribution': 'Equal', 'fillChoice': 'Cargo', 'strategy': '', 'strongMedium': 'Hatch', 'cargoSuccessTeleop': 'Mid', 'teamDBRef': 'team-1884', 'speed': 'Slow', 'hiRocketSuccessTeleop': '', 'size': 'Medium', 'match': 'match-27', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Ball', 'endingHab': 'None', 'functional': 'Yes', 'lowRocketSuccessTeleop': '', 'startingHatch': 'Hab I'}",
-cargoSuccessTeleop,,,,High
-sandstormCargoShipHatchSuccess,,0,,
-startingHatch,,,,Hab I
-fillChoice,,,,Cargo
-functional,,,,Yes
-sandstormCargoShipCargoSuccess,,0,,
-strongMedium,,,,Ball
-teleOpCargoShipCargoFailure,,0,,
-sandstormRocketHatchFailure,,0,,
-sandstormCargoShipHatchFailure,,1,,
-fillChoiceTeleop,,,,Cargo
-contrubution,,,,Equal
-HABClimb,,None,,
-match,,match-2,,match-32
-hiRocketSuccessTeleop,,,,N/A
-endingHab,,,,None
-teleOpCargoShipCargoSuccess,,0,,
+sandstormRocketCargoFailure,teleOpRocketCargoSuccess,sandstormRocketHatchSuccess,strongMediumTeleop,teleOpCargoShipHatchFailure,jouGPhPF0qME5wNIbd86MzYFsGw2,sandstormRocketCargoSuccess,size,speed,strategy,teamDBRef,sandstormCross,sandstormCrossBonus,teleOpCargoShipHatchSuccess,teleOpRocketHatchSuccess,sandstormCargoShipCargoFailure,lowRocketSuccessTeleop,teleOpRocketHatchFailure,teleOpRocketCargoFailure,klQQqapPjwO3jnpN8Dieequh3OI3,cargoSuccessTeleop,sandstormCargoShipHatchSuccess,startingHatch,fillChoice,functional,sandstormCargoShipCargoSuccess,strongMedium,teleOpCargoShipCargoFailure,sandstormRocketHatchFailure,sandstormCargoShipHatchFailure,fillChoiceTeleop,contrubution,HABClimb,match,hiRocketSuccessTeleop,endingHab,teleOpCargoShipCargoSuccess
+,,,,,"{'contribution': '', 'notes': 'very unstable ', 'fillChoice': 'Cargo', 'strategy': 'ineffective ', 'cargoSuccessTeleop': 'Low', 'strongMedium': 'Hatch', 'teamDBRef': 'team-1884', 'hiRocketSuccessTeleop': 'N/A', 'speed': 'Fast', 'match': 'match-16', 'size': '', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Hatch', 'endingHab': '', 'functional': 'Yes', 'lowRocketSuccessTeleop': 'N/A', 'startingHatch': 'Hab I'}",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+0,0,0,,0,,0,,slow,,team-1884,L1,,0,0,0,,0,0,,,0,,,,0,,0,0,1,,,None,match-2,,,0
+,,,,,,,,,,,,,,,,,,,"{'notes': '', 'contribution': 'Equal', 'fillChoice': 'Cargo', 'strategy': '', 'strongMedium': 'Hatch', 'cargoSuccessTeleop': 'Mid', 'teamDBRef': 'team-1884', 'speed': 'Slow', 'hiRocketSuccessTeleop': '', 'size': 'Medium', 'match': 'match-27', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Ball', 'endingHab': 'None', 'functional': 'Yes', 'lowRocketSuccessTeleop': '', 'startingHatch': 'Hab I'}",,,,,,,,,,,,,,,,,
+,,,Both,,,,Large,Fast,,team-1884,L1,L1,,,,N/A,,,,High,,Hab I,Cargo,Yes,,Ball,,,,Cargo,Equal,,match-32,N/A,None,
