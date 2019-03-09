@@ -1,0 +1,19 @@
+sandstormCrossBonus,,L2
+9fv7QhcLPsfU59sRrPq7LcJlD8J3,"{'contribution': '', 'notes': '', 'fillChoice': 'High Rocket', 'strategy': 'place high hatches. except- it’s very inaccurate. has the reach, though ', 'cargoSuccessTeleop': '', 'strongMedium': 'Hatch', 'teamDBRef': 'team-1736', 'hiRocketSuccessTeleop': 'Low', 'speed': '', 'match': 'match-14', 'size': '', 'fillChoiceTeleop': 'High Rocket', 'strongMediumTeleop': '', 'endingHab': '', 'functional': 'Yes', 'startingHatch': 'Hab II', 'lowRocketSuccessTeleop': ''}",
+strongMediumTeleop,,Ball
+fillChoiceTeleop,,Cargo
+cargoSuccessTeleop,,Low
+contrubution,,Equal
+functional,,No
+lowRocketSuccessTeleop,,N/A
+startingHatch,,Hab II
+size,,Medium
+hiRocketSuccessTeleop,,N/A
+speed,,Medium
+strategy,,"Hatches, then balls"
+match,,match-27
+fillChoice,,Cargo
+endingHab,,None
+teamDBRef,,team-1736
+strongMedium,,Neither
+sandstormCross,,L2

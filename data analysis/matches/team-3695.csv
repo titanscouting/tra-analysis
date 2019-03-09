@@ -1,0 +1,37 @@
+gmkR7hN4D1fQguey5X5V48d3PhO2,,"{'contribution': '', 'notes': '', 'fillChoice': 'Cargo', 'strategy': '', 'cargoSuccessTeleop': 'Mid', 'strongMedium': 'Hatch', 'teamDBRef': 'team-3695', 'speed': 'Fast', 'hiRocketSuccessTeleop': '', 'size': 'Large', 'match': 'match-26', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Both', 'endingHab': '', 'functional': 'Yes', 'startingHatch': 'Hab II', 'lowRocketSuccessTeleop': ''}",
+sandstormRocketCargoFailure,0,,0
+teleOpRocketCargoSuccess,2,,3
+sandstormRocketHatchSuccess,0,,0
+strongMediumTeleop,,Ball,
+teleOpCargoShipHatchFailure,0,,0
+sandstormRocketCargoSuccess,0,,0
+size,,Jumbo,
+speed,slow,Fast,slow
+strategy,,Fill cargo ship,
+teamDBRef,team-3695,team-3695,team-3695
+sandstormCross,L1,L2,L1
+sandstormCrossBonus,,L2,
+teleOpCargoShipHatchSuccess,1,,0
+teleOpRocketHatchSuccess,3,,3
+sandstormCargoShipCargoFailure,0,,0
+lowRocketSuccessTeleop,,N/A,
+teleOpRocketHatchFailure,0,,0
+teleOpRocketCargoFailure,0,,0
+klQQqapPjwO3jnpN8Dieequh3OI3,"{'contribution': 'Great', 'notes': '', 'fillChoice': 'Cargo', 'strategy': 'attempted hab 3', 'cargoSuccessTeleop': 'High', 'strongMedium': 'Hatch', 'teamDBRef': 'team-3695', 'speed': 'Fast', 'hiRocketSuccessTeleop': 'High', 'size': 'Medium', 'match': 'match-14', 'fillChoiceTeleop': 'Low Rocket', 'strongMediumTeleop': 'Both', 'endingHab': 'Hab 1', 'functional': 'Sorta', 'startingHatch': 'Hab II', 'lowRocketSuccessTeleop': 'High'}",,
+cargoSuccessTeleop,,High,
+sandstormCargoShipHatchSuccess,0,,0
+startingHatch,,Hab II,
+fillChoice,,Cargo,
+functional,,Yes,
+sandstormCargoShipCargoSuccess,0,,0
+strongMedium,,Hatch,
+teleOpCargoShipCargoFailure,0,,0
+sandstormRocketHatchFailure,0,,0
+sandstormCargoShipHatchFailure,0,,0
+fillChoiceTeleop,,Cargo,
+contrubution,,Strong,
+HABClimb,L1,,L1
+match,match-14,match-26,match-5
+hiRocketSuccessTeleop,,N/A,
+endingHab,,L3,
+teleOpCargoShipCargoSuccess,2,,0

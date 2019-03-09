@@ -1,0 +1,22 @@
+sandstormRocketCargoFailure,0
+teleOpRocketCargoSuccess,0
+sandstormRocketHatchSuccess,0
+teleOpCargoShipHatchFailure,0
+sandstormRocketCargoSuccess,0
+speed,Medium
+teamDBRef,team-6651
+sandstormCross,L1
+teleOpCargoShipHatchSuccess,0
+teleOpRocketHatchSuccess,0
+sandstormCargoShipCargoFailure,0
+teleOpRocketHatchFailure,0
+teleOpRocketCargoFailure,0
+klQQqapPjwO3jnpN8Dieequh3OI3,"{'notes': '', 'contribution': '', 'fillChoice': 'Cargo', 'strategy': '', 'strongMedium': 'Hatch', 'cargoSuccessTeleop': 'Low', 'teamDBRef': 'team-6651', 'speed': '', 'hiRocketSuccessTeleop': '', 'size': 'Medium', 'match': 'match-17', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Hatch', 'endingHab': 'Hab 1', 'functional': 'Sorta', 'lowRocketSuccessTeleop': '', 'startingHatch': 'Hab I'}"
+sandstormCargoShipHatchSuccess,0
+sandstormCargoShipCargoSuccess,0
+teleOpCargoShipCargoFailure,0
+sandstormRocketHatchFailure,0
+sandstormCargoShipHatchFailure,1
+HABClimb,L1
+match,match-17
+teleOpCargoShipCargoSuccess,0

@@ -1,0 +1,36 @@
+sandstormRocketCargoFailure,,,,0
+teleOpRocketCargoSuccess,,,,0
+strongMediumTeleop,,Ball,Ball,
+sandstormRocketHatchSuccess,,,,0
+teleOpCargoShipHatchFailure,,,,0
+jouGPhPF0qME5wNIbd86MzYFsGw2,"{'notes': '', 'contribution': 'Equal', 'fillChoice': '', 'strategy': '', 'strongMedium': 'Ball', 'cargoSuccessTeleop': 'Mid', 'teamDBRef': 'team-2016', 'speed': 'Fast', 'hiRocketSuccessTeleop': 'N/A', 'size': 'Medium', 'match': 'match-12', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Neither', 'endingHab': 'Hab 2', 'functional': 'Sorta', 'lowRocketSuccessTeleop': 'N/A', 'startingHatch': 'Hab I'}",,,
+size,,Large,Small,
+sandstormRocketCargoSuccess,,,,0
+speed,,Fast,Medium,slow
+strategy,,Tried unsuccessfully to fill cargo ship then rammed defensively,Pure cargo,
+teamDBRef,,team-2016,team-2016,team-2016
+sandstormCross,,L2,L2,None
+sandstormCrossBonus,,L2,L2,
+teleOpCargoShipHatchSuccess,,,,0
+teleOpRocketHatchSuccess,,,,0
+sandstormCargoShipCargoFailure,,,,0
+lowRocketSuccessTeleop,,N/A,N/A,
+teleOpRocketHatchFailure,,,,0
+teleOpRocketCargoFailure,,,,0
+cargoSuccessTeleop,,Low,High,
+sandstormCargoShipHatchSuccess,,,,0
+teleOpCargoShipCargoSuccess,,,,0
+functional,,No,Yes,
+fillChoice,,None,None,
+sandstormCargoShipCargoSuccess,,,,0
+strongMedium,,Hatch,Neither,
+teleOpCargoShipCargoFailure,,,,0
+sandstormRocketHatchFailure,,,,0
+sandstormCargoShipHatchFailure,,,,0
+fillChoiceTeleop,,Cargo,Cargo,
+contrubution,,Weak,Weak,
+HABClimb,,,,None
+hiRocketSuccessTeleop,,N/A,Low,
+match,,match-27,match-38,match-5
+endingHab,,L2,L1,
+startingHatch,,Hab II,Hab II,

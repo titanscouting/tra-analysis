@@ -1,0 +1,38 @@
+gmkR7hN4D1fQguey5X5V48d3PhO2,,,"{'contribution': 'Great', 'notes': 'almost ended on hab 3', 'cargoSuccess': 'High', 'fillChoice': 'Cargo', 'cargoSuccessTeleop': 'High', 'strongMedium': 'Hatch', 'teamDBRef': 'team-16', 'speed': 'Fast', 'hiRocketSuccessTeleop': '', 'lowRocketSuccess': '', 'size': 'Large', 'match': 'match-3', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Both', 'startingHatch': 'Hab I', 'lowRocketSuccessTeleop': '', 'hiRocketSuccess': ''}",,
+sandstormRocketCargoFailure,0,0,,,
+teleOpRocketCargoSuccess,0,0,,,
+sandstormRocketHatchSuccess,0,0,,,
+strongMediumTeleop,,,,,Both
+teleOpCargoShipHatchFailure,1,0,,,
+jouGPhPF0qME5wNIbd86MzYFsGw2,"{'notes': 'working with us didn’t see most of the match', 'contribution': 'Idk', 'fillChoice': 'Cargo', 'strategy': '', 'cargoSuccessTeleop': '', 'strongMedium': 'Ball', 'teamDBRef': 'team-16', 'speed': '', 'hiRocketSuccessTeleop': '', 'size': 'Jumbo', 'match': 'match-11', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Ball', 'endingHab': '', 'functional': 'Sorta', 'startingHatch': 'Hab I', 'lowRocketSuccessTeleop': ''}",,,,
+sandstormRocketCargoSuccess,0,0,,,
+nTG6cThsi9TB9mTkcwuo5bKEo9B3,,,,"{'notes': 'tipped over', 'contribution': 'Weak', 'fillChoice': 'Cargo', 'strategy': 'did not stay up long enough to determine ', 'strongMedium': 'Hatch', 'cargoSuccessTeleop': '', 'teamDBRef': 'team-16', 'speed': 'Fast', 'hiRocketSuccessTeleop': '', 'size': 'Large', 'match': 'match-35', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Ball', 'endingHab': '', 'functional': 'Yes', 'lowRocketSuccessTeleop': '', 'startingHatch': 'Hab I'}",
+size,,,,,Large
+speed,slow,Ludicrous,,,Ludicrous
+strategy,,,,,
+teamDBRef,team-16,team-16,,,team-16
+sandstormCross,L2,L1,,,L1
+sandstormCrossBonus,,,,,L1
+teleOpCargoShipHatchSuccess,0,0,,,
+teleOpRocketHatchSuccess,1,0,,,
+sandstormCargoShipCargoFailure,0,0,,,
+lowRocketSuccessTeleop,,,,,Mid
+teleOpRocketHatchFailure,0,0,,,
+teleOpRocketCargoFailure,0,0,,,
+cargoSuccessTeleop,,,,,High
+sandstormCargoShipHatchSuccess,0,0,,,
+startingHatch,,,,,Hab I
+fillChoice,,,,,Cargo
+functional,,,,,No
+sandstormCargoShipCargoSuccess,0,0,,,
+strongMedium,,,,,Neither
+teleOpCargoShipCargoFailure,0,0,,,
+sandstormRocketHatchFailure,0,0,,,
+sandstormCargoShipHatchFailure,1,1,,,
+fillChoiceTeleop,,,,,Cargo
+contrubution,,,,,Strong
+HABClimb,L3,L3,,,
+match,match-11,match-18,,,match-41
+hiRocketSuccessTeleop,,,,,N/A
+endingHab,,,,,L3
+teleOpCargoShipCargoSuccess,4,4,,,

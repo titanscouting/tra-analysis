@@ -1,0 +1,23 @@
+gmkR7hN4D1fQguey5X5V48d3PhO2,,,"{'notes': '', 'contribution': '', 'fillChoice': 'Cargo', 'strategy': '', 'strongMedium': 'Hatch', 'cargoSuccessTeleop': 'Mid', 'teamDBRef': 'team-5822', 'speed': '', 'hiRocketSuccessTeleop': 'High', 'size': 'Medium', 'match': 'match-36', 'fillChoiceTeleop': 'High Rocket', 'strongMediumTeleop': 'Hatch', 'endingHab': 'Hab 1', 'functional': '', 'lowRocketSuccessTeleop': 'High', 'startingHatch': 'Hab II'}",
+sandstormRocketCargoFailure,0,0,,0
+teleOpRocketCargoSuccess,0,0,,0
+sandstormRocketHatchSuccess,0,1,,0
+teleOpCargoShipHatchFailure,0,0,,0
+sandstormRocketCargoSuccess,0,0,,0
+nTG6cThsi9TB9mTkcwuo5bKEo9B3,,,"{'notes': '', 'contribution': 'Equal', 'fillChoice': 'Cargo', 'strategy': 'placed hatch on rocket', 'strongMedium': 'Hatch', 'cargoSuccessTeleop': '', 'teamDBRef': 'team-5822', 'speed': 'Medium', 'hiRocketSuccessTeleop': 'High', 'size': 'Jumbo', 'match': 'match-36', 'fillChoiceTeleop': 'High Rocket', 'strongMediumTeleop': 'Hatch', 'endingHab': 'Hab 1', 'functional': 'Yes', 'lowRocketSuccessTeleop': 'High', 'startingHatch': 'idk'}",
+speed,Fast,slow,,slow
+teamDBRef,team-5822,team-5822,,team-5822
+sandstormCross,L2,L2,,L2
+teleOpCargoShipHatchSuccess,0,1,,1
+teleOpRocketHatchSuccess,4,3,,2
+sandstormCargoShipCargoFailure,0,0,,0
+teleOpRocketHatchFailure,1,1,,1
+teleOpRocketCargoFailure,1,1,,1
+sandstormCargoShipHatchSuccess,0,0,,0
+sandstormCargoShipCargoSuccess,0,0,,0
+teleOpCargoShipCargoFailure,0,0,,0
+sandstormRocketHatchFailure,0,0,,0
+sandstormCargoShipHatchFailure,0,0,,0
+HABClimb,L1,L1,,L1
+match,match-10,match-20,,match-6
+teleOpCargoShipCargoSuccess,0,0,,0

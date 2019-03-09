@@ -1,0 +1,23 @@
+sandstormRocketCargoFailure,,,0
+teleOpRocketCargoSuccess,,,0
+sandstormRocketHatchSuccess,,,0
+teleOpCargoShipHatchFailure,,,0
+jouGPhPF0qME5wNIbd86MzYFsGw2,"{'notes': 'unable to move can only pivot', 'contribution': 'Weak', 'fillChoice': '', 'strategy': 'did nothing ', 'cargoSuccessTeleop': '', 'strongMedium': 'Neither', 'teamDBRef': 'team-5350', 'speed': 'Slow', 'hiRocketSuccessTeleop': '', 'size': 'Small', 'match': 'match-17', 'fillChoiceTeleop': '', 'strongMediumTeleop': '', 'endingHab': 'Hab 1', 'functional': 'No', 'startingHatch': 'Hab I', 'lowRocketSuccessTeleop': ''}",,
+sandstormRocketCargoSuccess,,,0
+speed,,,slow
+teamDBRef,,,team-5350
+sandstormCross,,,None
+teleOpCargoShipHatchSuccess,,,0
+teleOpRocketHatchSuccess,,,0
+sandstormCargoShipCargoFailure,,,0
+teleOpRocketHatchFailure,,,0
+teleOpRocketCargoFailure,,,0
+klQQqapPjwO3jnpN8Dieequh3OI3,,"{'notes': '', 'contribution': 'Weak', 'fillChoice': '', 'strategy': '', 'strongMedium': 'Neither', 'cargoSuccessTeleop': 'Low', 'teamDBRef': 'team-5350', 'speed': 'Slow', 'hiRocketSuccessTeleop': '', 'size': 'Small', 'match': 'match-29', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Hatch', 'endingHab': '', 'functional': 'No', 'lowRocketSuccessTeleop': '', 'startingHatch': 'Hab I'}",
+sandstormCargoShipHatchSuccess,,,0
+sandstormCargoShipCargoSuccess,,,0
+teleOpCargoShipCargoFailure,,,0
+sandstormRocketHatchFailure,,,0
+sandstormCargoShipHatchFailure,,,0
+HABClimb,,,None
+match,,,match-8
+teleOpCargoShipCargoSuccess,,,0
