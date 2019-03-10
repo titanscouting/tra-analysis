@@ -38,7 +38,7 @@ __author__ = (
     "Arthur Lu <arthurlu@ttic.edu>, "
     "Jacob Levine <jlevine@ttic.edu>,"
     )
-s
+
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
