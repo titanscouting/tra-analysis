@@ -30,9 +30,10 @@ from sklearn import metrics, datasets
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+import time
 
 #enable CUDA if possible
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device("cpu")
 
 #linear_nn: creates a fully connected network given params
 def linear_nn(in_dim, hidden_dim, out_dim, num_hidden, act_fn="tanh", end="none"):
@@ -194,8 +195,12 @@ def retyuoipufdyu():
 
     data = torch.tensor(datasets.fetch_california_housing()['data']).to(torch.float)
     ground = datasets.fetch_california_housing()['target']
-    ground=torch.tensor(ground).to(torch.float)
+    ground = torch.tensor(ground).to(torch.float)
     model = linear_nn(8, 100, 1, 20, act_fn = "relu")
     print(model)
     return train_sgd_simple(model,"regression", data, ground, learnrate=1e-4, iters=1000)
-#retyuoipufdyu()
+
+start = time.time()
+retyuoipufdyu()
+end = time.time()
+print(end-start)
