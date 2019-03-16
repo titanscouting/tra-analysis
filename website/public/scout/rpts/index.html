@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>
+    <meta charset="utf-8">
+    <title>titanscout</title>
+    <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.1/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.1/firebaseui.css" />
+    <link rel="stylesheet" href="../style.css" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <script type="text/javascript" src="scripts.js"></script>
+</head>
+
+<body>
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="../../profile">Profile</a>
+    <a href="../../team">Team</a>
+    <p>Scout Matches</p>
+    <a href="../signUps" class="scoutMatchLinks">Sign Up For Matches</a>
+    <a href="../rpts" class="scoutMatchLinks">Submit Scouting Reports</a>
+    <a href="../../stats">Tournament Stats</a>
+  </div>
+  <div id="main">
+    <span onclick="openNav()" id="topbar">
+      <img id="sideload" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Hamburger_icon.svg/1200px-Hamburger_icon.svg.png">
+    </span>
+    <h1 id="mainhead">TitanScout- Scout Matches</h1>
+    <p id="status">Loading...</p>
+    <div>
+      Scouting For: <select id="tns" onchange="changeTeam(document.getElementById('tns').value)"></select>
+    </div>
+    <h2>Sign Up For Matches</h2>
+    <h2>Submit a Report:</h2>
+    <div id=FormData>
+      <select id="mSelect"></select>
+
+    </div>
+  </div>
+</body>
+
+</html>

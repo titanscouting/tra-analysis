@@ -36,7 +36,7 @@ window.onload = function() {
         document.getElementById('status').innerHTML = "You are signed in.";
       }
     } else {
-      window.location.replace('../');
+      window.location.replace('../../');
     }
     teamAssoc = firebase.firestore().collection('UserAssociations').doc(user.uid);
     teamAssoc.get().then(function(doc) {
