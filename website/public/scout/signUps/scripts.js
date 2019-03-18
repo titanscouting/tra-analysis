@@ -144,7 +144,7 @@ function changeTeam(teamNum) {
             outstr += "<td class='blue'>" + nr[k] + "</td>";
             outstr += "</tr>"
           }
-          document.getElementById(matchTable).innerHTML += outstr;
+          document.getElementById('matchTable').innerHTML += outstr;
         }
       }
     });
