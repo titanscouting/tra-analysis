@@ -125,23 +125,23 @@ function changeTeam(teamNum) {
           }
           var outstr = "";
           outstr += "<tr><td rowspan='2' class='neu'>Quals " + (i + 1).toString() + "</td>";
-          outstr += "<td class='neu'>Series 1</tr>";
+          outstr += "<td class='neu'>Series 1</td>";
           outstr += "<td class='blue'>" + fb[0] + "</td>";
           outstr += "<td class='blue'>" + mb[0] + "</td>";
           outstr += "<td class='blue'>" + nb[0] + "</td>";
-          outstr += "<td class='blue'>" + fr[0] + "</td>";
-          outstr += "<td class='blue'>" + mr[0] + "</td>";
-          outstr += "<td class='blue'>" + nr[0] + "</td>";
+          outstr += "<td class='red'>" + fr[0] + "</td>";
+          outstr += "<td class='red'>" + mr[0] + "</td>";
+          outstr += "<td class='red'>" + nr[0] + "</td>";
           outstr += "</tr>"
           for (var k = 1; k < 2; k++) {
             outstr += "<tr>";
-            outstr += "<td class='neu'>Series " + (k + 1).toString() + "</tr>";
+            outstr += "<td class='neu'>Series " + (k + 1).toString() + "</td>";
             outstr += "<td class='blue'>" + fb[k] + "</td>";
             outstr += "<td class='blue'>" + mb[k] + "</td>";
             outstr += "<td class='blue'>" + nb[k] + "</td>";
-            outstr += "<td class='blue'>" + fr[k] + "</td>";
-            outstr += "<td class='blue'>" + mr[k] + "</td>";
-            outstr += "<td class='blue'>" + nr[k] + "</td>";
+            outstr += "<td class='red'>" + fr[k] + "</td>";
+            outstr += "<td class='red'>" + mr[k] + "</td>";
+            outstr += "<td class='red'>" + nr[k] + "</td>";
             outstr += "</tr>"
           }
           document.getElementById('matchTable').innerHTML += outstr;
