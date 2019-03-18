@@ -79,7 +79,7 @@ function changeTeam(teamNum) {
     cci = firebase.firestore().collection('matchSignupsTeam').doc("team-" + teamNum).collection('competitions').doc(currentComp);
     cci.get().then(function(doc) {
       if (doc.exists) {
-        compInfo = cci.get();
+        compInfo = cci.data();
         matches = Object.keys(compInfo);
         matches.sort();
         var nr = [],
