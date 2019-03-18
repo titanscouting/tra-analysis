@@ -48,8 +48,125 @@ window.onload = function() {
           document.getElementById('tns').innerHTML += "<option value='" + teamNums[i] + "'>" + teamNums[i] + "</option>"
         }
       } else {}
+    }).then(function() {
+      changeTeam(document.getElementById('tns').value)
     })
   });
+}
+
+function changeTeam(teamNum) {
+  //remove all event listeners for element by cloning it
+  var old_element = document.getElementById("mSelect");
+  var new_element = old_element.cloneNode(true);
+  old_element.parentNode.replaceChild(new_element, old_element);
+  //ok back to normal stuff
+  var user = firebase.auth().currentUser;
+  ti = firebase.firestore().collection('teamData').doc("team-" + teamNum);
+  currentComp = null;
+  ti.get().then(function(doc) {
+    if (doc.exists) {
+      info = doc.data();
+      currentComp = info['currentCompetition'];
+    } else {
+      alert("Something's wrong with firebase.");
+      throw ("Something's wrong with firebase.");
+    }
+  }).then(function() {
+    if (currentComp != null) {
+      comps = firebase.firestore().collection('matchSignupsIndividual').doc(user.uid).collection("team-" + teamNum).doc(currentComp);
+      comps.get().then(function(doc) {
+        if (doc.exists) {
+          var matches = doc.data();
+          document.getElementById('mSelect').innerHTML = "";
+          for (var i = 0; i < Object.keys(matches).length; i++) {
+            name = Object.keys(matches)[i];
+            series = matches[Object.keys(matches)[i]]['series'];
+            completed = matches[Object.keys(matches)[i]]['completed'];
+            if (!completed) {
+              document.getElementById('mSelect').innerHTML += "<option value=" + name + series + ">" + name + "</option>"
+            }
+          }
+          document.getElementById('mSelect').addEventListener("change", function() {
+            updateForm(document.getElementById('mSelect').value, teamNum, currentComp);
+          });
+        }
+      });
+    }
+  });
+}
+
+function lastWord(words) {
+  var n = words.split(" ");
+  return n[n.length - 1];
+}
+function firstWord(words) {
+  var n = words.split(" ");
+  return n[0];
+}
+
+function updateForm(locString, teamNum, competition) {
+  seriesList = [];
+  document.getElementById('FormData').innerHTML = ""
+  loc = firebase.firestore().collection('appBuliding').document("team-" + teamNum).collection('competitions').document(competition).collection(lastWord(locString));
+  loc.get().then(function(docs) {
+    docs.forEach(function(doc) {
+      seriesList.push(doc.data());
+    });
+    seriesList.sort(function(a, b) {
+      return a.order - b.order;
+    })
+    for (var i = 0; i < seriesList.length; i++) {
+      document.getElementById('FormData').innerHTML += "<h3>"
+      seriesList[i].id + "</h3>";
+      labels = Object.keys(seriesList[i].data());
+      var index = labels.indexOf('order');
+      if (index > -1) {
+        labels.splice(index, 1);
+      }
+      var questions = [];
+      for (var j = 0; j < labels.length; j++) {
+        questions.push([labels[j], seriesList[i].data()[labels[j]]])
+      }
+      questions.sort(function(a, b) {
+        return a[1].order - b[1].order;
+      })
+      for (var j = 0; j < questions.length; j++) {
+        document.getElementById('FormData').innerHTML += "<div>";
+        document.getElementById('FormData').innerHTML += questions[j][1]['title'];
+        if (questions[j][1]['type'] = 'shortText') {
+          document.getElementById('FormData').innerHTML += "<input id=''" + questions[j][0] + "' type='text'></input>";
+        } else if (questions[j][1]['type'] = 'longText') {
+          document.getElementById('FormData').innerHTML += "<textarea id=''" + questions[j][0] + "' rows='4' cols='50''></textarea>";
+        } else if (questions[j][1]['type'] = 'numerical') {
+          document.getElementById('FormData').innerHTML += "<input type='button' onclick='dec(" + questions[j][0] + ")' value='-'></input><span id='" +
+            questions[j][0] +
+            "'>" + (questions[j][1]['default']).toString() + "</span><input type='button' onclick='inc(" + questions[j][0] + ")' value='+'></input>";
+        } else if (questions[j][1]['type'] = 'range') {
+          document.getElementById('FormData').innerHTML += "&nbsp;&nbsp;" + questions[j][1]['min']['text'] + "&nbsp;&nbsp;";
+          document.getElementById('FormData').innerHTML += "<input type='range' min='" + questions[j][1]['min']['val'] + "' max='" + questions[j][1]['max']['val'] + "'>";
+          document.getElementById('FormData').innerHTML += "&nbsp;&nbsp;" + questions[j][1]['max']['text'];
+        } else if (questions[j][1]['type'] = 'segment') {
+          document.getElementById('FormData').innerHTML += "<div id='" + questions[j][0] + "'>"
+          for (var k = 0; k < questions[j][1]['elements'].length; k++) {
+            //// TODO: replace with real buttons for good styling
+            document.getElementById('FormData').innerHTML += questions[j][1]['elements'][k];
+            document.getElementById('FormData').innerHTML += "<input type='radio' name='" + questions[j][0] + "' value=" + questions[j][1]['elements'][k] + "></input>"
+          }
+          document.getElementById('FormData').innerHTML += "</div>"
+        }
+        document.getElementById('FormData').innerHTML += "</div>";
+      }
+    }
+    document.getElementById('FormData').innerHTML += "<input type='button' onclick=subReport("+teamNum+","+competition+","+firstWord(locString)+") value='Submit'>"
+  });
+}
+
+function dec(id) {
+  document.getElementById(id).innerHTML = (parseInt(document.getElementById(id).innerHTML) - 1)).toString()
+}
+
+function inc(id) {
+  document.getElementById(id).innerHTML = (parseInt(document.getElementById(id).innerHTML) + 1)).toString()
 }
 
 function subRes() {
@@ -66,7 +183,7 @@ function subRes() {
     push['teamDBRef'] = 'team-' + document.getElementById('tsn').value
     push['speed'] = document.getElementById('speed').value
     push['sandstormCross'] = document.getElementById('SCross').value
-    push['strategy']= document.getElementById('strat').value
+    push['strategy'] = document.getElementById('strat').value
     push['contrubution'] = document.getElementById('contrib').value
     push['startingHatch'] = document.getElementById('habs').value
     push['size'] = document.getElementById('egs').value
@@ -95,7 +212,7 @@ function subRes() {
       push['teamDBRef'] = 'team-' + document.getElementById('tsn').value
       push['speed'] = document.getElementById('speed').value
       push['sandstormCross'] = document.getElementById('SCross').value
-      push['strategy']= document.getElementById('strat').value
+      push['strategy'] = document.getElementById('strat').value
       push['contrubution'] = document.getElementById('contrib').value
       push['startingHatch'] = document.getElementById('habs').value
       push['size'] = document.getElementById('egs').value
@@ -120,7 +237,9 @@ function subRes() {
 
   ).then(function() {
     alert('Submitted!')
-    setTimeout(function(){ window.location.href = '../scout'; }, 500);
+    setTimeout(function() {
+      window.location.href = '../scout';
+    }, 500);
 
   })
 }

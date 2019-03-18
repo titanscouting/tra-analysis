@@ -150,15 +150,19 @@ function changeTeam(teamNum) {
     });
   });
 }
-function addMatch(matchNum,seriesNum,position) {
+
+function addMatch(matchNum, seriesNum, position) {
+  var success = false;
+  var teamNum = document.getElementById('tns').value
   var user = firebase.auth().currentUser;
-  var name="anon"
+  var name = "anon"
   if (user.displayName != null) {
     name = user.displayName;
   } else if (user.email != null) {
     name = user.email;
   } else if (user.phoneNumber != null) {
-    name= user.phoneNumber;
+    name = user.phoneNumber;
+  }
   ti = firebase.firestore().collection('teamData').doc("team-" + teamNum);
   currentComp = null;
   ti.get().then(function(doc) {
@@ -171,21 +175,40 @@ function addMatch(matchNum,seriesNum,position) {
     }
   }).then(function() {
     cci = firebase.firestore().collection('matchSignupsTeam').doc("team-" + teamNum).collection('competitions').doc(currentComp);
-    cci.get().then(function (doc) {
+    cci.get().then(function(doc) {
       if (doc.exists) {
-        info=doc.data();
-        match=info["match-"+matchNum.toString()];
-        pos=match[position];
-        occ=pos["series-"+seriesNum.toString()];
+        info = doc.data();
+        match = info["match-" + matchNum.toString()];
+        pos = match[position];
+        occ = pos["series-" + seriesNum.toString()];
         if (occ == null) {
-          info["match-"+matchNum.toString()][position]["series-"+seriesNum.toString()]=name;
+          info["match-" + matchNum.toString()][position]["series-" + seriesNum.toString()] = name;
           firebase.firestore().collection('matchSignupsTeam').doc("team-" + teamNum).collection('competitions').doc(currentComp).set(info)
-          alert('Added!')
-          setTimeout(function(){ window.location.href = '../signUps'; }, 500);
-        }else{
-          alert(occ+"has added that match first.")
-          setTimeout(function(){ window.location.href = '../signUps'; }, 500);
+          success = true;
+        } else {
+          alert(occ + "has added that match first.")
+          setTimeout(function() {
+            window.location.href = '../signUps';
+          }, 500);
         }
+      }
+    }).then(function() {
+      if (success) {
+        ti = firebase.firestore().collection('matchSignupsIndividual').doc(user.uid).collection("team-" + teamNum).doc(currentComp);
+        push = {
+          "match-" + matchNum.toString()+" "+position: {
+            'completed': false,
+            series: seriesNum.toString()
+          }
+        }
+        cityRef.set(push, {
+          merge: true
+        }), then(function() {
+          alert('Added!')
+          setTimeout(function() {
+            window.location.href = '../signUps';
+          }, 500);
+        });
       }
     });
   });
