@@ -100,7 +100,7 @@ function changeTeam(teamNum) {
             if (mi['mid-blue']['series-' + (j + 1).toString()] != null) {
               mb.push(mi['mid-blue']['series-' + (j + 1).toString()]);
             } else {
-              mb.push("<span onclick='addMatch(" + (i + 1).toString() + "+", (j + 1).toString() + ",'mid-blue')'>open</span>");
+              mb.push("<span onclick='addMatch(" + (i + 1).toString() + "," + (j + 1).toString() + ",'mid-blue')'>open</span>");
             }
             if (mi['near-blue']['series-' + (j + 1).toString()] != null) {
               nb.push(mi['near-blue']['series-' + (j + 1).toString()]);
@@ -195,8 +195,9 @@ function addMatch(matchNum, seriesNum, position) {
     }).then(function() {
       if (success) {
         ti = firebase.firestore().collection('matchSignupsIndividual').doc(user.uid).collection("team-" + teamNum).doc(currentComp);
-        label="match-" + matchNum.toString()+" "+position
-        push = {label: {
+        label = "match-" + matchNum.toString() + " " + position
+        push = {
+          label: {
             'completed': false,
             'series': seriesNum.toString()
           }
