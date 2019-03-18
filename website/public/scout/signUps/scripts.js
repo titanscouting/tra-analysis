@@ -91,7 +91,7 @@ function changeTeam(teamNum) {
         for (var i = 0; i < matches.length; i++) {
           mi = compInfo["match-" + (i + 1).toString()]
           //sets up the table lists. i really hope it doesn't break.
-          for (var j = 0; j < 2; i++) {
+          for (var j = 0; j < 2; j++) {
             if (mi['far-blue']['series-' + (j + 1).toString()] != null) {
               fb.push(mi['far-blue']['series-' + (j + 1).toString()]);
             } else {

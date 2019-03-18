@@ -161,11 +161,11 @@ function updateForm(locString, teamNum, competition) {
 }
 
 function dec(id) {
-  document.getElementById(id).innerHTML = (parseInt(document.getElementById(id).innerHTML) - 1)).toString()
+  document.getElementById(id).innerHTML = (parseInt(document.getElementById(id).innerHTML) - 1).toString()
 }
 
 function inc(id) {
-  document.getElementById(id).innerHTML = (parseInt(document.getElementById(id).innerHTML) + 1)).toString()
+  document.getElementById(id).innerHTML = (parseInt(document.getElementById(id).innerHTML) + 1).toString()
 }
 
 function subReport(team, comp, matchNum) {
