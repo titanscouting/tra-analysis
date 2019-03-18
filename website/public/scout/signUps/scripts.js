@@ -195,10 +195,10 @@ function addMatch(matchNum, seriesNum, position) {
     }).then(function() {
       if (success) {
         ti = firebase.firestore().collection('matchSignupsIndividual').doc(user.uid).collection("team-" + teamNum).doc(currentComp);
-        push = {
-          "match-" + matchNum.toString()+" "+position: {
+        label="match-" + matchNum.toString()+" "+position
+        push = {label: {
             'completed': false,
-            series: seriesNum.toString()
+            'series': seriesNum.toString()
           }
         }
         cityRef.set(push, {
