@@ -133,7 +133,7 @@ function changeTeam(teamNum) {
           outstr += "<td class='blue'>" + mr[0] + "</td>";
           outstr += "<td class='blue'>" + nr[0] + "</td>";
           outstr += "</tr>"
-          for (var k = 1; k < 2; i++) {
+          for (var k = 1; k < 2; k++) {
             outstr += "<tr>";
             outstr += "<td class='neu'>Series " + (k + 1).toString() + "</tr>";
             outstr += "<td class='blue'>" + fb[k] + "</td>";
