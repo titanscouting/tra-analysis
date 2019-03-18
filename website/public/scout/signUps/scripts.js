@@ -55,7 +55,7 @@ window.onload = function() {
 }
 
 function changeTeam(teamNum) {
-  document.getElementById("matchTable") = `<tr>
+  document.getElementById("matchTable").innerHTML = `<tr>
     <td class="neu">Match Number</td>
     <td class="neu">Series</td>
     <td class="blue">Far Blue</td>
