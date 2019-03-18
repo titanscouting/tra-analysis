@@ -99,6 +99,7 @@ function lastWord(words) {
   var n = words.split(" ");
   return n[n.length - 1];
 }
+
 function firstWord(words) {
   var n = words.split(" ");
   return n[0];
@@ -138,9 +139,7 @@ function updateForm(locString, teamNum, competition) {
         } else if (questions[j][1]['type'] = 'longText') {
           document.getElementById('FormData').innerHTML += "<textarea id=''" + questions[j][0] + "' rows='4' cols='50''></textarea>";
         } else if (questions[j][1]['type'] = 'numerical') {
-          document.getElementById('FormData').innerHTML += "<input type='button' onclick='dec(" + questions[j][0] + ")' value='-'></input><span id='" +
-            questions[j][0] +
-            "'>" + (questions[j][1]['default']).toString() + "</span><input type='button' onclick='inc(" + questions[j][0] + ")' value='+'></input>";
+          document.getElementById('FormData').innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick='dec(" + questions[j][0] + ")' value='-'></input>" + (questions[j][1]['default']).toString() + "<input type='button' onclick='inc(" + questions[j][0] + ")' value='+'></input></span>";
         } else if (questions[j][1]['type'] = 'range') {
           document.getElementById('FormData').innerHTML += "&nbsp;&nbsp;" + questions[j][1]['min']['text'] + "&nbsp;&nbsp;";
           document.getElementById('FormData').innerHTML += "<input type='range' min='" + questions[j][1]['min']['val'] + "' max='" + questions[j][1]['max']['val'] + "'>";
@@ -157,7 +156,7 @@ function updateForm(locString, teamNum, competition) {
         document.getElementById('FormData').innerHTML += "</div>";
       }
     }
-    document.getElementById('FormData').innerHTML += "<input type='button' onclick=subReport("+teamNum+","+competition+","+firstWord(locString)+") value='Submit'>"
+    document.getElementById('FormData').innerHTML += "<input type='button' onclick=subReport(" + teamNum + "," + competition + "," + firstWord(locString) + ") value='Submit'>"
   });
 }
 
@@ -168,6 +167,33 @@ function dec(id) {
 function inc(id) {
   document.getElementById(id).innerHTML = (parseInt(document.getElementById(id).innerHTML) + 1)).toString()
 }
+
+function subReport(team, comp, matchNum) {
+  var push = {}
+  var x = document.getElementById('FormData').children;
+  for (var i = 0; i < x.length; i++) {
+    if (x[i].children[0].tagName == "INPUT") {
+      push[x[i].children[0].id] = x[i].children[0].tagName;
+    } else if (x[i].children[0].tagName == "TEXTAREA") {
+      push[x[i].children[0].id] = x[i].children[0].innerHTML;
+    } else if (x[i].children[0].tagName == "SPAN") {
+      push[x[i].children[0].id] = x[i].children[0].innerText;
+    }else if (x[i].children[0].tagName == "DIV") {
+      var name=x[i].children[0].id;
+      push[name]=document.querySelector('input[name="'+name+'"]:checked').value;
+    }
+  }
+  var user = firebase.auth().currentUser;
+  firebase.firestore().collection("teamData").doc('team-' + team).collection('scouts').doc(user.uid).collection(comp).doc("team-" + scoutedTeamNumber + matchNum).set(push, {
+    merge: true
+  }).then(function () {
+    firebase.firestore().collection("data").doc('team-' + team).collection(comp).doc("team-" + scoutedTeamNumber).collection('matches').doc('match-' + matchNum).set(push, {
+      merge: true
+    });
+  });
+}
+
+/*
 
 function subRes() {
   firebase.firestore().collection('teamData').doc('team-' + document.getElementById('tns').value).get().then(function(doc) {
@@ -242,4 +268,4 @@ function subRes() {
     }, 500);
 
   })
-}
+}*/
