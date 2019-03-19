@@ -89,6 +89,7 @@ function changeTeam(teamNum) {
           document.getElementById('mSelect').addEventListener("change", function() {
             updateForm(document.getElementById('mSelect').value, teamNum, currentComp);
           });
+          updateForm(document.getElementById('mSelect').value, teamNum, currentComp);
         }
       });
     }
