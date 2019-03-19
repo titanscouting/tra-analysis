@@ -195,12 +195,10 @@ function addMatch(matchNum, seriesNum, position) {
     }).then(function() {
       if (success) {
         ti = firebase.firestore().collection('matchSignupsIndividual').doc(user.uid).collection("team-" + teamNum).doc(currentComp);
-        label =
-        push = {
-          `match-${matchNum.toString()} ${position}`: {
-            'completed': false,
-            'series': seriesNum.toString()
-          }
+        var push = {}
+        push["match-" + matchNum.toString() + " " + position] = {
+          'completed': false,
+          'series': seriesNum.toString()
         }
         ti.set(push, {
           merge: true
