@@ -95,32 +95,32 @@ function changeTeam(teamNum) {
             if (mi['far-blue']['series-' + (j + 1).toString()] != null) {
               fb.push(mi['far-blue']['series-' + (j + 1).toString()]);
             } else {
-              fb.push(`<span onclick='addMatch(${(i + 1).toString()},${(j + 1).toString()},'far-blue')'>open</span>`);
+              fb.push(`<span onclick="addMatch(${(i + 1).toString()},${(j + 1).toString()},'far-blue')">open</span>`);
             }
             if (mi['mid-blue']['series-' + (j + 1).toString()] != null) {
               mb.push(mi['mid-blue']['series-' + (j + 1).toString()]);
             } else {
-              mb.push(`<span onclick='addMatch(${(i + 1).toString()},${(j + 1).toString()},'mid-blue')'>open</span>`);
+              mb.push(`<span onclick="addMatch(${(i + 1).toString()},${(j + 1).toString()},'mid-blue')">open</span>`);
             }
             if (mi['near-blue']['series-' + (j + 1).toString()] != null) {
               nb.push(mi['near-blue']['series-' + (j + 1).toString()]);
             } else {
-              nb.push(`<span onclick='addMatch(${(i + 1).toString()},${(j + 1).toString()},'near-blue')'>open</span>`);
+              nb.push(`<span onclick="addMatch(${(i + 1).toString()},${(j + 1).toString()},'near-blue')">open</span>`);
             }
             if (mi['far-red']['series-' + (j + 1).toString()] != null) {
               fr.push(mi['far-red']['series-' + (j + 1).toString()]);
             } else {
-              fr.push(`<span onclick='addMatch(${(i + 1).toString()},${(j + 1).toString()},'far-red')'>open</span>`);
+              fr.push(`<span onclick="addMatch(${(i + 1).toString()},${(j + 1).toString()},'far-red')">open</span>`);
             }
             if (mi['mid-red']['series-' + (j + 1).toString()] != null) {
               mr.push(mi['mid-red']['series-' + (j + 1).toString()]);
             } else {
-              mr.push(`<span onclick='addMatch(${(i + 1).toString()},${(j + 1).toString()},'mid-red')'>open</span>`);
+              mr.push(`<span onclick="addMatch(${(i + 1).toString()},${(j + 1).toString()},'mid-red')">open</span>`);
             }
             if (mi['near-red']['series-' + (j + 1).toString()] != null) {
               nr.push(mi['near-red']['series-' + (j + 1).toString()]);
             } else {
-              nr.push(`<span onclick='addMatch(${(i + 1).toString()},${(j + 1).toString()},'near-red')'>open</span>`)
+              nr.push(`<span onclick="addMatch(${(i + 1).toString()},${(j + 1).toString()},'near-red')">open</span>`)
             }
           }
           var outstr = "";
