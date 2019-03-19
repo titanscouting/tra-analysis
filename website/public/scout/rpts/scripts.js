@@ -109,7 +109,7 @@ function firstWord(words) {
 function updateForm(locString, teamNum, competition) {
   seriesList = [];
   document.getElementById('FormData').innerHTML = ""
-  loc = firebase.firestore().collection('appBuliding').document("team-" + teamNum).collection('competitions').document(competition).collection(lastWord(locString));
+  loc = firebase.firestore().collection('appBuliding').doc("team-" + teamNum).collection('competitions').doc(competition).collection(lastWord(locString));
   loc.get().then(function(docs) {
     docs.forEach(function(doc) {
       seriesList.push(doc.data());
