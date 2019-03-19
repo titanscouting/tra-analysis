@@ -202,9 +202,9 @@ function addMatch(matchNum, seriesNum, position) {
             'series': seriesNum.toString()
           }
         }
-        cityRef.set(push, {
+        ti.set(push, {
           merge: true
-        }), then(function() {
+        }).then(function() {
           alert('Added!')
           setTimeout(function() {
             window.location.href = '../signUps';
