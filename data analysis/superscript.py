@@ -3,9 +3,12 @@
 #Notes:
 #setup:
 
-__version__ = "1.0.5.003"
+__version__ = "1.0.6.000"
 
 __changelog__ = """changelog:
+1.0.6.000:
+    - added pulldata function
+    - service now pulls in, computes data, and outputs data as planned
 1.0.5.003:
     - hotfix: actually pushes data correctly now
 1.0.5.002:
@@ -51,7 +54,8 @@ import warnings
 import glob
 import numpy as np
 import time
-import tbarequest as tbS
+import tbarequest as tba
+import csv
 
 def titanservice():
     
@@ -197,9 +201,24 @@ def titanservice():
     #db.collection(u'stats').document(u'stats-noNN').set(score_out)
 
 def pulldata():
-    #TODO
-    pass
+    teams = analysis.load_csv('data/teams.csv')
+    scores = []
+    for i in range(len(teams)):
+        team_scores = []
+        request_data_object = tba.req_team_matches(teams[i][0], 2019, "UDvKmPjPRfwwUdDX1JxbmkyecYBJhCtXeyVk9vmO2i7K0Zn4wqQPMfzuEINXJ7e5")
+        json_data = request_data_object.json()
+        json_data = sorted(json_data, key=lambda k: k.get('actual_time', 0), reverse=False)
+        for j in range(len(json_data)):
+            if "frc" + teams[i][0] in json_data[j].get('alliances').get('blue').get('team_keys'):
+                team_scores.append(json_data[j].get('alliances').get('blue').get('score'))
+            elif "frc" + teams[i][0] in json_data[j].get('alliances').get('red').get('team_keys'):
+                team_scores.append(json_data[j].get('alliances').get('red').get('score'))
+        scores.append(team_scores)
 
+    with open("data/scores.csv", "w+", newline = '') as file:
+        writer = csv.writer(file, delimiter = ',')
+        writer.writerows(scores)
+            
 def service():
 
     while True:
