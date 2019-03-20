@@ -192,7 +192,8 @@ def titanservice():
         
         for j in range(len(files)):
             json_out[str(teams[i][0])] = (stats[j][i])
-            general_general_stats.document(files[j]).set({'stats':json_out.get(teams[i][0])})
+            name = os.path.basename(files[j])
+            general_general_stats.document(name).set({'stats':json_out.get(teams[i][0])})
 
     for i in range(len(teams)):
         nnum = location.collection(teams[i][0]).document(u'nishant_number').set({'nishant':score_out.get(teams[i][0])})
