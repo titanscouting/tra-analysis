@@ -257,7 +257,7 @@ def service():
 
 warnings.simplefilter("ignore")
 #Use a service account
-cred = credentials.Certificate('keys/keytemp.json')
+cred = credentials.Certificate('keys/firebasekey.json')
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
