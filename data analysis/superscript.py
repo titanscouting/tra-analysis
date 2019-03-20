@@ -43,7 +43,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 import analysis
-import titanlearn
+#import titanlearn
 import visualization
 import os
 import sys
@@ -51,6 +51,7 @@ import warnings
 import glob
 import numpy as np
 import time
+import tbarequest as tbS
 
 def titanservice():
     
