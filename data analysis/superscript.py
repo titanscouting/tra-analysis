@@ -3,9 +3,12 @@
 #Notes:
 #setup:
 
-__version__ = "1.0.6.000"
+__version__ = "1.0.6.001"
 
 __changelog__ = """changelog:
+1.0.6.001:
+    - fixed multiple bugs
+    - works now
 1.0.6.000:
     - added pulldata function
     - service now pulls in, computes data, and outputs data as planned
@@ -240,6 +243,14 @@ def pulldata():
     out = []
     var = {}
 
+    temp = []
+
+    for i in range(len(list_teams)):
+
+        temp.append(list_teams[i][0])
+
+    list_teams = temp
+
     for i in range(len(full)):
         for j in range(len(full[i])):
             for key in list(full[i][j].keys()):
@@ -247,6 +258,8 @@ def pulldata():
                 if "Quantitative" in key:
                     
                     quant_keys.append(key)
+
+                    #print(full[i][j].get(key).get('teamDBRef')[5:] in list_teams)
                     
                     if full[i][j].get(key).get('teamDBRef')[5:] in list_teams:
                         
@@ -260,7 +273,7 @@ def pulldata():
                             var[individual_keys[k]] = full[i][j].get(key).get(individual_keys[k])
 
                         out.append(var)
-
+    
     sorted_out = []
 
     for i in out:
