@@ -29,8 +29,10 @@ quant_keys = []
 list_teams = ["2022", "16", "2451"]
 
 out = []
-temp = []
+#temp = []
 var = []
+measured_vars_total = []
+team_out = {}
 
 for i in range(len(full)):
     for j in range(len(full[i])):
@@ -41,21 +43,30 @@ for i in range(len(full)):
                 if full[i][j].get(key).get('teamDBRef')[5:] in list_teams:
                     
                     var = []
-                    
+                    measured_vars = []
                     for k in range(len(list(full[i][j].get(key).keys()))):
 
                         individual_keys = list(full[i][j].get(key).keys())
                         #print(individual_keys)
-                        
+                        measured_vars.append(individual_keys[k])
                         var.append(full[i][j].get(key).get(individual_keys[k]))
 
-        temp.append(var)
-                  
-    out.append(var)
+                    team_out[full[i][j].get(key).get('teamDBRef')] = var
 
-                
-print(quant_keys)                        
-print(out)
+                    measured_vars_total.append(measured_vars)
+
+            #temp.append(var)
+                  
+        out.append(var)
+     
+print(quant_keys)
+print(measured_vars_total)   
+print(team_out)
+
+temp = []
+
+#for i in range(len(measured_vars)):
+    #for j in range(len)
                     
                     
                     #for k in range(len(list(full[i][j].get(key).keys()))):
