@@ -87,7 +87,7 @@ def titanservice():
 
         measure_stats = []
 
-        for i in range(len(measure) - 1): #unpacks into specific teams
+        for i in range(len(measure)): #unpacks into specific teams
 
                     print(i)
                     print(measure)
