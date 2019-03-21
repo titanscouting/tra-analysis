@@ -67,7 +67,7 @@ def titanservice():
     file_list = glob.glob(source_dir + '/*.csv') #supposedly sorts by alphabetical order, skips reading teams.csv because of redundancy
     data = []
     files = [fn for fn in glob.glob('data/*.csv') 
-             if not (os.path.basename(fn).startswith('teams'))] #scores will be handled sperately
+             if not (os.path.basename(fn).startswith('teams') or os.path.basename(fn).startswith('match') or os.path.basename(fn).startswith('notes')  or os.path.basename(fn).startswith('observationType') or os.path.basename(fn).startswith('teamDBRef') )] #scores will be handled sperately
 
     for i in files:
             data.append(analysis.load_csv(i))
@@ -89,40 +89,40 @@ def titanservice():
 
         for i in range(len(measure)): #unpacks into specific teams
 
-                    ofbest_curve = [None]
-                    r2best_curve = [None]
+                    #ofbest_curve = [None]
+                    #r2best_curve = [None]
 
                     line = measure[i]
 
                     #print(line)
 
-                    x = list(range(len(line)))
-                    eqs, rmss, r2s, overfit = analysis.optimize_regression(x, line, 10, 1)
+                    #x = list(range(len(line)))
+                    #eqs, rmss, r2s, overfit = analysis.optimize_regression(x, line, 10, 1)
 
-                    beqs, brmss, br2s, boverfit = analysis.select_best_regression(eqs, rmss, r2s, overfit, "min_overfit")
+                    #beqs, brmss, br2s, boverfit = analysis.select_best_regression(eqs, rmss, r2s, overfit, "min_overfit")
 
                     #print(eqs, rmss, r2s, overfit)
                     
-                    ofbest_curve.append(beqs)
-                    ofbest_curve.append(brmss)
-                    ofbest_curve.append(br2s)
-                    ofbest_curve.append(boverfit)
-                    ofbest_curve.pop(0)
+                    #ofbest_curve.append(beqs)
+                    #ofbest_curve.append(brmss)
+                    #ofbest_curve.append(br2s)
+                    #ofbest_curve.append(boverfit)
+                    #ofbest_curve.pop(0)
 
                     #print(ofbest_curve)
 
-                    beqs, brmss, br2s, boverfit = analysis.select_best_regression(eqs, rmss, r2s, overfit, "max_r2s")
+                    #beqs, brmss, br2s, boverfit = analysis.select_best_regression(eqs, rmss, r2s, overfit, "max_r2s")
 
-                    r2best_curve.append(beqs)
-                    r2best_curve.append(brmss)
-                    r2best_curve.append(br2s)
-                    r2best_curve.append(boverfit)
-                    r2best_curve.pop(0)
+                    #r2best_curve.append(beqs)
+                    #r2best_curve.append(brmss)
+                    #r2best_curve.append(br2s)
+                    #r2best_curve.append(boverfit)
+                    #r2best_curve.pop(0)
 
                     #print(r2best_curve)
 
                     
-                    measure_stats.append(teams[i] + list(analysis.basic_stats(line, 0, 0)) + list(analysis.histo_analysis(line, 1, -3, 3)) + ofbest_curve + r2best_curve)
+                    measure_stats.append(teams[i] + list(analysis.basic_stats(line, 0, 0)) + list(analysis.histo_analysis(line, 1, -3, 3)))
 
         stats.append(list(measure_stats))
         nishant = []
@@ -209,6 +209,15 @@ def pulldata():
         team_scores = []
         request_data_object = tba.req_team_matches(teams[i][0], 2019, "UDvKmPjPRfwwUdDX1JxbmkyecYBJhCtXeyVk9vmO2i7K0Zn4wqQPMfzuEINXJ7e5")
         json_data = request_data_object.json()
+        #print(json_data)
+        
+        for i in range(len(json_data) - 1, -1, -1):
+            
+            if json_data[i].get('winning_alliance') == None or json_data[i].get('winning_alliance') == [] or json_data[i].get('winning_alliance') == "":
+                print(json_data[i])
+                json_data.remove(json_data[i])
+                
+        #print(json_data)
         json_data = sorted(json_data, key=lambda k: k.get('actual_time', 0), reverse=False)
         for j in range(len(json_data)):
             if "frc" + teams[i][0] in json_data[j].get('alliances').get('blue').get('team_keys'):
@@ -217,11 +226,11 @@ def pulldata():
                 team_scores.append(json_data[j].get('alliances').get('red').get('score'))
         scores.append(team_scores)
 
+        print(scores)
+
     with open("data/scores.csv", "w+", newline = '') as file:
         writer = csv.writer(file, delimiter = ',')
         writer.writerows(scores)
-
-        
             
 def service():
 
@@ -231,17 +240,17 @@ def service():
 
         start = time.time()
 
-        print("[OK]" + "time is: " + time.time())
+        #print("[OK]" + "time is: " + time.time())
 
         print("[OK] starting calculations")
 
         fucked = False
         
         for i in range(0, 5):
-            try:
+            #try:
                 titanservice()
                 break
-            except:
+            #except:
                 if (i != 4):
                     print("[WARNING] failed, trying " + str(5 - i - 1) + " more times")
                 else:
