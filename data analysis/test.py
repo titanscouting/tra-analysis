@@ -22,6 +22,8 @@ for team in teams:
         data.append(db.collection('data').document('team-2022').collection("Central 2019").document(team.id).collection("matches").document(report.id).get().to_dict())
     full.append(data)
 
+print(len(full))
+
 #print(full)
 
 quant_keys = []
@@ -29,9 +31,7 @@ quant_keys = []
 list_teams = ["2022", "16", "2451"]
 
 out = []
-#temp = []
 var = {}
-#measured_vars_total = []
 
 for i in range(len(full)):
     for j in range(len(full[i])):
@@ -49,19 +49,14 @@ for i in range(len(full)):
                     for k in range(len(list(full[i][j].get(key).keys()))):
 
                         individual_keys = list(full[i][j].get(key).keys())
-                        #print(individual_keys)
-                        #measured_vars.append(individual_keys[k])
+                        
                         var[individual_keys[k]] = full[i][j].get(key).get(individual_keys[k])
-                        #var.append(full[i][j].get(key).get(individual_keys[k]))
 
-                    #measured_vars_total.append(measured_vars)
-
-            #temp.append(var)
-                  
         out.append(var)
 
+print(len(out))
+
 sorted_out = []
-#j_list = []
 
 for i in out:
 
@@ -78,50 +73,24 @@ for i in out:
         j_list.append(j)
 
     sorted_out.append(key_list)
-     
-#print(quant_keys)
-#print(measured_vars_total)
-print(sorted_out)
-print(j_list)
 
 var_index = 0
 team_index = 0
 
 big_out = []
 
+for j in range(len(i)):
+    big_out.append([])
+    for t in range(len(list_teams)):
+        big_out[j].append([])
+
 for i in sorted_out:
 
     team_index = list_teams.index(sorted_out[sorted_out.index(i)][j_list.index('teamDBRef')][5:])
 
-    #print(team_index)
-
     for j in range(len(i)):
-
-        print(j)
-        print(team_index)
-        print(i[j])
-
-        print(i)
-
-        print(big_out)
 
         big_out[j][team_index].append(i[j])
 
 print(big_out)
 
-#for i in range(len(measured_vars)):
-    #for j in range(len)
-                    
-                    
-                    #for k in range(len(list(full[i][j].get(key).keys()))):
-                    #    ind_keys = list(full[i][j].get(key).keys())
-                    #    print(ind_keys)
-                    #    print(k)
-                    #    print(ind_keys[k])
-                    #    print(full[i][j].get(key).get('teamDBRef')[5:])
-                    #    print(list_teams.index(full[i][j].get(key).get('teamDBRef')[5:]))
-                    #    print(full[i][j].get(key))
-                    #    var[list_teams.index(full[i][j].get(key).get('teamDBRef')[5:])].append( full[i][j].get(key).get(ind_keys[k]) )
-                    #print(var)
-
-#print(quant_keys)
