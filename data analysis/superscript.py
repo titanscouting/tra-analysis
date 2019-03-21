@@ -67,10 +67,12 @@ def titanservice():
     file_list = glob.glob(source_dir + '/*.csv') #supposedly sorts by alphabetical order, skips reading teams.csv because of redundancy
     data = []
     files = [fn for fn in glob.glob('data/*.csv') 
-             if not (os.path.basename(fn).startswith('teams') or os.path.basename(fn).startswith('match') or os.path.basename(fn).startswith('notes') or os.path.basename(fn).startswith('observationType') or os.path.basename(fn).startswith('teamDBRef'))] #scores will be handled sperately
+             if not (os.path.basename(fn).startswith('scores') or os.path.basename(fn).startswith('teams') or os.path.basename(fn).startswith('match') or os.path.basename(fn).startswith('notes') or os.path.basename(fn).startswith('observationType') or os.path.basename(fn).startswith('teamDBRef'))] #scores will be handled sperately
 
     for i in files:
             data.append(analysis.load_csv(i))
+
+    #print(files)
 
     stats = []
     measure_stats = []
@@ -127,49 +129,53 @@ def titanservice():
         stats.append(list(measure_stats))
         nishant = []
             
-        for i in range(len(scores)):
+    for i in range(len(scores)):
 
-                    ofbest_curve = [None]
-                    r2best_curve = [None]
+                #print(scores)
 
-                    line = measure[i]
+                ofbest_curve = [None]
+                r2best_curve = [None]
 
-                    #print(line)
+                line = scores[i]
 
-                    x = list(range(len(line)))
-                    eqs, rmss, r2s, overfit = analysis.optimize_regression(x, line, 10, 1)
+                #print(line)
 
-                    beqs, brmss, br2s, boverfit = analysis.select_best_regression(eqs, rmss, r2s, overfit, "min_overfit")
+                #print(line)
 
-                    #print(eqs, rmss, r2s, overfit)
+                x = list(range(len(line)))
+                eqs, rmss, r2s, overfit = analysis.optimize_regression(x, line, 10, 1)
+
+                beqs, brmss, br2s, boverfit = analysis.select_best_regression(eqs, rmss, r2s, overfit, "min_overfit")
+
+                #print(eqs, rmss, r2s, overfit)
                     
-                    ofbest_curve.append(beqs)
-                    ofbest_curve.append(brmss)
-                    ofbest_curve.append(br2s)
-                    ofbest_curve.append(boverfit)
-                    ofbest_curve.pop(0)
+                ofbest_curve.append(beqs)
+                ofbest_curve.append(brmss)
+                ofbest_curve.append(br2s)
+                ofbest_curve.append(boverfit)
+                ofbest_curve.pop(0)
 
-                    #print(ofbest_curve)
+                #print(ofbest_curve)
 
-                    beqs, brmss, br2s, boverfit = analysis.select_best_regression(eqs, rmss, r2s, overfit, "max_r2s")
+                beqs, brmss, br2s, boverfit = analysis.select_best_regression(eqs, rmss, r2s, overfit, "max_r2s")
 
-                    r2best_curve.append(beqs)
-                    r2best_curve.append(brmss)
-                    r2best_curve.append(br2s)
-                    r2best_curve.append(boverfit)
-                    r2best_curve.pop(0)
+                r2best_curve.append(beqs)
+                r2best_curve.append(brmss)
+                r2best_curve.append(br2s)
+                r2best_curve.append(boverfit)
+                r2best_curve.pop(0)
 
-                    #print(r2best_curve)
+                #print(r2best_curve)
                     
-                    z = len(scores[0]) + 1
-                    nis_num = []
+                z = len(scores[0]) + 1
+                nis_num = []
 
-                    nis_num.append(eval(str(ofbest_curve[0])))
-                    nis_num.append(eval(str(r2best_curve[0])))
+                nis_num.append(eval(str(ofbest_curve[0])))
+                nis_num.append(eval(str(r2best_curve[0])))
 
-                    nis_num.append((eval(ofbest_curve[0]) + eval(r2best_curve[0])) / 2)
+                nis_num.append((eval(ofbest_curve[0]) + eval(r2best_curve[0])) / 2)
 
-                    nishant.append(teams[i] + nis_num)
+                nishant.append(teams[i] + nis_num)
                 
     json_out = {}
     score_out = {}
