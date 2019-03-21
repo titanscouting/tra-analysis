@@ -30,40 +30,84 @@ list_teams = ["2022", "16", "2451"]
 
 out = []
 #temp = []
-var = []
-measured_vars_total = []
-team_out = {}
+var = {}
+#measured_vars_total = []
 
 for i in range(len(full)):
     for j in range(len(full[i])):
         for key in list(full[i][j].keys()):
             
             if "Quantitative" in key:
+                
                 quant_keys.append(key)
+                
                 if full[i][j].get(key).get('teamDBRef')[5:] in list_teams:
                     
-                    var = []
+                    var = {}
                     measured_vars = []
+                    
                     for k in range(len(list(full[i][j].get(key).keys()))):
 
                         individual_keys = list(full[i][j].get(key).keys())
                         #print(individual_keys)
-                        measured_vars.append(individual_keys[k])
-                        var.append(full[i][j].get(key).get(individual_keys[k]))
+                        #measured_vars.append(individual_keys[k])
+                        var[individual_keys[k]] = full[i][j].get(key).get(individual_keys[k])
+                        #var.append(full[i][j].get(key).get(individual_keys[k]))
 
-                    team_out[full[i][j].get(key).get('teamDBRef')] = var
-
-                    measured_vars_total.append(measured_vars)
+                    #measured_vars_total.append(measured_vars)
 
             #temp.append(var)
                   
         out.append(var)
-     
-print(quant_keys)
-print(measured_vars_total)   
-print(team_out)
 
-temp = []
+sorted_out = []
+#j_list = []
+
+for i in out:
+
+    j_list = []
+
+    key_list = []
+
+    sorted_keys = sorted(i.keys())
+
+    for j in sorted_keys:
+
+        key_list.append(i[j])
+
+        j_list.append(j)
+
+    sorted_out.append(key_list)
+     
+#print(quant_keys)
+#print(measured_vars_total)
+print(sorted_out)
+print(j_list)
+
+var_index = 0
+team_index = 0
+
+big_out = []
+
+for i in sorted_out:
+
+    team_index = list_teams.index(sorted_out[sorted_out.index(i)][j_list.index('teamDBRef')][5:])
+
+    #print(team_index)
+
+    for j in range(len(i)):
+
+        print(j)
+        print(team_index)
+        print(i[j])
+
+        print(i)
+
+        print(big_out)
+
+        big_out[j][team_index].append(i[j])
+
+print(big_out)
 
 #for i in range(len(measured_vars)):
     #for j in range(len)

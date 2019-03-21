@@ -228,6 +228,8 @@ def service():
 
         start = time.time()
 
+        print("[OK]" + "time is: " + time.time())
+
         print("[OK] starting calculations")
 
         fucked = False
