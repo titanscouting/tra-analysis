@@ -197,9 +197,11 @@ def pulldata():
         #print(teams[i][0])
         request_data_object = tba.req_team_matches(teams[i][0], 2019, "UDvKmPjPRfwwUdDX1JxbmkyecYBJhCtXeyVk9vmO2i7K0Zn4wqQPMfzuEINXJ7e5")
         json_data = request_data_object.json()
-        #for i in json_data:
+        for match in range(len(json_data) - 1, -1, -1):
+            if json_data[match].get('winning_alliance') == "":
+                print(json_data[match])
+                json_data.remove(json_data[match])
 
-           # if i
             
         json_data = sorted(json_data, key=lambda k: k.get('actual_time', 0), reverse=False)
         for j in range(len(json_data)):
