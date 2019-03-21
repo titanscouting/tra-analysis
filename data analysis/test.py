@@ -22,21 +22,51 @@ for team in teams:
         data.append(db.collection('data').document('team-2022').collection("Central 2019").document(team.id).collection("matches").document(report.id).get().to_dict())
     full.append(data)
 
-print(full)
+#print(full)
 
 quant_keys = []
 
 list_teams = ["2022", "16", "2451"]
 
 out = []
+temp = []
 var = []
 
 for i in range(len(full)):
     for j in range(len(full[i])):
         for key in list(full[i][j].keys()):
+            
             if "Quantitative" in key:
                 quant_keys.append(key)
                 if full[i][j].get(key).get('teamDBRef')[5:] in list_teams:
                     
+                    var = []
+                    
+                    for k in range(len(list(full[i][j].get(key).keys()))):
 
-print(quant_keys)
+                        individual_keys = list(full[i][j].get(key).keys())
+                        #print(individual_keys)
+                        
+                        var.append(full[i][j].get(key).get(individual_keys[k]))
+
+        temp.append(var)
+                  
+    out.append(var)
+
+                
+print(quant_keys)                        
+print(out)
+                    
+                    
+                    #for k in range(len(list(full[i][j].get(key).keys()))):
+                    #    ind_keys = list(full[i][j].get(key).keys())
+                    #    print(ind_keys)
+                    #    print(k)
+                    #    print(ind_keys[k])
+                    #    print(full[i][j].get(key).get('teamDBRef')[5:])
+                    #    print(list_teams.index(full[i][j].get(key).get('teamDBRef')[5:]))
+                    #    print(full[i][j].get(key))
+                    #    var[list_teams.index(full[i][j].get(key).get('teamDBRef')[5:])].append( full[i][j].get(key).get(ind_keys[k]) )
+                    #print(var)
+
+#print(quant_keys)
