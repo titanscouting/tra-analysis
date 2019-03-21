@@ -186,10 +186,9 @@ def titanservice():
 
     for i in range(len(teams)):
         score_out[str(teams[i][0])] = (nishant[i])
-    #print(teams)
+
     location = db.collection(u'stats').document(u'stats-noNN')
     for i in range(len(teams)):
-        print(i)
         general_general_stats = location.collection(teams[i][0])
 
         for j in range(len(files)):
@@ -205,8 +204,6 @@ def titanservice():
 
 def pulldata():
     teams = analysis.load_csv('data/teams.csv')
-    #print(teams)
-    #print(len(teams))
     scores = []
     for i in range(len(teams)):
         team_scores = []
