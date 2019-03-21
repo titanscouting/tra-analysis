@@ -15,16 +15,18 @@ teams=db.collection('data').document('team-2022').collection("Central 2019").get
 full=[]
 tms=[]
 for team in teams:
-    data=[]
+    
     tms.append(team.id)
     reports=db.collection('data').document('team-2022').collection("Central 2019").document(team.id).collection("matches").get()
+
     for report in reports:
+        data=[]
         data.append(db.collection('data').document('team-2022').collection("Central 2019").document(team.id).collection("matches").document(report.id).get().to_dict())
-    full.append(data)
+        full.append(data)
 
 print(len(full))
 
-#print(full)
+print(full)
 
 quant_keys = []
 
@@ -54,7 +56,7 @@ for i in range(len(full)):
 
         out.append(var)
 
-print(len(out))
+#print(len(out))
 
 sorted_out = []
 
