@@ -89,10 +89,6 @@ def titanservice():
 
         for i in range(len(measure)): #unpacks into specific teams
 
-                    print(i)
-                    print(measure)
-                    print(len(measure))
-
                     #ofbest_curve = [None]
                     #r2best_curve = [None]
 
