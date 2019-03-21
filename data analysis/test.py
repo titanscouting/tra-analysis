@@ -24,10 +24,6 @@ for team in teams:
         data.append(db.collection('data').document('team-2022').collection("Central 2019").document(team.id).collection("matches").document(report.id).get().to_dict())
         full.append(data)
 
-print(len(full))
-
-print(full)
-
 quant_keys = []
 
 list_teams = ["2022", "16", "2451"]
@@ -54,9 +50,7 @@ for i in range(len(full)):
                         
                         var[individual_keys[k]] = full[i][j].get(key).get(individual_keys[k])
 
-        out.append(var)
-
-#print(len(out))
+                    out.append(var)
 
 sorted_out = []
 
@@ -94,5 +88,10 @@ for i in sorted_out:
 
         big_out[j][team_index].append(i[j])
 
-print(big_out)
+for i in range(len(big_out)):
+
+    with open('data/' + j_list[i] + '.csv', "w+", newline = '') as file:
+
+        writer = csv.writer(file, delimiter = ',')
+        writer.writerows(big_out[i])
 

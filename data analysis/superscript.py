@@ -220,6 +220,8 @@ def pulldata():
     with open("data/scores.csv", "w+", newline = '') as file:
         writer = csv.writer(file, delimiter = ',')
         writer.writerows(scores)
+
+        
             
 def service():
 
