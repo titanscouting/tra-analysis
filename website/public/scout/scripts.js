@@ -331,49 +331,49 @@ function subReport() {
     }
   }).then(function() {
     if (currentComp != null) {
-      var submitTo = document.getElementById('tns').value;
-      var teamNum = document.getElementById('tselect').value;
-      var matchNum = document.getElementById('mselect').value;
-      var series = capitalizeFirstLetter(document.getElementById('sselect').value).toString;
+      var submitTo = document.getElementById('tns').value.toString();
+      var teamNum = document.getElementById('tselect').value.toString();
+      var matchNum = document.getElementById('mselect').value.toString();
+      var series = capitalizeFirstLetter(document.getElementById('sselect').value).toString();
       var push = {}
-      push[series + '-'+ user.uid]={}
+      push[`${series}-${user.uid.toString()}`.toString]={}
       var x = document.getElementById('repsec1').children;
       for (var i = 0; i < x.length; i++) {
         if (x[i].children[0].tagName == "INPUT") {
-          push[series + '-'+ user.uid][x[i].children[0].id] = x[i].children[0].tagName;
+          push[`${series}-${user.uid.toString()}`.toString][x[i].children[0].id] = x[i].children[0].tagName;
         }  else if (x[i].children[0].tagName == "SPAN") {
-          push[series + '-'+ user.uid][x[i].children[0].id] = x[i].children[0].innerText;
+          push[`${series}-${user.uid.toString()}`.toString][x[i].children[0].id] = x[i].children[0].innerText;
         } else if (x[i].children[0].tagName == "DIV") {
           var name = x[i].children[0].id;
-          push[series + '-'+ user.uid][name] = document.querySelector('input[name="' + name + '"]:checked').value;
+          push[`${series}-${user.uid.toString()}`.toString][name] = document.querySelector('input[name="' + name + '"]:checked').value;
         }else if (x[i].children[1].tagName == "TEXTAREA") {
-          push[series + '-'+ user.uid][x[i].children[1].id] = x[i].children[1].innerHTML;
+          push[`${series}-${user.uid.toString()}`.toString][x[i].children[1].id] = x[i].children[1].innerHTML;
         }
       }
       var x = document.getElementById('repsec2').children;
       for (var i = 0; i < x.length; i++) {
         if (x[i].children[0].tagName == "INPUT") {
-          push[series + '-'+ user.uid][x[i].children[0].id] = x[i].children[0].tagName;
+          push[`${series}-${user.uid.toString()}`.toString][x[i].children[0].id] = x[i].children[0].tagName;
         }  else if (x[i].children[0].tagName == "SPAN") {
-          push[series + '-'+ user.uid][x[i].children[0].id] = x[i].children[0].innerText;
+          push[`${series}-${user.uid.toString()}`.toString][x[i].children[0].id] = x[i].children[0].innerText;
         } else if (x[i].children[0].tagName == "DIV") {
           var name = x[i].children[0].id;
-          push[series + '-'+ user.uid][name] = document.querySelector('input[name="' + name + '"]:checked').value;
+          push[`${series}-${user.uid.toString()}`.toString][name] = document.querySelector('input[name="' + name + '"]:checked').value;
         }else if (x[i].children[1].tagName == "TEXTAREA") {
-          push[series + '-'+ user.uid][x[i].children[1].id] = x[i].children[1].innerHTML;
+          push[`${series}-${user.uid.toString()}`.toString][x[i].children[1].id] = x[i].children[1].innerHTML;
         }
       }
       var x = document.getElementById('repsec3').children;
       for (var i = 0; i < x.length; i++) {
         if (x[i].children[0].tagName == "INPUT") {
-          push[series + '-'+ user.uid][x[i].children[0].id] = x[i].children[0].tagName;
+          push[`${series}-${user.uid.toString()}`.toString][x[i].children[0].id] = x[i].children[0].tagName;
         }  else if (x[i].children[0].tagName == "SPAN") {
-          push[series + '-'+ user.uid][x[i].children[0].id] = x[i].children[0].innerText;
+          push[`${series}-${user.uid.toString()}`.toString][x[i].children[0].id] = x[i].children[0].innerText;
         } else if (x[i].children[0].tagName == "DIV") {
           var name = x[i].children[0].id;
-          push[series + '-'+ user.uid][name] = document.querySelector('input[name="' + name + '"]:checked').value;
+          push[`${series}-${user.uid.toString()}`.toString][name] = document.querySelector('input[name="' + name + '"]:checked').value;
         }else if (x[i].children[1].tagName == "TEXTAREA") {
-          push[series + '-'+ user.uid][x[i].children[1].id] = x[i].children[1].innerHTML;
+          push[`${series}-${user.uid.toString()}`.toString][x[i].children[1].id] = x[i].children[1].innerHTML;
         }
       }
       firebase.firestore().collection('webData').doc('test').set(push).then(function() {
