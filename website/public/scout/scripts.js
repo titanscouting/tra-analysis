@@ -224,7 +224,7 @@ function processAndAppendReturn(data,newloc) {
     return a[1].order - b[1].order;
   })
   for (var j = 0; j < questions.length; j++) {
-    document.getElementById(newLoc).innerHTML += "<div id='"+newloc+j.toString()+"'></div>";
+    document.getElementById(newloc).innerHTML += "<div id='"+newloc+j.toString()+"'></div>";
     document.getElementById(newloc+j.toString()).innerHTML += questions[j][0];
     if (questions[j][1]['type'] == 'shortText') {
       document.getElementById(newloc+j.toString()).innerHTML += "<input id=''" + questions[j][0] + "' type='text'></input>";
