@@ -233,7 +233,7 @@ function processAndAppendReturn(data) {
     } else if (questions[j][1]['type'] == 'longText') {
       document.getElementById('FormData').innerHTML += "<textarea id=''" + questions[j][0] + "' rows='4' cols='50''></textarea>";
     } else if (questions[j][1]['type'] == 'stepper') {
-      document.getElementById('FormData').innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick='dec('" + questions[j][0] + "')' value='-'></input>" + (questions[j][1]['defaultValue']).toString() + "<input type='button' onclick='inc('" + questions[j][0] + "')' value='+'></input></span>";
+      document.getElementById('FormData').innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + (questions[j][1]['defaultValue']).toString() + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
     } else if (questions[j][1]['type'] == 'range') {
       document.getElementById('FormData').innerHTML += "&nbsp;&nbsp;" + questions[j][1]['min']['text'] + "&nbsp;&nbsp;";
       document.getElementById('FormData').innerHTML += "<input type='range' min='" + questions[j][1]['min']['val'] + "' max='" + questions[j][1]['max']['val'] + "'>";
