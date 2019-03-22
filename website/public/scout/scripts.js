@@ -241,9 +241,9 @@ function processAndAppendReturn(data) {
     }else if (questions[j][1]['type'] == 'label') {
       document.getElementById('FormData').innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + '0' + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
     } else if (questions[j][1]['type'] == 'slider') {
-      document.getElementById('FormData').innerHTML += "&nbsp;&nbsp;" + questions[j][1]['min']['text'] + "&nbsp;&nbsp;";
-      document.getElementById('FormData').innerHTML += "<input type='range' min='" + questions[j][1]['min']['val'] + "' max='" + questions[j][1]['max']['val'] + "'>";
-      document.getElementById('FormData').innerHTML += "&nbsp;&nbsp;" + questions[j][1]['max']['text'];
+      document.getElementById('FormData').innerHTML += "&nbsp;&nbsp;" + questions[j][1]['min'] + "&nbsp;&nbsp;";
+      document.getElementById('FormData').innerHTML += "<input type='range' min='" + questions[j][1]['min']+ "' max='" + questions[j][1]['max'] + "'>";
+      document.getElementById('FormData').innerHTML += "&nbsp;&nbsp;" + questions[j][1]['max'];
     } else if (questions[j][1]['type'] == 'segment') {
       document.getElementById('FormData').innerHTML += "<div id='" + questions[j][0] + "'>"
       for (var k = 0; k < questions[j][1]['elements'].length; k++) {
