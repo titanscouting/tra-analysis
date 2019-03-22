@@ -119,7 +119,7 @@ function cmatch(matchName) {
 }
 
 function cseries(seriesName) {
-  document.getElementById('mselect').innerHTML = ""
+  document.getElementById('FormData').innerHTML = ""
   var user = firebase.auth().currentUser;
   ti = firebase.firestore().collection('teamData').doc("team-" + teamNum);
   currentComp = null;
