@@ -341,8 +341,8 @@ function subReport() {
       for (var i = 0; i < x.length; i++) {
         if (x[i].children[0].tagName == "INPUT") {
           push[series+'-'+user.uid][x[i].children[0].id] = x[i].children[0].tagName;
-        } else if (x[i].children[0].tagName == "TEXTAREA") {
-          push[series+'-'+user.uid][x[i].children[0].id] = x[i].children[0].innerHTML;
+        } else if (x[i].children[1].tagName == "TEXTAREA") {
+          push[series+'-'+user.uid][x[i].children[1].id] = x[i].children[1].innerHTML;
         } else if (x[i].children[0].tagName == "SPAN") {
           push[series+'-'+user.uid][x[i].children[0].id] = x[i].children[0].innerText;
         } else if (x[i].children[0].tagName == "DIV") {
@@ -354,8 +354,8 @@ function subReport() {
       for (var i = 0; i < x.length; i++) {
         if (x[i].children[0].tagName == "INPUT") {
           push[series+'-'+user.uid][x[i].children[0].id] = x[i].children[0].tagName;
-        } else if (x[i].children[0].tagName == "TEXTAREA") {
-          push[series+'-'+user.uid][x[i].children[0].id] = x[i].children[0].innerHTML;
+        } else if (x[i].children[1].tagName == "TEXTAREA") {
+          push[series+'-'+user.uid][x[i].children[1].id] = x[i].children[1].innerHTML;
         } else if (x[i].children[0].tagName == "SPAN") {
           push[series+'-'+user.uid][x[i].children[0].id] = x[i].children[0].innerText;
         } else if (x[i].children[0].tagName == "DIV") {
@@ -367,8 +367,8 @@ function subReport() {
       for (var i = 0; i < x.length; i++) {
         if (x[i].children[0].tagName == "INPUT") {
           push[series+'-'+user.uid][x[i].children[0].id] = x[i].children[0].tagName;
-        } else if (x[i].children[0].tagName == "TEXTAREA") {
-          push[series+'-'+user.uid][x[i].children[0].id] = x[i].children[0].innerHTML;
+        } else if (x[i].children[1].tagName == "TEXTAREA") {
+          push[series+'-'+user.uid][x[i].children[1].id] = x[i].children[1].innerHTML;
         } else if (x[i].children[0].tagName == "SPAN") {
           push[series+'-'+user.uid][x[i].children[0].id] = x[i].children[0].innerText;
         } else if (x[i].children[0].tagName == "DIV") {
