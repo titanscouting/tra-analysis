@@ -323,7 +323,6 @@ function inc(id) {
 }
 
 function subReport() {
-  document.getElementById('mselect').innerHTML = ""
   var user = firebase.auth().currentUser;
   ti = firebase.firestore().collection('teamData').doc("team-" + teamNum);
   currentComp = null;
