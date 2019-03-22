@@ -55,7 +55,7 @@ window.onload = function() {
 }
 
 function changeTeam(teamNum) {
-  document.getElementById('mSelect').innerHTML = ""
+  document.getElementById('mselect').innerHTML = ""
   var user = firebase.auth().currentUser;
   ti = firebase.firestore().collection('teamData').doc("team-" + teamNum);
   currentComp = null;
@@ -75,7 +75,7 @@ function changeTeam(teamNum) {
           //regex search!
           var pattern = /\d+/;
           var name = dc.id;
-          document.getElementById('mSelect').innerHTML += "<option value='" + name.match(pattern)[0].toString() + "'>" + name.match(pattern)[0].toString() + "</option>";
+          document.getElementById('mselect').innerHTML += "<option value='" + name.match(pattern)[0].toString() + "'>" + name.match(pattern)[0].toString() + "</option>";
         });
         cmatch(document.getElementById('mselect').value);
       });
@@ -83,7 +83,7 @@ function changeTeam(teamNum) {
   });
 }
 
-function cmatch(matchName) {
+function cmatch(matchName) {m
   document.getElementById('tselect').innerHTML = ""
   var user = firebase.auth().currentUser;
   ti = firebase.firestore().collection('teamData').doc("team-" + teamNum);
@@ -118,7 +118,7 @@ function cmatch(matchName) {
 }
 
 function cseries(seriesName) {
-  document.getElementById('mSelect').innerHTML = ""
+  document.getElementById('mselect').innerHTML = ""
   var user = firebase.auth().currentUser;
   ti = firebase.firestore().collection('teamData').doc("team-" + teamNum);
   currentComp = null;
@@ -300,7 +300,7 @@ function inc(id) {
 }
 
 function subReport() {
-  document.getElementById('mSelect').innerHTML = ""
+  document.getElementById('mselect').innerHTML = ""
   var user = firebase.auth().currentUser;
   ti = firebase.firestore().collection('teamData').doc("team-" + teamNum);
   currentComp = null;
