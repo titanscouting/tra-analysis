@@ -21,7 +21,7 @@
     <a href="../../team">Team</a>
     <p>Scout Matches</p>
     <a href="../signUps" class="scoutMatchLinks">Sign Up For Matches</a>
-    <a href="../rpts" class="scoutMatchLinks">Submit Scouting Reports</a>
+    <a href="#" class="scoutMatchLinks">Submit Scouting Reports</a>
     <a href="../../stats">Tournament Stats</a>
   </div>
   <div id="main">
@@ -33,19 +33,18 @@
     <div>
       Scouting For: <select id="tns" onchange="changeTeam(document.getElementById('tns').value)"></select>
     </div>
-    <h2>Sign Up For Matches</h2>
-    <table id="matchTable">
-      <tr>
-        <td class="neu">Match Number</td>
-        <td class="neu">Series</td>
-        <td class="blue">Far Blue</td>
-        <td class="blue">Mid Blue</td>
-        <td class="blue">Near Blue</td>
-        <td class="red">Far Red</td>
-        <td class="red">Mid Red</td>
-        <td class="red">Near Red</td>
-      </tr>
-    </table>
+    <h2>Submit a Report:</h2>
+    <div class="">
+      Match: <select id="mSelect" onchange="cmatch(document.getElementById('mselect').value)"></select>
+      Team: <select id="tselect"></Select>
+      Series: <select id="sselect" onchange="cseries(document.getElementById('sselect').value)">
+        <option value="quantitative">Quantitative</option>
+        <option value="qualitative">Qualitative</option>
+      </select>
+    </div>
+    <div id=FormData>
+
+
     </div>
   </div>
 </body>
