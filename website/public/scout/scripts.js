@@ -69,7 +69,7 @@ function changeTeam(teamNum) {
     }
   }).then(function() {
     if (currentComp != null) {
-      matches = firebase.firestore().collection('appBuliding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('scoutsAndSchedule');
+      matches = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('scoutsAndSchedule');
       matches.get().then(function(qs) {
         qs.forEach(function(dc) {
           //regex search!
@@ -98,7 +98,7 @@ function cmatch(matchName) {
     }
   }).then(function() {
     if (currentComp != null) {
-      match = firebase.firestore().collection('appBuliding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('scoutsAndSchedule').doc('match-' + matchName)
+      match = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('scoutsAndSchedule').doc('match-' + matchName)
       match.get().then(function(doc) {
         if (doc.exists) {
           data = doc.data()
@@ -136,7 +136,7 @@ function cseries(seriesName) {
       if (seriesName == "quantitative") {
         document.getElementById('FormData').innerHTML += "<h3>" + 'Sandstorm' + "</h3>";
         document.getElementById('FormData').innerHTML += "<div id='repsec1'>";
-        var ss = firebase.firestore().collection('appBuliding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appBuliding').doc('quantitativeSandstorm');
+        var ss = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appBuilding').doc('quantitativeSandstorm');
         ss.get().then(function(doc) {
           if (doc.exists) {
             processAndAppendReturn(doc.data())
@@ -145,7 +145,7 @@ function cseries(seriesName) {
         }).then(function() {
           document.getElementById('FormData').innerHTML += "<h3>" + 'TeleOp' + "</h3>";
           document.getElementById('FormData').innerHTML += "<div id='repsec2'>";
-          var to = firebase.firestore().collection('appBuliding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appBuliding').doc('quantitativeTeleop');
+          var to = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appBuilding').doc('quantitativeTeleop');
           to.get().then(function(doc) {
             if (doc.exists) {
               processAndAppendReturn(doc.data())
@@ -154,7 +154,7 @@ function cseries(seriesName) {
           }).then(function() {
             document.getElementById('FormData').innerHTML += "<h3>" + 'Cycle Times' + "</h3>";
             document.getElementById('FormData').innerHTML += "<div id='repsec3'>";
-            var cyc = firebase.firestore().collection('appBuliding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appBuliding').doc('quantitativeCycleTimes');
+            var cyc = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appBuilding').doc('quantitativeCycleTimes');
             cyc.get().then(function(doc) {
               if (doc.exists) {
                 processAndAppendReturn(doc.data())
@@ -166,7 +166,7 @@ function cseries(seriesName) {
       } else if (seriesName = "qualitative") {
         document.getElementById('FormData').innerHTML += "<h3>" + 'Sandstorm' + "</h3>";
         document.getElementById('FormData').innerHTML += "<div id='repsec1'>";
-        var ss = firebase.firestore().collection('appBuliding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appBuliding').doc('qualitativeSandstorm');
+        var ss = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appBuilding').doc('qualitativeSandstorm');
         ss.get().then(function(doc) {
           if (doc.exists) {
             processAndAppendReturn(doc.data())
@@ -175,7 +175,7 @@ function cseries(seriesName) {
         }).then(function() {
           document.getElementById('FormData').innerHTML += "<h3>" + 'TeleOp' + "</h3>";
           document.getElementById('FormData').innerHTML += "<div id='repsec2'>";
-          var to = firebase.firestore().collection('appBuliding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appBuliding').doc('qualitativeTeleop');
+          var to = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appBuilding').doc('qualitativeTeleop');
           to.get().then(function(doc) {
             if (doc.exists) {
               processAndAppendReturn(doc.data())
@@ -184,7 +184,7 @@ function cseries(seriesName) {
           }).then(function() {
             document.getElementById('FormData').innerHTML += "<h3>" + 'Strategy' + "</h3>";
             document.getElementById('FormData').innerHTML += "<div id='repsec3'>";
-            var strat = firebase.firestore().collection('appBuliding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appBuliding').doc('qualitativeStrategy');
+            var strat = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appBuilding').doc('qualitativeStrategy');
             strat.get().then(function(doc) {
               if (doc.exists) {
                 processAndAppendReturn(doc.data())
@@ -239,7 +239,7 @@ function processAndAppendReturn(data) {
 function updateForm(locString, teamNum, competition) {
   seriesList = [];
   document.getElementById('FormData').innerHTML = ""
-  loc = firebase.firestore().collection('appBuliding').doc("team-" + teamNum).collection('competitions').doc(competition).collection(lastWord(locString));
+  loc = firebase.firestore().collection('appBuilding').doc("team-" + teamNum).collection('competitions').doc(competition).collection(lastWord(locString));
   loc.get().then(function(docs) {
     docs.forEach(function(doc) {
       seriesList.push(doc.data());
