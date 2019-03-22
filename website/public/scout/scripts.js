@@ -382,7 +382,7 @@ function subReport() {
           push[user.uid][name] = document.querySelector('input[name="' + name + '"]:checked').value;
         }
       }
-      firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(comp).doc("team-" + teamNum).collection('matches').doc('match-' + mselect).set(push, {
+      firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(currentComp).doc("team-" + teamNum).collection('matches').doc('match-' + mselect).set(push, {
         merge: true
       })
     }
