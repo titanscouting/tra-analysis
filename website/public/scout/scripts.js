@@ -234,7 +234,9 @@ function processAndAppendReturn(data) {
       document.getElementById('FormData').innerHTML += "<textarea id=''" + questions[j][0] + "' rows='4' cols='50''></textarea>";
     } else if (questions[j][1]['type'] == 'stepper') {
       document.getElementById('FormData').innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + (questions[j][1]['defaultValue']).toString() + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
-    } else if (questions[j][1]['type'] == 'range') {
+    }else if (questions[j][1]['type'] == 'label') {
+      document.getElementById('FormData').innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + (questions[j][1]['defaultValue']).toString() + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
+    } else if (questions[j][1]['type'] == 'slider') {
       document.getElementById('FormData').innerHTML += "&nbsp;&nbsp;" + questions[j][1]['min']['text'] + "&nbsp;&nbsp;";
       document.getElementById('FormData').innerHTML += "<input type='range' min='" + questions[j][1]['min']['val'] + "' max='" + questions[j][1]['max']['val'] + "'>";
       document.getElementById('FormData').innerHTML += "&nbsp;&nbsp;" + questions[j][1]['max']['text'];
@@ -375,6 +377,9 @@ function subReport() {
           push[name] = document.querySelector('input[name="' + name + '"]:checked').value;
         }
       }
+      firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(comp).doc("team-" + teamNum).collection('matches').doc('match-' + mselect).set({(user.uid+'-'+series), push}, {
+        merge: true
+      })
     }
   });
 }
