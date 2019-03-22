@@ -161,6 +161,8 @@ function cseries(seriesName) {
                 processAndAppendReturn(doc.data())
               }
               document.getElementById('FormData').innerHTML += "</div>";
+            }).then(function () {
+              document.getElementById('FormData').innerHTML += "<input type='button' onclick=subReport() value='Submit'>";
             });
           });
         });
@@ -191,12 +193,12 @@ function cseries(seriesName) {
                 processAndAppendReturn(doc.data())
               }
               document.getElementById('FormData').innerHTML += "</div>";
+            }).then(function () {
+              document.getElementById('FormData').innerHTML += "<input type='button' onclick=subReport() value='Submit'>";
             });
           });
         });
-      }.then(function () {
-        document.getElementById('FormData').innerHTML += "<input type='button' onclick=subReport() value='Submit'>";
-      })
+      }
 
     }
   });
