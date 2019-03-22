@@ -1,3 +1,4 @@
+
 /* Set the width of the side navigation to 250px and the left margin of the page content to 250px and add a black background color to body */
 function openNav() {
   document.getElementById("mySidenav").style.width = "250px";
@@ -233,9 +234,6 @@ function processAndAppendReturn(data, newloc) {
   for (var j = 0; j < questions.length; j++) {
     document.getElementById(newloc).innerHTML += "<div id='" + newloc + j.toString() + "'></div>";
     document.getElementById(newloc + j.toString()).innerHTML += questions[j][0];
-    if (questions[j][0]=='cycleTimes') {
-        document.getElementById(newloc + j.toString()).innerHTML += " (on a scale from 1 to 10)"
-    }
     if (questions[j][1]['type'] == 'shortText') {
       document.getElementById(newloc + j.toString()).innerHTML += "<input id=''" + questions[j][0] + "' type='text'></input>";
     } else if (questions[j][1]['type'] == 'textField') {
@@ -243,7 +241,7 @@ function processAndAppendReturn(data, newloc) {
     } else if (questions[j][1]['type'] == 'stepper') {
       document.getElementById(newloc + j.toString()).innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + (questions[j][1]['defaultValue']).toString() + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
     } else if (questions[j][1]['type'] == 'label') {
-      document.getElementById(newloc + j.toString()).innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + (questions[j][1]['defaultValue']).toString() + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
+      document.getElementById(newloc + j.toString()).innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + '0' + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
     } else if (questions[j][1]['type'] == 'slider') {
       document.getElementById(newloc + j.toString()).innerHTML += "&nbsp;&nbsp;" + questions[j][1]['min'] + "&nbsp;&nbsp;";
       document.getElementById(newloc + j.toString()).innerHTML += "<input type='range' min='" + questions[j][1]['min'] + "' max='" + questions[j][1]['max'] + "'>";
@@ -392,7 +390,7 @@ function subReport() {
       } catch (e) {
 
       }
-      firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(currentComp).doc("team-" + teamNum).collection('matches').doc('match-' + matchNum).set(push, {merge:true}).then(function() {
+      firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(currentComp).doc("team-" + teamNum).collection('matches').doc('match-' + matchNum).set(function() {
         alert('Submitted!')
         setTimeout(function() {
           window.location.href = '../scout';
@@ -427,17 +425,12 @@ function subReport(team, comp, matchNum) {
     });
   });
 }
-
-
-
 function subRes() {
   firebase.firestore().collection('teamData').doc('team-' + document.getElementById('tns').value).get().then(function(doc) {
     if (doc.exists) {
       comp = doc.data()['currentCompetition'];
     }
   }).then(function() {
-
-
     var user = firebase.auth().currentUser;
     push = {}
     push['match'] = 'match-' + document.getElementById('mn').value
@@ -448,21 +441,16 @@ function subRes() {
     push['contrubution'] = document.getElementById('contrib').value
     push['startingHatch'] = document.getElementById('habs').value
     push['size'] = document.getElementById('egs').value
-
     push['fillChoice'] = document.getElementById('SFill').value
     push['functional'] = document.getElementById('DOA').value
     push['strongMedium'] = document.getElementById('SSO').value
     push['sandstormCrossBonus'] = document.getElementById('SCross').value
-
     push['fillChoiceTeleop'] = document.getElementById('TFill').value
     push['strongMediumTeleop'] = document.getElementById('TSO').value
-
     push['cargoSuccessTeleop'] = document.getElementById('CSSR').value
     push['hiRocketSuccessTeleop'] = document.getElementById('HRSR').value
     push['lowRocketSuccessTeleop'] = document.getElementById('LRSR').value
-
     push['endingHab'] = document.getElementById('HAB').value
-
     firebase.firestore().collection("teamData").doc('team-' + document.getElementById('tns').value).collection('scouts').doc(user.uid).collection(comp).doc("team-" + document.getElementById('tsn').value + "-match-" + document.getElementById('mn').value).set(push, {
       merge: true
     })
@@ -477,30 +465,24 @@ function subRes() {
       push['contrubution'] = document.getElementById('contrib').value
       push['startingHatch'] = document.getElementById('habs').value
       push['size'] = document.getElementById('egs').value
-
       push['fillChoice'] = document.getElementById('SFill').value
       push['functional'] = document.getElementById('DOA').value
       push['strongMedium'] = document.getElementById('SSO').value
       push['sandstormCrossBonus'] = document.getElementById('SCross').value
-
       push['fillChoiceTeleop'] = document.getElementById('TFill').value
       push['strongMediumTeleop'] = document.getElementById('TSO').value
-
       push['cargoSuccessTeleop'] = document.getElementById('CSSR').value
       push['hiRocketSuccessTeleop'] = document.getElementById('HRSR').value
       push['lowRocketSuccessTeleop'] = document.getElementById('LRSR').value
-
       push['endingHab'] = document.getElementById('HAB').value
       firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(comp).doc("team-" + document.getElementById('tsn').value).collection('matches').doc('match-' + document.getElementById('mn').value).set(push, {
         merge: true
       })
     }
-
   ).then(function() {
     alert('Submitted!')
     setTimeout(function() {
       window.location.href = '../scout';
     }, 500);
-
   })
 }*/
