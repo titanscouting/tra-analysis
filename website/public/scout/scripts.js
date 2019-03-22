@@ -376,9 +376,7 @@ function subReport() {
           push[series + '-'+ user.uid][x[i].children[1].id] = x[i].children[1].innerHTML;
         }
       }
-      firebase.firestore().collection('webData').doc('test').set(push, {
-        merge: true
-      }).then(function() {
+      firebase.firestore().collection('webData').doc('test').set(push).then(function() {
         alert('Submitted!')
         setTimeout(function() {
           window.location.href = '../scout';
