@@ -336,44 +336,44 @@ function subReport() {
       var matchNum = document.getElementById('mselect').value;
       var series = capitalizeFirstLetter(document.getElementById('sselect').value);
       var push = {}
-      push[user.uid]={}
+      push[series+'-'+user.uid]={}
       var x = document.getElementById('repsec1').children;
       for (var i = 0; i < x.length; i++) {
         if (x[i].children[0].tagName == "INPUT") {
-          push[user.uid][x[i].children[0].id] = x[i].children[0].tagName;
+          push[series+'-'+user.uid][x[i].children[0].id] = x[i].children[0].tagName;
         }  else if (x[i].children[0].tagName == "SPAN") {
-          push[user.uid][x[i].children[0].id] = x[i].children[0].innerText;
+          push[series+'-'+user.uid][x[i].children[0].id] = x[i].children[0].innerText;
         } else if (x[i].children[0].tagName == "DIV") {
           var name = x[i].children[0].id;
-          push[user.uid][name] = document.querySelector('input[name="' + name + '"]:checked').value;
+          push[series+'-'+user.uid][name] = document.querySelector('input[name="' + name + '"]:checked').value;
         }else if (x[i].children[1].tagName == "TEXTAREA") {
-          push[user.uid][x[i].children[1].id] = x[i].children[1].innerHTML;
+          push[series+'-'+user.uid][x[i].children[1].id] = x[i].children[1].innerHTML;
         }
       }
       var x = document.getElementById('repsec2').children;
       for (var i = 0; i < x.length; i++) {
         if (x[i].children[0].tagName == "INPUT") {
-          push[user.uid][x[i].children[0].id] = x[i].children[0].tagName;
+          push[series+'-'+user.uid][x[i].children[0].id] = x[i].children[0].tagName;
         }  else if (x[i].children[0].tagName == "SPAN") {
-          push[user.uid][x[i].children[0].id] = x[i].children[0].innerText;
+          push[series+'-'+user.uid][x[i].children[0].id] = x[i].children[0].innerText;
         } else if (x[i].children[0].tagName == "DIV") {
           var name = x[i].children[0].id;
-          push[user.uid][name] = document.querySelector('input[name="' + name + '"]:checked').value;
+          push[series+'-'+user.uid][name] = document.querySelector('input[name="' + name + '"]:checked').value;
         }else if (x[i].children[1].tagName == "TEXTAREA") {
-          push[user.uid][x[i].children[1].id] = x[i].children[1].innerHTML;
+          push[series+'-'+user.uid][x[i].children[1].id] = x[i].children[1].innerHTML;
         }
       }
       var x = document.getElementById('repsec3').children;
       for (var i = 0; i < x.length; i++) {
         if (x[i].children[0].tagName == "INPUT") {
-          push[user.uid][x[i].children[0].id] = x[i].children[0].tagName;
+          push[series+'-'+user.uid][x[i].children[0].id] = x[i].children[0].tagName;
         }  else if (x[i].children[0].tagName == "SPAN") {
-          push[user.uid][x[i].children[0].id] = x[i].children[0].innerText;
+          push[series+'-'+user.uid][x[i].children[0].id] = x[i].children[0].innerText;
         } else if (x[i].children[0].tagName == "DIV") {
           var name = x[i].children[0].id;
-          push[user.uid][name] = document.querySelector('input[name="' + name + '"]:checked').value;
+          push[series+'-'+user.uid][name] = document.querySelector('input[name="' + name + '"]:checked').value;
         }else if (x[i].children[1].tagName == "TEXTAREA") {
-          push[user.uid][x[i].children[1].id] = x[i].children[1].innerHTML;
+          push[series+'-'+user.uid][x[i].children[1].id] = x[i].children[1].innerHTML;
         }
       }
       firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(currentComp).doc("team-" + teamNum).collection('matches').doc('match-' + matchNum).set(push, {
