@@ -227,7 +227,7 @@ function processAndAppendReturn(data) {
   })
   for (var j = 0; j < questions.length; j++) {
     document.getElementById('FormData').innerHTML += "<div>";
-    document.getElementById('FormData').innerHTML += questions[j][1]['title'];
+    document.getElementById('FormData').innerHTML += questions[j][0];
     if (questions[j][1]['type'] == 'shortText') {
       document.getElementById('FormData').innerHTML += "<input id=''" + questions[j][0] + "' type='text'></input>";
     } else if (questions[j][1]['type'] == 'longText') {
