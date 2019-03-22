@@ -376,6 +376,11 @@ function subReport() {
           push[`${series}-${user.uid.toString()}`.toString()][x[i].children[1].id] = x[i].children[1].innerHTML;
         }
       }
+      try {
+        delete push[`${series}-${user.uid.toString()}`.toString()][""]
+      } catch (e) {
+
+      }
       firebase.firestore().collection('webData').doc('test').set(push).then(function() {
         alert('Submitted!')
         setTimeout(function() {
