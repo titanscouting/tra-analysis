@@ -235,7 +235,7 @@ function processAndAppendReturn(data) {
     if (questions[j][1]['type'] == 'shortText') {
       document.getElementById('FormData').innerHTML += "<input id=''" + questions[j][0] + "' type='text'></input>";
     } else if (questions[j][1]['type'] == 'textField') {
-      document.getElementById('FormData').innerHTML += "<textarea id=''" + questions[j][0] + "' rows='4' cols='50''></textarea>";
+      document.getElementById('FormData').innerHTML += "<br><textarea id=''" + questions[j][0] + "' rows='4' cols='50''></textarea>";
     } else if (questions[j][1]['type'] == 'stepper') {
       document.getElementById('FormData').innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + (questions[j][1]['defaultValue']).toString() + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
     }else if (questions[j][1]['type'] == 'label') {
