@@ -49,7 +49,7 @@ def generate_team_report(team):
     
     doc.generate_pdf(filepath="C://Users//creek//Documents//" + str(team.id), clean_tex=False)
 
-credentials = service_account.Credentials.from_service_account_file('titanscoutauth.json')
+credentials = service_account.Credentials.from_service_account_file('keys/firebasekey.json')
 
 db = firestore.Client(project="titanscoutandroid", credentials=credentials)
 teams_ref = db.collection(u'data').document(u'team-2022').collection(u'Central 2019')
