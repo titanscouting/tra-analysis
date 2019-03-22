@@ -336,44 +336,44 @@ function subReport() {
       var matchNum = document.getElementById('mselect').value;
       var series = capitalizeFirstLetter(document.getElementById('sselect').value);
       var push = {}
-      push[series + '-'+ 'web-1234']={}
+      push['a']={}
       var x = document.getElementById('repsec1').children;
       for (var i = 0; i < x.length; i++) {
         if (x[i].children[0].tagName == "INPUT") {
-          push[series + '-'+ 'web-1234'][x[i].children[0].id] = x[i].children[0].tagName;
+          push['a'][x[i].children[0].id] = x[i].children[0].tagName;
         }  else if (x[i].children[0].tagName == "SPAN") {
-          push[series + '-'+ 'web-1234'][x[i].children[0].id] = x[i].children[0].innerText;
+          push['a'][x[i].children[0].id] = x[i].children[0].innerText;
         } else if (x[i].children[0].tagName == "DIV") {
           var name = x[i].children[0].id;
-          push[series + '-'+ 'web-1234'][name] = document.querySelector('input[name="' + name + '"]:checked').value;
+          push['a'][name] = document.querySelector('input[name="' + name + '"]:checked').value;
         }else if (x[i].children[1].tagName == "TEXTAREA") {
-          push[series + '-'+ 'web-1234'][x[i].children[1].id] = x[i].children[1].innerHTML;
+          push['a'][x[i].children[1].id] = x[i].children[1].innerHTML;
         }
       }
       var x = document.getElementById('repsec2').children;
       for (var i = 0; i < x.length; i++) {
         if (x[i].children[0].tagName == "INPUT") {
-          push[series + '-'+ 'web-1234'][x[i].children[0].id] = x[i].children[0].tagName;
+          push['a'][x[i].children[0].id] = x[i].children[0].tagName;
         }  else if (x[i].children[0].tagName == "SPAN") {
-          push[series + '-'+ 'web-1234'][x[i].children[0].id] = x[i].children[0].innerText;
+          push['a'][x[i].children[0].id] = x[i].children[0].innerText;
         } else if (x[i].children[0].tagName == "DIV") {
           var name = x[i].children[0].id;
-          push[series + '-'+ 'web-1234'][name] = document.querySelector('input[name="' + name + '"]:checked').value;
+          push['a'][name] = document.querySelector('input[name="' + name + '"]:checked').value;
         }else if (x[i].children[1].tagName == "TEXTAREA") {
-          push[series + '-'+ 'web-1234'][x[i].children[1].id] = x[i].children[1].innerHTML;
+          push['a'][x[i].children[1].id] = x[i].children[1].innerHTML;
         }
       }
       var x = document.getElementById('repsec3').children;
       for (var i = 0; i < x.length; i++) {
         if (x[i].children[0].tagName == "INPUT") {
-          push[series + '-'+ 'web-1234'][x[i].children[0].id] = x[i].children[0].tagName;
+          push['a'][x[i].children[0].id] = x[i].children[0].tagName;
         }  else if (x[i].children[0].tagName == "SPAN") {
-          push[series + '-'+ 'web-1234'][x[i].children[0].id] = x[i].children[0].innerText;
+          push['a'][x[i].children[0].id] = x[i].children[0].innerText;
         } else if (x[i].children[0].tagName == "DIV") {
           var name = x[i].children[0].id;
-          push[series + '-'+ 'web-1234'][name] = document.querySelector('input[name="' + name + '"]:checked').value;
+          push['a'][name] = document.querySelector('input[name="' + name + '"]:checked').value;
         }else if (x[i].children[1].tagName == "TEXTAREA") {
-          push[series + '-'+ 'web-1234'][x[i].children[1].id] = x[i].children[1].innerHTML;
+          push['a'][x[i].children[1].id] = x[i].children[1].innerHTML;
         }
       }
       firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(currentComp).doc("team-" + teamNum).collection('matches').doc('match-' + matchNum).set(push, {
