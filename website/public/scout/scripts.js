@@ -243,7 +243,7 @@ function processAndAppendReturn(data,newloc) {
       for (var k = 0; k < questions[j][1]['elements'].length; k++) {
         //// TODO: replace with real buttons for good styling
         document.getElementById(questions[j][0]).innerHTML += questions[j][1]['elements'][k];
-        document.getElementById(questions[j][0]).innerHTML += "<input type='radio' name='" + questions[j][0] + "' value=" + questions[j][1]['elements'][k] + "></input>"
+        document.getElementById(questions[j][0]).innerHTML += "<input type='radio' name='" + questions[j][0] + "' value=" + questions[j][1]['elements'][k] + "></input>&nbsp;&nbsp;&nbsp;&nbsp;"
       }
     }
   }
