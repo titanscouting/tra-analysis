@@ -161,7 +161,7 @@ function cseries(seriesName) {
                 processAndAppendReturn(doc.data())
               }
               document.getElementById('FormData').innerHTML += "</div>";
-            }).then(function () {
+            }).then(function() {
               document.getElementById('FormData').innerHTML += "<input type='button' onclick=subReport() value='Submit'>";
             });
           });
@@ -193,7 +193,7 @@ function cseries(seriesName) {
                 processAndAppendReturn(doc.data())
               }
               document.getElementById('FormData').innerHTML += "</div>";
-            }).then(function () {
+            }).then(function() {
               document.getElementById('FormData').innerHTML += "<input type='button' onclick=subReport() value='Submit'>";
             });
           });
@@ -309,11 +309,11 @@ function updateForm(locString, teamNum, competition) {
 }
 */
 function dec(id) {
-  document.getElementById(id).innerHTML = (parseInt(document.getElementById(id).innerHTML) - 1).toString()
+  document.getElementById(id).textContent = (parseInt(document.getElementById(id).textContent) - 1).toString()
 }
 
 function inc(id) {
-  document.getElementById(id).innerHTML = (parseInt(document.getElementById(id).innerHTML) + 1).toString()
+  document.getElementById(id).textContent = (parseInt(document.getElementById(id).textContent) + 1).toString()
 }
 
 function subReport() {
