@@ -392,7 +392,7 @@ function subReport() {
       } catch (e) {
 
       }
-      firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(currentComp).doc("team-" + teamNum).collection('matches').doc('match-' + matchNum).set(function() {
+      firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(currentComp).doc("team-" + teamNum).collection('matches').doc('match-' + matchNum).set(push {
         alert('Submitted!')
         setTimeout(function() {
           window.location.href = '../scout';
