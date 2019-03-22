@@ -51,7 +51,9 @@ def generate_team_report(team):
 
 credential = credentials.Certificate('keys/firebasekey.json')
 
-db = firestore.Client(project="titanscoutandroid", credentials=credential)
+firebase_admin.initialize_app(credential)
+
+db = firestore.Client()
 teams_ref = db.collection(u'data').document(u'team-2022').collection(u'Central 2019')
 teams = teams_ref.get()
 
