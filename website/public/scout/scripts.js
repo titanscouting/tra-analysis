@@ -334,7 +334,7 @@ function subReport() {
       var submitTo = document.getElementById('tns').value;
       var teamNum = document.getElementById('tselect').value;
       var matchNum = document.getElementById('mselect').value;
-      var series = capitalizeFirstLetter(document.getElementById('sselect').value);
+      var series = capitalizeFirstLetter(document.getElementById('sselect').value).toString;
       var push = {}
       push[series + '-'+ user.uid]={}
       var x = document.getElementById('repsec1').children;
