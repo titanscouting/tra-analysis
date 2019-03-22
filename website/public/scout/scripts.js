@@ -389,6 +389,7 @@ function subReport() {
         setTimeout(function() {
           window.location.href = '../scout';
         }, 500);
+      });
     }
   });
 }
