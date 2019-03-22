@@ -313,6 +313,9 @@ function dec(id) {
 function inc(id) {
   document.getElementById(id).innerHTML = "<input type='button' onclick=\"dec('" + id + "')\" value='-'></input>"+(parseInt(document.getElementById(id).textContent) + 1).toString()+"<input type='button' onclick=\"inc('" + id + "')\" value='+'></input>"
 }
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 function subReport() {
   var user = firebase.auth().currentUser;
@@ -331,7 +334,7 @@ function subReport() {
       var submitTo = document.getElementById('tns').value;
       var teamNum = document.getElementById('tselect').value;
       var matchNum = document.getElementById('mselect').value;
-      var series = document.getElementById('sselect').value;
+      var series = capitalizeFirstLetter(document.getElementById('sselect').value);
       var push = {}
       push[series+'-'+user.uid]={}
       var x = document.getElementById('repsec1').children;
