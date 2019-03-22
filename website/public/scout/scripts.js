@@ -71,12 +71,19 @@ function changeTeam(teamNum) {
     if (currentComp != null) {
       matches = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('scoutsAndSchedule');
       matches.get().then(function(qs) {
+        var oklist = []
         qs.forEach(function(dc) {
           //regex search!
           var pattern = /\d+/;
           var name = dc.id;
-          document.getElementById('mselect').innerHTML += "<option value='" + name.match(pattern)[0].toString() + "'>" + name.match(pattern)[0].toString() + "</option>";
+          oklist.push(name.match(pattern)[0].toString())
         });
+        oklist.sort(function(a, b) {
+          return parseInt(a) - parseInt(b)
+        })
+        for (var i = 0; i < oklist.length; i++) {
+          document.getElementById('mselect').innerHTML += "<option value='" + oklist[i] + "'>" + oklist[i] + "</option>";
+        }
         cmatch(document.getElementById('mselect').value);
       });
     }
@@ -136,11 +143,11 @@ function cseries(seriesName) {
 
       if (seriesName == "quantitative") {
         document.getElementById('FormData').innerHTML += "<h3>" + 'Sandstorm' + "</h3>";
-        document.getElementById('FormData').innerHTML += "<div id='repsec1'>"+"</div>";
+        document.getElementById('FormData').innerHTML += "<div id='repsec1'>" + "</div>";
         var ss = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appElements').doc('quantitativeSandstorm');
         ss.get().then(function(doc) {
           if (doc.exists) {
-            processAndAppendReturn(doc.data(),'repsec1')
+            processAndAppendReturn(doc.data(), 'repsec1')
           }
         }).then(function() {
           document.getElementById('FormData').innerHTML += "<h3>" + 'TeleOp' + "</h3>";
@@ -148,7 +155,7 @@ function cseries(seriesName) {
           var to = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appElements').doc('quantitativeTeleop');
           to.get().then(function(doc) {
             if (doc.exists) {
-              processAndAppendReturn(doc.data(),'repsec2')
+              processAndAppendReturn(doc.data(), 'repsec2')
             }
           }).then(function() {
             document.getElementById('FormData').innerHTML += "<h3>" + 'Cycle Times' + "</h3>";
@@ -156,7 +163,7 @@ function cseries(seriesName) {
             var cyc = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appElements').doc('quantitativeCycleTimes');
             cyc.get().then(function(doc) {
               if (doc.exists) {
-                processAndAppendReturn(doc.data(),'repsec3')
+                processAndAppendReturn(doc.data(), 'repsec3')
               }
             }).then(function() {
               document.getElementById('FormData').innerHTML += "<br><input type='button' onclick=subReport() value='Submit'>";
@@ -169,7 +176,7 @@ function cseries(seriesName) {
         var ss = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appElements').doc('qualitativeSandstorm');
         ss.get().then(function(doc) {
           if (doc.exists) {
-            processAndAppendReturn(doc.data(),'repsec1')
+            processAndAppendReturn(doc.data(), 'repsec1')
           }
         }).then(function() {
           document.getElementById('FormData').innerHTML += "<h3>" + 'TeleOp' + "</h3>";
@@ -177,7 +184,7 @@ function cseries(seriesName) {
           var to = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appElements').doc('qualitativeTeleop');
           to.get().then(function(doc) {
             if (doc.exists) {
-              processAndAppendReturn(doc.data(),'repsec2')
+              processAndAppendReturn(doc.data(), 'repsec2')
             }
           }).then(function() {
             document.getElementById('FormData').innerHTML += "<h3>" + 'Strategy' + "</h3>";
@@ -185,7 +192,7 @@ function cseries(seriesName) {
             var strat = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appElements').doc('qualitativeStrategy');
             strat.get().then(function(doc) {
               if (doc.exists) {
-                processAndAppendReturn(doc.data(),'repsec3')
+                processAndAppendReturn(doc.data(), 'repsec3')
               }
             }).then(function() {
               document.getElementById('FormData').innerHTML += "<input type='button' onclick=subReport() value='Submit'>";
@@ -198,7 +205,7 @@ function cseries(seriesName) {
   });
 }
 
-function processAndAppendReturn(data,newloc) {
+function processAndAppendReturn(data, newloc) {
   labels = Object.keys(data);
   var index = labels.indexOf('header');
   if (index > -1) {
@@ -224,22 +231,22 @@ function processAndAppendReturn(data,newloc) {
     return a[1].order - b[1].order;
   })
   for (var j = 0; j < questions.length; j++) {
-    document.getElementById(newloc).innerHTML += "<div id='"+newloc+j.toString()+"'></div>";
-    document.getElementById(newloc+j.toString()).innerHTML += questions[j][0];
+    document.getElementById(newloc).innerHTML += "<div id='" + newloc + j.toString() + "'></div>";
+    document.getElementById(newloc + j.toString()).innerHTML += questions[j][0];
     if (questions[j][1]['type'] == 'shortText') {
-      document.getElementById(newloc+j.toString()).innerHTML += "<input id=''" + questions[j][0] + "' type='text'></input>";
+      document.getElementById(newloc + j.toString()).innerHTML += "<input id=''" + questions[j][0] + "' type='text'></input>";
     } else if (questions[j][1]['type'] == 'textField') {
-      document.getElementById(newloc+j.toString()).innerHTML += "<br><textarea id=''" + questions[j][0] + "' rows='4' cols='50''></textarea>";
+      document.getElementById(newloc + j.toString()).innerHTML += "<br><textarea id=''" + questions[j][0] + "' rows='4' cols='50''></textarea>";
     } else if (questions[j][1]['type'] == 'stepper') {
-      document.getElementById(newloc+j.toString()).innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + (questions[j][1]['defaultValue']).toString() + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
-    }else if (questions[j][1]['type'] == 'label') {
-      document.getElementById(newloc+j.toString()).innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + '0' + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
+      document.getElementById(newloc + j.toString()).innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + (questions[j][1]['defaultValue']).toString() + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
+    } else if (questions[j][1]['type'] == 'label') {
+      document.getElementById(newloc + j.toString()).innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + '0' + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
     } else if (questions[j][1]['type'] == 'slider') {
-      document.getElementById(newloc+j.toString()).innerHTML += "&nbsp;&nbsp;" + questions[j][1]['min'] + "&nbsp;&nbsp;";
-      document.getElementById(newloc+j.toString()).innerHTML += "<input type='range' min='" + questions[j][1]['min']+ "' max='" + questions[j][1]['max'] + "'>";
-      document.getElementById(newloc+j.toString()).innerHTML += "&nbsp;&nbsp;" + questions[j][1]['max'];
+      document.getElementById(newloc + j.toString()).innerHTML += "&nbsp;&nbsp;" + questions[j][1]['min'] + "&nbsp;&nbsp;";
+      document.getElementById(newloc + j.toString()).innerHTML += "<input type='range' min='" + questions[j][1]['min'] + "' max='" + questions[j][1]['max'] + "'>";
+      document.getElementById(newloc + j.toString()).innerHTML += "&nbsp;&nbsp;" + questions[j][1]['max'];
     } else if (questions[j][1]['type'] == 'segment') {
-      document.getElementById(newloc+j.toString()).innerHTML += "<div id='" + questions[j][0] + "'></div>"
+      document.getElementById(newloc + j.toString()).innerHTML += "<div id='" + questions[j][0] + "'></div>"
       for (var k = 0; k < questions[j][1]['elements'].length; k++) {
         //// TODO: replace with real buttons for good styling
         document.getElementById(questions[j][0]).innerHTML += questions[j][1]['elements'][k];
@@ -307,14 +314,15 @@ function updateForm(locString, teamNum, competition) {
 }
 */
 function dec(id) {
-  document.getElementById(id).innerHTML = "<input type='button' onclick=\"dec('" + id + "')\" value='-'></input>"+(parseInt(document.getElementById(id).textContent) - 1).toString()+"<input type='button' onclick=\"inc('" + id + "')\" value='+'></input>"
+  document.getElementById(id).innerHTML = "<input type='button' onclick=\"dec('" + id + "')\" value='-'></input>" + (parseInt(document.getElementById(id).textContent) - 1).toString() + "<input type='button' onclick=\"inc('" + id + "')\" value='+'></input>"
 }
 
 function inc(id) {
-  document.getElementById(id).innerHTML = "<input type='button' onclick=\"dec('" + id + "')\" value='-'></input>"+(parseInt(document.getElementById(id).textContent) + 1).toString()+"<input type='button' onclick=\"inc('" + id + "')\" value='+'></input>"
+  document.getElementById(id).innerHTML = "<input type='button' onclick=\"dec('" + id + "')\" value='-'></input>" + (parseInt(document.getElementById(id).textContent) + 1).toString() + "<input type='button' onclick=\"inc('" + id + "')\" value='+'></input>"
 }
+
 function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function subReport() {
@@ -336,17 +344,17 @@ function subReport() {
       var matchNum = document.getElementById('mselect').value.toString();
       var series = capitalizeFirstLetter(document.getElementById('sselect').value).toString();
       var push = {}
-      push[`${series}-${user.uid.toString()}`.toString()]={}
+      push[`${series}-${user.uid.toString()}`.toString()] = {}
       var x = document.getElementById('repsec1').children;
       for (var i = 0; i < x.length; i++) {
         if (x[i].children[0].tagName == "INPUT") {
           push[`${series}-${user.uid.toString()}`.toString()][x[i].children[0].id] = x[i].children[0].tagName;
-        }  else if (x[i].children[0].tagName == "SPAN") {
+        } else if (x[i].children[0].tagName == "SPAN") {
           push[`${series}-${user.uid.toString()}`.toString()][x[i].children[0].id] = x[i].children[0].innerText;
         } else if (x[i].children[0].tagName == "DIV") {
           var name = x[i].children[0].id;
           push[`${series}-${user.uid.toString()}`.toString()][name] = document.querySelector('input[name="' + name + '"]:checked').value;
-        }else if (x[i].children[1].tagName == "TEXTAREA") {
+        } else if (x[i].children[1].tagName == "TEXTAREA") {
           push[`${series}-${user.uid.toString()}`.toString()][x[i].children[1].id] = x[i].children[1].innerHTML;
         }
       }
@@ -354,12 +362,12 @@ function subReport() {
       for (var i = 0; i < x.length; i++) {
         if (x[i].children[0].tagName == "INPUT") {
           push[`${series}-${user.uid.toString()}`.toString()][x[i].children[0].id] = x[i].children[0].tagName;
-        }  else if (x[i].children[0].tagName == "SPAN") {
+        } else if (x[i].children[0].tagName == "SPAN") {
           push[`${series}-${user.uid.toString()}`.toString()][x[i].children[0].id] = x[i].children[0].innerText;
         } else if (x[i].children[0].tagName == "DIV") {
           var name = x[i].children[0].id;
           push[`${series}-${user.uid.toString()}`.toString()][name] = document.querySelector('input[name="' + name + '"]:checked').value;
-        }else if (x[i].children[1].tagName == "TEXTAREA") {
+        } else if (x[i].children[1].tagName == "TEXTAREA") {
           push[`${series}-${user.uid.toString()}`.toString()][x[i].children[1].id] = x[i].children[1].innerHTML;
         }
       }
@@ -367,12 +375,12 @@ function subReport() {
       for (var i = 0; i < x.length; i++) {
         if (x[i].children[0].tagName == "INPUT") {
           push[`${series}-${user.uid.toString()}`.toString()][x[i].children[0].id] = x[i].children[0].tagName;
-        }  else if (x[i].children[0].tagName == "SPAN") {
+        } else if (x[i].children[0].tagName == "SPAN") {
           push[`${series}-${user.uid.toString()}`.toString()][x[i].children[0].id] = x[i].children[0].innerText;
         } else if (x[i].children[0].tagName == "DIV") {
           var name = x[i].children[0].id;
           push[`${series}-${user.uid.toString()}`.toString()][name] = document.querySelector('input[name="' + name + '"]:checked').value;
-        }else if (x[i].children[1].tagName == "TEXTAREA") {
+        } else if (x[i].children[1].tagName == "TEXTAREA") {
           push[`${series}-${user.uid.toString()}`.toString()][x[i].children[1].id] = x[i].children[1].innerHTML;
         }
       }
@@ -381,7 +389,7 @@ function subReport() {
       } catch (e) {
 
       }
-      firebase.firestore().collection('webData').doc('test').set(push).then(function() {
+      firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(currentComp).doc("team-" + teamNum).collection('matches').doc('match-' + matchNum).set(function() {
         alert('Submitted!')
         setTimeout(function() {
           window.location.href = '../scout';
