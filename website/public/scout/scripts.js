@@ -194,11 +194,11 @@ function cseries(seriesName) {
             });
           });
         });
-      }
+      }.then(function () {
+        document.getElementById('FormData').innerHTML += "<input type='button' onclick=subReport() value='Submit'>";
+      })
 
     }
-  }).then(function() {
-    document.getElementById('FormData').innerHTML += "<input type='button' onclick=subReport() value='Submit'>";
   });
 }
 
