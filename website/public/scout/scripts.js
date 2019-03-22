@@ -228,17 +228,17 @@ function processAndAppendReturn(data) {
   for (var j = 0; j < questions.length; j++) {
     document.getElementById('FormData').innerHTML += "<div>";
     document.getElementById('FormData').innerHTML += questions[j][1]['title'];
-    if (questions[j][1]['type'] = 'shortText') {
+    if (questions[j][1]['type'] == 'shortText') {
       document.getElementById('FormData').innerHTML += "<input id=''" + questions[j][0] + "' type='text'></input>";
-    } else if (questions[j][1]['type'] = 'longText') {
+    } else if (questions[j][1]['type'] == 'longText') {
       document.getElementById('FormData').innerHTML += "<textarea id=''" + questions[j][0] + "' rows='4' cols='50''></textarea>";
-    } else if (questions[j][1]['type'] = 'stepper') {
+    } else if (questions[j][1]['type'] == 'stepper') {
       document.getElementById('FormData').innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick='dec(" + questions[j][0] + ")' value='-'></input>" + (questions[j][1]['default']).toString() + "<input type='button' onclick='inc(" + questions[j][0] + ")' value='+'></input></span>";
-    } else if (questions[j][1]['type'] = 'range') {
+    } else if (questions[j][1]['type'] == 'range') {
       document.getElementById('FormData').innerHTML += "&nbsp;&nbsp;" + questions[j][1]['min']['text'] + "&nbsp;&nbsp;";
       document.getElementById('FormData').innerHTML += "<input type='range' min='" + questions[j][1]['min']['val'] + "' max='" + questions[j][1]['max']['val'] + "'>";
       document.getElementById('FormData').innerHTML += "&nbsp;&nbsp;" + questions[j][1]['max']['text'];
-    } else if (questions[j][1]['type'] = 'segment') {
+    } else if (questions[j][1]['type'] == 'segment') {
       document.getElementById('FormData').innerHTML += "<div id='" + questions[j][0] + "'>"
       for (var k = 0; k < questions[j][1]['elements'].length; k++) {
         //// TODO: replace with real buttons for good styling
