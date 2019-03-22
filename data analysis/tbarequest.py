@@ -32,6 +32,12 @@ __all__ = [
 import requests
 
 #as this code is public, i'm not putting 2022's API key in here. just add it as a var in your script and go
+#requests basic team info
+def req_team_info(team,apikey):
+    headers={'X-TBA-Auth-Key':apikey}
+    r=requests.get('https://www.thebluealliance.com/api/v3/team/frc'+str(team)+'/simple/',headers=headers)
+    return r
+
 #requests a list of events that a team went to
 def req_team_events(team,year,apikey):
     headers={'X-TBA-Auth-Key':apikey}
