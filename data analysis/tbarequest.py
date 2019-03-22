@@ -71,7 +71,7 @@ def req_event_elim_alli(event_key, apikey):
 #requests oprs and dprs
 def req_event_opr(event_key, apikey):
     headers={'X-TBA-Auth-Key':apikey}
-    r=requests.get('https://www.thebluealliance.com/api/v3//event/'+str(event_key)+'/oprs', headers=headers)
+    r=requests.get('https://www.thebluealliance.com/api/v3/event/'+str(event_key)+'/oprs', headers=headers)
     return r
 
 
