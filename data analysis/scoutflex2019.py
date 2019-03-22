@@ -5,8 +5,8 @@ Created on Wed Mar 20 12:21:31 2019
 @author: creek
 """
 
+from firebase_admin import credentials
 from firebase_admin import firestore
-from google.oauth2 import service_account
 import pprint
 from pylatex import Document, Section, Subsection, Command
 from pylatex.utils import italic, NoEscape
@@ -49,7 +49,7 @@ def generate_team_report(team):
 
     doc.generate_pdf(filepath= str(team.id), clean_tex=False)
 
-credentials = service_account.Credentials.from_service_account_file('keys/firebasekey.json')
+credential = credentials.Certificate('keys/firebasekey.json')
 
 db = firestore.Client(project="titanscoutandroid", credentials=credentials)
 teams_ref = db.collection(u'data').document(u'team-2022').collection(u'Central 2019')
