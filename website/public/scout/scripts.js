@@ -137,7 +137,7 @@ function cseries(seriesName) {
       if (seriesName == "quantitative") {
         document.getElementById('FormData').innerHTML += "<h3>" + 'Sandstorm' + "</h3>";
         document.getElementById('FormData').innerHTML += "<div id='repsec1'>";
-        var ss = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appBuilding').doc('quantitativeSandstorm');
+        var ss = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appElements').doc('quantitativeSandstorm');
         ss.get().then(function(doc) {
           if (doc.exists) {
             processAndAppendReturn(doc.data())
@@ -146,7 +146,7 @@ function cseries(seriesName) {
         }).then(function() {
           document.getElementById('FormData').innerHTML += "<h3>" + 'TeleOp' + "</h3>";
           document.getElementById('FormData').innerHTML += "<div id='repsec2'>";
-          var to = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appBuilding').doc('quantitativeTeleop');
+          var to = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appElements').doc('quantitativeTeleop');
           to.get().then(function(doc) {
             if (doc.exists) {
               processAndAppendReturn(doc.data())
@@ -155,7 +155,7 @@ function cseries(seriesName) {
           }).then(function() {
             document.getElementById('FormData').innerHTML += "<h3>" + 'Cycle Times' + "</h3>";
             document.getElementById('FormData').innerHTML += "<div id='repsec3'>";
-            var cyc = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appBuilding').doc('quantitativeCycleTimes');
+            var cyc = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appElements').doc('quantitativeCycleTimes');
             cyc.get().then(function(doc) {
               if (doc.exists) {
                 processAndAppendReturn(doc.data())
@@ -169,7 +169,7 @@ function cseries(seriesName) {
       } else if (seriesName = "qualitative") {
         document.getElementById('FormData').innerHTML += "<h3>" + 'Sandstorm' + "</h3>";
         document.getElementById('FormData').innerHTML += "<div id='repsec1'>";
-        var ss = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appBuilding').doc('qualitativeSandstorm');
+        var ss = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appElements').doc('qualitativeSandstorm');
         ss.get().then(function(doc) {
           if (doc.exists) {
             processAndAppendReturn(doc.data())
@@ -178,7 +178,7 @@ function cseries(seriesName) {
         }).then(function() {
           document.getElementById('FormData').innerHTML += "<h3>" + 'TeleOp' + "</h3>";
           document.getElementById('FormData').innerHTML += "<div id='repsec2'>";
-          var to = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appBuilding').doc('qualitativeTeleop');
+          var to = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appElements').doc('qualitativeTeleop');
           to.get().then(function(doc) {
             if (doc.exists) {
               processAndAppendReturn(doc.data())
@@ -187,7 +187,7 @@ function cseries(seriesName) {
           }).then(function() {
             document.getElementById('FormData').innerHTML += "<h3>" + 'Strategy' + "</h3>";
             document.getElementById('FormData').innerHTML += "<div id='repsec3'>";
-            var strat = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appBuilding').doc('qualitativeStrategy');
+            var strat = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appElements').doc('qualitativeStrategy');
             strat.get().then(function(doc) {
               if (doc.exists) {
                 processAndAppendReturn(doc.data())
