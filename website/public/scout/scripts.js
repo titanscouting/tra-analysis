@@ -243,7 +243,7 @@ function processAndAppendReturn(data, newloc) {
     } else if (questions[j][1]['type'] == 'stepper') {
       document.getElementById(newloc + j.toString()).innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + (questions[j][1]['defaultValue']).toString() + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
     } else if (questions[j][1]['type'] == 'label') {
-      document.getElementById(newloc + j.toString()).innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + (0).toString() + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
+      document.getElementById(newloc + j.toString()).innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + (questions[j][1]['defaultValue']).toString() + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
     } else if (questions[j][1]['type'] == 'slider') {
       document.getElementById(newloc + j.toString()).innerHTML += "&nbsp;&nbsp;" + questions[j][1]['min'] + "&nbsp;&nbsp;";
       document.getElementById(newloc + j.toString()).innerHTML += "<input type='range' min='" + questions[j][1]['min'] + "' max='" + questions[j][1]['max'] + "'>";
@@ -392,7 +392,7 @@ function subReport() {
       } catch (e) {
 
       }
-      firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(currentComp).doc("team-" + teamNum).collection('matches').doc('match-' + matchNum).set(push, {
+      firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(currentComp).doc("team-" + teamNum).collection('matches').doc('match-' + matchNum).set(push, {merge:true}).then(function() {
         alert('Submitted!')
         setTimeout(function() {
           window.location.href = '../scout';
