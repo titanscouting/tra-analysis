@@ -234,7 +234,7 @@ function processAndAppendReturn(data, newloc) {
     document.getElementById(newloc).innerHTML += "<div id='" + newloc + j.toString() + "'></div>";
     document.getElementById(newloc + j.toString()).innerHTML += questions[j][0];
     if (questions[j][0]=='cycleTimes') {
-        document.getElementById(newloc + j.toString()).innerHTML += " (on a scale from 0 to 10)"
+        document.getElementById(newloc + j.toString()).innerHTML += " (on a scale from 1 to 10)"
     }
     if (questions[j][1]['type'] == 'shortText') {
       document.getElementById(newloc + j.toString()).innerHTML += "<input id=''" + questions[j][0] + "' type='text'></input>";
@@ -243,7 +243,7 @@ function processAndAppendReturn(data, newloc) {
     } else if (questions[j][1]['type'] == 'stepper') {
       document.getElementById(newloc + j.toString()).innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + (questions[j][1]['defaultValue']).toString() + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
     } else if (questions[j][1]['type'] == 'label') {
-      document.getElementById(newloc + j.toString()).innerHTML += "<span id='" + 0 + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + (questions[j][1]['defaultValue']).toString() + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
+      document.getElementById(newloc + j.toString()).innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + (0).toString() + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
     } else if (questions[j][1]['type'] == 'slider') {
       document.getElementById(newloc + j.toString()).innerHTML += "&nbsp;&nbsp;" + questions[j][1]['min'] + "&nbsp;&nbsp;";
       document.getElementById(newloc + j.toString()).innerHTML += "<input type='range' min='" + questions[j][1]['min'] + "' max='" + questions[j][1]['max'] + "'>";
