@@ -88,16 +88,16 @@ def titanservice():
 
     #assumes that team number is in the first column, and that the order of teams is the same across all files
     #unhelpful comment
-    for measure in data: #unpacks 3d array into 2ds
+    #for measure in data: #unpacks 3d array into 2ds
 
-        measure_stats = []
+        #measure_stats = []
 
-        for i in range(len(measure)): #unpacks into specific teams
+        #for i in range(len(measure)): #unpacks into specific teams
 
                     #ofbest_curve = [None]
                     #r2best_curve = [None]
 
-                    line = measure[i]
+                    #line = measure[i]
 
                     #print(line)
 
@@ -127,10 +127,10 @@ def titanservice():
                     #print(r2best_curve)
 
                     
-                    measure_stats.append(teams[i] + list(analysis.basic_stats(line, 0, 0)) + list(analysis.histo_analysis(line, 1, -3, 3)))
+                    #measure_stats.append(teams[i] + list(analysis.basic_stats(line, 0, 0)) + list(analysis.histo_analysis(line, 1, -3, 3)))
 
-        stats.append(list(measure_stats))
-        nishant = []
+        #stats.append(list(measure_stats))
+    nishant = []
             
     for i in range(len(scores)):
 
@@ -193,13 +193,13 @@ def titanservice():
             score_out[str(teams[i][0])] = (nishant[i])
 
     location = db.collection(u'stats').document(u'stats-noNN')
-    for i in range(len(teams)):
-        general_general_stats = location.collection(teams[i][0])
+    #for i in range(len(teams)):
+        #general_general_stats = location.collection(teams[i][0])
         
-        for j in range(len(files)):
-            json_out[str(teams[i][0])] = (stats[j][i])
-            name = os.path.basename(files[j])
-            general_general_stats.document(name).set({'stats':json_out.get(teams[i][0])})
+        #for j in range(len(files)):
+         #   json_out[str(teams[i][0])] = (stats[j][i])
+          #  name = os.path.basename(files[j])
+         #   general_general_stats.document(name).set({'stats':json_out.get(teams[i][0])})
 
     for i in range(len(teams)):
         nnum = location.collection(teams[i][0]).document(u'nishant_number').set({'nishant':score_out.get(teams[i][0])})
@@ -229,103 +229,6 @@ def pulldata():
     with open("data/scores.csv", "w+", newline = '') as file:
         writer = csv.writer(file, delimiter = ',')
         writer.writerows(scores)
-
-    list_teams = teams
-    teams=db.collection('data').document('team-2022').collection("Central 2019").get()
-    full=[]
-    tms=[]
-    for team in teams:
-        
-        tms.append(team.id)
-        reports=db.collection('data').document('team-2022').collection("Central 2019").document(team.id).collection("matches").get()
-
-        for report in reports:
-            data=[]
-            data.append(db.collection('data').document('team-2022').collection("Central 2019").document(team.id).collection("matches").document(report.id).get().to_dict())
-            full.append(data)
-
-    quant_keys = []
-
-    out = []
-    var = {}
-
-    temp = []
-
-    for i in range(len(list_teams)):
-
-        temp.append(list_teams[i][0])
-
-    list_teams = temp
-
-    for i in range(len(full)):
-        for j in range(len(full[i])):
-            for key in list(full[i][j].keys()):
-                
-                if "Quantitative" in key:
-                    
-                    quant_keys.append(key)
-
-                    #print(full[i][j].get(key).get('teamDBRef')[5:] in list_teams)
-
-                    print(full[i][j].get(key).get('teamDBRef'))
-
-                    print(list_teams)
-                    
-                    if full[i][j].get(key).get('teamDBRef')[5:] in list_teams:
-                        
-                        var = {}
-                        measured_vars = []
-                        
-                        for k in range(len(list(full[i][j].get(key).keys()))):
-
-                            individual_keys = list(full[i][j].get(key).keys())
-                            
-                            var[individual_keys[k]] = full[i][j].get(key).get(individual_keys[k])
-
-                        out.append(var)
-    
-    sorted_out = []
-
-    for i in out:
-
-        j_list = []
-
-        key_list = []
-
-        sorted_keys = sorted(i.keys())
-
-        for j in sorted_keys:
-
-            key_list.append(i[j])
-
-            j_list.append(j)
-
-        sorted_out.append(key_list)
-
-        var_index = 0
-        team_index = 0
-
-        big_out = []
-
-        for j in range(len(i)):
-            big_out.append([])
-            for t in range(len(list_teams)):
-                big_out[j].append([])
-
-        for i in sorted_out:
-
-            team_index = list_teams.index(sorted_out[sorted_out.index(i)][j_list.index('teamDBRef')][5:])
-
-            for j in range(len(i)):
-
-                big_out[j][team_index].append(i[j])
-
-        for i in range(len(big_out)):
-
-            with open('data/' + j_list[i] + '.csv', "w+", newline = '') as file:
-
-                writer = csv.writer(file, delimiter = ',')
-                writer.writerows(big_out[i])
             
 def service():
 
