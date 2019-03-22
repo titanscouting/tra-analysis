@@ -267,9 +267,11 @@ def pulldata():
 
                     #print(full[i][j].get(key).get('teamDBRef')[5:] in list_teams)
 
-                    print(full[i][j].get(key).get('teamDBRef'))
+                    #print(full[i][j].get(key).get('teamDBRef'))
 
-                    print(list_teams)
+                    #print(list(full[i][j].keys()))
+
+                    #print(list_teams)
                     
                     if full[i][j].get(key).get('teamDBRef')[5:] in list_teams:
                         
