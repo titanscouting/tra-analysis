@@ -84,6 +84,7 @@ function changeTeam(teamNum) {
 }
 
 function cmatch(matchName) {
+  teamNum = document.getElementById('tns').value;
   document.getElementById('tselect').innerHTML = ""
   var user = firebase.auth().currentUser;
   ti = firebase.firestore().collection('teamData').doc("team-" + teamNum);
