@@ -384,7 +384,11 @@ function subReport() {
       }
       firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(currentComp).doc("team-" + teamNum).collection('matches').doc('match-' + mselect).set(push, {
         merge: true
-      })
+      }).then(function() {
+        alert('Submitted!')
+        setTimeout(function() {
+          window.location.href = '../scout';
+        }, 500);
     }
   });
 }
