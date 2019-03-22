@@ -237,7 +237,7 @@ function processAndAppendReturn(data, newloc) {
     if (questions[j][1]['type'] == 'shortText') {
       document.getElementById(newloc + j.toString()).innerHTML += "<input id=''" + questions[j][0] + "' type='text'></input>";
     } else if (questions[j][1]['type'] == 'textField') {
-      document.getElementById(newloc + j.toString()).innerHTML += "<br><textarea id=''" + questions[j][0] + "' rows='4' cols='50''></textarea>";
+      document.getElementById(newloc + j.toString()).innerHTML += "<br><textarea id='" + questions[j][0] + "' rows='4' cols='50''></textarea>";
     } else if (questions[j][1]['type'] == 'stepper') {
       document.getElementById(newloc + j.toString()).innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick=\"dec('" + questions[j][0] + "')\" value='-'></input>" + (questions[j][1]['defaultValue']).toString() + "<input type='button' onclick=\"inc('" + questions[j][0] + "')\" value='+'></input></span>";
     } else if (questions[j][1]['type'] == 'label') {
@@ -382,9 +382,11 @@ function subReport() {
           var name = x[i].children[0].id;
           push[`${series}-${user.uid.toString()}`.toString()][name] = document.querySelector('input[name="' + name + '"]:checked').value;
         } else if (x[i].children[1].tagName == "TEXTAREA") {
-          push[`${series}-${user.uid.toString()}`.toString()][x[i].children[1].id] = x[i].children[1].innerHTML;
+          push[`${series}-${user.uid.toString()}`.toString()][x[i].children[1].id] = x[i].children[1].value;
         }
       }
+      push[`${series}-${user.uid.toString()}`.toString()]['match']='match-'+matchNum;
+      push[`${series}-${user.uid.toString()}`.toString()]['teamDBRed']='team-'+teamNum;
       try {
         delete push[`${series}-${user.uid.toString()}`.toString()][""]
       } catch (e) {
