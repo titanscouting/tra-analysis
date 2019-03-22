@@ -382,7 +382,7 @@ function subReport() {
           var name = x[i].children[0].id;
           push[`${series}-${user.uid.toString()}`.toString()][name] = document.querySelector('input[name="' + name + '"]:checked').value;
         } else if (x[i].children[1].tagName == "TEXTAREA") {
-          push[`${series}-${user.uid.toString()}`.toString()][x[i].children[1].id] = x[i].children[1].innerHTML;
+          push[`${series}-${user.uid.toString()}`.toString()][x[i].children[1].id] = x[i].children[1].value;
         }
       }
       push[`${series}-${user.uid.toString()}`.toString()]['match']='match-'+matchNum;
