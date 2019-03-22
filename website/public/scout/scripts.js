@@ -385,6 +385,8 @@ function subReport() {
           push[`${series}-${user.uid.toString()}`.toString()][x[i].children[1].id] = x[i].children[1].innerHTML;
         }
       }
+      push[`${series}-${user.uid.toString()}`.toString()]['match']='match-'+matchNum;
+      push[`${series}-${user.uid.toString()}`.toString()]['teamDBRed']='team-'+teamNum;
       try {
         delete push[`${series}-${user.uid.toString()}`.toString()][""]
       } catch (e) {
