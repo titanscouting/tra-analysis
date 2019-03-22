@@ -206,6 +206,18 @@ function cseries(seriesName) {
 
 function processAndAppendReturn(data) {
   labels = Object.keys(data);
+  var index = labels.indexOf('header');
+  if (index > -1) {
+    labels.splice(index, 1);
+  }
+  var index = labels.indexOf('observationType');
+  if (index > -1) {
+    labels.splice(index, 1);
+  }
+  var index = labels.indexOf('header');
+  if (index > -1) {
+    labels.splice(index, 1);
+  }
   var questions = [];
   for (var j = 0; j < labels.length; j++) {
     questions.push([labels[j], data[labels[j]]]);
@@ -220,7 +232,7 @@ function processAndAppendReturn(data) {
       document.getElementById('FormData').innerHTML += "<input id=''" + questions[j][0] + "' type='text'></input>";
     } else if (questions[j][1]['type'] = 'longText') {
       document.getElementById('FormData').innerHTML += "<textarea id=''" + questions[j][0] + "' rows='4' cols='50''></textarea>";
-    } else if (questions[j][1]['type'] = 'numerical') {
+    } else if (questions[j][1]['type'] = 'stepper') {
       document.getElementById('FormData').innerHTML += "<span id='" + questions[j][0] + "'><input type='button' onclick='dec(" + questions[j][0] + ")' value='-'></input>" + (questions[j][1]['default']).toString() + "<input type='button' onclick='inc(" + questions[j][0] + ")' value='+'></input></span>";
     } else if (questions[j][1]['type'] = 'range') {
       document.getElementById('FormData').innerHTML += "&nbsp;&nbsp;" + questions[j][1]['min']['text'] + "&nbsp;&nbsp;";
