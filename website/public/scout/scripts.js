@@ -338,46 +338,47 @@ function subReport() {
       var matchNum = document.getElementById('mselect').value;
       var series = document.getElementById('sselect').value;
       var push = {}
+      push[user.uid]={}
       var x = document.getElementById('repsec1').children;
       for (var i = 0; i < x.length; i++) {
         if (x[i].children[0].tagName == "INPUT") {
-          push[x[i].children[0].id] = x[i].children[0].tagName;
+          push[user.uid][x[i].children[0].id] = x[i].children[0].tagName;
         } else if (x[i].children[0].tagName == "TEXTAREA") {
-          push[x[i].children[0].id] = x[i].children[0].innerHTML;
+          push[user.uid][x[i].children[0].id] = x[i].children[0].innerHTML;
         } else if (x[i].children[0].tagName == "SPAN") {
-          push[x[i].children[0].id] = x[i].children[0].innerText;
+          push[user.uid][x[i].children[0].id] = x[i].children[0].innerText;
         } else if (x[i].children[0].tagName == "DIV") {
           var name = x[i].children[0].id;
-          push[name] = document.querySelector('input[name="' + name + '"]:checked').value;
+          push[user.uid][name] = document.querySelector('input[name="' + name + '"]:checked').value;
         }
       }
       var x = document.getElementById('repsec2').children;
       for (var i = 0; i < x.length; i++) {
         if (x[i].children[0].tagName == "INPUT") {
-          push[x[i].children[0].id] = x[i].children[0].tagName;
+          push[user.uid][x[i].children[0].id] = x[i].children[0].tagName;
         } else if (x[i].children[0].tagName == "TEXTAREA") {
-          push[x[i].children[0].id] = x[i].children[0].innerHTML;
+          push[user.uid][x[i].children[0].id] = x[i].children[0].innerHTML;
         } else if (x[i].children[0].tagName == "SPAN") {
-          push[x[i].children[0].id] = x[i].children[0].innerText;
+          push[user.uid][x[i].children[0].id] = x[i].children[0].innerText;
         } else if (x[i].children[0].tagName == "DIV") {
           var name = x[i].children[0].id;
-          push[name] = document.querySelector('input[name="' + name + '"]:checked').value;
+          push[user.uid][name] = document.querySelector('input[name="' + name + '"]:checked').value;
         }
       }
       var x = document.getElementById('repsec3').children;
       for (var i = 0; i < x.length; i++) {
         if (x[i].children[0].tagName == "INPUT") {
-          push[x[i].children[0].id] = x[i].children[0].tagName;
+          push[user.uid][x[i].children[0].id] = x[i].children[0].tagName;
         } else if (x[i].children[0].tagName == "TEXTAREA") {
-          push[x[i].children[0].id] = x[i].children[0].innerHTML;
+          push[user.uid][x[i].children[0].id] = x[i].children[0].innerHTML;
         } else if (x[i].children[0].tagName == "SPAN") {
-          push[x[i].children[0].id] = x[i].children[0].innerText;
+          push[user.uid][x[i].children[0].id] = x[i].children[0].innerText;
         } else if (x[i].children[0].tagName == "DIV") {
           var name = x[i].children[0].id;
-          push[name] = document.querySelector('input[name="' + name + '"]:checked').value;
+          push[user.uid][name] = document.querySelector('input[name="' + name + '"]:checked').value;
         }
       }
-      firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(comp).doc("team-" + teamNum).collection('matches').doc('match-' + mselect).set({(user.uid+'-'+series), push}, {
+      firebase.firestore().collection("data").doc('team-' + document.getElementById('tns').value).collection(comp).doc("team-" + teamNum).collection('matches').doc('match-' + mselect).set(push, {
         merge: true
       })
     }
