@@ -136,7 +136,7 @@ function cseries(seriesName) {
 
       if (seriesName == "quantitative") {
         document.getElementById('FormData').innerHTML += "<h3>" + 'Sandstorm' + "</h3>";
-        document.getElementById('FormData').innerHTML += "<div id='repsec1'>""</div>";
+        document.getElementById('FormData').innerHTML += "<div id='repsec1'>"+"</div>";
         var ss = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appElements').doc('quantitativeSandstorm');
         ss.get().then(function(doc) {
           if (doc.exists) {
@@ -144,54 +144,49 @@ function cseries(seriesName) {
           }
         }).then(function() {
           document.getElementById('FormData').innerHTML += "<h3>" + 'TeleOp' + "</h3>";
-          document.getElementById('FormData').innerHTML += "<div id='repsec2'>";
+          document.getElementById('FormData').innerHTML += "<div id='repsec2'></div>";
           var to = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appElements').doc('quantitativeTeleop');
           to.get().then(function(doc) {
             if (doc.exists) {
-              processAndAppendReturn(doc.data())
+              processAndAppendReturn(doc.data(),'repsec2')
             }
-            document.getElementById('FormData').innerHTML += "</div>";
           }).then(function() {
             document.getElementById('FormData').innerHTML += "<h3>" + 'Cycle Times' + "</h3>";
-            document.getElementById('FormData').innerHTML += "<div id='repsec3'>";
+            document.getElementById('FormData').innerHTML += "<div id='repsec3'></div>";
             var cyc = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appElements').doc('quantitativeCycleTimes');
             cyc.get().then(function(doc) {
               if (doc.exists) {
-                processAndAppendReturn(doc.data())
+                processAndAppendReturn(doc.data(),'repsec3')
               }
-              document.getElementById('FormData').innerHTML += "</div>";
             }).then(function() {
-              document.getElementById('FormData').innerHTML += "<input type='button' onclick=subReport() value='Submit'>";
+              document.getElementById('FormData').innerHTML += "<br><input type='button' onclick=subReport() value='Submit'>";
             });
           });
         });
       } else if (seriesName = "qualitative") {
         document.getElementById('FormData').innerHTML += "<h3>" + 'Sandstorm' + "</h3>";
-        document.getElementById('FormData').innerHTML += "<div id='repsec1'>";
+        document.getElementById('FormData').innerHTML += "<div id='repsec1'></div>";
         var ss = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appElements').doc('qualitativeSandstorm');
         ss.get().then(function(doc) {
           if (doc.exists) {
-            processAndAppendReturn(doc.data())
+            processAndAppendReturn(doc.data(),'repsec1')
           }
-          document.getElementById('FormData').innerHTML += "</div>";
         }).then(function() {
           document.getElementById('FormData').innerHTML += "<h3>" + 'TeleOp' + "</h3>";
-          document.getElementById('FormData').innerHTML += "<div id='repsec2'>";
+          document.getElementById('FormData').innerHTML += "<div id='repsec2'></div>";
           var to = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appElements').doc('qualitativeTeleop');
           to.get().then(function(doc) {
             if (doc.exists) {
-              processAndAppendReturn(doc.data())
+              processAndAppendReturn(doc.data(),'repsec2')
             }
-            document.getElementById('FormData').innerHTML += "</div>";
           }).then(function() {
             document.getElementById('FormData').innerHTML += "<h3>" + 'Strategy' + "</h3>";
-            document.getElementById('FormData').innerHTML += "<div id='repsec3'>";
+            document.getElementById('FormData').innerHTML += "<div id='repsec3'></div>";
             var strat = firebase.firestore().collection('appBuilding').doc('team-' + teamNum).collection('competitions').doc(currentComp).collection('appElements').doc('qualitativeStrategy');
             strat.get().then(function(doc) {
               if (doc.exists) {
-                processAndAppendReturn(doc.data())
+                processAndAppendReturn(doc.data(),'repsec3')
               }
-              document.getElementById('FormData').innerHTML += "</div>";
             }).then(function() {
               document.getElementById('FormData').innerHTML += "<input type='button' onclick=subReport() value='Submit'>";
             });
