@@ -309,11 +309,11 @@ function updateForm(locString, teamNum, competition) {
 }
 */
 function dec(id) {
-  document.getElementById(id).textContent = (parseInt(document.getElementById(id).textContent) - 1).toString()
+  document.getElementById(id).innerHTML = "<input type='button' onclick=\"dec('" + id + "')\" value='-'></input>"+(parseInt(document.getElementById(id).textContent) - 1).toString()+"<input type='button' onclick=\"inc('" + id + "')\" value='+'></input>"
 }
 
 function inc(id) {
-  document.getElementById(id).textContent = (parseInt(document.getElementById(id).textContent) + 1).toString()
+  document.getElementById(id).innerHTML = "<input type='button' onclick=\"dec('" + id + "')\" value='-'></input>"+(parseInt(document.getElementById(id).textContent) + 1).toString()+"<input type='button' onclick=\"inc('" + id + "')\" value='+'></input>"
 }
 
 function subReport() {
