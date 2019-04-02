@@ -38,7 +38,7 @@ __changelog__ = """changelog:
     - added superstructure to code
 1.0.0.000:
     - added import statements (revolutionary)
-""" 
+"""
 
 __author__ = (
     "Arthur Lu <arthurlu@ttic.edu>, "
@@ -61,15 +61,15 @@ import tbarequest as tba
 import csv
 
 def titanservice():
-    
+
     print("[OK] loading data")
 
     start = time.time()
-    
+
     source_dir = 'data'
     file_list = glob.glob(source_dir + '/*.csv') #supposedly sorts by alphabetical order, skips reading teams.csv because of redundancy
     data = []
-    files = [fn for fn in glob.glob('data/*.csv') 
+    files = [fn for fn in glob.glob('data/*.csv')
              if not (os.path.basename(fn).startswith('scores') or os.path.basename(fn).startswith('teams') or os.path.basename(fn).startswith('match') or os.path.basename(fn).startswith('notes') or os.path.basename(fn).startswith('observationType') or os.path.basename(fn).startswith('teamDBRef'))] #scores will be handled sperately
 
     for i in files:
@@ -107,7 +107,7 @@ def titanservice():
                     #beqs, brmss, br2s, boverfit = analysis.select_best_regression(eqs, rmss, r2s, overfit, "min_overfit")
 
                     #print(eqs, rmss, r2s, overfit)
-                    
+
                     #ofbest_curve.append(beqs)
                     #ofbest_curve.append(brmss)
                     #ofbest_curve.append(br2s)
@@ -126,12 +126,12 @@ def titanservice():
 
                     #print(r2best_curve)
 
-                    
+
                     measure_stats.append(teams[i] + list(analysis.basic_stats(line, 0, 0)) + list(analysis.histo_analysis(line, 1, -3, 3)))
 
         stats.append(list(measure_stats))
         nishant = []
-            
+
     for i in range(len(scores)):
 
                 #print(scores)
@@ -144,7 +144,7 @@ def titanservice():
                 if len(line) < 4:
 
                     nishant.append('no_data')
-                    
+
                     continue
 
                 #print(line)
@@ -157,7 +157,7 @@ def titanservice():
                 beqs, brmss, br2s, boverfit = analysis.select_best_regression(eqs, rmss, r2s, overfit, "min_overfit")
 
                 #print(eqs, rmss, r2s, overfit)
-                    
+
                 ofbest_curve.append(beqs)
                 ofbest_curve.append(brmss)
                 ofbest_curve.append(br2s)
@@ -175,7 +175,7 @@ def titanservice():
                 r2best_curve.pop(0)
 
                 #print(r2best_curve)
-                    
+
                 z = len(scores[0]) + 1
                 nis_num = []
 
@@ -185,7 +185,7 @@ def titanservice():
                 nis_num.append((eval(ofbest_curve[0]) + eval(r2best_curve[0])) / 2)
 
                 nishant.append(teams[i] + nis_num)
-                
+
     json_out = {}
     score_out = {}
 
@@ -195,7 +195,7 @@ def titanservice():
     location = db.collection(u'stats').document(u'stats-noNN')
     for i in range(len(teams)):
         general_general_stats = location.collection(teams[i][0])
-        
+
         for j in range(len(files)):
             json_out[str(teams[i][0])] = (stats[j][i])
             name = os.path.basename(files[j])
@@ -217,7 +217,7 @@ def pulldata():
             if json_data[match].get('winning_alliance') == "":
                 #print(json_data[match])
                 json_data.remove(json_data[match])
-            
+
         json_data = sorted(json_data, key=lambda k: k.get('actual_time', 0), reverse=False)
         for j in range(len(json_data)):
             if "frc" + teams[i][0] in json_data[j].get('alliances').get('blue').get('team_keys'):
@@ -235,7 +235,7 @@ def pulldata():
     full=[]
     tms=[]
     for team in teams:
-        
+
         tms.append(team.id)
         reports=db.collection('data').document('team-2022').collection("Central 2019").document(team.id).collection("matches").get()
 
@@ -260,9 +260,9 @@ def pulldata():
     for i in range(len(full)):
         for j in range(len(full[i])):
             for key in list(full[i][j].keys()):
-                
+
                 if "Quantitative" in key:
-                    
+
                     quant_keys.append(key)
 
                     #print(full[i][j].get(key).get('teamDBRef')[5:] in list_teams)
@@ -272,20 +272,20 @@ def pulldata():
                     #print(list(full[i][j].keys()))
 
                     #print(list_teams)
-                    
+
                     if full[i][j].get(key).get('teamDBRef')[5:] in list_teams:
-                        
+
                         var = {}
                         measured_vars = []
-                        
+
                         for k in range(len(list(full[i][j].get(key).keys()))):
 
                             individual_keys = list(full[i][j].get(key).keys())
-                            
+
                             var[individual_keys[k]] = full[i][j].get(key).get(individual_keys[k])
 
                         out.append(var)
-    
+
     sorted_out = []
 
     for i in out:
@@ -328,7 +328,7 @@ def pulldata():
 
                 writer = csv.writer(file, delimiter = ',')
                 writer.writerows(big_out[i])
-            
+
 def service():
 
     while True:
@@ -340,7 +340,7 @@ def service():
         print("[OK] starting calculations")
 
         fucked = False
-        
+
         for i in range(0, 5):
             try:
                 titanservice()
@@ -358,7 +358,7 @@ def service():
             break
 
         else:
-            
+
             print("[OK] finished calculations")
 
         print("[OK] waiting: " + str(300 - (end - start)) + " seconds" + "\n")
