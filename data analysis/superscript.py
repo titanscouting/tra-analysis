@@ -96,37 +96,37 @@ def titanservice():
 
         for i in range(len(measure)):  # unpacks into specific teams
 
-            #ofbest_curve = [None]
-            #r2best_curve = [None]
+            ofbest_curve = [None]
+            r2best_curve = [None]
 
             line = measure[i]
 
             # print(line)
 
-            #x = list(range(len(line)))
-            #eqs, rmss, r2s, overfit = analysis.optimize_regression(x, line, 10, 1)
+            x = list(range(len(line)))
+            eqs, rmss, r2s, overfit = analysis.optimize_regression(x, line, 10, 1)
 
-            #beqs, brmss, br2s, boverfit = analysis.select_best_regression(eqs, rmss, r2s, overfit, "min_overfit")
+            beqs, brmss, br2s, boverfit = analysis.select_best_regression(eqs, rmss, r2s, overfit, "min_overfit")
 
-            #print(eqs, rmss, r2s, overfit)
+            print(eqs, rmss, r2s, overfit)
 
-            # ofbest_curve.append(beqs)
-            # ofbest_curve.append(brmss)
-            # ofbest_curve.append(br2s)
-            # ofbest_curve.append(boverfit)
-            # ofbest_curve.pop(0)
+            ofbest_curve.append(beqs)
+            ofbest_curve.append(brmss)
+            ofbest_curve.append(br2s)
+            ofbest_curve.append(boverfit)
+            ofbest_curve.pop(0)
 
-            # print(ofbest_curve)
+            print(ofbest_curve)
 
-            #beqs, brmss, br2s, boverfit = analysis.select_best_regression(eqs, rmss, r2s, overfit, "max_r2s")
+            beqs, brmss, br2s, boverfit = analysis.select_best_regression(eqs, rmss, r2s, overfit, "max_r2s")
 
-            # r2best_curve.append(beqs)
-            # r2best_curve.append(brmss)
-            # r2best_curve.append(br2s)
-            # r2best_curve.append(boverfit)
-            # r2best_curve.pop(0)
+            r2best_curve.append(beqs)
+            r2best_curve.append(brmss)
+            r2best_curve.append(br2s)
+            r2best_curve.append(boverfit)
+            r2best_curve.pop(0)
 
-            # print(r2best_curve)
+            print(r2best_curve)
 
             measure_stats.append(teams[i] + list(analysis.basic_stats(
                 line, 0, 0)) + list(analysis.histo_analysis(line, 1, -3, 3)))
