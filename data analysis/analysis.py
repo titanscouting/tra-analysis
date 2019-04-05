@@ -1,15 +1,15 @@
-#Titan Robotics Team 2022: Data Analysis Module
-#Written by Arthur Lu & Jacob Levine
-#Notes:
+# Titan Robotics Team 2022: Data Analysis Module
+# Written by Arthur Lu & Jacob Levine
+# Notes:
 #   this should be imported as a python module using 'import analysis'
 #   this should be included in the local directory or environment variable
 #   this module has not been optimized for multhreaded computing
-#number of easter eggs: 2
-#setup:
+# number of easter eggs: 2
+# setup:
 
 __version__ = "1.0.8.005"
 
-#changelog should be viewed using print(analysis.__changelog__)
+# changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
 1.0.8.005:
     - minor fixes
@@ -96,12 +96,12 @@ __changelog__ = """changelog:
 1.0.0.xxx:
     - added loading csv
     - added 1d, column, row basic stats
-""" 
+"""
 
 __author__ = (
     "Arthur Lu <arthurlu@ttic.edu>, "
     "Jacob Levine <jlevine@ttic.edu>,"
-    )
+)
 
 __all__ = [
     '_init_device',
@@ -125,12 +125,12 @@ __all__ = [
     'optimize_regression',
     'select_best_regression',
     'basic_analysis',
-    #all statistics functions left out due to integration in other functions
-    ]
+    # all statistics functions left out due to integration in other functions
+]
 
-#now back to your regularly scheduled programming:
+# now back to your regularly scheduled programming:
 
-#imports (now in alphabetical order! v 1.0.3.006):
+# imports (now in alphabetical order! v 1.0.3.006):
 
 from bisect import bisect_left, bisect_right
 import collections
@@ -149,16 +149,18 @@ import scipy
 from scipy.optimize import curve_fit
 from scipy import stats
 from sklearn import *
-#import statistics <-- statistics.py functions have been integrated into analysis.py as of v 1.0.3.002
+# import statistics <-- statistics.py functions have been integrated into analysis.py as of v 1.0.3.002
 import time
 import torch
-    
+
+
 class error(ValueError):
     pass
 
-def _init_device (setting, arg): #initiates computation device for ANNs
+
+def _init_device(setting, arg):  # initiates computation device for ANNs
     if setting == "cuda":
-        try: 
+        try:
             return torch.device(setting + ":" + str(arg) if torch.cuda.is_available() else "cpu")
         except:
             raise error("could not assign cuda or cpu")
@@ -169,6 +171,7 @@ def _init_device (setting, arg): #initiates computation device for ANNs
             raise error("could not assign cpu")
     else:
         raise error("specified device does not exist")
+
 
 class c_entities:
 
@@ -181,7 +184,7 @@ class c_entities:
     def debug(self):
         print("c_entities has attributes names, ids, positions, properties, and logic. __init__ takes self, 1d array of names, 1d array of ids, 2d array of positions, nd array of properties, and nd array of logic")
         return[self.c_names, self.c_ids, self.c_pos, self.c_properties, self.c_logic]
-    
+
     def __init__(self, names, ids, pos, properties, logic):
         self.c_names = names
         self.c_ids = ids
@@ -189,7 +192,6 @@ class c_entities:
         self.c_properties = properties
         self.c_logic = logic
         return None
-        
 
     def append(self, n_name, n_id, n_pos, n_property, n_logic):
         self.c_names.append(n_name)
@@ -198,7 +200,7 @@ class c_entities:
         self.c_properties.append(n_property)
         self.c_logic.append(n_logic)
         return None
-    
+
     def edit(self, search, n_name, n_id, n_pos, n_property, n_logic):
         position = 0
         for i in range(0, len(self.c_ids), 1):
@@ -206,32 +208,33 @@ class c_entities:
                 position = i
         if n_name != "null":
             self.c_names[position] = n_name
-    
+
         if n_id != "null":
             self.c_ids[position] = n_id
-    
+
         if n_pos != "null":
             self.c_pos[position] = n_pos
-    
+
         if n_property != "null":
             self.c_properties[position] = n_property
-    
+
         if n_logic != "null":
             self.c_logic[position] = n_logic
-    
+
         return None
-    
+
     def search(self, search):
         position = 0
         for i in range(0, len(self.c_ids), 1):
             if self.c_ids[i] == search:
                 position = i
 
-        return [self.c_names[position], self.c_ids[position], self.c_pos[position], self.c_properties[position], self.c_logic[position]]    
+        return [self.c_names[position], self.c_ids[position], self.c_pos[position], self.c_properties[position], self.c_logic[position]]
 
     def regurgitate(self):
         return[self.c_names, self.c_ids, self.c_pos, self.c_properties, self.c_logic]
-    
+
+
 class nc_entities:
 
     c_names = []
@@ -241,7 +244,7 @@ class nc_entities:
     c_effects = []
 
     def debug(self):
-        print ("nc_entities (non-controlable entities) has attributes names, ids, positions, properties, and effects. __init__ takes self, 1d array of names, 1d array of ids, 2d array of positions, 2d array of properties, and 2d array of effects.")
+        print("nc_entities (non-controlable entities) has attributes names, ids, positions, properties, and effects. __init__ takes self, 1d array of names, 1d array of ids, 2d array of positions, 2d array of properties, and 2d array of effects.")
         return[self.c_names, self.c_ids, self.c_pos, self.c_properties, self.c_effects]
 
     def __init__(self, names, ids, pos, properties, effects):
@@ -258,7 +261,7 @@ class nc_entities:
         self.c_pos.append(n_pos)
         self.c_properties.append(n_property)
         self.c_effects.append(n_effect)
-        
+
         return None
 
     def edit(self, search, n_name, n_id, n_pos, n_property, n_effect):
@@ -289,11 +292,12 @@ class nc_entities:
             if self.c_ids[i] == search:
                 position = i
 
-        return [self.c_names[position], self.c_ids[position], self.c_pos[position], self.c_properties[position], self.c_effects[position]]        
+        return [self.c_names[position], self.c_ids[position], self.c_pos[position], self.c_properties[position], self.c_effects[position]]
 
     def regurgitate(self):
 
         return[self.c_names, self.c_ids, self.c_pos, self.c_properties, self.c_effects]
+
 
 class obstacles:
 
@@ -337,7 +341,7 @@ class obstacles:
 
         if n_effect != "null":
             self.c_effects[position] = n_effect
-            
+
         return None
 
     def search(self, search):
@@ -351,8 +355,9 @@ class obstacles:
     def regurgitate(self):
         return[self.c_names, self.c_ids, self.c_perim, self.c_effects]
 
+
 class objectives:
-    
+
     c_names = []
     c_ids = []
     c_pos = []
@@ -361,21 +366,21 @@ class objectives:
     def debug(self):
         print("objectives has atributes names, ids, positions, and effects. __init__ takes self, 1d array of names, 1d array of ids, 2d array of position, 1d array of effects.")
         return [self.c_names, self.c_ids, self.c_pos, self.c_effects]
-    
+
     def __init__(self, names, ids, pos, effects):
         self.c_names = names
         self.c_ids = ids
         self.c_pos = pos
         self.c_effects = effects
         return None
-    
+
     def append(self, n_name, n_id, n_pos, n_effect):
         self.c_names.append(n_name)
         self.c_ids.append(n_id)
         self.c_pos.append(n_pos)
         self.c_effects.append(n_effect)
         return None
-    
+
     def edit(self, search, n_name, n_id, n_pos, n_effect):
         position = 0
         print(self.c_ids)
@@ -394,9 +399,9 @@ class objectives:
 
         if n_effect != "null":
             self.c_effects[position] = n_effect
-            
+
         return None
-    
+
     def search(self, search):
         position = 0
         for i in range(0, len(self.c_ids), 1):
@@ -407,15 +412,18 @@ class objectives:
 
     def regurgitate(self):
         return[self.c_names, self.c_ids, self.c_pos, self.c_effects]
-    
+
+
 def load_csv(filepath):
-    with open(filepath, newline = '') as csvfile:
+    with open(filepath, newline='') as csvfile:
         file_array = list(csv.reader(csvfile))
         csvfile.close()
     return file_array
 
-def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, 'column':c_basic_stats, 'row':r_basic_stats], arg for mode 1 or mode 2 for column or row
-    
+
+# data=array, mode = ['1d':1d_basic_stats, 'column':c_basic_stats, 'row':r_basic_stats], arg for mode 1 or mode 2 for column or row
+def basic_stats(data, method, arg):
+
     if method == 'debug':
         return "basic_stats requires 3 args: data, mode, arg; where data is data to be analyzed, mode is an int from 0 - 2 depending on type of analysis (by column or by row) and is only applicable to 2d arrays (for 1d arrays use mode 1), and arg is row/column number for mode 1 or mode 2; function returns: [mean, median, mode, stdev, variance]"
 
@@ -423,9 +431,9 @@ def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, '
 
         data_t = []
 
-        for i in range (0, len(data), 1):
+        for i in range(0, len(data), 1):
             data_t.append(float(data[i]))
-    
+
         _mean = mean(data_t)
         _median = median(data_t)
         try:
@@ -433,7 +441,7 @@ def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, '
         except:
             _mode = None
         try:
-            _stdev = stdev(data_t)  
+            _stdev = stdev(data_t)
         except:
             _stdev = None
         try:
@@ -442,18 +450,18 @@ def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, '
             _variance = None
 
         return _mean, _median, _mode, _stdev, _variance
-    
+
     elif method == "column" or method == 1:
 
         c_data = []
         c_data_sorted = []
-        
+
         for i in data:
             try:
                 c_data.append(float(i[arg]))
             except:
                 pass
-            
+
         _mean = mean(c_data)
         _median = median(c_data)
         try:
@@ -477,7 +485,7 @@ def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, '
 
         for i in range(len(data[arg])):
             r_data.append(float(data[arg][i]))
-        
+
         _mean = mean(r_data)
         _median = median(r_data)
         try:
@@ -492,69 +500,77 @@ def basic_stats(data, method, arg): # data=array, mode = ['1d':1d_basic_stats, '
             _variance = variance(r_data)
         except:
             _variance = None
-        
+
         return _mean, _median, _mode, _stdev, _variance
 
     else:
         raise error("method error")
-    
-def z_score(point, mean, stdev): #returns z score with inputs of point, mean and standard deviation of spread
-    score = (point - mean)/stdev
+
+
+# returns z score with inputs of point, mean and standard deviation of spread
+def z_score(point, mean, stdev):
+    score = (point - mean) / stdev
     return score
 
-def z_normalize(x, y, mode): #mode is either 'x' or 'y' or 'both' depending on the variable(s) to be normalized
 
-	x_norm = []
-	y_norm = []
+# mode is either 'x' or 'y' or 'both' depending on the variable(s) to be normalized
+def z_normalize(x, y, mode):
 
-	mean = 0
-	stdev = 0
+    x_norm = []
+    y_norm = []
 
-	if mode == 'x':
-		_mean, _median, _mode, _stdev, _variance = basic_stats(x, "1d", 0)
+    mean = 0
+    stdev = 0
 
-		for i in range (0, len(x), 1):
-			x_norm.append(z_score(x[i], _mean, _stdev))
+    if mode == 'x':
+        _mean, _median, _mode, _stdev, _variance = basic_stats(x, "1d", 0)
 
-		return x_norm, y
+        for i in range(0, len(x), 1):
+            x_norm.append(z_score(x[i], _mean, _stdev))
 
-	if mode == 'y': 
-		_mean, _median, _mode, _stdev, _variance = basic_stats(y, "1d", 0)
+        return x_norm, y
 
-		for i in range (0, len(y), 1):
-			y_norm.append(z_score(y[i], _mean, _stdev))
+    if mode == 'y':
+        _mean, _median, _mode, _stdev, _variance = basic_stats(y, "1d", 0)
 
-		return x, y_norm
+        for i in range(0, len(y), 1):
+            y_norm.append(z_score(y[i], _mean, _stdev))
 
-	if mode == 'both':
-		_mean, _median, _mode, _stdev, _variance = basic_stats(x, "1d", 0)
+        return x, y_norm
 
-		for i in range (0, len(x), 1):
-			x_norm.append(z_score(x[i], _mean, _stdev))
+    if mode == 'both':
+        _mean, _median, _mode, _stdev, _variance = basic_stats(x, "1d", 0)
 
-		_mean, _median, _mode, _stdev, _variance = basic_stats(y, "1d", 0)
+        for i in range(0, len(x), 1):
+            x_norm.append(z_score(x[i], _mean, _stdev))
 
-		for i in range (0, len(y), 1):
-			y_norm.append(z_score(y[i], _mean, _stdev))
+        _mean, _median, _mode, _stdev, _variance = basic_stats(y, "1d", 0)
 
-		return x_norm, y_norm
+        for i in range(0, len(y), 1):
+            y_norm.append(z_score(y[i], _mean, _stdev))
 
-	else:
+        return x_norm, y_norm
 
-		return error('method error')
+    else:
 
-def stdev_z_split(mean, stdev, delta, low_bound, high_bound): #returns n-th percentile of spread given mean, standard deviation, lower z-score, and upper z-score
+        return error('method error')
+
+
+# returns n-th percentile of spread given mean, standard deviation, lower z-score, and upper z-score
+def stdev_z_split(mean, stdev, delta, low_bound, high_bound):
 
     z_split = []
     i = low_bound
 
     while True:
-        z_split.append(float((1 / (stdev * math.sqrt(2 * math.pi))) * math.e ** (-0.5 * (((i - mean) / stdev) ** 2))))
+        z_split.append(float((1 / (stdev * math.sqrt(2 * math.pi))) *
+                             math.e ** (-0.5 * (((i - mean) / stdev) ** 2))))
         i = i + delta
         if i > high_bound:
             break
 
     return z_split
+
 
 def histo_analysis(hist_data, delta, low_bound, high_bound):
 
@@ -565,12 +581,12 @@ def histo_analysis(hist_data, delta, low_bound, high_bound):
 
     for i in range(0, len(hist_data), 1):
         try:
-            derivative.append(float(hist_data[i - 1]) - float(hist_data [i]))
+            derivative.append(float(hist_data[i - 1]) - float(hist_data[i]))
         except:
             pass
 
     derivative_sorted = sorted(derivative, key=int)
-    mean_derivative = basic_stats(derivative_sorted,"1d", 0)[0]
+    mean_derivative = basic_stats(derivative_sorted, "1d", 0)[0]
     stdev_derivative = basic_stats(derivative_sorted, "1d", 0)[3]
 
     predictions = []
@@ -584,7 +600,7 @@ def histo_analysis(hist_data, delta, low_bound, high_bound):
 
         try:
             pred_change = mean_derivative + i * stdev_derivative
-        except:  
+        except:
             pred_change = mean_derivative
 
         predictions.append(float(hist_data[-1:][0]) + pred_change)
@@ -593,23 +609,26 @@ def histo_analysis(hist_data, delta, low_bound, high_bound):
 
     return predictions
 
+
 def poly_regression(x, y, power):
 
-    if x == "null": #if x is 'null', then x will be filled with integer points between 1 and the size of y
+    if x == "null":  # if x is 'null', then x will be filled with integer points between 1 and the size of y
         x = []
 
         for i in range(len(y)):
             print(i)
-            x.append(i+1)
+            x.append(i + 1)
 
-    reg_eq = scipy.polyfit(x, y, deg = power)
+    reg_eq = scipy.polyfit(x, y, deg=power)
     eq_str = ""
 
     for i in range(0, len(reg_eq), 1):
-        if i < len(reg_eq)- 1:
-            eq_str = eq_str + str(reg_eq[i]) + "*(z**" + str(len(reg_eq) - i - 1) + ")+"
+        if i < len(reg_eq) - 1:
+            eq_str = eq_str + str(reg_eq[i]) + \
+                "*(z**" + str(len(reg_eq) - i - 1) + ")+"
         else:
-            eq_str = eq_str + str(reg_eq[i]) + "*(z**" + str(len(reg_eq) - i - 1) + ")"
+            eq_str = eq_str + str(reg_eq[i]) + \
+                "*(z**" + str(len(reg_eq) - i - 1) + ")"
 
     vals = []
 
@@ -617,108 +636,121 @@ def poly_regression(x, y, power):
         z = x[i]
 
         try:
-        	exec("vals.append(" + eq_str + ")")
+            exec("vals.append(" + eq_str + ")")
         except:
-        	pass
+            pass
 
     _rms = rms(vals, y)
-    r2_d2 = r_squared(vals, y) 
+    r2_d2 = r_squared(vals, y)
 
     return [eq_str, _rms, r2_d2]
 
+
 def log_regression(x, y, base):
 
-	x_fit = []
-	
-	for i in range(len(x)):
-		try:
-			x_fit.append(np.log(x[i]) / np.log(base)) #change of base for logs
-		except:
-			pass
+    x_fit = []
 
-	reg_eq = np.polyfit(x_fit, y, 1) # y = reg_eq[0] * log(x, base) + reg_eq[1]
-	q_str = str(reg_eq[0]) + "* (np.log(z) / np.log(" + str(base) +"))+" + str(reg_eq[1])
-	vals = []
+    for i in range(len(x)):
+        try:
+            # change of base for logs
+            x_fit.append(np.log(x[i]) / np.log(base))
+        except:
+            pass
 
-	for i in range(len(x)):
-		z = x[i]
+    # y = reg_eq[0] * log(x, base) + reg_eq[1]
+    reg_eq = np.polyfit(x_fit, y, 1)
+    q_str = str(reg_eq[0]) + "* (np.log(z) / np.log(" + \
+        str(base) + "))+" + str(reg_eq[1])
+    vals = []
 
-		try:
-			exec("vals.append(" + eq_str + ")")
-		except:
-			pass
+    for i in range(len(x)):
+        z = x[i]
 
-	_rms = rms(vals, y)
-	r2_d2 = r_squared(vals, y)
+        try:
+            exec("vals.append(" + eq_str + ")")
+        except:
+            pass
 
-	return eq_str, _rms, r2_d2
+    _rms = rms(vals, y)
+    r2_d2 = r_squared(vals, y)
+
+    return eq_str, _rms, r2_d2
+
 
 def exp_regression(x, y, base):
 
-	y_fit = []
+    y_fit = []
 
-	for i in range(len(y)):
-		try:       
-			y_fit.append(np.log(y[i]) / np.log(base)) #change of base for logs
-		except:
-			pass
+    for i in range(len(y)):
+        try:
+            # change of base for logs
+            y_fit.append(np.log(y[i]) / np.log(base))
+        except:
+            pass
 
-	reg_eq = np.polyfit(x, y_fit, 1, w=np.sqrt(y_fit)) # y = base ^ (reg_eq[0] * x) * base ^ (reg_eq[1])
-	eq_str = "(" + str(base) + "**(" + str(reg_eq[0]) + "*z))*(" + str(base) + "**(" + str(reg_eq[1]) + "))"
-	vals = []
+    # y = base ^ (reg_eq[0] * x) * base ^ (reg_eq[1])
+    reg_eq = np.polyfit(x, y_fit, 1, w=np.sqrt(y_fit))
+    eq_str = "(" + str(base) + "**(" + \
+        str(reg_eq[0]) + "*z))*(" + str(base) + "**(" + str(reg_eq[1]) + "))"
+    vals = []
 
-	for i in range(len(x)):
-		z = x[i]
+    for i in range(len(x)):
+        z = x[i]
 
-		try:
-			exec("vals.append(" + eq_str + ")")
-		except:
-			pass
+        try:
+            exec("vals.append(" + eq_str + ")")
+        except:
+            pass
 
-	_rms = rms(vals, y)
-	r2_d2 = r_squared(vals, y)
+    _rms = rms(vals, y)
+    r2_d2 = r_squared(vals, y)
 
-	return eq_str, _rms, r2_d2
+    return eq_str, _rms, r2_d2
+
 
 def tanh_regression(x, y):
 
-	def tanh (x, a, b, c, d):
+    def tanh(x, a, b, c, d):
 
-		return a * np.tanh(b * (x - c)) + d
+        return a * np.tanh(b * (x - c)) + d
 
-	reg_eq = np.float64(curve_fit(tanh, np.array(x), np.array(y))[0]).tolist()
-	eq_str = str(reg_eq[0]) + " * np.tanh(" + str(reg_eq[1]) + "*(z - " + str(reg_eq[2]) + ")) + " + str(reg_eq[3])
-	vals = []
+    reg_eq = np.float64(curve_fit(tanh, np.array(x), np.array(y))[0]).tolist()
+    eq_str = str(reg_eq[0]) + " * np.tanh(" + str(reg_eq[1]) + \
+        "*(z - " + str(reg_eq[2]) + ")) + " + str(reg_eq[3])
+    vals = []
 
-	for i in range(len(x)):
-		z = x[i]
-		try:
-			exec("vals.append(" + eq_str + ")")
-		except:
-			pass
+    for i in range(len(x)):
+        z = x[i]
+        try:
+            exec("vals.append(" + eq_str + ")")
+        except:
+            pass
 
-	_rms = rms(vals, y)
-	r2_d2 = r_squared(vals, y)
+    _rms = rms(vals, y)
+    r2_d2 = r_squared(vals, y)
 
-	return eq_str, _rms, r2_d2
-    
-def r_squared(predictions, targets): # assumes equal size inputs
+    return eq_str, _rms, r2_d2
+
+
+def r_squared(predictions, targets):  # assumes equal size inputs
 
     return metrics.r2_score(np.array(targets), np.array(predictions))
 
-def rms(predictions, targets): # assumes equal size inputs
+
+def rms(predictions, targets):  # assumes equal size inputs
 
     _sum = 0
 
     for i in range(0, len(targets), 1):
         _sum = (targets[i] - predictions[i]) ** 2
 
-    return float(math.sqrt(_sum/len(targets)))
+    return float(math.sqrt(_sum / len(targets)))
+
 
 def calc_overfit(equation, rms_train, r2_train, x_test, y_test):
 
-    #performance overfit = performance(train) - performance(test) where performance is r^2
-    #error overfit = error(train) - error(test) where error is rms; biased towards smaller values
+    # performance overfit = performance(train) - performance(test) where performance is r^2
+    # error overfit = error(train) - error(test) where error is rms; biased towards smaller values
 
     vals = []
 
@@ -733,19 +765,22 @@ def calc_overfit(equation, rms_train, r2_train, x_test, y_test):
 
     return r2_train - r2_test
 
+
 def strip_data(data, mode):
 
-    if mode == "adam": #x is the row number, y are the data
+    if mode == "adam":  # x is the row number, y are the data
         pass
 
-    if mode == "eve": #x are the data, y is the column number
+    if mode == "eve":  # x are the data, y is the column number
         pass
 
     else:
         raise error("mode error")
 
-def optimize_regression(x, y, _range, resolution):#_range in poly regression is the range of powers tried, and in log/exp it is the inverse of the stepsize taken from -1000 to 1000
-#usage not: for demonstration purpose only, performance is shit
+
+# _range in poly regression is the range of powers tried, and in log/exp it is the inverse of the stepsize taken from -1000 to 1000
+def optimize_regression(x, y, _range, resolution):
+    # usage not: for demonstration purpose only, performance is shit
     if type(resolution) != int:
         raise error("resolution must be int")
 
@@ -758,7 +793,7 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
     x_test = []
     y_test = []
 
-    for i in range (0, math.floor(len(x) * 0.5), 1):
+    for i in range(0, math.floor(len(x) * 0.5), 1):
         index = random.randint(0, len(x) - 1)
 
         x_test.append(x[index])
@@ -769,12 +804,12 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
 
     #print(x_train, x_test)
     #print(y_train, y_test)
-    
+
     eqs = []
     rmss = []
     r2s = []
 
-    for i in range (0, _range + 1, 1):
+    for i in range(0, _range + 1, 1):
         try:
             x, y, z = poly_regression(x_train, y_train, i)
             eqs.append(x)
@@ -783,21 +818,21 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
         except:
             pass
 
-    for i in range (1, 100 * resolution + 1):
+    for i in range(1, 100 * resolution + 1):
         try:
-        	x, y, z = exp_regression(x_train, y_train, float(i / resolution))
-        	eqs.append(x)
-        	rmss.append(y)
-        	r2s.append(z)
+            x, y, z = exp_regression(x_train, y_train, float(i / resolution))
+            eqs.append(x)
+            rmss.append(y)
+            r2s.append(z)
         except:
             pass
 
-    for i in range (1, 100 * resolution + 1):
+    for i in range(1, 100 * resolution + 1):
         try:
-        	x, y, z = log_regression(x_train, y_train, float(i / resolution))
-        	eqs.append(x)
-        	rmss.append(y)
-        	r2s.append(z)
+            x, y, z = log_regression(x_train, y_train, float(i / resolution))
+            eqs.append(x)
+            rmss.append(y)
+            r2s.append(z)
         except:
             pass
 
@@ -809,15 +844,16 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
         r2s.append(z)
     except:
         pass
-    
-    for i in range (0, len(eqs), 1): #marks all equations where r2 = 1 as they 95% of the time overfit the data
+
+    # marks all equations where r2 = 1 as they 95% of the time overfit the data
+    for i in range(0, len(eqs), 1):
         if r2s[i] == 1:
             eqs[i] = ""
             rmss[i] = ""
             r2s[i] = ""
 
-    while True: #removes all equations marked for removal
-        try:        
+    while True:  # removes all equations marked for removal
+        try:
             eqs.remove('')
             rmss.remove('')
             r2s.remove('')
@@ -826,11 +862,12 @@ def optimize_regression(x, y, _range, resolution):#_range in poly regression is 
 
     overfit = []
 
-    for i in range (0, len(eqs), 1):
+    for i in range(0, len(eqs), 1):
 
         overfit.append(calc_overfit(eqs[i], rmss[i], r2s[i], x_test, y_test))
-            
+
     return eqs, rmss, r2s, overfit
+
 
 def select_best_regression(eqs, rmss, r2s, overfit, selector):
 
@@ -860,37 +897,40 @@ def select_best_regression(eqs, rmss, r2s, overfit, selector):
 
     return b_eq, b_rms, b_r2, b_overfit
 
-def p_value(x, y): #takes 2 1d arrays
-	
-	return stats.ttest_ind(x, y)[1]
 
-def basic_analysis(data): #assumes that rows are the independent variable and columns are the dependant. also assumes that time flows from lowest column to highest column.
+def p_value(x, y):  # takes 2 1d arrays
 
-	row = len(data)
-	column = []
-    
-	for i in range(0, row, 1):        
-		column.append(len(data[i]))
-        
-	column_max = max(column)
-	row_b_stats = []
-	row_histo = []
-    
-	for i in range(0, row, 1):
-		row_b_stats.append(basic_stats(data, "row", i))
-		row_histo.append(histo_analysis(data[i], 0.67449, -0.67449, 0.67449))
-    
-	column_b_stats = []
-    
-	for i in range(0, column_max, 1):
-		column_b_stats.append(basic_stats(data, "column", i))
-    
-	return[row_b_stats, column_b_stats, row_histo]
+    return stats.ttest_ind(x, y)[1]
+
+
+# assumes that rows are the independent variable and columns are the dependant. also assumes that time flows from lowest column to highest column.
+def basic_analysis(data):
+
+    row = len(data)
+    column = []
+
+    for i in range(0, row, 1):
+        column.append(len(data[i]))
+
+    column_max = max(column)
+    row_b_stats = []
+    row_histo = []
+
+    for i in range(0, row, 1):
+        row_b_stats.append(basic_stats(data, "row", i))
+        row_histo.append(histo_analysis(data[i], 0.67449, -0.67449, 0.67449))
+
+    column_b_stats = []
+
+    for i in range(0, column_max, 1):
+        column_b_stats.append(basic_stats(data, "column", i))
+
+    return[row_b_stats, column_b_stats, row_histo]
 
 
 def benchmark(x, y):
 
-    start_g = time.time() 
+    start_g = time.time()
     generate_data("data/data.csv", x, y, -10, 10)
     end_g = time.time()
 
@@ -900,21 +940,24 @@ def benchmark(x, y):
 
     return [(end_g - start_g), (end_a - start_a)]
 
+
 def generate_data(filename, x, y, low, high):
 
     file = open(filename, "w")
 
-    for i in range (0, y, 1):
+    for i in range(0, y, 1):
         temp = ""
-        
-        for j in range (0, x - 1, 1):
-            temp = str(random.uniform(low, high)) +  ","  + temp
+
+        for j in range(0, x - 1, 1):
+            temp = str(random.uniform(low, high)) + "," + temp
 
         temp = temp + str(random.uniform(low, high))
         file.write(temp + "\n")
 
+
 class StatisticsError(ValueError):
     pass
+
 
 def _sum(data, start=0):
     count = 0
@@ -924,7 +967,7 @@ def _sum(data, start=0):
     T = _coerce(int, type(start))
     for typ, values in groupby(data, type):
         T = _coerce(T, typ)  # or raise TypeError
-        for n,d in map(_exact_ratio, values):
+        for n, d in map(_exact_ratio, values):
             count += 1
             partials[d] = partials_get(d, 0) + n
     if None in partials:
@@ -936,26 +979,35 @@ def _sum(data, start=0):
         total = sum(Fraction(n, d) for d, n in sorted(partials.items()))
     return (T, total, count)
 
+
 def _isfinite(x):
     try:
         return x.is_finite()  # Likely a Decimal.
     except AttributeError:
         return math.isfinite(x)  # Coerces to float first.
 
+
 def _coerce(T, S):
 
     assert T is not bool, "initial type T is bool"
 
-    if T is S:  return T
+    if T is S:
+        return T
 
-    if S is int or S is bool:  return T
-    if T is int:  return S
+    if S is int or S is bool:
+        return T
+    if T is int:
+        return S
 
-    if issubclass(S, T):  return S
-    if issubclass(T, S):  return T
+    if issubclass(S, T):
+        return S
+    if issubclass(T, S):
+        return T
 
-    if issubclass(T, int):  return S
-    if issubclass(S, int):  return T
+    if issubclass(T, int):
+        return S
+    if issubclass(S, int):
+        return T
 
     if issubclass(T, Fraction) and issubclass(S, float):
         return S
@@ -964,6 +1016,7 @@ def _coerce(T, S):
 
     msg = "don't know how to coerce %s and %s"
     raise TypeError(msg % (T.__name__, S.__name__))
+
 
 def _exact_ratio(x):
 
@@ -988,6 +1041,7 @@ def _exact_ratio(x):
     msg = "can't convert type '{}' to numerator/denominator"
     raise TypeError(msg.format(type(x).__name__))
 
+
 def _convert(value, T):
 
     if type(value) is T:
@@ -1000,9 +1054,10 @@ def _convert(value, T):
         return T(value)
     except TypeError:
         if issubclass(T, Decimal):
-            return T(value.numerator)/T(value.denominator)
+            return T(value.numerator) / T(value.denominator)
         else:
             raise
+
 
 def _counts(data):
 
@@ -1029,8 +1084,8 @@ def _find_lteq(a, x):
 def _find_rteq(a, l, x):
 
     i = bisect_right(a, x, lo=l)
-    if i != (len(a)+1) and a[i-1] == x:
-        return i-1
+    if i != (len(a) + 1) and a[i - 1] == x:
+        return i - 1
     raise ValueError
 
 
@@ -1041,6 +1096,7 @@ def _fail_neg(values, errmsg='negative value'):
             raise StatisticsError(errmsg)
         yield x
 
+
 def mean(data):
 
     if iter(data) is data:
@@ -1050,43 +1106,47 @@ def mean(data):
         raise StatisticsError('mean requires at least one data point')
     T, total, count = _sum(data)
     assert count == n
-    return _convert(total/n, T)
+    return _convert(total / n, T)
+
 
 def median(data):
-    
+
     data = sorted(data)
     n = len(data)
     if n == 0:
         raise StatisticsError("no median for empty data")
-    if n%2 == 1:
-        return data[n//2]
+    if n % 2 == 1:
+        return data[n // 2]
     else:
-        i = n//2
-        return (data[i - 1] + data[i])/2
+        i = n // 2
+        return (data[i - 1] + data[i]) / 2
+
 
 def mode(data):
-    
+
     table = _counts(data)
     if len(table) == 1:
         return table[0][0]
     elif table:
         raise StatisticsError(
-                'no unique mode; found %d equally common values' % len(table)
-                )
+            'no unique mode; found %d equally common values' % len(table)
+        )
     else:
         raise StatisticsError('no mode for empty data')
+
 
 def _ss(data, c=None):
 
     if c is None:
         c = mean(data)
-    T, total, count = _sum((x-c)**2 for x in data)
+    T, total, count = _sum((x - c)**2 for x in data)
 
-    U, total2, count2 = _sum((x-c) for x in data)
+    U, total2, count2 = _sum((x - c) for x in data)
     assert T == U and count == count2
-    total -=  total2**2/len(data)
+    total -= total2**2 / len(data)
     assert not total < 0, 'negative sum of square deviations: %f' % total
     return (T, total)
+
 
 def variance(data, xbar=None):
 
@@ -1096,7 +1156,8 @@ def variance(data, xbar=None):
     if n < 2:
         raise StatisticsError('variance requires at least two data points')
     T, ss = _ss(data, xbar)
-    return _convert(ss/(n-1), T)
+    return _convert(ss / (n - 1), T)
+
 
 def stdev(data, xbar=None):
 
