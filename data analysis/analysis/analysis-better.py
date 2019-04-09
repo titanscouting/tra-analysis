@@ -14,6 +14,7 @@ __changelog__ = """changelog:
 1.0.9.000:
     - refactored
     - numpyed everything
+    - removed stats in favor of numpy functions
 1.0.8.005:
     - minor fixes
 1.0.8.004:
@@ -160,7 +161,6 @@ import torch
 class error(ValueError):
     pass
 
-
 def _init_device(setting, arg):  # initiates computation device for ANNs
     if setting == "cuda":
         try:
@@ -177,10 +177,9 @@ def _init_device(setting, arg):  # initiates computation device for ANNs
 
 def load_csv(filepath):
     with open(filepath, newline='') as csvfile:
-        file_array = list(csv.reader(csvfile))
+        file_array = np.array(list(csv.reader(csvfile)))
         csvfile.close()
     return file_array
-
 
 # data=array, mode = ['1d':1d_basic_stats, 'column':c_basic_stats, 'row':r_basic_stats], arg for mode 1 or mode 2 for column or row
 def basic_stats(data, method, arg):
@@ -190,10 +189,7 @@ def basic_stats(data, method, arg):
 
     if method == "1d" or method == 0:
 
-        data_t = []
-
-        for i in range(0, len(data), 1):
-            data_t.append(float(data[i]))
+        data_t = np.array(data).astype(float)
 
         _mean = mean(data_t)
         _median = median(data_t)
@@ -211,7 +207,7 @@ def basic_stats(data, method, arg):
             _variance = None
 
         return _mean, _median, _mode, _stdev, _variance
-
+    """
     elif method == "column" or method == 1:
 
         c_data = []
@@ -239,7 +235,7 @@ def basic_stats(data, method, arg):
             _variance = None
 
         return _mean, _median, _mode, _stdev, _variance
-
+    
     elif method == "row" or method == 2:
 
         r_data = []
@@ -263,9 +259,10 @@ def basic_stats(data, method, arg):
             _variance = None
 
         return _mean, _median, _mode, _stdev, _variance
-
+    
     else:
         raise error("method error")
+    """
 
 
 # returns z score with inputs of point, mean and standard deviation of spread
@@ -277,8 +274,8 @@ def z_score(point, mean, stdev):
 # mode is either 'x' or 'y' or 'both' depending on the variable(s) to be normalized
 def z_normalize(x, y, mode):
 
-    x_norm = []
-    y_norm = []
+    x_norm = np.array().astype(float)
+    y_norm = np.array().astype(float)
 
     mean = 0
     stdev = 0
@@ -320,7 +317,7 @@ def z_normalize(x, y, mode):
 # returns n-th percentile of spread given mean, standard deviation, lower z-score, and upper z-score
 def stdev_z_split(mean, stdev, delta, low_bound, high_bound):
 
-    z_split = []
+    z_split = np.array().astype(float)
     i = low_bound
 
     while True:
@@ -715,6 +712,27 @@ def generate_data(filename, x, y, low, high):
         temp = temp + str(random.uniform(low, high))
         file.write(temp + "\n")
 
+def mean(data):
+
+    return np.mean(data)
+
+def median(data):
+
+    return np.median(data)
+
+def mode(data):
+
+    return np.argmax(np.bincount(data))
+
+def stdev(data):
+
+    return np.std(data)
+
+def variance(data):
+
+    return np.var(data)
+
+"""
 
 class StatisticsError(ValueError):
     pass
@@ -856,8 +874,6 @@ def _fail_neg(values, errmsg='negative value'):
         if x < 0:
             raise StatisticsError(errmsg)
         yield x
-
-
 def mean(data):
 
     if iter(data) is data:
@@ -927,3 +943,4 @@ def stdev(data, xbar=None):
         return var.sqrt()
     except AttributeError:
         return math.sqrt(var)
+"""
