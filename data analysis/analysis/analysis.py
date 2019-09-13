@@ -4,7 +4,6 @@
 #   this should be imported as a python module using 'import analysis'
 #   this should be included in the local directory or environment variable
 #   this module has not been optimized for multhreaded computing
-# number of easter eggs: 2
 # setup:
 
 __version__ = "1.1.0.002"
@@ -166,7 +165,7 @@ def load_csv(filepath):
         csvfile.close()
     return file_array
 
-# data=array, mode = ['1d':1d_basic_stats, 'column':c_basic_stats, 'row':r_basic_stats], arg for mode 1 or mode 2 for column or row
+# expects 1d array
 @jit(forceobj=True)
 def basic_stats(data):
 
