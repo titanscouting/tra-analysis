@@ -6,10 +6,12 @@
 #   this module has not been optimized for multhreaded computing
 # setup:
 
-__version__ = "1.1.0.002"
+__version__ = "1.1.0.003"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.1.0.003:
+    - resolved nopython mode for mean, median, stdev, variance
 1.1.0.002:
     - snapped (removed) majority of uneeded imports
     - forced object mode (bad) on all jit
@@ -214,22 +216,22 @@ def histo_analysis(hist_data):
 
     return mean_derivative, stdev_derivative
 
-@jit(forceobj=True)
+@jit(nopython=True)
 def mean(data):
 
     return np.mean(data)
 
-@jit(forceobj=True)
+@jit(nopython=True)
 def median(data):
 
     return np.median(data)
 
-@jit(forceobj=True)
+@jit(nopython=True)
 def stdev(data):
 
     return np.std(data)
 
-@jit(forceobj=True)
+@jit(nopython=True)
 def variance(data):
 
     return np.var(data)
