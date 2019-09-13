@@ -7,10 +7,14 @@
 # number of easter eggs: 2
 # setup:
 
-__version__ = "1.1.0.001"
+__version__ = "1.1.0.002"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.1.0.002:
+    - snapped (removed) majority of uneeded imports
+    - forced object mode (bad) on all jit
+    - TODO: stop numba complaining about not being able to compile in nopython mode
 1.1.0.001:
     - removed from sklearn import * to resolve uneeded wildcard imports
 1.1.0.000:
@@ -132,28 +136,11 @@ __all__ = [
 
 # imports (now in alphabetical order! v 1.0.3.006):
 
-from bisect import bisect_left, bisect_right
-import collections
 import csv
-from decimal import Decimal
-import functools
-from fractions import Fraction
-from itertools import groupby
-import math
-import matplotlib
 import numba
 from numba import jit
-import numbers
 import numpy as np
-import pandas
-import random
-import scipy
-from scipy.optimize import curve_fit
-from scipy import stats
 from sklearn import preprocessing
-# import statistics <-- statistics.py functions have been integrated into analysis.py as of v 1.0.3.002
-import time
-import torch
 
 class error(ValueError):
     pass
@@ -172,7 +159,7 @@ def _init_device(setting, arg):  # initiates computation device for ANNs
     else:
         raise error("specified device does not exist")
 
-@jit
+@jit(forceobj=True)
 def load_csv(filepath):
     with open(filepath, newline='') as csvfile:
         file_array = np.array(list(csv.reader(csvfile)))
@@ -180,7 +167,7 @@ def load_csv(filepath):
     return file_array
 
 # data=array, mode = ['1d':1d_basic_stats, 'column':c_basic_stats, 'row':r_basic_stats], arg for mode 1 or mode 2 for column or row
-@jit
+@jit(forceobj=True)
 def basic_stats(data):
 
     data_t = np.array(data).astype(float)
@@ -193,13 +180,13 @@ def basic_stats(data):
     return _mean, _median, _stdev, _variance
 
 # returns z score with inputs of point, mean and standard deviation of spread
-@jit
+@jit(forceobj=True)
 def z_score(point, mean, stdev):
     score = (point - mean) / stdev
     return score
 
 # expects 2d array, normalizes across all axes
-@jit
+@jit(forceobj=True)
 def z_normalize(array, *args):
 
    array = np.array(array)
@@ -210,7 +197,7 @@ def z_normalize(array, *args):
 
    return array
 
-@jit
+@jit(forceobj=True)
 # expects 2d array of [x,y]
 def histo_analysis(hist_data):
 
@@ -228,22 +215,22 @@ def histo_analysis(hist_data):
 
     return mean_derivative, stdev_derivative
 
-@jit
+@jit(forceobj=True)
 def mean(data):
 
     return np.mean(data)
 
-@jit
+@jit(forceobj=True)
 def median(data):
 
     return np.median(data)
 
-@jit
+@jit(forceobj=True)
 def stdev(data):
 
     return np.std(data)
 
-@jit
+@jit(forceobj=True)
 def variance(data):
 
     return np.var(data)
