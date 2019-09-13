@@ -4,6 +4,7 @@
 #   this should be imported as a python module using 'import analysis'
 #   this should be included in the local directory or environment variable
 #   this module has not been optimized for multhreaded computing
+#   current benchmark of optimization: 1.33 times faster
 # setup:
 
 __version__ = "1.1.0.003"
