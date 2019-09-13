@@ -7,10 +7,12 @@
 # number of easter eggs: 2
 # setup:
 
-__version__ = "1.1.0.000"
+__version__ = "1.1.0.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.1.0.001:
+    - removed from sklearn import * to resolve uneeded wildcard imports
 1.1.0.000:
     - removed c_entities,nc_entities,obstacles,objectives from __all__
     - applied numba.jit to all functions
@@ -149,7 +151,6 @@ import scipy
 from scipy.optimize import curve_fit
 from scipy import stats
 from sklearn import preprocessing
-from sklearn import *
 # import statistics <-- statistics.py functions have been integrated into analysis.py as of v 1.0.3.002
 import time
 import torch
