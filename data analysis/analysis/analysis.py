@@ -7,10 +7,12 @@
 #   current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.0.003"
+__version__ = "1.1.0.004"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.1.0.004:
+    - added performance metrics (r^2, mse, rms)
 1.1.0.003:
     - resolved nopython mode for mean, median, stdev, variance
 1.1.0.002:
@@ -120,8 +122,8 @@ __changelog__ = """changelog:
 """
 
 __author__ = (
-    "Arthur Lu <arthurlu@ttic.edu>, "
-    "Jacob Levine <jlevine@ttic.edu>,"
+    "Arthur Lu <arthurlu@ttic.edu>",
+    "Jacob Levine <jlevine@ttic.edu>",
 )
 
 __all__ = [
@@ -131,6 +133,9 @@ __all__ = [
     'z_score',
     'z_normalize',
     'histo_analysis',
+    'r_squared',
+    'mse',
+    'rms',
     # all statistics functions left out due to integration in other functions
 ]
 
@@ -142,6 +147,8 @@ import csv
 import numba
 from numba import jit
 import numpy as np
+import math
+from sklearn import metrics
 from sklearn import preprocessing
 
 class error(ValueError):
@@ -212,10 +219,25 @@ def histo_analysis(hist_data):
     derivative = t[1] / t[0]
 
     np.sort(derivative)
-    mean_derivative = basic_stats(derivative)[0]
-    stdev_derivative = basic_stats(derivative)[3]
 
-    return mean_derivative, stdev_derivative
+    return basic_stats(derivative)[0], basic_stats(derivative)[3]
+
+#regressions
+
+@jit(forceobj=True)
+def r_squared(predictions, targets):  # assumes equal size inputs
+
+    return metrics.r2_score(np.array(targets), np.array(predictions))
+
+@jit(forceobj=True)
+def mse(predictions, targets):
+
+    return metrics.mean_squared_error(np.array(targets), np.array(predictions))
+
+@jit(forceobj=True)
+def rms(predictions, targets):
+
+    return math.sqrt(metrics.mean_squared_error(np.array(targets), np.array(predictions)))
 
 @jit(nopython=True)
 def mean(data):
