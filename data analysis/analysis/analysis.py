@@ -7,10 +7,12 @@
 #   current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.0.004"
+__version__ = "1.1.0.005"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.1.0.005:
+    - removed impossible outcomes
 1.1.0.004:
     - added performance metrics (r^2, mse, rms)
 1.1.0.003:
@@ -158,13 +160,9 @@ def _init_device(setting, arg):  # initiates computation device for ANNs
     if setting == "cuda":
         try:
             return torch.device(setting + ":" + str(arg) if torch.cuda.is_available() else "cpu")
-        except:
-            raise error("could not assign cuda or cpu")
     elif setting == "cpu":
         try:
             return torch.device("cpu")
-        except:
-            raise error("could not assign cpu")
     else:
         raise error("specified device does not exist")
 
