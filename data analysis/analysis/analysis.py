@@ -154,6 +154,7 @@ import numpy as np
 import math
 from sklearn import metrics
 from sklearn import preprocessing
+import torch
 
 class error(ValueError):
     pass
