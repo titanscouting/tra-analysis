@@ -58,6 +58,7 @@ def take_all_pwrs(vec,pwr):
     return out
 
 def set_device(new_device):
+    global device
     device=new_device
 
 class LinearRegKernel():
