@@ -25,7 +25,7 @@ __all__ = [
     'take_all_pwrs',
     'set_device',
     'LinearRegKernel',
-    'SigmoidalRegKernel'.
+    'SigmoidalRegKernel',
     'LogRegKernel',
     'PolyRegKernel',
     'ExpRegKernel',
