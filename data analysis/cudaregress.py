@@ -38,6 +38,8 @@ __all__ = [
 
 import torch
 
+#set device
+device='cuda:0' if torch.cuda.is_available() else 'cpu'
 
 #todo: document completely
 
