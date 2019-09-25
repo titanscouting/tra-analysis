@@ -7,10 +7,12 @@
 #   current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.0.006"
+__version__ = "1.1.0.007"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.1.0.007:
+    - updated _init_device()
 1.1.0.006:
     - removed useless try statements
 1.1.0.005:
@@ -159,13 +161,9 @@ import torch
 class error(ValueError):
     pass
 
-def _init_device(setting, arg):  # initiates computation device for ANNs
-    if setting == "cuda":
-        return torch.device(setting + ":" + str(arg) if torch.cuda.is_available() else "cpu")
-    elif setting == "cpu":
-        return torch.device("cpu")
-    else:
-        raise error("specified device does not exist")
+def _init_device():  # initiates computation device for ANNs
+    device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+    return device
 
 @jit(forceobj=True)
 def load_csv(filepath):
