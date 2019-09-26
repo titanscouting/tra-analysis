@@ -6,10 +6,14 @@
 #   this module is cuda-optimized and vectorized (except for one small part)
 # setup:
 
-__version__ = "1.0.0.001"
+__version__ = "1.0.0.002"
 
 # changelog should be viewed using print(cudaregress.__changelog__)
 __changelog__ = """
+1.0.0.002:
+    -Added more parameters to log, exponential, polynomial
+    -
+
 1.0.0.001:
     -initial release, with linear, log, exponential, polynomial, and sigmoid kernels
     -already vectorized (except for polynomial generation) and CUDA-optimized
@@ -23,12 +27,14 @@ __author__ = (
 __all__ = [
     'factorial',
     'take_all_pwrs',
+    'num_poly_terms',
     'set_device',
     'LinearRegKernel',
     'SigmoidalRegKernel',
     'LogRegKernel',
     'PolyRegKernel',
     'ExpRegKernel',
+    'SigmoidalRegKernelArthur',
     'SGDTrain',
     'CustomTrain'
 ]
@@ -38,8 +44,7 @@ __all__ = [
 
 import torch
 
-#set device
-device='cuda:0' if torch.cuda.is_available() else 'cpu'
+device = "cuda:0" if torch.torch.cuda.is_available() else "cpu"
 
 #todo: document completely
 
@@ -48,6 +53,10 @@ def factorial(n):
         return 1
     else:
         return n*factorial(n-1)
+def num_poly_terms(num_vars, power):
+    if power == 0:
+        return 0
+    return int(factorial(num_vars+power-1) / factorial(power) / factorial(num_vars-1)) + nt(num_vars, power-1)
 
 def take_all_pwrs(vec,pwr):
     #todo: vectorize (kinda)
@@ -55,7 +64,7 @@ def take_all_pwrs(vec,pwr):
     out=torch.ones(combins.size()[0])
     for i in torch.t(combins):
         out *= i
-    return out
+    return torch.cat(out,take_all_pwrs(vec, pwr-1))
 
 def set_device(new_device):
     global device
@@ -86,29 +95,57 @@ class SigmoidalRegKernel():
         long_bias=self.bias.repeat([1,mtx.size()[1]])
         return self.sigmoid(torch.matmul(self.weights,mtx)+long_bias)
 
+class SigmoidalRegKernelArthur():
+    parameters= []
+    weights=None
+    in_bias=None
+    scal_mult=None
+    out_bias=None
+    sigmoid=torch.nn.Sigmoid()
+    def __init__(self, num_vars):
+        self.weights=torch.rand(num_vars, requires_grad=True, device=device)
+        self.in_bias=torch.rand(1, requires_grad=True, device=device)
+        self.scal_mult=torch.rand(1, requires_grad=True, device=device)
+        self.out_bias==torch.rand(1, requires_grad=True, device=device)
+        self.parameters=[self.weights,self.in_bias, self.scal_mult, self.out_bias]
+    def forward(self,mtx):
+        long_in_bias=self.in_bias.repeat([1,mtx.size()[1]])
+        long_out_bias=self.out_bias.repeat([1,mtx.size()[1]])
+        return (scal_mult*self.sigmoid(torch.matmul(self.weights,mtx)+long_in_bias))+long_out_bias
+
 class LogRegKernel():
     parameters= []
     weights=None
-    bias=None
+    in_bias=None
+    scal_mult=None
+    out_bias=None
     def __init__(self, num_vars):
         self.weights=torch.rand(num_vars, requires_grad=True, device=device)
-        self.bias=torch.rand(1, requires_grad=True, device=device)
-        self.parameters=[self.weights,self.bias]
+        self.in_bias=torch.rand(1, requires_grad=True, device=device)
+        self.scal_mult=torch.rand(1, requires_grad=True, device=device)
+        self.out_bias==torch.rand(1, requires_grad=True, device=device)
+        self.parameters=[self.weights,self.in_bias, self.scal_mult, self.out_bias]
     def forward(self,mtx):
-        long_bias=self.bias.repeat([1,mtx.size()[1]])
-        return torch.log(torch.matmul(self.weights,mtx)+long_bias)
+        long_in_bias=self.in_bias.repeat([1,mtx.size()[1]])
+        long_out_bias=self.out_bias.repeat([1,mtx.size()[1]])
+        return (scal_mult*torch.log(torch.matmul(self.weights,mtx)+long_in_bias))+long_out_bias
 
 class ExpRegKernel():
     parameters= []
     weights=None
-    bias=None
+    in_bias=None
+    scal_mult=None
+    out_bias=None
     def __init__(self, num_vars):
         self.weights=torch.rand(num_vars, requires_grad=True, device=device)
-        self.bias=torch.rand(1, requires_grad=True, device=device)
-        self.parameters=[self.weights,self.bias]
+        self.in_bias=torch.rand(1, requires_grad=True, device=device)
+        self.scal_mult=torch.rand(1, requires_grad=True, device=device)
+        self.out_bias==torch.rand(1, requires_grad=True, device=device)
+        self.parameters=[self.weights,self.in_bias, self.scal_mult, self.out_bias]
     def forward(self,mtx):
-        long_bias=self.bias.repeat([1,mtx.size()[1]])
-        return torch.exp(torch.matmul(self.weights,mtx)+long_bias)
+        long_in_bias=self.in_bias.repeat([1,mtx.size()[1]])
+        long_out_bias=self.out_bias.repeat([1,mtx.size()[1]])
+        return (scal_mult*torch.exp(torch.matmul(self.weights,mtx)+long_in_bias))+long_out_bias
 
 class PolyRegKernel():
     parameters= []
@@ -117,7 +154,7 @@ class PolyRegKernel():
     power=None
     def __init__(self, num_vars, power):
         self.power=power
-        num_terms=int(factorial(num_vars+power-1) / factorial(power) / factorial(num_vars-1))
+        num_terms=num_poly_terms(num_vars, power)
         self.weights=torch.rand(num_terms, requires_grad=True, device=device)
         self.bias=torch.rand(1, requires_grad=True, device=device)
         self.parameters=[self.weights,self.bias]
