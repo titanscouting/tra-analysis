@@ -10,3 +10,5 @@ data analysis/analysis/analysis.cp37-win_amd64.pyd
 data analysis/analysis/build/temp.win-amd64-3.7/Release/analysis.cp37-win_amd64.exp
 data analysis/analysis/build/temp.win-amd64-3.7/Release/analysis.cp37-win_amd64.lib
 data analysis/analysis/build/temp.win-amd64-3.7/Release/analysis.obj
+data analysis/test.ipynb
+data analysis/.ipynb_checkpoints/test-checkpoint.ipynb
