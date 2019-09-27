@@ -1,7 +1,7 @@
 # Titan Robotics Team 2022: CUDA-based Regressions Module
 # Written by Arthur Lu & Jacob Levine
 # Notes:
-#   this should be imported as a python module using 'import cudaregress'
+#   this should be imported as a python module using 'import regression'
 #   this should be included in the local directory or environment variable
 #   this module is cuda-optimized and vectorized (except for one small part)
 # setup:
