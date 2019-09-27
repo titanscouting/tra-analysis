@@ -112,7 +112,7 @@ class SigmoidalRegKernelArthur():
     def forward(self,mtx):
         long_in_bias=self.in_bias.repeat([1,mtx.size()[1]])
         long_out_bias=self.out_bias.repeat([1,mtx.size()[1]])
-        return (scal_mult*self.sigmoid(torch.matmul(self.weights,mtx)+long_in_bias))+long_out_bias
+        return (self.scal_mult*self.sigmoid(torch.matmul(self.weights,mtx)+long_in_bias))+long_out_bias
 
 class LogRegKernel():
     parameters= []
@@ -129,7 +129,7 @@ class LogRegKernel():
     def forward(self,mtx):
         long_in_bias=self.in_bias.repeat([1,mtx.size()[1]])
         long_out_bias=self.out_bias.repeat([1,mtx.size()[1]])
-        return (scal_mult*torch.log(torch.matmul(self.weights,mtx)+long_in_bias))+long_out_bias
+        return (self.scal_mult*torch.log(torch.matmul(self.weights,mtx)+long_in_bias))+long_out_bias
 
 class ExpRegKernel():
     parameters= []
@@ -146,7 +146,7 @@ class ExpRegKernel():
     def forward(self,mtx):
         long_in_bias=self.in_bias.repeat([1,mtx.size()[1]])
         long_out_bias=self.out_bias.repeat([1,mtx.size()[1]])
-        return (scal_mult*torch.exp(torch.matmul(self.weights,mtx)+long_in_bias))+long_out_bias
+        return (self.scal_mult*torch.exp(torch.matmul(self.weights,mtx)+long_in_bias))+long_out_bias
 
 class PolyRegKernel():
     parameters= []
