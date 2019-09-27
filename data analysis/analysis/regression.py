@@ -1,7 +1,7 @@
 # Titan Robotics Team 2022: CUDA-based Regressions Module
 # Written by Arthur Lu & Jacob Levine
 # Notes:
-#   this should be imported as a python module using 'import regression'
+#   this should be imported as a python module using 'import cudaregress'
 #   this should be included in the local directory or environment variable
 #   this module is cuda-optimized and vectorized (except for one small part)
 # setup:
@@ -12,7 +12,8 @@ __version__ = "1.0.0.002"
 __changelog__ = """
 1.0.0.002:
     -Added more parameters to log, exponential, polynomial
-    -
+    -Added SigmoidalRegKernelArthur, because Arthur apparently needs
+    to train the scaling and shifting of sigmoids
 
 1.0.0.001:
     -initial release, with linear, log, exponential, polynomial, and sigmoid kernels
@@ -56,7 +57,7 @@ def factorial(n):
 def num_poly_terms(num_vars, power):
     if power == 0:
         return 0
-    return int(factorial(num_vars+power-1) / factorial(power) / factorial(num_vars-1)) + nt(num_vars, power-1)
+    return int(factorial(num_vars+power-1) / factorial(power) / factorial(num_vars-1)) + num_poly_terms(num_vars, power-1)
 
 def take_all_pwrs(vec,pwr):
     #todo: vectorize (kinda)
@@ -106,7 +107,7 @@ class SigmoidalRegKernelArthur():
         self.weights=torch.rand(num_vars, requires_grad=True, device=device)
         self.in_bias=torch.rand(1, requires_grad=True, device=device)
         self.scal_mult=torch.rand(1, requires_grad=True, device=device)
-        self.out_bias==torch.rand(1, requires_grad=True, device=device)
+        self.out_bias=torch.rand(1, requires_grad=True, device=device)
         self.parameters=[self.weights,self.in_bias, self.scal_mult, self.out_bias]
     def forward(self,mtx):
         long_in_bias=self.in_bias.repeat([1,mtx.size()[1]])
@@ -123,7 +124,7 @@ class LogRegKernel():
         self.weights=torch.rand(num_vars, requires_grad=True, device=device)
         self.in_bias=torch.rand(1, requires_grad=True, device=device)
         self.scal_mult=torch.rand(1, requires_grad=True, device=device)
-        self.out_bias==torch.rand(1, requires_grad=True, device=device)
+        self.out_bias=torch.rand(1, requires_grad=True, device=device)
         self.parameters=[self.weights,self.in_bias, self.scal_mult, self.out_bias]
     def forward(self,mtx):
         long_in_bias=self.in_bias.repeat([1,mtx.size()[1]])
@@ -140,7 +141,7 @@ class ExpRegKernel():
         self.weights=torch.rand(num_vars, requires_grad=True, device=device)
         self.in_bias=torch.rand(1, requires_grad=True, device=device)
         self.scal_mult=torch.rand(1, requires_grad=True, device=device)
-        self.out_bias==torch.rand(1, requires_grad=True, device=device)
+        self.out_bias=torch.rand(1, requires_grad=True, device=device)
         self.parameters=[self.weights,self.in_bias, self.scal_mult, self.out_bias]
     def forward(self,mtx):
         long_in_bias=self.in_bias.repeat([1,mtx.size()[1]])
