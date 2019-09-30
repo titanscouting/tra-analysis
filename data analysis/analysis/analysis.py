@@ -201,6 +201,7 @@ def basic_stats(data):
 @jit(forceobj=True)
 def z_score(point, mean, stdev):
     score = (point - mean) / stdev
+    
     return score
 
 # expects 2d array, normalizes across all axes
@@ -208,9 +209,7 @@ def z_score(point, mean, stdev):
 def z_normalize(array, *args):
 
    array = np.array(array)
-
    for arg in args:
-
        array = preprocessing.normalize(array, axis = arg)
 
    return array
@@ -220,13 +219,9 @@ def z_normalize(array, *args):
 def histo_analysis(hist_data):
 
     hist_data = np.array(hist_data)
-
     derivative = np.array(len(hist_data) - 1, dtype = float)
-
     t = np.diff(hist_data)
-
     derivative = t[1] / t[0]
-
     np.sort(derivative)
 
     return basic_stats(derivative)[0], basic_stats(derivative)[3]
