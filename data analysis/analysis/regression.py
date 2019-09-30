@@ -8,7 +8,7 @@
 
 __version__ = "1.0.0.002"
 
-# changelog should be viewed using print(cudaregress.__changelog__)
+# changelog should be viewed using print(regression.__changelog__)
 __changelog__ = """
 1.0.0.002:
     -Added more parameters to log, exponential, polynomial
