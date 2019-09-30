@@ -144,6 +144,7 @@ __all__ = [
     'z_score',
     'z_normalize',
     'histo_analysis',
+    'regression_engine',
     'r_squared',
     'mse',
     'rms',
