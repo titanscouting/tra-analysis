@@ -7,10 +7,13 @@
 #   current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.0.007"
+__version__ = "1.1.1.000"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.1.1.000:
+    - added regression_engine()
+    - added all regressions except polynomial
 1.1.0.007:
     - updated _init_device()
 1.1.0.006:
@@ -154,6 +157,7 @@ import numba
 from numba import jit
 import numpy as np
 import math
+import regression
 from sklearn import metrics
 from sklearn import preprocessing
 import torch
@@ -219,7 +223,66 @@ def histo_analysis(hist_data):
 
     return basic_stats(derivative)[0], basic_stats(derivative)[3]
 
-#regressions
+@jit(forceobj=True)
+def regression_engine(device, inputs, outputs, loss = torch.nn.MSELoss(), _iterations = 10000, lr = 0.1, *args):
+
+    regressions = []
+
+    if 'cuda' in device:
+
+        regression.set_device(device)
+
+        if 'linear' in args:
+
+            model = regression.SGDTrain(regression.LinearRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
+            regressions.append([model[0].parameter, model[1][::-1][0]])
+
+        if 'log' in args:
+
+            model = regression.SGDTrain(regression.LogRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
+            regressions.append([model[0].parameter, model[1][::-1][0]])
+
+        if 'exp' in args:
+
+            model = regression.SGDTrain(regression.ExpRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
+            regressions.append([model[0].parameter, model[1][::-1][0]])
+
+        #if 'poly' in args:
+
+            #TODO because Jacob hasnt fixed regression.py
+
+        if 'sig' in args:
+
+            model = regression.SGDTrain(regression.SigmoidalRegKernelArthur(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
+            regressions.append([model[0].parameter, model[1][::-1][0]])
+
+    else:
+
+        regression.set_device(device)
+
+        if 'linear' in args:
+
+            model = regression.SGDTrain(regression.LinearRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
+            regressions.append([model[0].parameter, model[1][::-1][0]])
+
+        if 'log' in args:
+
+            model = regression.SGDTrain(regression.LogRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
+            regressions.append([model[0].parameter, model[1][::-1][0]])
+
+        if 'exp' in args:
+
+            model = regression.SGDTrain(regression.ExpRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
+            regressions.append([model[0].parameter, model[1][::-1][0]])
+
+        #if 'poly' in args:
+
+            #TODO because Jacob hasnt fixed regression.py
+
+        if 'sig' in args:
+
+            model = regression.SGDTrain(regression.SigmoidalRegKernelArthur(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
+            regressions.append([model[0].parameter, model[1][::-1][0]])
 
 @jit(forceobj=True)
 def r_squared(predictions, targets):  # assumes equal size inputs
