@@ -7,10 +7,12 @@
 #   current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.2.000"
+__version__ = "1.1.2.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.1.2.001:
+    - readded regrression import
 1.1.2.000:
     - integrated regression.py as regression class
     - removed regression import
@@ -166,6 +168,10 @@ import numba
 from numba import jit
 import numpy as np
 import math
+try:
+    from analysis import regression
+except:
+    pass
 from sklearn import metrics
 from sklearn import preprocessing
 import torch
