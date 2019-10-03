@@ -7,10 +7,13 @@
 #   current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.2.001"
+__version__ = "1.1.2.002"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.1.2.002L
+    - added elo()
+    - elo() has bugs to be fixed
 1.1.2.001:
     - readded regrression import
 1.1.2.000:
@@ -295,10 +298,12 @@ def regression_engine(device, inputs, outputs, args, loss = torch.nn.MSELoss(), 
 
     return regressions
 
-#@jit TODO: determine jit type
-def elo(starting_score, observed, N, K):
+@jit(nopython=True)
+def elo(starting_score, opposing_scores, observed, N, K):
 
-    pass
+    expected = 1/(1+10**((np.array(opposing_scores) - starting_score)/N))
+
+    return starting_score + K*(np.sum(expected) - np.sum(observed))
 
 @jit(forceobj=True)
 def r_squared(predictions, targets):  # assumes equal size inputs
