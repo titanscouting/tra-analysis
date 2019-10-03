@@ -295,6 +295,11 @@ def regression_engine(device, inputs, outputs, args, loss = torch.nn.MSELoss(), 
 
     return regressions
 
+#@jit TODO: determine jit type
+def elo(starting_score):
+
+    
+
 @jit(forceobj=True)
 def r_squared(predictions, targets):  # assumes equal size inputs
 
