@@ -7,11 +7,13 @@
 #   current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.2.002"
+__version__ = "1.1.2.003"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
-1.1.2.002L
+1.1.2.003:
+    - fixed elo()
+1.1.2.002:
     - added elo()
     - elo() has bugs to be fixed
 1.1.2.001:
@@ -303,7 +305,7 @@ def elo(starting_score, opposing_scores, observed, N, K):
 
     expected = 1/(1+10**((np.array(opposing_scores) - starting_score)/N))
 
-    return starting_score + K*(np.sum(expected) - np.sum(observed))
+    return starting_score + K*(np.sum(observed) - np.sum(expected))
 
 @jit(forceobj=True)
 def r_squared(predictions, targets):  # assumes equal size inputs
