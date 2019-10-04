@@ -248,7 +248,7 @@ def histo_analysis(hist_data):
     return basic_stats(derivative)[0], basic_stats(derivative)[3]
 
 @jit(forceobj=True)
-def regression(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterations = 10000, lr = 0.01):
+def regression(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterations = 10000, lr = 0.01): # inputs, outputs expects N-D array 
 
     regressions = []
 
