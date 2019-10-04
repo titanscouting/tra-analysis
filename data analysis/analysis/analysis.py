@@ -7,10 +7,12 @@
 #   current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.3.001"
+__version__ = "1.1.3.002"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.1.3.002:
+    - renamed regression class to Regression, regression_engine() to regression gliko2_engine class to Gliko2
 1.1.3.001:
     - changed glicko2() to return tuple instead of array
 1.1.3.000:
@@ -161,11 +163,14 @@ __all__ = [
     'z_score',
     'z_normalize',
     'histo_analysis',
-    'regression_engine',
+    'regression',
+    'elo',
+    'gliko2',
     'r_squared',
     'mse',
     'rms',
-    'regression'
+    'Regression',
+    'Gliko2'
     # all statistics functions left out due to integration in other functions
 ]
 
@@ -243,27 +248,27 @@ def histo_analysis(hist_data):
     return basic_stats(derivative)[0], basic_stats(derivative)[3]
 
 @jit(forceobj=True)
-def regression_engine(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterations = 10000, lr = 0.01):
+def regression(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterations = 10000, lr = 0.01):
 
     regressions = []
 
     if 'cuda' in device:
 
-        regression.set_device(device)
+        Regression.set_device(device)
 
         if 'linear' in args:
 
-            model = regression.SGDTrain(regression.LinearRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor([outputs]).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
+            model = Regression.SGDTrain(Regression.LinearRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor([outputs]).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
             regressions.append([model[0].parameters, model[1][::-1][0]])
 
         if 'log' in args:
 
-            model = regression.SGDTrain(regression.LogRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
+            model = Regression.SGDTrain(Regression.LogRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
             regressions.append([model[0].parameters, model[1][::-1][0]])
 
         if 'exp' in args:
 
-            model = regression.SGDTrain(regression.ExpRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
+            model = Regression.SGDTrain(Regression.ExpRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
             regressions.append([model[0].parameters, model[1][::-1][0]])
 
         #if 'poly' in args:
@@ -272,26 +277,26 @@ def regression_engine(device, inputs, outputs, args, loss = torch.nn.MSELoss(), 
 
         if 'sig' in args:
 
-            model = regression.SGDTrain(regression.SigmoidalRegKernelArthur(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
+            model = Regression.SGDTrain(Regression.SigmoidalRegKernelArthur(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
             regressions.append([model[0].parameters, model[1][::-1][0]])
 
     else:
 
-        regression.set_device(device)
+        Regression.set_device(device)
 
         if 'linear' in args:
 
-            model = regression.SGDTrain(regression.LinearRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
+            model = Regression.SGDTrain(Regression.LinearRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
             regressions.append([model[0].parameters, model[1][::-1][0]])
 
         if 'log' in args:
 
-            model = regression.SGDTrain(regression.LogRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
+            model = Regression.SGDTrain(Regression.LogRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
             regressions.append([model[0].parameters, model[1][::-1][0]])
 
         if 'exp' in args:
 
-            model = regression.SGDTrain(regression.ExpRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
+            model = Regression.SGDTrain(Regression.ExpRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
             regressions.append([model[0].parameters, model[1][::-1][0]])
 
         #if 'poly' in args:
@@ -300,7 +305,7 @@ def regression_engine(device, inputs, outputs, args, loss = torch.nn.MSELoss(), 
 
         if 'sig' in args:
 
-            model = regression.SGDTrain(regression.SigmoidalRegKernelArthur(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
+            model = Regression.SGDTrain(Regression.SigmoidalRegKernelArthur(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
             regressions.append([model[0].parameters, model[1][::-1][0]])
 
     return regressions
@@ -315,7 +320,7 @@ def elo(starting_score, opposing_scores, observed, N, K):
 @jit(forceobj=True)
 def gliko2(starting_score, starting_rd, starting_vol, opposing_scores, opposing_rd, observations):
 
-    player = gliko2_engine(rating = starting_score, rd = starting_rd, vol = starting_vol)
+    player = Gliko2(rating = starting_score, rd = starting_rd, vol = starting_vol)
 
     player.update_player([x for x in opposing_scores], [x for x in opposing_rd], observations)
 
@@ -356,7 +361,7 @@ def variance(data):
 
     return np.var(data)
 
-class regression:
+class Regression:
 
     # Titan Robotics Team 2022: CUDA-based Regressions Module
     # Written by Arthur Lu & Jacob Levine
@@ -576,7 +581,7 @@ class regression:
                     optim.step()
             return kernel
 
-class gliko2_engine:
+class Gliko2:
 
     _tau = 0.5
 
