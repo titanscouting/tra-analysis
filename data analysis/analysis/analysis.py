@@ -7,10 +7,12 @@
 #   current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.3.000"
+__version__ = "1.1.3.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.1.3.001:
+    - changed glicko2() to return tuple instead of array
 1.1.3.000:
     - added glicko2_engine class and glicko()
     - verified glicko2() accuracy
@@ -316,7 +318,7 @@ def gliko2(opp_ratings, opp_rd, observations, rating = 1500, rd = 350, vol = 0.0
 
     player.update_player([x for x in opp_ratings], [x for x in opp_rd], observations)
 
-    return [player.rating, player.rd, player.vol]
+    return (player.rating, player.rd, player.vol)
 
 @jit(forceobj=True)
 def r_squared(predictions, targets):  # assumes equal size inputs
