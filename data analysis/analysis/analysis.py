@@ -312,6 +312,7 @@ def elo(starting_score, opposing_scores, observed, N, K):
 
     return starting_score + K*(np.sum(observed) - np.sum(expected))
 
+@jit(forceobj=True)
 def gliko2(starting_score, starting_rd, starting_vol, opposing_scores, opposing_rd, observations):
 
     player = gliko2_engine(rating = starting_score, rd = starting_rd, vol = starting_vol)
