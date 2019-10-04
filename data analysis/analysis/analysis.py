@@ -312,11 +312,11 @@ def elo(starting_score, opposing_scores, observed, N, K):
 
     return starting_score + K*(np.sum(observed) - np.sum(expected))
 
-def gliko2(opp_ratings, opp_rd, observations, rating = 1500, rd = 350, vol = 0.06):
+def gliko2(starting_score, starting_rd, starting_vol, opposing_scores, opposing_rd, observations):
 
-    player = gliko2_engine(rating = rating, rd = rd, vol = vol)
+    player = gliko2_engine(rating = starting_score, rd = starting_rd, vol = starting_vol)
 
-    player.update_player([x for x in opp_ratings], [x for x in opp_rd], observations)
+    player.update_player([x for x in opposing_scores], [x for x in opposing_rd], observations)
 
     return (player.rating, player.rd, player.vol)
 
