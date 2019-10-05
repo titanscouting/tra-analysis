@@ -168,6 +168,7 @@ __all__ = [
     'regression',
     'elo',
     'gliko2',
+    'trueskill',
     'r_squared',
     'mse',
     'rms',
@@ -186,13 +187,13 @@ from numba import jit
 import numpy as np
 import math
 try:
-    from analysis import regression
+    from analysis import regression as Regression
 except:
     pass
 try:
-    from analysis import trueskill as ts
+    from analysis import trueskill as Trueskill
 except:
-    import trueskill as ts
+    import trueskill as Trueskill
 from sklearn import metrics
 from sklearn import preprocessing
 import torch
@@ -341,14 +342,14 @@ def trueskill(teams_data, observations):#teams_data is array of array of tuples 
         team_temp = []
         for player in team:
             if player != None:
-                player = ts.Rating(player[0], player[1])
+                player = Trueskill.Rating(player[0], player[1])
                 team_temp.append(player)
             else:
-                player = ts.Rating()
+                player = Trueskill.Rating()
                 team_temp.append(player)
         team_ratings.append(team_temp)
 
-    return ts.rate(teams_data, observations)
+    return Trueskill.rate(teams_data, observations)
 
 @jit(forceobj=True)
 def r_squared(predictions, targets):  # assumes equal size inputs
