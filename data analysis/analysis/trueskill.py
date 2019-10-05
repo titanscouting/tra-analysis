@@ -1,14 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-   trueskill
-   ~~~~~~~~~
-
-   The video game rating system.
-
-   :copyright: (c) 2012-2016 by Heungsub Lee
-   :license: BSD, see LICENSE for more details.
-
-"""
 from __future__ import absolute_import
 
 from itertools import chain
@@ -16,28 +5,488 @@ import math
 
 from six import iteritems
 from six.moves import map, range, zip
+from six import iterkeys
 
-from .__about__ import __version__  # noqa
-from .backends import choose_backend
-from .factorgraph import (LikelihoodFactor, PriorFactor, SumFactor,
-                          TruncateFactor, Variable)
-from .mathematics import Gaussian, Matrix
+import copy
+try:
+    from numbers import Number
+except ImportError:
+    Number = (int, long, float, complex)
+
+inf = float('inf')
+
+class Gaussian(object):
+    #: Precision, the inverse of the variance.
+    pi = 0
+    #: Precision adjusted mean, the precision multiplied by the mean.
+    tau = 0
+
+    def __init__(self, mu=None, sigma=None, pi=0, tau=0):
+        if mu is not None:
+            if sigma is None:
+                raise TypeError('sigma argument is needed')
+            elif sigma == 0:
+                raise ValueError('sigma**2 should be greater than 0')
+            pi = sigma ** -2
+            tau = pi * mu
+        self.pi = pi
+        self.tau = tau
+
+    @property
+    def mu(self):
+        return self.pi and self.tau / self.pi
+
+    @property
+    def sigma(self):
+        return math.sqrt(1 / self.pi) if self.pi else inf
+
+    def __mul__(self, other):
+        pi, tau = self.pi + other.pi, self.tau + other.tau
+        return Gaussian(pi=pi, tau=tau)
+
+    def __truediv__(self, other):
+        pi, tau = self.pi - other.pi, self.tau - other.tau
+        return Gaussian(pi=pi, tau=tau)
+
+    __div__ = __truediv__  # for Python 2
+
+    def __eq__(self, other):
+        return self.pi == other.pi and self.tau == other.tau
+
+    def __lt__(self, other):
+        return self.mu < other.mu
+
+    def __le__(self, other):
+        return self.mu <= other.mu
+
+    def __gt__(self, other):
+        return self.mu > other.mu
+
+    def __ge__(self, other):
+        return self.mu >= other.mu
+
+    def __repr__(self):
+        return 'N(mu={:.3f}, sigma={:.3f})'.format(self.mu, self.sigma)
+
+    def _repr_latex_(self):
+        latex = r'\mathcal{{ N }}( {:.3f}, {:.3f}^2 )'.format(self.mu, self.sigma)
+        return '$%s$' % latex
+
+class Matrix(list):
+    def __init__(self, src, height=None, width=None):
+        if callable(src):
+            f, src = src, {}
+            size = [height, width]
+            if not height:
+                def set_height(height):
+                    size[0] = height
+                size[0] = set_height
+            if not width:
+                def set_width(width):
+                    size[1] = width
+                size[1] = set_width
+            try:
+                for (r, c), val in f(*size):
+                    src[r, c] = val
+            except TypeError:
+                raise TypeError('A callable src must return an interable '
+                                'which generates a tuple containing '
+                                'coordinate and value')
+            height, width = tuple(size)
+            if height is None or width is None:
+                raise TypeError('A callable src must call set_height and '
+                                'set_width if the size is non-deterministic')
+        if isinstance(src, list):
+            is_number = lambda x: isinstance(x, Number)
+            unique_col_sizes = set(map(len, src))
+            everything_are_number = filter(is_number, sum(src, []))
+            if len(unique_col_sizes) != 1 or not everything_are_number:
+                raise ValueError('src must be a rectangular array of numbers')
+            two_dimensional_array = src
+        elif isinstance(src, dict):
+            if not height or not width:
+                w = h = 0
+                for r, c in iterkeys(src):
+                    if not height:
+                        h = max(h, r + 1)
+                    if not width:
+                        w = max(w, c + 1)
+                if not height:
+                    height = h
+                if not width:
+                    width = w
+            two_dimensional_array = []
+            for r in range(height):
+                row = []
+                two_dimensional_array.append(row)
+                for c in range(width):
+                    row.append(src.get((r, c), 0))
+        else:
+            raise TypeError('src must be a list or dict or callable')
+        super(Matrix, self).__init__(two_dimensional_array)
+
+    @property
+    def height(self):
+        return len(self)
+
+    @property
+    def width(self):
+        return len(self[0])
+
+    def transpose(self):
+        height, width = self.height, self.width
+        src = {}
+        for c in range(width):
+            for r in range(height):
+                src[c, r] = self[r][c]
+        return type(self)(src, height=width, width=height)
+
+    def minor(self, row_n, col_n):
+        height, width = self.height, self.width
+        if not (0 <= row_n < height):
+            raise ValueError('row_n should be between 0 and %d' % height)
+        elif not (0 <= col_n < width):
+            raise ValueError('col_n should be between 0 and %d' % width)
+        two_dimensional_array = []
+        for r in range(height):
+            if r == row_n:
+                continue
+            row = []
+            two_dimensional_array.append(row)
+            for c in range(width):
+                if c == col_n:
+                    continue
+                row.append(self[r][c])
+        return type(self)(two_dimensional_array)
+
+    def determinant(self):
+        height, width = self.height, self.width
+        if height != width:
+            raise ValueError('Only square matrix can calculate a determinant')
+        tmp, rv = copy.deepcopy(self), 1.
+        for c in range(width - 1, 0, -1):
+            pivot, r = max((abs(tmp[r][c]), r) for r in range(c + 1))
+            pivot = tmp[r][c]
+            if not pivot:
+                return 0.
+            tmp[r], tmp[c] = tmp[c], tmp[r]
+            if r != c:
+                rv = -rv
+            rv *= pivot
+            fact = -1. / pivot
+            for r in range(c):
+                f = fact * tmp[r][c]
+                for x in range(c):
+                    tmp[r][x] += f * tmp[c][x]
+        return rv * tmp[0][0]
+
+    def adjugate(self):
+        height, width = self.height, self.width
+        if height != width:
+            raise ValueError('Only square matrix can be adjugated')
+        if height == 2:
+            a, b = self[0][0], self[0][1]
+            c, d = self[1][0], self[1][1]
+            return type(self)([[d, -b], [-c, a]])
+        src = {}
+        for r in range(height):
+            for c in range(width):
+                sign = -1 if (r + c) % 2 else 1
+                src[r, c] = self.minor(r, c).determinant() * sign
+        return type(self)(src, height, width)
+
+    def inverse(self):
+        if self.height == self.width == 1:
+            return type(self)([[1. / self[0][0]]])
+        return (1. / self.determinant()) * self.adjugate()
+
+    def __add__(self, other):
+        height, width = self.height, self.width
+        if (height, width) != (other.height, other.width):
+            raise ValueError('Must be same size')
+        src = {}
+        for r in range(height):
+            for c in range(width):
+                src[r, c] = self[r][c] + other[r][c]
+        return type(self)(src, height, width)
+
+    def __mul__(self, other):
+        if self.width != other.height:
+            raise ValueError('Bad size')
+        height, width = self.height, other.width
+        src = {}
+        for r in range(height):
+            for c in range(width):
+                src[r, c] = sum(self[r][x] * other[x][c]
+                                for x in range(self.width))
+        return type(self)(src, height, width)
+
+    def __rmul__(self, other):
+        if not isinstance(other, Number):
+            raise TypeError('The operand should be a number')
+        height, width = self.height, self.width
+        src = {}
+        for r in range(height):
+            for c in range(width):
+                src[r, c] = other * self[r][c]
+        return type(self)(src, height, width)
+
+    def __repr__(self):
+        return '{}({})'.format(type(self).__name__, super(Matrix, self).__repr__())
+
+    def _repr_latex_(self):
+        rows = [' && '.join(['%.3f' % cell for cell in row]) for row in self]
+        latex = r'\begin{matrix} %s \end{matrix}' % r'\\'.join(rows)
+        return '$%s$' % latex
+
+def _gen_erfcinv(erfc, math=math):
+    def erfcinv(y):
+        """The inverse function of erfc."""
+        if y >= 2:
+            return -100.
+        elif y <= 0:
+            return 100.
+        zero_point = y < 1
+        if not zero_point:
+            y = 2 - y
+        t = math.sqrt(-2 * math.log(y / 2.))
+        x = -0.70711 * \
+            ((2.30753 + t * 0.27061) / (1. + t * (0.99229 + t * 0.04481)) - t)
+        for i in range(2):
+            err = erfc(x) - y
+            x += err / (1.12837916709551257 * math.exp(-(x ** 2)) - x * err)
+        return x if zero_point else -x
+    return erfcinv
+
+def _gen_ppf(erfc, math=math):
+    erfcinv = _gen_erfcinv(erfc, math)
+    def ppf(x, mu=0, sigma=1):
+        return mu - sigma * math.sqrt(2) * erfcinv(2 * x)
+    return ppf
+
+def erfc(x):
+    z = abs(x)
+    t = 1. / (1. + z / 2.)
+    r = t * math.exp(-z * z - 1.26551223 + t * (1.00002368 + t * (
+        0.37409196 + t * (0.09678418 + t * (-0.18628806 + t * (
+            0.27886807 + t * (-1.13520398 + t * (1.48851587 + t * (
+                -0.82215223 + t * 0.17087277
+            )))
+        )))
+    )))
+    return 2. - r if x < 0 else r
+
+def cdf(x, mu=0, sigma=1):
+    return 0.5 * erfc(-(x - mu) / (sigma * math.sqrt(2)))
 
 
-__all__ = [
-    # TrueSkill objects
-    'TrueSkill', 'Rating',
-    # functions for the global environment
-    'rate', 'quality', 'rate_1vs1', 'quality_1vs1', 'expose', 'setup',
-    'global_env',
-    # default values
-    'MU', 'SIGMA', 'BETA', 'TAU', 'DRAW_PROBABILITY',
-    # draw probability helpers
-    'calc_draw_probability', 'calc_draw_margin',
-    # deprecated features
-    'transform_ratings', 'match_quality', 'dynamic_draw_probability',
-]
+def pdf(x, mu=0, sigma=1):
+    return (1 / math.sqrt(2 * math.pi) * abs(sigma) *
+            math.exp(-(((x - mu) / abs(sigma)) ** 2 / 2)))
 
+ppf = _gen_ppf(erfc)
+
+def choose_backend(backend):
+    if backend is None:  # fallback
+        return cdf, pdf, ppf
+    elif backend == 'mpmath':
+        try:
+            import mpmath
+        except ImportError:
+            raise ImportError('Install "mpmath" to use this backend')
+        return mpmath.ncdf, mpmath.npdf, _gen_ppf(mpmath.erfc, math=mpmath)
+    elif backend == 'scipy':
+        try:
+            from scipy.stats import norm
+        except ImportError:
+            raise ImportError('Install "scipy" to use this backend')
+        return norm.cdf, norm.pdf, norm.ppf
+    raise ValueError('%r backend is not defined' % backend)
+
+def available_backends():
+    backends = [None]
+    for backend in ['mpmath', 'scipy']:
+        try:
+            __import__(backend)
+        except ImportError:
+            continue
+        backends.append(backend)
+    return backends
+
+class Node(object):
+
+    pass
+
+class Variable(Node, Gaussian):
+
+    def __init__(self):
+        self.messages = {}
+        super(Variable, self).__init__()
+
+    def set(self, val):
+        delta = self.delta(val)
+        self.pi, self.tau = val.pi, val.tau
+        return delta
+
+    def delta(self, other):
+        pi_delta = abs(self.pi - other.pi)
+        if pi_delta == inf:
+            return 0.
+        return max(abs(self.tau - other.tau), math.sqrt(pi_delta))
+
+    def update_message(self, factor, pi=0, tau=0, message=None):
+        message = message or Gaussian(pi=pi, tau=tau)
+        old_message, self[factor] = self[factor], message
+        return self.set(self / old_message * message)
+
+    def update_value(self, factor, pi=0, tau=0, value=None):
+        value = value or Gaussian(pi=pi, tau=tau)
+        old_message = self[factor]
+        self[factor] = value * old_message / self
+        return self.set(value)
+
+    def __getitem__(self, factor):
+        return self.messages[factor]
+
+    def __setitem__(self, factor, message):
+        self.messages[factor] = message
+
+    def __repr__(self):
+        args = (type(self).__name__, super(Variable, self).__repr__(),
+                len(self.messages), '' if len(self.messages) == 1 else 's')
+        return '<%s %s with %d connection%s>' % args
+
+
+class Factor(Node):
+
+    def __init__(self, variables):
+        self.vars = variables
+        for var in variables:
+            var[self] = Gaussian()
+
+    def down(self):
+        return 0
+
+    def up(self):
+        return 0
+
+    @property
+    def var(self):
+        assert len(self.vars) == 1
+        return self.vars[0]
+
+    def __repr__(self):
+        args = (type(self).__name__, len(self.vars),
+                '' if len(self.vars) == 1 else 's')
+        return '<%s with %d connection%s>' % args
+
+
+class PriorFactor(Factor):
+
+    def __init__(self, var, val, dynamic=0):
+        super(PriorFactor, self).__init__([var])
+        self.val = val
+        self.dynamic = dynamic
+
+    def down(self):
+        sigma = math.sqrt(self.val.sigma ** 2 + self.dynamic ** 2)
+        value = Gaussian(self.val.mu, sigma)
+        return self.var.update_value(self, value=value)
+
+
+class LikelihoodFactor(Factor):
+
+    def __init__(self, mean_var, value_var, variance):
+        super(LikelihoodFactor, self).__init__([mean_var, value_var])
+        self.mean = mean_var
+        self.value = value_var
+        self.variance = variance
+
+    def calc_a(self, var):
+        return 1. / (1. + self.variance * var.pi)
+
+    def down(self):
+        # update value.
+        msg = self.mean / self.mean[self]
+        a = self.calc_a(msg)
+        return self.value.update_message(self, a * msg.pi, a * msg.tau)
+
+    def up(self):
+        # update mean.
+        msg = self.value / self.value[self]
+        a = self.calc_a(msg)
+        return self.mean.update_message(self, a * msg.pi, a * msg.tau)
+
+
+class SumFactor(Factor):
+
+    def __init__(self, sum_var, term_vars, coeffs):
+        super(SumFactor, self).__init__([sum_var] + term_vars)
+        self.sum = sum_var
+        self.terms = term_vars
+        self.coeffs = coeffs
+
+    def down(self):
+        vals = self.terms
+        msgs = [var[self] for var in vals]
+        return self.update(self.sum, vals, msgs, self.coeffs)
+
+    def up(self, index=0):
+        coeff = self.coeffs[index]
+        coeffs = []
+        for x, c in enumerate(self.coeffs):
+            try:
+                if x == index:
+                    coeffs.append(1. / coeff)
+                else:
+                    coeffs.append(-c / coeff)
+            except ZeroDivisionError:
+                coeffs.append(0.)
+        vals = self.terms[:]
+        vals[index] = self.sum
+        msgs = [var[self] for var in vals]
+        return self.update(self.terms[index], vals, msgs, coeffs)
+
+    def update(self, var, vals, msgs, coeffs):
+        pi_inv = 0
+        mu = 0
+        for val, msg, coeff in zip(vals, msgs, coeffs):
+            div = val / msg
+            mu += coeff * div.mu
+            if pi_inv == inf:
+                continue
+            try:
+                # numpy.float64 handles floating-point error by different way.
+                # For example, it can just warn RuntimeWarning on n/0 problem
+                # instead of throwing ZeroDivisionError.  So div.pi, the
+                # denominator has to be a built-in float.
+                pi_inv += coeff ** 2 / float(div.pi)
+            except ZeroDivisionError:
+                pi_inv = inf
+        pi = 1. / pi_inv
+        tau = pi * mu
+        return var.update_message(self, pi, tau)
+
+
+class TruncateFactor(Factor):
+
+    def __init__(self, var, v_func, w_func, draw_margin):
+        super(TruncateFactor, self).__init__([var])
+        self.v_func = v_func
+        self.w_func = w_func
+        self.draw_margin = draw_margin
+
+    def up(self):
+        val = self.var
+        msg = self.var[self]
+        div = val / msg
+        sqrt_pi = math.sqrt(div.pi)
+        args = (div.tau / sqrt_pi, self.draw_margin * sqrt_pi)
+        v = self.v_func(*args)
+        w = self.w_func(*args)
+        denom = (1. - w)
+        pi, tau = div.pi / denom, (div.tau + sqrt_pi * v) / denom
+        return val.update_value(self, pi, tau)
 
 #: Default initial mean of ratings.
 MU = 25.
@@ -54,35 +503,18 @@ DELTA = 0.0001
 
 
 def calc_draw_probability(draw_margin, size, env=None):
-    """Calculates a draw-probability from the given ``draw_margin``.
-
-    :param draw_margin: the draw-margin.
-    :param size: the number of players in two comparing teams.
-    :param env: the :class:`TrueSkill` object.  Defaults to the global
-                environment.
-
-    """
     if env is None:
         env = global_env()
     return 2 * env.cdf(draw_margin / (math.sqrt(size) * env.beta)) - 1
 
 
 def calc_draw_margin(draw_probability, size, env=None):
-    """Calculates a draw-margin from the given ``draw_probability``.
-
-    :param draw_probability: the draw-probability.
-    :param size: the number of players in two comparing teams.
-    :param env: the :class:`TrueSkill` object.  Defaults to the global
-                environment.
-
-    """
     if env is None:
         env = global_env()
     return env.ppf((draw_probability + 1) / 2.) * math.sqrt(size) * env.beta
 
 
 def _team_sizes(rating_groups):
-    """Makes a size map of each teams."""
     team_sizes = [0]
     for group in rating_groups:
         team_sizes.append(len(group) + team_sizes[-1])
@@ -99,17 +531,6 @@ def _floating_point_error(env):
 
 
 class Rating(Gaussian):
-    """Represents a player's skill as Gaussian distrubution.
-
-    The default mu and sigma value follows the global environment's settings.
-    If you don't want to use the global, use :meth:`TrueSkill.create_rating` to
-    create the rating object.
-
-    :param mu: the mean.
-    :param sigma: the standard deviation.
-
-    """
-
     def __init__(self, mu=None, sigma=None):
         if isinstance(mu, tuple):
             mu, sigma = mu
@@ -140,40 +561,6 @@ class Rating(Gaussian):
 
 
 class TrueSkill(object):
-    """Implements a TrueSkill environment.  An environment could have
-    customized constants.  Every games have not same design and may need to
-    customize TrueSkill constants.
-
-    For example, 60% of matches in your game have finished as draw then you
-    should set ``draw_probability`` to 0.60::
-
-       env = TrueSkill(draw_probability=0.60)
-
-    For more details of the constants, see `The Math Behind TrueSkill`_ by
-    Jeff Moser.
-
-    .. _The Math Behind TrueSkill:: http://bit.ly/trueskill-math
-
-    :param mu: the initial mean of ratings.
-    :param sigma: the initial standard deviation of ratings.  The recommended
-                  value is a third of ``mu``.
-    :param beta: the distance which guarantees about 76% chance of winning.
-                 The recommended value is a half of ``sigma``.
-    :param tau: the dynamic factor which restrains a fixation of rating.  The
-                recommended value is ``sigma`` per cent.
-    :param draw_probability: the draw probability between two teams.  It can be
-                             a ``float`` or function which returns a ``float``
-                             by the given two rating (team performance)
-                             arguments and the beta value.  If it is a
-                             ``float``, the game has fixed draw probability.
-                             Otherwise, the draw probability will be decided
-                             dynamically per each match.
-    :param backend: the name of a backend which implements cdf, pdf, ppf.  See
-                    :mod:`trueskill.backends` for more details.  Defaults to
-                    ``None``.
-
-    """
-
     def __init__(self, mu=MU, sigma=SIGMA, beta=BETA, tau=TAU,
                  draw_probability=DRAW_PROBABILITY, backend=None):
         self.mu = mu
@@ -188,14 +575,6 @@ class TrueSkill(object):
             self.cdf, self.pdf, self.ppf = choose_backend(backend)
 
     def create_rating(self, mu=None, sigma=None):
-        """Initializes new :class:`Rating` object, but it fixes default mu and
-        sigma to the environment's.
-
-        >>> env = TrueSkill(mu=0, sigma=1)
-        >>> env.create_rating()
-        trueskill.Rating(mu=0.000, sigma=1.000)
-
-        """
         if mu is None:
             mu = self.mu
         if sigma is None:
@@ -203,15 +582,11 @@ class TrueSkill(object):
         return Rating(mu, sigma)
 
     def v_win(self, diff, draw_margin):
-        """The non-draw version of "V" function.  "V" calculates a variation of
-        a mean.
-        """
         x = diff - draw_margin
         denom = self.cdf(x)
         return (self.pdf(x) / denom) if denom else -x
 
     def v_draw(self, diff, draw_margin):
-        """The draw version of "V" function."""
         abs_diff = abs(diff)
         a, b = draw_margin - abs_diff, -draw_margin - abs_diff
         denom = self.cdf(a) - self.cdf(b)
@@ -219,9 +594,6 @@ class TrueSkill(object):
         return ((numer / denom) if denom else a) * (-1 if diff < 0 else +1)
 
     def w_win(self, diff, draw_margin):
-        """The non-draw version of "W" function.  "W" calculates a variation of
-        a standard deviation.
-        """
         x = diff - draw_margin
         v = self.v_win(diff, draw_margin)
         w = v * (v + x)
@@ -230,7 +602,6 @@ class TrueSkill(object):
         raise _floating_point_error(self)
 
     def w_draw(self, diff, draw_margin):
-        """The draw version of "W" function."""
         abs_diff = abs(diff)
         a, b = draw_margin - abs_diff, -draw_margin - abs_diff
         denom = self.cdf(a) - self.cdf(b)
@@ -240,27 +611,6 @@ class TrueSkill(object):
         return (v ** 2) + (a * self.pdf(a) - b * self.pdf(b)) / denom
 
     def validate_rating_groups(self, rating_groups):
-        """Validates a ``rating_groups`` argument.  It should contain more than
-        2 groups and all groups must not be empty.
-
-        >>> env = TrueSkill()
-        >>> env.validate_rating_groups([])
-        Traceback (most recent call last):
-            ...
-        ValueError: need multiple rating groups
-        >>> env.validate_rating_groups([(Rating(),)])
-        Traceback (most recent call last):
-            ...
-        ValueError: need multiple rating groups
-        >>> env.validate_rating_groups([(Rating(),), ()])
-        Traceback (most recent call last):
-            ...
-        ValueError: each group must contain multiple ratings
-        >>> env.validate_rating_groups([(Rating(),), (Rating(),)])
-        ... #doctest: +ELLIPSIS
-        [(truekill.Rating(...),), (trueskill.Rating(...),)]
-
-        """
         # check group sizes
         if len(rating_groups) < 2:
             raise ValueError('Need multiple rating groups')
@@ -304,25 +654,6 @@ class TrueSkill(object):
         return weights
 
     def factor_graph_builders(self, rating_groups, ranks, weights):
-        """Makes nodes for the TrueSkill factor graph.
-
-        Here's an example of a TrueSkill factor graph when 1 vs 2 vs 1 match::
-
-              rating_layer:  O O O O  (PriorFactor)
-                             | | | |
-                             | | | |
-                perf_layer:  O O O O  (LikelihoodFactor)
-                             | \ / |
-                             |  |  |
-           team_perf_layer:  O  O  O  (SumFactor)
-                             \ / \ /
-                              |   |
-           team_diff_layer:   O   O   (SumFactor)
-                              |   |
-                              |   |
-               trunc_layer:   O   O   (TruncateFactor)
-
-        """
         flatten_ratings = sum(map(tuple, rating_groups), ())
         flatten_weights = sum(map(tuple, weights), ())
         size = len(flatten_ratings)
@@ -379,9 +710,6 @@ class TrueSkill(object):
     def run_schedule(self, build_rating_layer, build_perf_layer,
                      build_team_perf_layer, build_team_diff_layer,
                      build_trunc_layer, min_delta=DELTA):
-        """Sends messages within every nodes of the factor graph until the
-        result is reliable.
-        """
         if min_delta <= 0:
             raise ValueError('min_delta must be greater than 0')
         layers = []
@@ -431,49 +759,6 @@ class TrueSkill(object):
         return layers
 
     def rate(self, rating_groups, ranks=None, weights=None, min_delta=DELTA):
-        """Recalculates ratings by the ranking table::
-
-           env = TrueSkill()  # uses default settings
-           # create ratings
-           r1 = env.create_rating(42.222)
-           r2 = env.create_rating(89.999)
-           # calculate new ratings
-           rating_groups = [(r1,), (r2,)]
-           rated_rating_groups = env.rate(rating_groups, ranks=[0, 1])
-           # save new ratings
-           (r1,), (r2,) = rated_rating_groups
-
-        ``rating_groups`` is a list of rating tuples or dictionaries that
-        represents each team of the match.  You will get a result as same
-        structure as this argument.  Rating dictionaries for this may be useful
-        to choose specific player's new rating::
-
-           # load players from the database
-           p1 = load_player_from_database('Arpad Emrick Elo')
-           p2 = load_player_from_database('Mark Glickman')
-           p3 = load_player_from_database('Heungsub Lee')
-           # calculate new ratings
-           rating_groups = [{p1: p1.rating, p2: p2.rating}, {p3: p3.rating}]
-           rated_rating_groups = env.rate(rating_groups, ranks=[0, 1])
-           # save new ratings
-           for player in [p1, p2, p3]:
-               player.rating = rated_rating_groups[player.team][player]
-
-        :param rating_groups: a list of tuples or dictionaries containing
-                              :class:`Rating` objects.
-        :param ranks: a ranking table.  By default, it is same as the order of
-                      the ``rating_groups``.
-        :param weights: weights of each players for "partial play".
-        :param min_delta: each loop checks a delta of changes and the loop
-                          will stop if the delta is less then this argument.
-        :returns: recalculated ratings same structure as ``rating_groups``.
-        :raises: :exc:`FloatingPointError` occurs when winners have too lower
-                 rating than losers.  higher floating-point precision couls
-                 solve this error.  set the backend to "mpmath".
-
-        .. versionadded:: 0.2
-
-        """
         rating_groups, keys = self.validate_rating_groups(rating_groups)
         weights = self.validate_weights(weights, rating_groups, keys)
         group_size = len(rating_groups)
@@ -513,20 +798,6 @@ class TrueSkill(object):
         return [dict(zip(keys[x], g)) for x, g in unsorting]
 
     def quality(self, rating_groups, weights=None):
-        """Calculates the match quality of the given rating groups.  A result
-        is the draw probability in the association::
-
-          env = TrueSkill()
-          if env.quality([team1, team2, team3]) < 0.50:
-              print('This match seems to be not so fair')
-
-        :param rating_groups: a list of tuples or dictionaries containing
-                              :class:`Rating` objects.
-        :param weights: weights of each players for "partial play".
-
-        .. versionadded:: 0.2
-
-        """
         rating_groups, keys = self.validate_rating_groups(rating_groups)
         weights = self.validate_weights(weights, rating_groups, keys)
         flatten_ratings = sum(map(tuple, rating_groups), ())
@@ -568,31 +839,10 @@ class TrueSkill(object):
         return math.exp(e_arg) * math.sqrt(s_arg)
 
     def expose(self, rating):
-        """Returns the value of the rating exposure.  It starts from 0 and
-        converges to the mean.  Use this as a sort key in a leaderboard::
-
-           leaderboard = sorted(ratings, key=env.expose, reverse=True)
-
-        .. versionadded:: 0.4
-
-        """
         k = self.mu / self.sigma
         return rating.mu - k * rating.sigma
 
     def make_as_global(self):
-        """Registers the environment as the global environment.
-
-        >>> env = TrueSkill(mu=50)
-        >>> Rating()
-        trueskill.Rating(mu=25.000, sigma=8.333)
-        >>> env.make_as_global()  #doctest: +ELLIPSIS
-        trueskill.TrueSkill(mu=50.000, ...)
-        >>> Rating()
-        trueskill.Rating(mu=50.000, sigma=8.333)
-
-        But if you need just one environment, :func:`setup` is better to use.
-
-        """
         return setup(env=self)
 
     def __repr__(self):
@@ -615,24 +865,6 @@ class TrueSkill(object):
 
 
 def rate_1vs1(rating1, rating2, drawn=False, min_delta=DELTA, env=None):
-    """A shortcut to rate just 2 players in a head-to-head match::
-
-       alice, bob = Rating(25), Rating(30)
-       alice, bob = rate_1vs1(alice, bob)
-       alice, bob = rate_1vs1(alice, bob, drawn=True)
-
-    :param rating1: the winner's rating if they didn't draw.
-    :param rating2: the loser's rating if they didn't draw.
-    :param drawn: if the players drew, set this to ``True``.  Defaults to
-                  ``False``.
-    :param min_delta: will be passed to :meth:`rate`.
-    :param env: the :class:`TrueSkill` object.  Defaults to the global
-                environment.
-    :returns: a tuple containing recalculated 2 ratings.
-
-    .. versionadded:: 0.2
-
-    """
     if env is None:
         env = global_env()
     ranks = [0, 0 if drawn else 1]
@@ -641,27 +873,12 @@ def rate_1vs1(rating1, rating2, drawn=False, min_delta=DELTA, env=None):
 
 
 def quality_1vs1(rating1, rating2, env=None):
-    """A shortcut to calculate the match quality between just 2 players in
-    a head-to-head match::
-
-       if quality_1vs1(alice, bob) < 0.50:
-           print('This match seems to be not so fair')
-
-    :param rating1: the rating.
-    :param rating2: the another rating.
-    :param env: the :class:`TrueSkill` object.  Defaults to the global
-                environment.
-
-    .. versionadded:: 0.2
-
-    """
     if env is None:
         env = global_env()
     return env.quality([(rating1,), (rating2,)])
 
 
 def global_env():
-    """Gets the :class:`TrueSkill` object which is the global environment."""
     try:
         global_env.__trueskill__
     except AttributeError:
@@ -672,19 +889,6 @@ def global_env():
 
 def setup(mu=MU, sigma=SIGMA, beta=BETA, tau=TAU,
           draw_probability=DRAW_PROBABILITY, backend=None, env=None):
-    """Setups the global environment.
-
-    :param env: the specific :class:`TrueSkill` object to be the global
-                environment.  It is optional.
-
-    >>> Rating()
-    trueskill.Rating(mu=25.000, sigma=8.333)
-    >>> setup(mu=50)  #doctest: +ELLIPSIS
-    trueskill.TrueSkill(mu=50.000, ...)
-    >>> Rating()
-    trueskill.Rating(mu=50.000, sigma=8.333)
-
-    """
     if env is None:
         env = TrueSkill(mu, sigma, beta, tau, draw_probability, backend)
     global_env.__trueskill__ = env
@@ -692,35 +896,12 @@ def setup(mu=MU, sigma=SIGMA, beta=BETA, tau=TAU,
 
 
 def rate(rating_groups, ranks=None, weights=None, min_delta=DELTA):
-    """A proxy function for :meth:`TrueSkill.rate` of the global environment.
-
-    .. versionadded:: 0.2
-
-    """
     return global_env().rate(rating_groups, ranks, weights, min_delta)
 
 
 def quality(rating_groups, weights=None):
-    """A proxy function for :meth:`TrueSkill.quality` of the global
-    environment.
-
-    .. versionadded:: 0.2
-
-    """
     return global_env().quality(rating_groups, weights)
 
 
 def expose(rating):
-    """A proxy function for :meth:`TrueSkill.expose` of the global environment.
-
-    .. versionadded:: 0.4
-
-    """
     return global_env().expose(rating)
-
-
-# Append deprecated methods into :class:`TrueSkill` and :class:`Rating`
-from . import deprecated  # noqa
-from .deprecated import (  # noqa
-    dynamic_draw_probability, match_quality, transform_ratings)
-deprecated.ensure_backward_compatibility(TrueSkill, Rating)

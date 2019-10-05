@@ -7,10 +7,12 @@
 #   current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.3.002"
+__version__ = "1.1.4.000"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.1.4.000:
+    - added trueskill()
 1.1.3.002:
     - renamed regression class to Regression, regression_engine() to regression gliko2_engine class to Gliko2
 1.1.3.001:
@@ -187,6 +189,10 @@ try:
     from analysis import regression
 except:
     pass
+try:
+    from analysis import trueskill
+except:
+    import trueskill
 from sklearn import metrics
 from sklearn import preprocessing
 import torch
@@ -325,6 +331,24 @@ def gliko2(starting_score, starting_rd, starting_vol, opposing_scores, opposing_
     player.update_player([x for x in opposing_scores], [x for x in opposing_rd], observations)
 
     return (player.rating, player.rd, player.vol)
+
+@jit(forceobj=True)
+def trueskill(teams_data, observations):#teams_data is array of array of tuples ie. [[(mu, sigma), (mu, sigma), (mu, sigma)], [(mu, sigma), (mu, sigma), (mu, sigma)]]
+
+    team_ratings = []
+
+    for team in teams_data:
+        team_temp = []
+        for player in team:
+            if player != None:
+                player = trueskill.Rating(player[0], player[1])
+                team_temp.append(player)
+            else:
+                player = trueskill.Rating()
+                team_temp.append(player)
+        team_ratings.append(team_temp)
+
+    return trueskill.rate(teams_data, observations)
 
 @jit(forceobj=True)
 def r_squared(predictions, targets):  # assumes equal size inputs
