@@ -7,7 +7,7 @@
 #   current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.4.000"
+__version__ = "1.1.4.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
@@ -190,9 +190,9 @@ try:
 except:
     pass
 try:
-    from analysis import trueskill
+    from analysis import trueskill as ts
 except:
-    import trueskill
+    import trueskill as ts
 from sklearn import metrics
 from sklearn import preprocessing
 import torch
@@ -341,14 +341,14 @@ def trueskill(teams_data, observations):#teams_data is array of array of tuples 
         team_temp = []
         for player in team:
             if player != None:
-                player = trueskill.Rating(player[0], player[1])
+                player = ts.Rating(player[0], player[1])
                 team_temp.append(player)
             else:
-                player = trueskill.Rating()
+                player = ts.Rating()
                 team_temp.append(player)
         team_ratings.append(team_temp)
 
-    return trueskill.rate(teams_data, observations)
+    return ts.rate(teams_data, observations)
 
 @jit(forceobj=True)
 def r_squared(predictions, targets):  # assumes equal size inputs
