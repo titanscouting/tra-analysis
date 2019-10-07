@@ -185,11 +185,6 @@ import csv
 import numba
 from numba import jit
 import numpy as np
-import math
-try:
-    from analysis import regression as Regression
-except:
-    pass
 try:
     from analysis import trueskill as Trueskill
 except:
