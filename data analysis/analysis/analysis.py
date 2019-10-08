@@ -425,11 +425,6 @@ class Regression:
         'CustomTrain'
     ]
 
-
-    # imports (just one for now):
-
-    import torch
-
     device = "cuda:0" if torch.torch.cuda.is_available() else "cpu"
 
     #todo: document completely
