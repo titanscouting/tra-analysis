@@ -262,26 +262,26 @@ def regression(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterat
         if 'lin' in args:
 
             model = Regression.SGDTrain(Regression.LinearRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor([outputs]).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
-            regressions.append([model[0].parameters, model[1][::-1][0]])
+            regressions.append((model[0].parameters, model[1][::-1][0]))
 
         if 'log' in args:
 
             model = Regression.SGDTrain(Regression.LogRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
-            regressions.append([model[0].parameters, model[1][::-1][0]])
+            regressions.append((model[0].parameters, model[1][::-1][0]))
 
         if 'exp' in args:
 
             model = Regression.SGDTrain(Regression.ExpRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
-            regressions.append([model[0].parameters, model[1][::-1][0]])
+            regressions.append((model[0].parameters, model[1][::-1][0]))
 
-        #if 'poly' in args:
+        #if 'ply' in args:
 
             #TODO because Jacob hasnt fixed regression.py
 
         if 'sig' in args:
 
             model = Regression.SGDTrain(Regression.SigmoidalRegKernelArthur(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
-            regressions.append([model[0].parameters, model[1][::-1][0]])
+            regressions.append((model[0].parameters, model[1][::-1][0]))
 
     else:
 
@@ -290,26 +290,26 @@ def regression(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterat
         if 'linear' in args:
 
             model = Regression.SGDTrain(Regression.LinearRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
-            regressions.append([model[0].parameters, model[1][::-1][0]])
+            regressions.append((model[0].parameters, model[1][::-1][0]))
 
         if 'log' in args:
 
             model = Regression.SGDTrain(Regression.LogRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
-            regressions.append([model[0].parameters, model[1][::-1][0]])
+            regressions.append((model[0].parameters, model[1][::-1][0]))
 
         if 'exp' in args:
 
             model = Regression.SGDTrain(Regression.ExpRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
-            regressions.append([model[0].parameters, model[1][::-1][0]])
+            regressions.append((model[0].parameters, model[1][::-1][0]))
 
-        #if 'poly' in args:
+        #if 'ply' in args:
 
             #TODO because Jacob hasnt fixed regression.py
 
         if 'sig' in args:
 
             model = Regression.SGDTrain(Regression.SigmoidalRegKernelArthur(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
-            regressions.append([model[0].parameters, model[1][::-1][0]])
+            regressions.append((model[0].parameters, model[1][::-1][0]))
 
     return regressions
 
