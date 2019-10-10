@@ -7,10 +7,12 @@
 #   current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.4.000"
+__version__ = "1.1.5.000"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.1.5.000:
+    - added polynomial regression to regression(); untested
 1.1.4.000:
     - added trueskill()
 1.1.3.002:
@@ -251,7 +253,12 @@ def histo_analysis(hist_data):
     return basic_stats(derivative)[0], basic_stats(derivative)[3]
 
 @jit(forceobj=True)
-def regression(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterations = 10000, lr = 0.01): # inputs, outputs expects N-D array 
+def regression(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterations = 10000, lr = 0.01, _iterations_ply = 10000, lr_ply = 0.01, power_limit = None): # inputs, outputs expects N-D array 
+
+    if power_limit == None:
+        power_limit = len(outputs[0])
+    else:
+        power_limit += 1
 
     regressions = []
 
@@ -274,9 +281,16 @@ def regression(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterat
             model = Regression.SGDTrain(Regression.ExpRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
             regressions.append((model[0].parameters, model[1][::-1][0]))
 
-        #if 'ply' in args:
+        if 'ply' in args:
 
-            #TODO because Jacob hasnt fixed regression.py
+            plys = []
+
+            for i in range(2, power_limit):
+
+                model = Regression.SGDTrain(Regression.PolyRegKernel(len(inputs),i), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations_ply * 10 ** i, learning_rate=lr_ply * 10 ** -i, return_losses=True)
+                plys.append((model[0].parameters, model[1][::-1][0]))
+            
+            regressions.append(plys)
 
         if 'sig' in args:
 
@@ -302,9 +316,16 @@ def regression(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterat
             model = Regression.SGDTrain(Regression.ExpRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
             regressions.append((model[0].parameters, model[1][::-1][0]))
 
-        #if 'ply' in args:
+        if 'ply' in args:
 
-            #TODO because Jacob hasnt fixed regression.py
+            plys = []
+
+            for i in range(2, power_limit):
+
+                model = Regression.SGDTrain(Regression.PolyRegKernel(len(inputs),i), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations_ply * 10 ** i, learning_rate=lr_ply * 10 ** -i, return_losses=True)
+                plys.append((model[0].parameters, model[1][::-1][0]))
+
+            regressions.append(plys)
 
         if 'sig' in args:
 
