@@ -11,6 +11,9 @@ __version__ = "1.1.5.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.1.5.002:
+    - reduced import list
+    - added kmeans clustering engine
 1.1.5.001:
     - simplified regression by using .to(device)
 1.1.5.000:
@@ -194,8 +197,8 @@ try:
     from analysis import trueskill as Trueskill
 except:
     import trueskill as Trueskill
-from sklearn import metrics
-from sklearn import preprocessing
+import sklearn
+from sklearn import *
 import torch
 
 class error(ValueError):
@@ -238,7 +241,7 @@ def z_normalize(array, *args):
 
    array = np.array(array)
    for arg in args:
-       array = preprocessing.normalize(array, axis = arg)
+       array = sklearnpreprocessing.normalize(array, axis = arg)
 
    return array
 
@@ -335,17 +338,17 @@ def trueskill(teams_data, observations):#teams_data is array of array of tuples 
 @jit(forceobj=True)
 def r_squared(predictions, targets):  # assumes equal size inputs
 
-    return metrics.r2_score(np.array(targets), np.array(predictions))
+    return sklearn.metrics.r2_score(np.array(targets), np.array(predictions))
 
 @jit(forceobj=True)
 def mse(predictions, targets):
 
-    return metrics.mean_squared_error(np.array(targets), np.array(predictions))
+    return sklearn.metrics.mean_squared_error(np.array(targets), np.array(predictions))
 
 @jit(forceobj=True)
 def rms(predictions, targets):
 
-    return math.sqrt(metrics.mean_squared_error(np.array(targets), np.array(predictions)))
+    return math.sqrt(sklearn.metrics.mean_squared_error(np.array(targets), np.array(predictions)))
 
 @jit(nopython=True)
 def mean(data):
@@ -366,6 +369,14 @@ def stdev(data):
 def variance(data):
 
     return np.var(data)
+
+def kmeans(data, kernel=sklearn.cluster.KMeans()):
+
+    kernel.fit(data)
+    predictions = kernel.predict(data)
+    centers = kernel.cluster_centers_
+
+    return centers, predictions
 
 class Regression:
 
