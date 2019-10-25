@@ -7,10 +7,12 @@
 #   current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.5.000"
+__version__ = "1.1.5.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.1.5.001:
+    - simplified regression by using .to(device)
 1.1.5.000:
     - added polynomial regression to regression(); untested
 1.1.4.000:
@@ -256,81 +258,43 @@ def histo_analysis(hist_data):
 def regression(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterations = 10000, lr = 0.01, _iterations_ply = 10000, lr_ply = 0.01, power_limit = None): # inputs, outputs expects N-D array 
 
     if power_limit == None:
-        power_limit = len(outputs[0])
+        power_limit = len(outputs)
     else:
         power_limit += 1
 
     regressions = []
+    Regression.set_device(device)
 
-    if 'cuda' in device:
+    if 'lin' in args:
 
-        Regression.set_device(device)
+        model = Regression.SGDTrain(Regression.LinearRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor([outputs]).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
+        regressions.append((model[0].parameters, model[1][::-1][0]))
 
-        if 'lin' in args:
+    if 'log' in args:
 
-            model = Regression.SGDTrain(Regression.LinearRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor([outputs]).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
-            regressions.append((model[0].parameters, model[1][::-1][0]))
+        model = Regression.SGDTrain(Regression.LogRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
+        regressions.append((model[0].parameters, model[1][::-1][0]))
 
-        if 'log' in args:
+    if 'exp' in args:
 
-            model = Regression.SGDTrain(Regression.LogRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
-            regressions.append((model[0].parameters, model[1][::-1][0]))
+        model = Regression.SGDTrain(Regression.ExpRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
+        regressions.append((model[0].parameters, model[1][::-1][0]))
 
-        if 'exp' in args:
+    if 'ply' in args:
 
-            model = Regression.SGDTrain(Regression.ExpRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
-            regressions.append((model[0].parameters, model[1][::-1][0]))
+        plys = []
 
-        if 'ply' in args:
+        for i in range(2, power_limit):
 
-            plys = []
+            model = Regression.SGDTrain(Regression.PolyRegKernel(len(inputs),i), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations_ply * 10 ** i, learning_rate=lr_ply * 10 ** -i, return_losses=True)
+            plys.append((model[0].parameters, model[1][::-1][0]))
+        
+        regressions.append(plys)
 
-            for i in range(2, power_limit):
+    if 'sig' in args:
 
-                model = Regression.SGDTrain(Regression.PolyRegKernel(len(inputs),i), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations_ply * 10 ** i, learning_rate=lr_ply * 10 ** -i, return_losses=True)
-                plys.append((model[0].parameters, model[1][::-1][0]))
-            
-            regressions.append(plys)
-
-        if 'sig' in args:
-
-            model = Regression.SGDTrain(Regression.SigmoidalRegKernelArthur(len(inputs)), torch.tensor(inputs).to(torch.float).cuda(), torch.tensor(outputs).to(torch.float).cuda(), iterations=_iterations, learning_rate=lr, return_losses=True)
-            regressions.append((model[0].parameters, model[1][::-1][0]))
-
-    else:
-
-        Regression.set_device(device)
-
-        if 'linear' in args:
-
-            model = Regression.SGDTrain(Regression.LinearRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
-            regressions.append((model[0].parameters, model[1][::-1][0]))
-
-        if 'log' in args:
-
-            model = Regression.SGDTrain(Regression.LogRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
-            regressions.append((model[0].parameters, model[1][::-1][0]))
-
-        if 'exp' in args:
-
-            model = Regression.SGDTrain(Regression.ExpRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
-            regressions.append((model[0].parameters, model[1][::-1][0]))
-
-        if 'ply' in args:
-
-            plys = []
-
-            for i in range(2, power_limit):
-
-                model = Regression.SGDTrain(Regression.PolyRegKernel(len(inputs),i), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations_ply * 10 ** i, learning_rate=lr_ply * 10 ** -i, return_losses=True)
-                plys.append((model[0].parameters, model[1][::-1][0]))
-
-            regressions.append(plys)
-
-        if 'sig' in args:
-
-            model = Regression.SGDTrain(Regression.SigmoidalRegKernelArthur(len(inputs)), torch.tensor(inputs).to(torch.float), torch.tensor(outputs).to(torch.float), iterations=_iterations, learning_rate=lr, return_losses=True)
-            regressions.append((model[0].parameters, model[1][::-1][0]))
+        model = Regression.SGDTrain(Regression.SigmoidalRegKernelArthur(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
+        regressions.append((model[0].parameters, model[1][::-1][0]))
 
     return regressions
 
