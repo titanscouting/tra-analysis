@@ -1,7 +1,0 @@
-#Internal package file, do not edit.
-#Wed Feb 06 17:42:48 CST 2019
-0.base=C\:\\_main\\Projects\\tr2022 strategy\\apps\\android\\source\\app\\build\\intermediates\\dex\\release\\mergeDexRelease\\out
-0.path=classes.dex
-count=1
-0.baseType=DIRECTORY
-0.set=DEX

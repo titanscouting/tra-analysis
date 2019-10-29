@@ -1,4 +1,0 @@
-#Wed Feb 06 17:42:47 CST 2019
-base.0=C\:\\_main\\Projects\\tr2022 strategy\\apps\\android\\source\\app\\build\\intermediates\\dex\\release\\mergeDexRelease\\out
-renamed.0=classes.dex
-path.0=classes.dex
