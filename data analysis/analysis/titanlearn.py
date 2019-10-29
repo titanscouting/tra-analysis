@@ -33,13 +33,13 @@ __all__ = [
 
 import torch
 import torch.optim as optim
-from os import *
+from os import system, name
 
 def clear(): 
-    if os.name == 'nt': 
-        _ = os.system('cls') 
+    if name == 'nt': 
+        _ = system('cls') 
     else: 
-        _ = os.system('clear') 
+        _ = system('clear') 
 
 def train(device, net, epochs, trainloader, optimizer, criterion):
 
