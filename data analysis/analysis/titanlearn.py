@@ -7,10 +7,12 @@
 #    this module learns from its mistakes far faster than 2022's captains
 # setup:
 
-__version__ = "2.0.0.000"
+__version__ = "2.0.0.001"
 
 #changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+2.0.0.001:
+    - added clear functions
 2.0.0.000:
     - complete rewrite planned
     - depreciated 1.0.0.xxx versions
@@ -25,11 +27,19 @@ __author__ = (
     )
 
 __all__ = [
+    'clear',
     'train',
     ]
 
 import torch
 import torch.optim as optim
+from os import *
+
+def clear(): 
+    if os.name == 'nt': 
+        _ = os.system('cls') 
+    else: 
+        _ = os.system('clear') 
 
 def train(device, net, epochs, trainloader, optimizer, criterion):
 
