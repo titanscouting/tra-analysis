@@ -32,7 +32,6 @@ __all__ = [
     ]
 
 import torch
-import torch.optim as optim
 from os import system, name
 
 def clear(): 
