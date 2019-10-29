@@ -22,7 +22,7 @@ __changelog__ = """changelog:
 """
 
 __author__ = (
-    "Arthur Lu <arthurlu@ttic.edu>, "
+    "Arthur Lu <arthurlu@ttic.edu>,"
     "Jacob Levine <jlevine@ttic.edu>,"
     )
 
