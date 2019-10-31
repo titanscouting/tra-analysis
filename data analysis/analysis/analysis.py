@@ -11,6 +11,8 @@ __version__ = "1.1.5.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.1.5.003:
+    - added pca
 1.1.5.002:
     - reduced import list
     - added kmeans clustering engine
@@ -377,6 +379,10 @@ def kmeans(data, kernel=sklearn.cluster.KMeans()):
     centers = kernel.cluster_centers_
 
     return centers, predictions
+
+def pca(data, kernel = sklearn.decomposition.PCA(n_components=2)):
+
+    return kernel.fit_transform(data)
 
 class Regression:
 
