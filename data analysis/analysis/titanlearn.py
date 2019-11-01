@@ -7,10 +7,13 @@
 #    this module learns from its mistakes far faster than 2022's captains
 # setup:
 
-__version__ = "2.0.1.000"
+__version__ = "2.0.1.001"
 
 #changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+2.0.1.001:
+    - removed matplotlib import
+    - removed graphloss()
 2.0.1.000:
     - added net, dataset, dataloader, and stdtrain template definitions
     - added graphloss function
@@ -36,7 +39,6 @@ __all__ = [
 
 import torch
 from os import system, name
-import matplotlib.pyplot as plt
 import numpy as np
 
 def clear(): 
@@ -114,9 +116,3 @@ def stdtrainer(net, criterion, optimizer, dataloader, epochs, batch_size):
     trainloader = dataloader
     
     return train(device, net, epochs, trainloader, optimizer, criterion)
-
-def graphloss(losses):
-
-    x = range(0, len(losses))
-    plt.plot(x, losses)
-    plt.show()
