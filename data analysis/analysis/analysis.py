@@ -245,7 +245,7 @@ def z_normalize(array, *args):
 
    array = np.array(array)
    for arg in args:
-       array = sklearnpreprocessing.normalize(array, axis = arg)
+       array = sklearn.preprocessing.normalize(array, axis = arg)
 
    return array
 
