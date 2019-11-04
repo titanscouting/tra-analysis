@@ -178,11 +178,13 @@ __all__ = [
     'elo',
     'gliko2',
     'trueskill',
+    'kmeans',
+    'pca',
     'r_squared',
     'mse',
     'rms',
     'Regression',
-    'Gliko2'
+    'Gliko2',
     # all statistics functions left out due to integration in other functions
 ]
 
