@@ -34,7 +34,11 @@ __author__ = (
 
 __all__ = [
     'clear',
+    'net',
+    'dataset',
+    'dataloader',
     'train',
+    'stdtrainer',
     ]
 
 import torch
