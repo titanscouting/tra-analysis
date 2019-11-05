@@ -198,6 +198,8 @@ __all__ = [
     'kmeans',
     'pca',
     'decisiontree',
+    'knn',
+    'NaiveBayes'
     'Regression',
     'Gliko2',
     # all statistics functions left out due to integration in other functions
