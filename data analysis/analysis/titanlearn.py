@@ -11,20 +11,20 @@ __version__ = "2.0.1.001"
 
 #changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
-2.0.1.001:
-    - removed matplotlib import
-    - removed graphloss()
-2.0.1.000:
-    - added net, dataset, dataloader, and stdtrain template definitions
-    - added graphloss function
-2.0.0.001:
-    - added clear functions
-2.0.0.000:
-    - complete rewrite planned
-    - depreciated 1.0.0.xxx versions
-    - added simple training loop
-1.0.0.xxx:
-    -added generation of ANNS, basic SGD training
+    2.0.1.001:
+        - removed matplotlib import
+        - removed graphloss()
+    2.0.1.000:
+        - added net, dataset, dataloader, and stdtrain template definitions
+        - added graphloss function
+    2.0.0.001:
+        - added clear functions
+    2.0.0.000:
+        - complete rewrite planned
+        - depreciated 1.0.0.xxx versions
+        - added simple training loop
+    1.0.0.xxx:
+        -added generation of ANNS, basic SGD training
 """
 
 __author__ = (

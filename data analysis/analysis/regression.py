@@ -10,15 +10,14 @@ __version__ = "1.0.0.002"
 
 # changelog should be viewed using print(regression.__changelog__)
 __changelog__ = """
-1.0.0.002:
-    -Added more parameters to log, exponential, polynomial
-    -Added SigmoidalRegKernelArthur, because Arthur apparently needs
-    to train the scaling and shifting of sigmoids
+    1.0.0.002:
+        -Added more parameters to log, exponential, polynomial
+        -Added SigmoidalRegKernelArthur, because Arthur apparently needs
+        to train the scaling and shifting of sigmoids
 
-1.0.0.001:
-    -initial release, with linear, log, exponential, polynomial, and sigmoid kernels
-    -already vectorized (except for polynomial generation) and CUDA-optimized
-
+    1.0.0.001:
+        -initial release, with linear, log, exponential, polynomial, and sigmoid kernels
+        -already vectorized (except for polynomial generation) and CUDA-optimized
 """
 
 __author__ = (
