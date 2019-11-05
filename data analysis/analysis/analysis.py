@@ -7,10 +7,13 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.7.000"
+__version__ = "1.1.8.000"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.8.000:
+        - added NaiveBayes classification engine
+        - note: untested
     1.1.7.000:
         - added knn()
         - added confusion matrix to decisiontree()
@@ -405,9 +408,9 @@ def decisiontree(data, labels, test_size = 0.3, criterion = "gini", splitter = "
     model = model.fit(data_train,labels_train)
     predictions = model.predict(data_test)
     cm = sklearn.metrics.confusion_matrix(labels_test, predictions)
-    accuracy = sklearn.metrics.accuracy_score(labels_test, predictions)
+    cr = sklearn.metrics.classification_report(labels_test, predictions)
 
-    return model, cm, accuracy
+    return model, cm, cr
 
 def knn(data, labels, test_size = 0.3, algorithm='auto', leaf_size=30, metric='minkowski', metric_params=None, n_jobs=None, n_neighbors=5, p=2, weights='uniform'): #expects *2d data and 1d labels post-scaling
 
@@ -419,6 +422,52 @@ def knn(data, labels, test_size = 0.3, algorithm='auto', leaf_size=30, metric='m
     cr = sklearn.metrics.classification_report(labels_test, predictions)
 
     return model, cm, cr
+
+class NaiveBayes:
+
+    def guassian(self, data, labels, test_size = 0.3, priors = None, var_smoothing = 1e-09):
+
+        data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
+        model = sklearn.naive_bayes.GaussianNB(priors = priors, var_smoothing = var_smoothing)
+        model.fit(data_train, labels_train)
+        predictions = model.predict(data_test)
+        cm = sklearn.metrics.confusion_matrix(labels_test, predictions)
+        cr = sklearn.metrics.classification_report(labels_test, predictions)
+
+        return model, cm, cr
+
+    def multinomial(self, data, labels, test_size = 0.3, alpha=1.0, fit_prior=True, class_prior=None):
+
+        data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
+        model = sklearn.naive_bayes.MultinomialNB(alpha = alpha, fit_prior = fit_prior, class_prior = class_prior)
+        model.fit(data_train, labels_train)
+        predictions = model.predict(data_test)
+        cm = sklearn.metrics.confusion_matrix(labels_test, predictions)
+        cr = sklearn.metrics.classification_report(labels_test, predictions)
+
+        return model, cm, cr
+
+    def bernoulli(self, data, labels, test_size = 0.3, alpha=1.0, binarize=0.0, fit_prior=True, class_prior=None):
+
+        data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
+        model = sklearn.naive_bayes.BernoulliNB(alpha = alpha, binarize = binarize, fit_prior = fit_prior, class_prior = class_prior)
+        model.fit(data_train, labels_train)
+        predictions = model.predict(data_test)
+        cm = sklearn.metrics.confusion_matrix(labels_test, predictions)
+        cr = sklearn.metrics.classification_report(labels_test, predictions)
+
+        return model, cm, cr
+
+    def complement(self, data, labels, test_size = 0.3, alpha=1.0, fit_prior=True, class_prior=None, norm=False):
+
+        data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
+        model = sklearn.naive_bayes.ComplementNB(aplha = alpha, fit_prior = fit_prior, class_prior = class_prior, norm = norm)
+        model.fit(data_train, labels_train)
+        predictions = model.predict(data_test)
+        cm = sklearn.metrics.confusion_matrix(labels_test, predictions)
+        cr = sklearn.metrics.classification_report(labels_test, predictions)
+
+        return model, cm, cr
 
 class Regression:
 
