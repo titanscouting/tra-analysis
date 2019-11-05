@@ -7,10 +7,13 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.6.002"
+__version__ = "1.1.7.000"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.7.000:
+        - added knn()
+        - added confusion matrix to decisiontree()
     1.1.6.002:
         - changed layout of __changelog to be vscode friendly
     1.1.6.001:
@@ -395,14 +398,27 @@ def pca(data, kernel = sklearn.decomposition.PCA(n_components=2)):
 
     return kernel.fit_transform(data)
 
-def decisiontree(data, labels, test_size = 0.3, criterion = "gini", splitter = "default", max_depth = None): #expects 2d data and 1d labels
+def decisiontree(data, labels, test_size = 0.3, criterion = "gini", splitter = "default", max_depth = None): #expects *2d data and 1d labels
 
     data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
     model = sklearn.tree.DecisionTreeClassifier(criterion = criterion, splitter = splitter, max_depth = max_depth)
     model = model.fit(data_train,labels_train)
     predictions = model.predict(data_test)
+    cm = sklearn.metrics.confusion_matrix(labels_test, predictions)
     accuracy = sklearn.metrics.accuracy_score(labels_test, predictions)
-    return model, accuracy
+
+    return model, cm, accuracy
+
+def knn(data, labels, test_size = 0.3, algorithm='auto', leaf_size=30, metric='minkowski', metric_params=None, n_jobs=None, n_neighbors=5, p=2, weights='uniform'): #expects *2d data and 1d labels post-scaling
+
+    data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
+    model = sklearn.neighbors.KNeighborsClassifier()
+    model.fit(data_train, labels_train)
+    predictions = model.predict(data_test)
+    cm = sklearn.metrics.confusion_matrix(labels_test, predictions)
+    cr = sklearn.metrics.classification_report(labels_test, predictions)
+
+    return model, cm, cr
 
 class Regression:
 
