@@ -10,10 +10,10 @@ __version__ = "1.0.0.000"
 
 #changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
-1.0.0.000:
-    - created visualization.py
-    - added graphloss()
-    - added imports
+    1.0.0.000:
+        - created visualization.py
+        - added graphloss()
+        - added imports
 """
 
 __author__ = (
