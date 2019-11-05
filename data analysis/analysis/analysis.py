@@ -7,10 +7,14 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.5.001"
+__version__ = "1.1.6.000"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+1.1.6.000:
+    - fixed __version__
+    - fixed __all__ order
+    - added decisiontree()
 1.1.5.003:
     - added pca
 1.1.5.002:
@@ -178,11 +182,12 @@ __all__ = [
     'elo',
     'gliko2',
     'trueskill',
-    'kmeans',
-    'pca',
     'r_squared',
     'mse',
     'rms',
+    'kmeans',
+    'pca',
+    'decisiontree',
     'Regression',
     'Gliko2',
     # all statistics functions left out due to integration in other functions
@@ -385,6 +390,15 @@ def kmeans(data, kernel=sklearn.cluster.KMeans()):
 def pca(data, kernel = sklearn.decomposition.PCA(n_components=2)):
 
     return kernel.fit_transform(data)
+
+def decisiontree(data, labels, test_size = 0.3): #expects 2d data and 1d labels
+
+    data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
+    model = sklearn.tree.DecisionTreeClassifier()
+    model = model.fit(data_train,labels_train)
+    predictions = model.predict(data_test)
+    accuracy = sklearn.metrics.accuracy_score(labels_test, predictions)
+    return model, accuracy
 
 class Regression:
 
