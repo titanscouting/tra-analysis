@@ -205,6 +205,7 @@ __all__ = [
     'decisiontree',
     'knn',
     'NaiveBayes',
+    'SVM',
     'Regression',
     'Gliko2',
     # all statistics functions left out due to integration in other functions
