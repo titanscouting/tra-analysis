@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.9.000"
+__version__ = "1.1.9.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.9.001:
+        - fixed bugs with SVM and NaiveBayes
     1.1.9.000:
         - added SVM class, subclasses, and functions
         - note: untested
@@ -202,7 +204,7 @@ __all__ = [
     'pca',
     'decisiontree',
     'knn',
-    'NaiveBayes'
+    'NaiveBayes',
     'Regression',
     'Gliko2',
     # all statistics functions left out due to integration in other functions
@@ -466,7 +468,7 @@ class NaiveBayes:
     def complement(self, data, labels, test_size = 0.3, alpha=1.0, fit_prior=True, class_prior=None, norm=False):
 
         data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
-        model = sklearn.naive_bayes.ComplementNB(aplha = alpha, fit_prior = fit_prior, class_prior = class_prior, norm = norm)
+        model = sklearn.naive_bayes.ComplementNB(alpha = alpha, fit_prior = fit_prior, class_prior = class_prior, norm = norm)
         model.fit(data_train, labels_train)
         predictions = model.predict(data_test)
         cm = sklearn.metrics.confusion_matrix(labels_test, predictions)
@@ -478,39 +480,39 @@ class SVM:
 
     class CustomKernel:
 
-        def __init__(self, C, kernel, degre, gamma, coef0, shrinking, probability, tol, cache_size, class_weight, verbose, max_iter, decision_function_shape, random_state):
+        def __new__(self, C, kernel, degre, gamma, coef0, shrinking, probability, tol, cache_size, class_weight, verbose, max_iter, decision_function_shape, random_state):
 
-            return sklearn.svm.SVC(C = C, kernel = kernel, gamma = gamma, coef0 = coef0, shrinking + shrinking, probability = probability, tol = tol, cache_size = cache_size, class_weight = class_weight, verbose = verbose, max_iter = max_iter, decision_function_shape = decision_function_shape, random_state = random_state)
+            return sklearn.svm.SVC(C = C, kernel = kernel, gamma = gamma, coef0 = coef0, shrinking = shrinking, probability = probability, tol = tol, cache_size = cache_size, class_weight = class_weight, verbose = verbose, max_iter = max_iter, decision_function_shape = decision_function_shape, random_state = random_state)
 
     class StandardKernel:
 
-        def __init__(self, kernel, C=1.0, degree=3, gamma='auto_deprecated', coef0=0.0, shrinking=True, probability=False, tol=0.001, cache_size=200, class_weight=None, verbose=False, max_iter=-1, decision_function_shape='ovr', random_state=None):
+        def __new__(self, kernel, C=1.0, degree=3, gamma='auto_deprecated', coef0=0.0, shrinking=True, probability=False, tol=0.001, cache_size=200, class_weight=None, verbose=False, max_iter=-1, decision_function_shape='ovr', random_state=None):
 
-            return sklearn.svm.SVC(C = C, kernel = kernel, gamma = gamma, coef0 = coef0, shrinking + shrinking, probability = probability, tol = tol, cache_size = cache_size, class_weight = class_weight, verbose = verbose, max_iter = max_iter, decision_function_shape = decision_function_shape, random_state = random_state)
+            return sklearn.svm.SVC(C = C, kernel = kernel, gamma = gamma, coef0 = coef0, shrinking = shrinking, probability = probability, tol = tol, cache_size = cache_size, class_weight = class_weight, verbose = verbose, max_iter = max_iter, decision_function_shape = decision_function_shape, random_state = random_state)
 
     class PrebuiltKernel:
 
         class Linear:
 
-            def __init__(self):
+            def __new__(self):
 
                 return sklearn.svm.SVC(kernel = 'linear')
 
         class Polynomial:
 
-            def __init__(self, power, r_bias):
+            def __new__(self, power, r_bias):
 
                 return sklearn.svm.SVC(kernel = 'polynomial', degree = power, coef0 = r_bias)
 
         class RBF:
 
-            def __init__(self, gamma):
+            def __new__(self, gamma):
 
                 return sklearn.svm.SVC(kernel = 'rbf', gamma = gamma)
 
         class Sigmoid:
 
-            def __init__(self, r_bias):
+            def __new__(self, r_bias):
 
                 return sklearn.svm.SVC(kernel = 'sigmoid', coef0 = r_bias)
 
@@ -521,8 +523,8 @@ class SVM:
     def eval_classification(self, kernel, test_data, test_outputs):
 
         predictions = kernel.predict(test_data)
-        cm = sklearn.metrics.confusion_matrix(labels_test, predictions)
-        cr = sklearn.metrics.classification_report(labels_test, predictions)
+        cm = sklearn.metrics.confusion_matrix(predictions, predictions)
+        cr = sklearn.metrics.classification_report(predictions, predictions)
 
         return cm, cr
 
@@ -530,10 +532,10 @@ class SVM:
 
         predictions = kernel.predict(test_data)
         r_2 = r_squared(predictions, test_outputs)
-        mse = mse(predictions, test_outputs)
-        rms = rms(predictions, test_outputs)
+        _mse = mse(predictions, test_outputs)
+        _rms = rms(predictions, test_outputs)
 
-        return r_2, mse, rms
+        return r_2, _mse, _rms
 
 class Regression:
 
