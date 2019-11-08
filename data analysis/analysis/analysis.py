@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.9.001"
+__version__ = "1.1.9.002"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.9.002:
+        - kernelized PCA and KNN
     1.1.9.001:
         - fixed bugs with SVM and NaiveBayes
     1.1.9.000:
@@ -397,17 +399,18 @@ def variance(data):
 
     return np.var(data)
 
-def kmeans(data, kernel=sklearn.cluster.KMeans()):
+def kmeans(data, n_clusters=8, init="k-means++", n_init=10, max_iter=300, tol=0.0001, precompute_distances="auto", verbose=0, random_state=None, copy_x=True, n_jobs=None, algorithm="auto"):
 
+    kernel = sklearn.cluster.KMeans(n_clusters = n_clusters, init = init, n_init = n_init, max_iter = max_iter, tol = tol, precompute_distances = precompute_distances, verbose = verbose, random_state = random_state, copy_x = copy_x, n_jobs = n_jobs, algorithm = algorithm)
     kernel.fit(data)
     predictions = kernel.predict(data)
     centers = kernel.cluster_centers_
 
     return centers, predictions
 
-def pca(data, n_components = None, copy = True, whiten = False, svd_solver = ’auto’, tol = 0.0, iterated_power = ’auto’, random_state = None):
+def pca(data, n_components = None, copy = True, whiten = False, svd_solver = "auto", tol = 0.0, iterated_power = "auto", random_state = None):
 
-    kernel = sklearn.decomposition.PCA()
+    kernel = sklearn.decomposition.PCA(n_components = n_components, copy = copy, whiten = whiten, svd_solver = svd_solver, tol = tol, iterated_power = iterated_power, random_state = random_state)
 
     return kernel.fit_transform(data)
 
