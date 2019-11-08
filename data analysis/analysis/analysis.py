@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.9.002"
+__version__ = "1.1.10.000"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.10.000:
+        - added numba.jit to remaining functions
     1.1.9.002:
         - kernelized PCA and KNN
     1.1.9.001:
@@ -399,6 +401,7 @@ def variance(data):
 
     return np.var(data)
 
+@jit(forceobj=True)
 def kmeans(data, n_clusters=8, init="k-means++", n_init=10, max_iter=300, tol=0.0001, precompute_distances="auto", verbose=0, random_state=None, copy_x=True, n_jobs=None, algorithm="auto"):
 
     kernel = sklearn.cluster.KMeans(n_clusters = n_clusters, init = init, n_init = n_init, max_iter = max_iter, tol = tol, precompute_distances = precompute_distances, verbose = verbose, random_state = random_state, copy_x = copy_x, n_jobs = n_jobs, algorithm = algorithm)
@@ -408,12 +411,14 @@ def kmeans(data, n_clusters=8, init="k-means++", n_init=10, max_iter=300, tol=0.
 
     return centers, predictions
 
+@jit(forceobj=True)
 def pca(data, n_components = None, copy = True, whiten = False, svd_solver = "auto", tol = 0.0, iterated_power = "auto", random_state = None):
 
     kernel = sklearn.decomposition.PCA(n_components = n_components, copy = copy, whiten = whiten, svd_solver = svd_solver, tol = tol, iterated_power = iterated_power, random_state = random_state)
 
     return kernel.fit_transform(data)
 
+@jit(forceobj=True)
 def decisiontree(data, labels, test_size = 0.3, criterion = "gini", splitter = "default", max_depth = None): #expects *2d data and 1d labels
 
     data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
@@ -425,6 +430,7 @@ def decisiontree(data, labels, test_size = 0.3, criterion = "gini", splitter = "
 
     return model, cm, cr
 
+@jit(forceobj=True)
 def knn(data, labels, test_size = 0.3, algorithm='auto', leaf_size=30, metric='minkowski', metric_params=None, n_jobs=None, n_neighbors=5, p=2, weights='uniform'): #expects *2d data and 1d labels post-scaling
 
     data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
@@ -436,6 +442,7 @@ def knn(data, labels, test_size = 0.3, algorithm='auto', leaf_size=30, metric='m
 
     return model, cm, cr
 
+@jit(forceobj=True)
 class NaiveBayes:
 
     def guassian(self, data, labels, test_size = 0.3, priors = None, var_smoothing = 1e-09):
@@ -482,6 +489,7 @@ class NaiveBayes:
 
         return model, cm, cr
 
+@jit(forceobj=True)
 class SVM:
 
     class CustomKernel:
