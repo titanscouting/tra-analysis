@@ -405,7 +405,9 @@ def kmeans(data, kernel=sklearn.cluster.KMeans()):
 
     return centers, predictions
 
-def pca(data, kernel = sklearn.decomposition.PCA(n_components=2)):
+def pca(data, n_components = None, copy = True, whiten = False, svd_solver = ’auto’, tol = 0.0, iterated_power = ’auto’, random_state = None):
+
+    kernel = sklearn.decomposition.PCA()
 
     return kernel.fit_transform(data)
 
