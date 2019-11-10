@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.11.000"
+__version__ = "1.1.11.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.11.001:
+        - added test/train split to RandomForestClassifier and RandomForestRegressor
     1.1.11.000:
         - added RandomForestClassifier and RandomForestRegressor
         - note: untested
@@ -554,17 +556,26 @@ class SVM:
 
         return r_2, _mse, _rms
 
-def RandomForestClassifier(data, labels, n_estimators="warn", criterion="gini", max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features="auto", max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False, class_weight=None):
+def RandomForestClassifier(data, labels, test_size, n_estimators="warn", criterion="gini", max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features="auto", max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False, class_weight=None):
 
+    data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
     kernel = sklearn.ensemble.RandomForestClassifier(n_estimators = n_estimators, criterion = criterion, max_depth = max_depth, min_samples_split = min_samples_split, min_samples_leaf = min_samples_leaf, min_weight_fraction_leaf = min_weight_fraction_leaf, max_leaf_nodes = max_leaf_nodes, min_impurity_decrease = min_impurity_decrease, bootstrap = bootstrap, oob_score = oob_score, n_jobs = n_jobs, random_state = random_state, verbose = verbose, warm_start = warm_start, class_weight = class_weight)
-    kernel.fit(data, labels)
-    return kernel
+    kernel.fit(data_train, labels_train)
+    predictions = kernel.predict(data_test)
+    cm = sklearn.metrics.confusion_matrix(predictions, predictions)
+    cr = sklearn.metrics.classification_report(predictions, predictions)
+    return kernel, cm, cr
 
-def RandomForestRegressor(inputs, outputs, n_estimators="warn", criterion="mse", max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features="auto", max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False):
+def RandomForestRegressor(data, outputs, test_size, n_estimators="warn", criterion="mse", max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features="auto", max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False):
 
+    data_train, data_test, outputs_train, outputs_test = sklearn.model_selection.train_test_split(inputs, outputs, test_size=test_size, random_state=1)
     kernel = sklearn.ensemble.RandomForestRegressor(n_estimators = n_estimators, criterion = criterion, max_depth = max_depth, min_samples_split = min_samples_split, min_weight_fraction_leaf = min_weight_fraction_leaf, max_features = max_features, max_leaf_nodes = max_leaf_nodes, min_impurity_decrease = min_impurity_decrease, min_impurity_split = min_impurity_split, bootstrap = bootstrap, oob_score = oob_score, n_jobs = n_jobs, random_state = random_state, verbose = verbose, warm_start = warm_start)
-    kernel.fit(inputs, outputs)
-    return kernel
+    kernel.fit(data_train, outputs_train)
+    predictions = kernel.predict(data_test)
+    r_2 = r_squared(predictions, outputs_test)
+    _mse = mse(predictions, outputs_test)
+    _rms = rms(predictions, outputs_test)
+    return kernel, r_2, _mse, _rms
 
 class Regression:
 
