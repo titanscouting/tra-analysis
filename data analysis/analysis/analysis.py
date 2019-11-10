@@ -12,7 +12,7 @@ __version__ = "1.1.11.001"
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
     1.1.11.002:
-        - consolidated matrics
+        - consolidated metrics
         - fixed __all__
     1.1.11.001:
         - added test/train split to RandomForestClassifier and RandomForestRegressor
