@@ -11,6 +11,9 @@ __version__ = "1.1.11.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.11.002:
+        - consolidated matrics
+        - fixed __all__
     1.1.11.001:
         - added test/train split to RandomForestClassifier and RandomForestRegressor
     1.1.11.000:
@@ -206,15 +209,17 @@ __all__ = [
     'elo',
     'gliko2',
     'trueskill',
-    'r_squared',
-    'mse',
-    'rms',
+    'RegressionMetrics',
+    'ClassificationMetrics',
     'kmeans',
     'pca',
     'decisiontree',
-    'knn',
+    'knn_classifier',
+    'knn_regressor',
     'NaiveBayes',
     'SVM',
+    'random_forest_classifier',
+    'random_forest_regressor',
     'Regression',
     'Gliko2',
     # all statistics functions left out due to integration in other functions
@@ -372,19 +377,38 @@ def trueskill(teams_data, observations):#teams_data is array of array of tuples 
     return Trueskill.rate(teams_data, observations)
 
 @jit(forceobj=True)
-def r_squared(predictions, targets):  # assumes equal size inputs
+class RegressionMetrics():
 
-    return sklearn.metrics.r2_score(np.array(targets), np.array(predictions))
+    def __new__(self, predictions, targets):
+
+        return r_squared(predictions, targets), mse(predictions, targets), rms(predictions, targets)
+
+    def r_squared(predictions, targets):  # assumes equal size inputs
+
+        return sklearn.metrics.r2_score(targets, predictions)
+
+    def mse(predictions, targets):
+
+        return sklearn.metrics.mean_squared_error(targets, predictions)
+
+    def rms(predictions, targets):
+
+        return math.sqrt(sklearn.metrics.mean_squared_error(targets, predictions))
 
 @jit(forceobj=True)
-def mse(predictions, targets):
+class ClassificationMetrics():
 
-    return sklearn.metrics.mean_squared_error(np.array(targets), np.array(predictions))
+    def __new__(self, predictions, targets):
 
-@jit(forceobj=True)
-def rms(predictions, targets):
+        return cm(predictions, targets), cr(predictions, targets)
 
-    return math.sqrt(sklearn.metrics.mean_squared_error(np.array(targets), np.array(predictions)))
+    def cm(predictions, targets):
+
+        return sklearn.metrics.confusion_matrix(targets, predictions)
+
+    def cr(predictions, targets):
+
+        return sklearn.metrics.classification_report(targets, predictions)
 
 @jit(nopython=True)
 def mean(data):
@@ -430,22 +454,29 @@ def decisiontree(data, labels, test_size = 0.3, criterion = "gini", splitter = "
     model = sklearn.tree.DecisionTreeClassifier(criterion = criterion, splitter = splitter, max_depth = max_depth)
     model = model.fit(data_train,labels_train)
     predictions = model.predict(data_test)
-    cm = sklearn.metrics.confusion_matrix(labels_test, predictions)
-    cr = sklearn.metrics.classification_report(labels_test, predictions)
+    metrics = ClassificationMetrics(predictions, labels_test)
 
-    return model, cm, cr
+    return model, metrics
 
 @jit(forceobj=True)
-def knn(data, labels, test_size = 0.3, algorithm='auto', leaf_size=30, metric='minkowski', metric_params=None, n_jobs=None, n_neighbors=5, p=2, weights='uniform'): #expects *2d data and 1d labels post-scaling
+def knn_classifier(data, labels, test_size = 0.3, algorithm='auto', leaf_size=30, metric='minkowski', metric_params=None, n_jobs=None, n_neighbors=5, p=2, weights='uniform'): #expects *2d data and 1d labels post-scaling
 
     data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
     model = sklearn.neighbors.KNeighborsClassifier()
     model.fit(data_train, labels_train)
     predictions = model.predict(data_test)
-    cm = sklearn.metrics.confusion_matrix(labels_test, predictions)
-    cr = sklearn.metrics.classification_report(labels_test, predictions)
 
-    return model, cm, cr
+    return model, ClassificationMetrics(predictions, labels_test)
+
+def knn_regressor(data, outputs, test_size, n_neighbors = 5, weights = "uniform", algorithm = "auto", leaf_size = 30, p = 2, metric = "minkowski", metric_params = None, n_jobs = None):
+
+    data_train, data_test, outputs_train, outputs_test = sklearn.model_selection.train_test_split(inputs, outputs, test_size=test_size, random_state=1)
+    model = sklearn.neighbors.KNeighborsRegressor(n_neighbors = n_neighbors, weights = weights, algorithm = algorithm, leaf_size = leaf_size, p = p, metric = metric, metric_params = metric_params, n_jobs = n_jobs)
+    model.fit(data_train, labels_train)
+    predictions = model.predict(data_test)
+
+    return model, RegressionMetrics(predictions, labels_test)
+
 
 @jit(forceobj=True)
 class NaiveBayes:
@@ -456,10 +487,8 @@ class NaiveBayes:
         model = sklearn.naive_bayes.GaussianNB(priors = priors, var_smoothing = var_smoothing)
         model.fit(data_train, labels_train)
         predictions = model.predict(data_test)
-        cm = sklearn.metrics.confusion_matrix(labels_test, predictions)
-        cr = sklearn.metrics.classification_report(labels_test, predictions)
 
-        return model, cm, cr
+        return model, ClassificationMetrics(predictions, labels_test)
 
     def multinomial(self, data, labels, test_size = 0.3, alpha=1.0, fit_prior=True, class_prior=None):
 
@@ -467,10 +496,8 @@ class NaiveBayes:
         model = sklearn.naive_bayes.MultinomialNB(alpha = alpha, fit_prior = fit_prior, class_prior = class_prior)
         model.fit(data_train, labels_train)
         predictions = model.predict(data_test)
-        cm = sklearn.metrics.confusion_matrix(labels_test, predictions)
-        cr = sklearn.metrics.classification_report(labels_test, predictions)
 
-        return model, cm, cr
+        return model, ClassificationMetrics(predictions, labels_test)
 
     def bernoulli(self, data, labels, test_size = 0.3, alpha=1.0, binarize=0.0, fit_prior=True, class_prior=None):
 
@@ -478,10 +505,8 @@ class NaiveBayes:
         model = sklearn.naive_bayes.BernoulliNB(alpha = alpha, binarize = binarize, fit_prior = fit_prior, class_prior = class_prior)
         model.fit(data_train, labels_train)
         predictions = model.predict(data_test)
-        cm = sklearn.metrics.confusion_matrix(labels_test, predictions)
-        cr = sklearn.metrics.classification_report(labels_test, predictions)
 
-        return model, cm, cr
+        return model, ClassificationMetrics(predictions, labels_test)
 
     def complement(self, data, labels, test_size = 0.3, alpha=1.0, fit_prior=True, class_prior=None, norm=False):
 
@@ -489,10 +514,8 @@ class NaiveBayes:
         model = sklearn.naive_bayes.ComplementNB(alpha = alpha, fit_prior = fit_prior, class_prior = class_prior, norm = norm)
         model.fit(data_train, labels_train)
         predictions = model.predict(data_test)
-        cm = sklearn.metrics.confusion_matrix(labels_test, predictions)
-        cr = sklearn.metrics.classification_report(labels_test, predictions)
 
-        return model, cm, cr
+        return model, ClassificationMetrics(predictions, labels_test)
 
 @jit(forceobj=True)
 class SVM:
@@ -542,40 +565,32 @@ class SVM:
     def eval_classification(self, kernel, test_data, test_outputs):
 
         predictions = kernel.predict(test_data)
-        cm = sklearn.metrics.confusion_matrix(predictions, predictions)
-        cr = sklearn.metrics.classification_report(predictions, predictions)
 
-        return cm, cr
+        return ClassificationMetrics(predictions, test_outputs)
 
     def eval_regression(self, kernel, test_data, test_outputs):
 
         predictions = kernel.predict(test_data)
-        r_2 = r_squared(predictions, test_outputs)
-        _mse = mse(predictions, test_outputs)
-        _rms = rms(predictions, test_outputs)
 
-        return r_2, _mse, _rms
+        return RegressionMetrics(predictions, test_outputs)
 
-def RandomForestClassifier(data, labels, test_size, n_estimators="warn", criterion="gini", max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features="auto", max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False, class_weight=None):
+def random_forest_classifier(data, labels, test_size, n_estimators="warn", criterion="gini", max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features="auto", max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False, class_weight=None):
 
     data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
     kernel = sklearn.ensemble.RandomForestClassifier(n_estimators = n_estimators, criterion = criterion, max_depth = max_depth, min_samples_split = min_samples_split, min_samples_leaf = min_samples_leaf, min_weight_fraction_leaf = min_weight_fraction_leaf, max_leaf_nodes = max_leaf_nodes, min_impurity_decrease = min_impurity_decrease, bootstrap = bootstrap, oob_score = oob_score, n_jobs = n_jobs, random_state = random_state, verbose = verbose, warm_start = warm_start, class_weight = class_weight)
     kernel.fit(data_train, labels_train)
     predictions = kernel.predict(data_test)
-    cm = sklearn.metrics.confusion_matrix(predictions, predictions)
-    cr = sklearn.metrics.classification_report(predictions, predictions)
-    return kernel, cm, cr
 
-def RandomForestRegressor(data, outputs, test_size, n_estimators="warn", criterion="mse", max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features="auto", max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False):
+    return kernel, ClassificationMetrics(predictions, labels_test)
+
+def random_forest_regressor(data, outputs, test_size, n_estimators="warn", criterion="mse", max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features="auto", max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False):
 
     data_train, data_test, outputs_train, outputs_test = sklearn.model_selection.train_test_split(inputs, outputs, test_size=test_size, random_state=1)
     kernel = sklearn.ensemble.RandomForestRegressor(n_estimators = n_estimators, criterion = criterion, max_depth = max_depth, min_samples_split = min_samples_split, min_weight_fraction_leaf = min_weight_fraction_leaf, max_features = max_features, max_leaf_nodes = max_leaf_nodes, min_impurity_decrease = min_impurity_decrease, min_impurity_split = min_impurity_split, bootstrap = bootstrap, oob_score = oob_score, n_jobs = n_jobs, random_state = random_state, verbose = verbose, warm_start = warm_start)
     kernel.fit(data_train, outputs_train)
     predictions = kernel.predict(data_test)
-    r_2 = r_squared(predictions, outputs_test)
-    _mse = mse(predictions, outputs_test)
-    _rms = rms(predictions, outputs_test)
-    return kernel, r_2, _mse, _rms
+
+    return kernel, RegressionMetrics(predictions, labels_test)
 
 class Regression:
 
