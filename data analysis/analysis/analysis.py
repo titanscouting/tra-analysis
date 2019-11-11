@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.11.001"
+__version__ = "1.1.11.003"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.11.003:
+        - bug fixes
     1.1.11.002:
         - consolidated metrics
         - fixed __all__
@@ -381,17 +383,17 @@ class RegressionMetrics():
 
     def __new__(self, predictions, targets):
 
-        return r_squared(predictions, targets), mse(predictions, targets), rms(predictions, targets)
+        return self.r_squared(self, predictions, targets), self.mse(self, predictions, targets), self.rms(self, predictions, targets)
 
-    def r_squared(predictions, targets):  # assumes equal size inputs
+    def r_squared(self, predictions, targets):  # assumes equal size inputs
 
         return sklearn.metrics.r2_score(targets, predictions)
 
-    def mse(predictions, targets):
+    def mse(self, predictions, targets):
 
         return sklearn.metrics.mean_squared_error(targets, predictions)
 
-    def rms(predictions, targets):
+    def rms(self, predictions, targets):
 
         return math.sqrt(sklearn.metrics.mean_squared_error(targets, predictions))
 
@@ -400,13 +402,13 @@ class ClassificationMetrics():
 
     def __new__(self, predictions, targets):
 
-        return cm(predictions, targets), cr(predictions, targets)
+        return self.cm(self, predictions, targets), self.cr(self, predictions, targets)
 
-    def cm(predictions, targets):
+    def cm(self, predictions, targets):
 
         return sklearn.metrics.confusion_matrix(targets, predictions)
 
-    def cr(predictions, targets):
+    def cr(self, predictions, targets):
 
         return sklearn.metrics.classification_report(targets, predictions)
 
@@ -470,12 +472,12 @@ def knn_classifier(data, labels, test_size = 0.3, algorithm='auto', leaf_size=30
 
 def knn_regressor(data, outputs, test_size, n_neighbors = 5, weights = "uniform", algorithm = "auto", leaf_size = 30, p = 2, metric = "minkowski", metric_params = None, n_jobs = None):
 
-    data_train, data_test, outputs_train, outputs_test = sklearn.model_selection.train_test_split(inputs, outputs, test_size=test_size, random_state=1)
+    data_train, data_test, outputs_train, outputs_test = sklearn.model_selection.train_test_split(data, outputs, test_size=test_size, random_state=1)
     model = sklearn.neighbors.KNeighborsRegressor(n_neighbors = n_neighbors, weights = weights, algorithm = algorithm, leaf_size = leaf_size, p = p, metric = metric, metric_params = metric_params, n_jobs = n_jobs)
-    model.fit(data_train, labels_train)
+    model.fit(data_train, outputs_train)
     predictions = model.predict(data_test)
 
-    return model, RegressionMetrics(predictions, labels_test)
+    return model, RegressionMetrics(predictions, outputs_test)
 
 
 @jit(forceobj=True)
@@ -585,12 +587,12 @@ def random_forest_classifier(data, labels, test_size, n_estimators="warn", crite
 
 def random_forest_regressor(data, outputs, test_size, n_estimators="warn", criterion="mse", max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features="auto", max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False):
 
-    data_train, data_test, outputs_train, outputs_test = sklearn.model_selection.train_test_split(inputs, outputs, test_size=test_size, random_state=1)
+    data_train, data_test, outputs_train, outputs_test = sklearn.model_selection.train_test_split(data, outputs, test_size=test_size, random_state=1)
     kernel = sklearn.ensemble.RandomForestRegressor(n_estimators = n_estimators, criterion = criterion, max_depth = max_depth, min_samples_split = min_samples_split, min_weight_fraction_leaf = min_weight_fraction_leaf, max_features = max_features, max_leaf_nodes = max_leaf_nodes, min_impurity_decrease = min_impurity_decrease, min_impurity_split = min_impurity_split, bootstrap = bootstrap, oob_score = oob_score, n_jobs = n_jobs, random_state = random_state, verbose = verbose, warm_start = warm_start)
     kernel.fit(data_train, outputs_train)
     predictions = kernel.predict(data_test)
 
-    return kernel, RegressionMetrics(predictions, labels_test)
+    return kernel, RegressionMetrics(predictions, outputs_test)
 
 class Regression:
 
@@ -639,7 +641,7 @@ class Regression:
 
     #todo: document completely
 
-    def set_device(new_device):
+    def set_device(self, new_device):
         global device
         device=new_device
 
@@ -784,7 +786,7 @@ class Regression:
                     optim.step()
             return kernel
 
-    def CustomTrain(kernel, optim, data, ground, loss=torch.nn.MSELoss(), iterations=1000, return_losses=False):
+    def CustomTrain(self, kernel, optim, data, ground, loss=torch.nn.MSELoss(), iterations=1000, return_losses=False):
         data_cuda=data.to(device)
         ground_cuda=ground.to(device)
         if (return_losses):
