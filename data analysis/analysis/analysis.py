@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.11.003"
+__version__ = "1.1.11.004"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.11.004:
+        - bug fixes
     1.1.11.003:
         - bug fixes
     1.1.11.002:
@@ -378,7 +380,6 @@ def trueskill(teams_data, observations):#teams_data is array of array of tuples 
 
     return Trueskill.rate(teams_data, observations)
 
-@jit(forceobj=True)
 class RegressionMetrics():
 
     def __new__(self, predictions, targets):
@@ -397,7 +398,6 @@ class RegressionMetrics():
 
         return math.sqrt(sklearn.metrics.mean_squared_error(targets, predictions))
 
-@jit(forceobj=True)
 class ClassificationMetrics():
 
     def __new__(self, predictions, targets):
@@ -479,8 +479,6 @@ def knn_regressor(data, outputs, test_size, n_neighbors = 5, weights = "uniform"
 
     return model, RegressionMetrics(predictions, outputs_test)
 
-
-@jit(forceobj=True)
 class NaiveBayes:
 
     def guassian(self, data, labels, test_size = 0.3, priors = None, var_smoothing = 1e-09):
@@ -519,7 +517,6 @@ class NaiveBayes:
 
         return model, ClassificationMetrics(predictions, labels_test)
 
-@jit(forceobj=True)
 class SVM:
 
     class CustomKernel:
