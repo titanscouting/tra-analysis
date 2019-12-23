@@ -12,7 +12,7 @@ __version__ = "1.1.11.005"
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
     1.1.11.005:
-        - added min and max for basic_stats
+        - added min and max in basic_stats
     1.1.11.004:
         - bug fixes
     1.1.11.003:
