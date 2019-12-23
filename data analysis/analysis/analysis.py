@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.11.004"
+__version__ = "1.1.11.005"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.11.005:
+        - added min and max for basic_stats
     1.1.11.004:
         - bug fixes
     1.1.11.003:
@@ -270,8 +272,10 @@ def basic_stats(data):
     _median = median(data_t)
     _stdev = stdev(data_t)
     _variance = variance(data_t)
+    _min = npmin(data_t)
+    _max = npmax()
 
-    return _mean, _median, _stdev, _variance
+    return _mean, _median, _stdev, _variance, _min, _max
 
 # returns z score with inputs of point, mean and standard deviation of spread
 @jit(forceobj=True)
@@ -431,6 +435,16 @@ def stdev(data):
 def variance(data):
 
     return np.var(data)
+
+@jit(nopython=True)
+def npmin(data):
+
+    return np.amin(data)
+
+@jit(nopython=True)
+def npmax(data):
+
+    return np.amax(data)
 
 @jit(forceobj=True)
 def kmeans(data, n_clusters=8, init="k-means++", n_init=10, max_iter=300, tol=0.0001, precompute_distances="auto", verbose=0, random_state=None, copy_x=True, n_jobs=None, algorithm="auto"):
