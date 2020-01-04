@@ -273,7 +273,7 @@ def basic_stats(data):
     _stdev = stdev(data_t)
     _variance = variance(data_t)
     _min = npmin(data_t)
-    _max = npmax()
+    _max = npmax(data_t)
 
     return _mean, _median, _stdev, _variance, _min, _max
 
