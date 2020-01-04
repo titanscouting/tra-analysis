@@ -7,10 +7,13 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.11.005"
+__version__ = "1.1.11.006"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.11.006:
+        - tested min and max
+        - bug fixes 
     1.1.11.005:
         - added min and max in basic_stats
     1.1.11.004:
