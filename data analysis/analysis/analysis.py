@@ -253,7 +253,6 @@ def _init_device():  # initiates computation device for ANNs
     device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
     return device
 
-@jit(forceobj=True)
 def load_csv(filepath):
     with open(filepath, newline='') as csvfile:
         file_array = np.array(list(csv.reader(csvfile)))
@@ -270,8 +269,10 @@ def basic_stats(data):
     _median = median(data_t)
     _stdev = stdev(data_t)
     _variance = variance(data_t)
+    _min = min(data_t)
+    _max = max(data_t)
 
-    return _mean, _median, _stdev, _variance
+    return _mean, _median, _stdev, _variance, _min, _max
 
 # returns z score with inputs of point, mean and standard deviation of spread
 @jit(forceobj=True)
@@ -431,6 +432,16 @@ def stdev(data):
 def variance(data):
 
     return np.var(data)
+
+@jit(nopython=True)
+def min(data):
+
+    return data.min
+
+@jit(nopython=True)
+def max(data):
+
+    return data.max
 
 @jit(forceobj=True)
 def kmeans(data, n_clusters=8, init="k-means++", n_init=10, max_iter=300, tol=0.0001, precompute_distances="auto", verbose=0, random_state=None, copy_x=True, n_jobs=None, algorithm="auto"):
