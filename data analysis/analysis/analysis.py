@@ -7,10 +7,17 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.11.004"
+__version__ = "1.1.11.007"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.11.007:
+        - bug fixes
+    1.1.11.006:
+        - tested min and max
+        - bug fixes 
+    1.1.11.005:
+        - added min and max in basic_stats
     1.1.11.004:
         - bug fixes
     1.1.11.003:
@@ -269,8 +276,8 @@ def basic_stats(data):
     _median = median(data_t)
     _stdev = stdev(data_t)
     _variance = variance(data_t)
-    _min = min(data_t)
-    _max = max(data_t)
+    _min = npmin(data_t)
+    _max = npmax(data_t)
 
     return _mean, _median, _stdev, _variance, _min, _max
 
@@ -383,9 +390,9 @@ def trueskill(teams_data, observations):#teams_data is array of array of tuples 
 
 class RegressionMetrics():
 
-    def __new__(self, predictions, targets):
+    def __new__(cls, predictions, targets):
 
-        return self.r_squared(self, predictions, targets), self.mse(self, predictions, targets), self.rms(self, predictions, targets)
+        return cls.r_squared(cls, predictions, targets), cls.mse(cls, predictions, targets), cls.rms(cls, predictions, targets)
 
     def r_squared(self, predictions, targets):  # assumes equal size inputs
 
@@ -401,9 +408,9 @@ class RegressionMetrics():
 
 class ClassificationMetrics():
 
-    def __new__(self, predictions, targets):
+    def __new__(cls, predictions, targets):
 
-        return self.cm(self, predictions, targets), self.cr(self, predictions, targets)
+        return cls.cm(cls, predictions, targets), cls.cr(cls, predictions, targets)
 
     def cm(self, predictions, targets):
 
@@ -434,14 +441,14 @@ def variance(data):
     return np.var(data)
 
 @jit(nopython=True)
-def min(data):
+def npmin(data):
 
-    return data.min
+    return np.amin(data)
 
 @jit(nopython=True)
-def max(data):
+def npmax(data):
 
-    return data.max
+    return np.amax(data)
 
 @jit(forceobj=True)
 def kmeans(data, n_clusters=8, init="k-means++", n_init=10, max_iter=300, tol=0.0001, precompute_distances="auto", verbose=0, random_state=None, copy_x=True, n_jobs=None, algorithm="auto"):
@@ -532,13 +539,13 @@ class SVM:
 
     class CustomKernel:
 
-        def __new__(self, C, kernel, degre, gamma, coef0, shrinking, probability, tol, cache_size, class_weight, verbose, max_iter, decision_function_shape, random_state):
+        def __new__(cls, C, kernel, degre, gamma, coef0, shrinking, probability, tol, cache_size, class_weight, verbose, max_iter, decision_function_shape, random_state):
 
             return sklearn.svm.SVC(C = C, kernel = kernel, gamma = gamma, coef0 = coef0, shrinking = shrinking, probability = probability, tol = tol, cache_size = cache_size, class_weight = class_weight, verbose = verbose, max_iter = max_iter, decision_function_shape = decision_function_shape, random_state = random_state)
 
     class StandardKernel:
 
-        def __new__(self, kernel, C=1.0, degree=3, gamma='auto_deprecated', coef0=0.0, shrinking=True, probability=False, tol=0.001, cache_size=200, class_weight=None, verbose=False, max_iter=-1, decision_function_shape='ovr', random_state=None):
+        def __new__(cls, kernel, C=1.0, degree=3, gamma='auto_deprecated', coef0=0.0, shrinking=True, probability=False, tol=0.001, cache_size=200, class_weight=None, verbose=False, max_iter=-1, decision_function_shape='ovr', random_state=None):
 
             return sklearn.svm.SVC(C = C, kernel = kernel, gamma = gamma, coef0 = coef0, shrinking = shrinking, probability = probability, tol = tol, cache_size = cache_size, class_weight = class_weight, verbose = verbose, max_iter = max_iter, decision_function_shape = decision_function_shape, random_state = random_state)
 
@@ -546,25 +553,25 @@ class SVM:
 
         class Linear:
 
-            def __new__(self):
+            def __new__(cls):
 
                 return sklearn.svm.SVC(kernel = 'linear')
 
         class Polynomial:
 
-            def __new__(self, power, r_bias):
+            def __new__(cls, power, r_bias):
 
                 return sklearn.svm.SVC(kernel = 'polynomial', degree = power, coef0 = r_bias)
 
         class RBF:
 
-            def __new__(self, gamma):
+            def __new__(cls, gamma):
 
                 return sklearn.svm.SVC(kernel = 'rbf', gamma = gamma)
 
         class Sigmoid:
 
-            def __new__(self, r_bias):
+            def __new__(cls, r_bias):
 
                 return sklearn.svm.SVC(kernel = 'sigmoid', coef0 = r_bias)
 
@@ -611,10 +618,12 @@ class Regression:
     #   this module is cuda-optimized and vectorized (except for one small part)
     # setup:
 
-    __version__ = "1.0.0.002"
+    __version__ = "1.0.0.003"
 
     # changelog should be viewed using print(analysis.regression.__changelog__)
     __changelog__ = """
+    1.0.0.003:
+        - bug fixes
     1.0.0.002:
         -Added more parameters to log, exponential, polynomial
         -Added SigmoidalRegKernelArthur, because Arthur apparently needs
@@ -645,12 +654,13 @@ class Regression:
         'CustomTrain'
     ]
 
+    global device
+
     device = "cuda:0" if torch.torch.cuda.is_available() else "cpu"
 
     #todo: document completely
 
     def set_device(self, new_device):
-        global device
         device=new_device
 
     class LinearRegKernel():
@@ -769,7 +779,7 @@ class Regression:
             long_bias=self.bias.repeat([1,mtx.size()[1]])
             return torch.matmul(self.weights,new_mtx)+long_bias
 
-    def SGDTrain(kernel, data, ground, loss=torch.nn.MSELoss(), iterations=1000, learning_rate=.1, return_losses=False):
+    def SGDTrain(self, kernel, data, ground, loss=torch.nn.MSELoss(), iterations=1000, learning_rate=.1, return_losses=False):
         optim=torch.optim.SGD(kernel.parameters, lr=learning_rate)
         data_cuda=data.to(device)
         ground_cuda=ground.to(device)
