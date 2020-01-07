@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.11.007"
+__version__ = "1.1.11.008"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.11.008:
+        - bug fixes
     1.1.11.007:
         - bug fixes
     1.1.11.006:
@@ -319,21 +321,21 @@ def regression(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterat
         power_limit += 1
 
     regressions = []
-    Regression.set_device(device)
+    Regression().set_device(device)
 
     if 'lin' in args:
 
-        model = Regression.SGDTrain(Regression.LinearRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor([outputs]).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
+        model = Regression().SGDTrain(Regression.LinearRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor([outputs]).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
         regressions.append((model[0].parameters, model[1][::-1][0]))
 
     if 'log' in args:
 
-        model = Regression.SGDTrain(Regression.LogRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
+        model = Regression().SGDTrain(Regression.LogRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
         regressions.append((model[0].parameters, model[1][::-1][0]))
 
     if 'exp' in args:
 
-        model = Regression.SGDTrain(Regression.ExpRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
+        model = Regression().SGDTrain(Regression.ExpRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
         regressions.append((model[0].parameters, model[1][::-1][0]))
 
     if 'ply' in args:
@@ -342,14 +344,14 @@ def regression(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterat
 
         for i in range(2, power_limit):
 
-            model = Regression.SGDTrain(Regression.PolyRegKernel(len(inputs),i), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations_ply * 10 ** i, learning_rate=lr_ply * 10 ** -i, return_losses=True)
+            model = Regression().SGDTrain(Regression.PolyRegKernel(len(inputs),i), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations_ply * 10 ** i, learning_rate=lr_ply * 10 ** -i, return_losses=True)
             plys.append((model[0].parameters, model[1][::-1][0]))
         
         regressions.append(plys)
 
     if 'sig' in args:
 
-        model = Regression.SGDTrain(Regression.SigmoidalRegKernelArthur(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
+        model = Regression().SGDTrain(Regression.SigmoidalRegKernelArthur(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
         regressions.append((model[0].parameters, model[1][::-1][0]))
 
     return regressions
