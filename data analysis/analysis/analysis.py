@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.11.008"
+__version__ = "1.1.11.009"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.11.009:
+        - bug fixes
     1.1.11.008:
         - bug fixes
     1.1.11.007:
@@ -341,6 +343,10 @@ def regression(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterat
     if 'ply' in args:
 
         plys = []
+
+        if power_limit == None:
+
+            power_limit = len(outputs[0])
 
         for i in range(2, power_limit):
 
