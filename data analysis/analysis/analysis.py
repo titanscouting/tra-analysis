@@ -317,11 +317,6 @@ def histo_analysis(hist_data):
 @jit(forceobj=True)
 def regression(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterations = 10000, lr = 0.01, _iterations_ply = 10000, lr_ply = 0.01, power_limit = None): # inputs, outputs expects N-D array 
 
-    if power_limit == None:
-        power_limit = len(outputs)
-    else:
-        power_limit += 1
-
     regressions = []
     Regression().set_device(device)
 
@@ -345,8 +340,8 @@ def regression(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterat
         plys = []
 
         if power_limit == None:
-
-            power_limit = len(outputs[0])
+            
+            power_limit = len(outputs[0]) - 1
 
         for i in range(2, power_limit):
 
