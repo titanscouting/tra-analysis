@@ -11,6 +11,8 @@ __version__ = "1.1.11.009"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.11.010:
+        - alphabeticaly ordered import lists
     1.1.11.009:
         - bug fixes
     1.1.11.008:
@@ -249,13 +251,13 @@ import numba
 from numba import jit
 import numpy as np
 import math
+import sklearn
+from sklearn import *
+import torch
 try:
     from analysis import trueskill as Trueskill
 except:
     import trueskill as Trueskill
-import sklearn
-from sklearn import *
-import torch
 
 class error(ValueError):
     pass
