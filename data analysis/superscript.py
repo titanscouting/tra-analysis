@@ -25,3 +25,9 @@ __all__ = [
 from analysis import analysis as an
 from numba import jit
 import numpy as np
+
+def main():
+
+    pass
+
+main()

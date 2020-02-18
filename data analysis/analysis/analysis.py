@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.11.010"
+__version__ = "1.1.12.000"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.12.000:
+        - temporarily fixed polynomial regressions by using sklearn's PolynomialFeatures
     1.1.11.010:
         - alphabeticaly ordered import lists
     1.1.11.009:
@@ -317,10 +319,10 @@ def histo_analysis(hist_data):
     return basic_stats(derivative)[0], basic_stats(derivative)[3]
 
 @jit(forceobj=True)
-def regression(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterations = 10000, lr = 0.01, _iterations_ply = 10000, lr_ply = 0.01, power_limit = None): # inputs, outputs expects N-D array 
+def regression(ndevice, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterations = 10000, lr = 0.01, _iterations_ply = 10000, lr_ply = 0.01): # inputs, outputs expects N-D array 
 
     regressions = []
-    Regression().set_device(device)
+    Regression().set_device(ndevice)
 
     if 'lin' in args:
 
@@ -340,6 +342,25 @@ def regression(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterat
     if 'ply' in args:
 
         plys = []
+        limit = len(outputs[0])
+
+        for i in range(2, limit):
+
+            model = sklearn.preprocessing.PolynomialFeatures(degree = i)
+            model = sklearn.pipeline.make_pipeline(model, sklearn.linear_model.LinearRegression())
+            model = model.fit(np.rot90(inputs), np.rot90(outputs))
+
+            params = model.steps[1][1].intercept_.tolist()
+            params = np.append(params, model.steps[1][1].coef_[0].tolist()[1::])
+            params.flatten()
+            params = params.tolist()
+            
+            plys.append(params)
+
+        regressions.append(plys)
+
+        """ non functional and dep
+        plys = []
 
         if power_limit == None:
             
@@ -351,6 +372,7 @@ def regression(device, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterat
             plys.append((model[0].parameters, model[1][::-1][0]))
         
         regressions.append(plys)
+        """
 
     if 'sig' in args:
 
