@@ -7,10 +7,15 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.12.000"
+__version__ = "1.1.12.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.12.001:
+        - improved readibility of regression outputs by stripping tensor data
+        - used map with lambda to acheive the improved readibility
+        - lost numba jit support with regression, and generated_jit hangs at execution
+        - TODO: reimplement correct numba integration in regression
     1.1.12.000:
         - temporarily fixed polynomial regressions by using sklearn's PolynomialFeatures
     1.1.11.010:
@@ -318,28 +323,33 @@ def histo_analysis(hist_data):
 
     return basic_stats(derivative)[0], basic_stats(derivative)[3]
 
-@jit(forceobj=True)
 def regression(ndevice, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterations = 10000, lr = 0.01, _iterations_ply = 10000, lr_ply = 0.01): # inputs, outputs expects N-D array 
 
     regressions = []
     Regression().set_device(ndevice)
 
-    if 'lin' in args:
+    if 'lin' in args: # formula: ax + b
 
         model = Regression().SGDTrain(Regression.LinearRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor([outputs]).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
-        regressions.append((model[0].parameters, model[1][::-1][0]))
+        params = model[0].parameters
+        params[:] = map(lambda x: x.item(), params)
+        regressions.append((params, model[1][::-1][0]))
 
-    if 'log' in args:
+    if 'log' in args: # formula: a log (b(x + c)) + d
 
         model = Regression().SGDTrain(Regression.LogRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
-        regressions.append((model[0].parameters, model[1][::-1][0]))
+        params = model[0].parameters
+        params[:] = map(lambda x: x.item(), params)
+        regressions.append((params, model[1][::-1][0]))
 
-    if 'exp' in args:
+    if 'exp' in args: # formula: a e ^ (b(x + c)) + d
 
         model = Regression().SGDTrain(Regression.ExpRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
-        regressions.append((model[0].parameters, model[1][::-1][0]))
+        params = model[0].parameters
+        params[:] = map(lambda x: x.item(), params)
+        regressions.append((params, model[1][::-1][0]))
 
-    if 'ply' in args:
+    if 'ply' in args: # formula: a + bx^1 + cx^2 + dx^3 + ...
 
         plys = []
         limit = len(outputs[0])
@@ -374,10 +384,12 @@ def regression(ndevice, inputs, outputs, args, loss = torch.nn.MSELoss(), _itera
         regressions.append(plys)
         """
 
-    if 'sig' in args:
+    if 'sig' in args: # formula: a sig (b(x + c)) + d | sig() = 1/(1 + e ^ -x)
 
         model = Regression().SGDTrain(Regression.SigmoidalRegKernelArthur(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
-        regressions.append((model[0].parameters, model[1][::-1][0]))
+        params = model[0].parameters
+        params[:] = map(lambda x: x.item(), params)
+        regressions.append((params, model[1][::-1][0]))
 
     return regressions
 
