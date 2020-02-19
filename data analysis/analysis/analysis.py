@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.12.002"
+__version__ = "1.1.12.003"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.12.003:
+        - removed depreciated code
     1.1.12.002:
         - removed team first time trueskill instantiation in favor of integration in superscript.py
     1.1.12.001:
@@ -370,21 +372,6 @@ def regression(ndevice, inputs, outputs, args, loss = torch.nn.MSELoss(), _itera
             plys.append(params)
 
         regressions.append(plys)
-
-        """ non functional and dep
-        plys = []
-
-        if power_limit == None:
-            
-            power_limit = len(outputs[0]) - 1
-
-        for i in range(2, power_limit):
-
-            model = Regression().SGDTrain(Regression.PolyRegKernel(len(inputs),i), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations_ply * 10 ** i, learning_rate=lr_ply * 10 ** -i, return_losses=True)
-            plys.append((model[0].parameters, model[1][::-1][0]))
-        
-        regressions.append(plys)
-        """
 
     if 'sig' in args: # formula: a sig (b(x + c)) + d | sig() = 1/(1 + e ^ -x)
 
