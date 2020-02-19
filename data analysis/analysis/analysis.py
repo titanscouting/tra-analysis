@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.12.001"
+__version__ = "1.1.12.002"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.12.002:
+        - removed team first time trueskill instantiation in favor of integration in superscript.py
     1.1.12.001:
         - improved readibility of regression outputs by stripping tensor data
         - used map with lambda to acheive the improved readibility
@@ -394,35 +396,31 @@ def regression(ndevice, inputs, outputs, args, loss = torch.nn.MSELoss(), _itera
     return regressions
 
 @jit(nopython=True)
-def elo(starting_score, opposing_scores, observed, N, K):
+def elo(starting_score, opposing_score, observed, N, K):
 
-    expected = 1/(1+10**((np.array(opposing_scores) - starting_score)/N))
+    expected = 1/(1+10**((np.array(opposing_score) - starting_score)/N))
 
     return starting_score + K*(np.sum(observed) - np.sum(expected))
 
 @jit(forceobj=True)
-def gliko2(starting_score, starting_rd, starting_vol, opposing_scores, opposing_rd, observations):
+def gliko2(starting_score, starting_rd, starting_vol, opposing_score, opposing_rd, observations):
 
     player = Gliko2(rating = starting_score, rd = starting_rd, vol = starting_vol)
 
-    player.update_player([x for x in opposing_scores], [x for x in opposing_rd], observations)
+    player.update_player([x for x in opposing_score], [x for x in opposing_rd], observations)
 
     return (player.rating, player.rd, player.vol)
 
 @jit(forceobj=True)
-def trueskill(teams_data, observations):#teams_data is array of array of tuples ie. [[(mu, sigma), (mu, sigma), (mu, sigma)], [(mu, sigma), (mu, sigma), (mu, sigma)]]
+def trueskill(teams_data, observations): # teams_data is array of array of tuples ie. [[(mu, sigma), (mu, sigma), (mu, sigma)], [(mu, sigma), (mu, sigma), (mu, sigma)]]
 
     team_ratings = []
 
     for team in teams_data:
         team_temp = []
         for player in team:
-            if player != None:
-                player = Trueskill.Rating(player[0], player[1])
-                team_temp.append(player)
-            else:
-                player = Trueskill.Rating()
-                team_temp.append(player)
+            player = Trueskill.Rating(player[0], player[1])
+            team_temp.append(player)
         team_ratings.append(team_temp)
 
     return Trueskill.rate(teams_data, observations)
