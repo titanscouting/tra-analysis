@@ -98,7 +98,7 @@ def metricsloop(team_lookup, data, tests): # expects array with [Match] ([Teams]
         gl2 = {"score": gl2_starting_score, "rd": gl2_starting_rd, "vol": gl2_starting_vol}
         ts = Trueskill.Rating()
 
-        scores[str(team)] = {"elo": elo, "gl2": gl2, "ts": ts} )
+        scores[str(team)] = {"elo": elo, "gl2": gl2, "ts": ts}
 
     for match in data:
 
