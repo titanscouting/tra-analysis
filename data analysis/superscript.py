@@ -3,10 +3,12 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.0.002"
+__version__ = "0.0.0.003"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.0.003:
+        - added metricsloop which is unfinished
     0.0.0.002:
         - added simpleloop which is untested until data is provided
     0.0.0.001:
@@ -27,6 +29,10 @@ __all__ = [
 from analysis import analysis as an
 from numba import jit
 import numpy as np
+try:
+    from analysis import trueskill as Trueskill
+except:
+    import trueskill as Trueskill
 
 def main():
 
@@ -54,28 +60,49 @@ def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
 
                     variable_vector.append(an.histo_analysis(variable))
 
-                if(test == "sr.lin" or test == "sregression.lin" or test == 2):
+                if(test == "r.lin" or test == "regression.lin" or test == 2):
 
                     variable_vector.append(an.regression("cpu", range(0, len(variable) - 1), variable, ["lin"]))
 
-                if(test == "sr.log" or test == "sregression.log" or test == 3):
+                if(test == "r.log" or test == "regression.log" or test == 3):
 
                     variable_vector.append(an.regression("cpu", range(0, len(variable) - 1), variable, ["log"]))
 
-                if(test == "sr.exp" or test == "sregression.exp" or test == 4):
+                if(test == "r.exp" or test == "regression.exp" or test == 4):
 
                     variable_vector.append(an.regression("cpu", range(0, len(variable) - 1), variable, ["exp"]))
 
-                if(test == "sr.ply" or test == "sregression.ply" or test == 5):
+                if(test == "r.ply" or test == "regression.ply" or test == 5):
 
                     variable_vector.append(an.regression("cpu", range(0, len(variable) - 1), variable, ["ply"]))
 
-                if(test == "sr.sig" or test == "sregression.sig" or test == 6):
+                if(test == "r.sig" or test == "regression.sig" or test == 6):
 
                     variable_vector.append(an.regression("cpu", range(0, len(variable) - 1), variable, ["sig"]))
 
-def metricsloop(data):
+def metricsloop(team_lookup, data, tests): # expects array with [Match] ([Teams], [Win/Loss])
 
-    pass
+    scores = []
+
+    elo_starting_score = 1500
+    N = 1500
+    K = 32
+
+    gl2_starting_score = 1500
+    gl2_starting_rd = 350
+    gl2_starting_vol = 0.06
+
+    for team in team_lookup:
+
+        elo = elo_starting_score
+        gl2 = {"score": gl2_starting_score, "rd": gl2_starting_rd, "vol": gl2_starting_vol}
+        ts = Trueskill.Rating()
+
+        scores[str(team)] = {"elo": elo, "gl2": gl2, "ts": ts} )
+
+    for match in data:
+
+        groups = data[0]
+        observations = data[1]
 
 main()
