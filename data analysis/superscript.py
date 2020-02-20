@@ -3,10 +3,13 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.0.004"
+__version__ = "0.0.0.005"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.0.005:
+        - imported pickle
+        - created custom database object
     0.0.0.004:
         - fixed simpleloop to actually return a vector
     0.0.0.003:
@@ -31,6 +34,7 @@ __all__ = [
 from analysis import analysis as an
 from numba import jit
 import numpy as np
+import pickle
 try:
     from analysis import trueskill as Trueskill
 except:
@@ -88,7 +92,74 @@ def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
 
     return return_vector
 
-def metricsloop(team_lookup, data, tests): # expects array with [Match] ([Teams], [Win/Loss])
+class database:
+
+    data = {}
+
+    elo_starting_score = 1500
+    N = 1500
+    K = 32
+
+    gl2_starting_score = 1500
+    gl2_starting_rd = 350
+    gl2_starting_vol = 0.06
+
+    def __init__(self, team_lookup):
+        super().__init__()
+
+        for team in team_lookup:
+
+            elo = elo_starting_score
+            gl2 = {"score": gl2_starting_score, "rd": gl2_starting_rd, "vol": gl2_starting_vol}
+            ts = Trueskill.Rating()
+
+            data[str(team)] = {"elo": elo, "gl2": gl2, "ts": ts}            
+
+    def get_team(self, team):
+
+        return data[team]
+
+    def get_elo(self, team):
+
+        return data[team]["elo"]
+
+    def get_gl2(self, team):
+
+        return data[team]["gl2"]
+
+    def get_ts(self, team):
+
+        return data[team]["ts"]
+
+    def set_team(self, team, ndata):
+
+        data[team] = ndata
+
+    def set_elo(self, team, nelo):
+
+        data[team]["elo"] = nelo
+
+    def set_gl2(self, team, ngl2):
+
+        data[team]["gl2"] = ngl2
+
+    def set_ts(self, team, nts):
+
+        data[team]["ts"] = nts
+
+    def save_database(self, location):
+
+        pickle.dump(data, open(location, "wb"))
+
+    def load_database(self, location):
+
+        data = pickle.load(open(location, "rb"))
+
+def metricsloop(group_data, observations, database, tests):
+
+    pass
+
+def metricsloop_dumb(team_lookup, data, tests): # expects array with [Match] ([Teams], [Win/Loss])
 
     scores = []
 
@@ -111,6 +182,19 @@ def metricsloop(team_lookup, data, tests): # expects array with [Match] ([Teams]
     for match in data:
 
         groups = data[0]
+
+        for group in groups:
+
+            group_vector = []
+
+            for team in group:
+
+                group_vector.append(scores[team])
+
+            group_ratings.append(group_vector)
+
         observations = data[1]
+
+        new_group_ratings = []
 
 main()
