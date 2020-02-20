@@ -3,10 +3,12 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.0.003"
+__version__ = "0.0.0.004"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.0.004:
+        - fixed simpleloop to actually return a vector
     0.0.0.003:
         - added metricsloop which is unfinished
     0.0.0.002:
@@ -79,6 +81,12 @@ def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
                 if(test == "r.sig" or test == "regression.sig" or test == 6):
 
                     variable_vector.append(an.regression("cpu", range(0, len(variable) - 1), variable, ["sig"]))
+
+            team_vector.append(variable_vector)
+
+        return_vector.append(team_vector)
+
+    return return_vector
 
 def metricsloop(team_lookup, data, tests): # expects array with [Match] ([Teams], [Win/Loss])
 
