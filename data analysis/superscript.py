@@ -159,6 +159,7 @@ def metricsloop(group_data, observations, database, tests): # listener based met
 
     pass
 
+""" dep
 def metricsloop_dumb(team_lookup, data, tests): # expects array with [Match] ([Teams], [Win/Loss])
 
     scores = []
@@ -196,5 +197,6 @@ def metricsloop_dumb(team_lookup, data, tests): # expects array with [Match] ([T
         observations = data[1]
 
         new_group_ratings = []
+"""
 
 main()
