@@ -48,11 +48,11 @@ def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
 
     return_vector = []
 
-    for team in teams:
+    for team in data:
 
         team_vector = []
 
-        for variable in teams:
+        for variable in team:
 
             variable_vector = []
 
