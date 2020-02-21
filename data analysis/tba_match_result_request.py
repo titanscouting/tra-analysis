@@ -3,7 +3,7 @@ def req_event_matches(eventkey,apikey):
     headers={'X-TBA-Auth-Key':apikey}
     r=requests.get('https://www.thebluealliance.com/api/v3/event/'+eventkey+'/matches/simple', headers=headers)
     return r
-def sort_through_request(request):
+def get_match_data(request):
     if request.status_code == 200:
         x=[]
         for i in sorted(request.json(), key=lambda i: i['actual_time']):
