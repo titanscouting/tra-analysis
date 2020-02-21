@@ -159,44 +159,4 @@ def metricsloop(group_data, observations, database, tests): # listener based met
 
     pass
 
-""" dep
-def metricsloop_dumb(team_lookup, data, tests): # expects array with [Match] ([Teams], [Win/Loss])
-
-    scores = []
-
-    elo_starting_score = 1500
-    N = 1500
-    K = 32
-
-    gl2_starting_score = 1500
-    gl2_starting_rd = 350
-    gl2_starting_vol = 0.06
-
-    for team in team_lookup:
-
-        elo = elo_starting_score
-        gl2 = {"score": gl2_starting_score, "rd": gl2_starting_rd, "vol": gl2_starting_vol}
-        ts = Trueskill.Rating()
-
-        scores[str(team)] = {"elo": elo, "gl2": gl2, "ts": ts}
-
-    for match in data:
-
-        groups = data[0]
-
-        for group in groups:
-
-            group_vector = []
-
-            for team in group:
-
-                group_vector.append(scores[team])
-
-            group_ratings.append(group_vector)
-
-        observations = data[1]
-
-        new_group_ratings = []
-"""
-
 main()
