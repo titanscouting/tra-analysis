@@ -35,7 +35,7 @@ from analysis import analysis as an
 from numba import jit
 import numpy as np
 import pickle
-import tba_match_result_request as tba
+import tba
 try:
     from analysis import trueskill as Trueskill
 except:
