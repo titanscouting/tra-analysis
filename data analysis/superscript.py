@@ -3,10 +3,12 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.0.005"
+__version__ = "0.0.0.006"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.0.006:
+        - fixes
     0.0.0.005:
         - imported pickle
         - created custom database object
@@ -47,51 +49,39 @@ def main():
 
 def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
 
-    return_vector = []
+    return_vector = {}
 
     for team in data:
 
-        team_vector = []
+        variable_vector = {}
 
-        for variable in team:
+        for variable in data[team]:
 
-            variable_vector = []
+            test_vector = {}
+            variable_data = data[team][variable]
 
-            for test in tests:
+            for test in tests[variable]:
 
-                if(test == "basic" or test == "basic_stats" or test == 0):
+                test_vector[test] = simplestats(variable_data, test)
 
-                    variable_vector.append(an.basic_stats(variable))
+               #test_vector[test] = None
+            
+            variable_vector[variable] = test_vector
 
-                if(test == "histo" or test == "histo_analysis" or test == 1):
-
-                    variable_vector.append(an.histo_analysis(variable))
-
-                if(test == "r.lin" or test == "regression.lin" or test == 2):
-
-                    variable_vector.append(an.regression("cpu", range(0, len(variable) - 1), variable, ["lin"]))
-
-                if(test == "r.log" or test == "regression.log" or test == 3):
-
-                    variable_vector.append(an.regression("cpu", range(0, len(variable) - 1), variable, ["log"]))
-
-                if(test == "r.exp" or test == "regression.exp" or test == 4):
-
-                    variable_vector.append(an.regression("cpu", range(0, len(variable) - 1), variable, ["exp"]))
-
-                if(test == "r.ply" or test == "regression.ply" or test == 5):
-
-                    variable_vector.append(an.regression("cpu", range(0, len(variable) - 1), variable, ["ply"]))
-
-                if(test == "r.sig" or test == "regression.sig" or test == 6):
-
-                    variable_vector.append(an.regression("cpu", range(0, len(variable) - 1), variable, ["sig"]))
-
-            team_vector.append(variable_vector)
-
-        return_vector.append(team_vector)
+        return_vector[team] = variable_vector
 
     return return_vector
+
+def simplestats(data, test):
+
+    if(test == "simple_stats"):
+
+        return an.basic_stats(data)
+
+
+def metricsloop(group_data, observations, database, tests): # listener based metrics update
+
+    pass
 
 class database:
 
@@ -155,9 +145,5 @@ class database:
     def load_database(self, location):
 
         data = pickle.load(open(location, "rb"))
-
-def metricsloop(group_data, observations, database, tests): # listener based metrics update
-
-    pass
 
 main()
