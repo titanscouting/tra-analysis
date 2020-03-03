@@ -55,44 +55,28 @@ except:
     import trueskill as Trueskill
 
 def main():
-
     while(True):
-
         config = load_config("config.csv")
-
         simpleloop(data, config)
 
 def load_config(file):
-
     config_vector = {}
-
     file = an.load_csv(file)
-
     for line in file:
-
         config_vector[line[0]] = line[1:]
 
     return config_vector
 
 def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
-
     return_vector = {}
-
     for team in data:
-
         variable_vector = {}
-
         for variable in data[team]:
-
             test_vector = {}
             variable_data = data[team][variable]
-
             for test in tests[variable]:
-
-                test_vector[test] = simplestats(variable_data, test)
-            
+                test_vector[test] = simplestats(variable_data, test)           
             variable_vector[variable] = test_vector
-
         return_vector[team] = variable_vector
 
     return return_vector
@@ -100,31 +84,24 @@ def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
 def simplestats(data, test):
 
     if(test == "simple_stats"):
-
         return an.basic_stats(data)
 
     if(test == "historical_analysis"):
-
         return an.histo_analysis(data)
 
     if(test == "regression_linear"):
-
         return an.regression('cpu', list(range(len(data))), data, ['lin'])
 
     if(test == "regression_logarithmic"):
-
         return an.regression('cpu', list(range(len(data))), data, ['log'])
 
     if(test == "regression_exponential"):
-
         return an.regression('cpu', list(range(len(data))), data, ['exp'])
 
     if(test == "regression_polynomial"):
-
         return an.regression('cpu', list(range(len(data))), data, ['ply'])
 
     if(test == "regression_sigmoidal"):
-
         return an.regression('cpu', list(range(len(data))), data, ['sig'])
 
 def metricsloop(group_data, observations, database, tests): # listener based metrics update
