@@ -3,10 +3,16 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.0.006"
+__version__ = "0.0.0.007"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.0.007:
+        - added load_config
+        - optimized simpleloop for readibility
+        - added __all__ entries
+        - added simplestats engine
+        - pending testing
     0.0.0.006:
         - fixes
     0.0.0.005:
@@ -29,6 +35,11 @@ __author__ = (
 )
 
 __all__ = [
+    "main", 
+    "load_config",
+    "simpleloop",
+    "simplestats",
+    "metricsloop"
 ]
 
 # imports:
@@ -45,7 +56,23 @@ except:
 
 def main():
 
-    pass
+    while(True):
+
+        config = load_config("config.csv")
+
+        simpleloop(data, config)
+
+def load_config(file):
+
+    config_vector = {}
+
+    file = an.load_csv(file)
+
+    for line in file:
+
+        config_vector[line[0]] = line[1:]
+
+    return config_vector
 
 def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
 
@@ -63,8 +90,6 @@ def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
             for test in tests[variable]:
 
                 test_vector[test] = simplestats(variable_data, test)
-
-               #test_vector[test] = None
             
             variable_vector[variable] = test_vector
 
@@ -78,6 +103,29 @@ def simplestats(data, test):
 
         return an.basic_stats(data)
 
+    if(test == "historical_analysis"):
+
+        return an.histo_analysis(data)
+
+    if(test == "regression_linear"):
+
+        return an.regression('cpu', list(range(len(data))), data, ['lin'])
+
+    if(test == "regression_logarithmic"):
+
+        return an.regression('cpu', list(range(len(data))), data, ['log'])
+
+    if(test == "regression_exponential"):
+
+        return an.regression('cpu', list(range(len(data))), data, ['exp'])
+
+    if(test == "regression_polynomial"):
+
+        return an.regression('cpu', list(range(len(data))), data, ['ply'])
+
+    if(test == "regression_sigmoidal"):
+
+        return an.regression('cpu', list(range(len(data))), data, ['sig'])
 
 def metricsloop(group_data, observations, database, tests): # listener based metrics update
 
