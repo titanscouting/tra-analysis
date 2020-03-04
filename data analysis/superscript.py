@@ -57,10 +57,6 @@ __all__ = [
 
 from analysis import analysis as an
 import data as d
-try:
-    from analysis import trueskill as Trueskill
-except:
-    import trueskill as Trueskilll
 
 def main():
     while(True):
