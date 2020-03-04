@@ -3,10 +3,12 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.0.009"
+__version__ = "0.0.1.000"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.1.000:
+        - tested working, can push to database
     0.0.0.009:
         - tested working
         - prints out stats for the time being, will push to database later
@@ -63,11 +65,21 @@ except:
 
 def main():
     while(True):
+        print("loading config")
         competition, config = load_config("config.csv")
+        print("config loaded")
+        print("loading database keys")
         apikey = an.load_csv("keys.txt")[0][0]
+        print("loaded keys")
+        print("loading data")
         data = d.get_data_formatted(apikey, competition)
+        print("loaded data")
+        print("running tests")
         results = simpleloop(data, config)
-        print(results)
+        print("finished tests")
+        print("pushing to database")
+        push_to_database(apikey, competition, results)
+        print("pushed to database")
 
 def load_config(file):
     config_vector = {}
@@ -116,6 +128,12 @@ def simplestats(data, test):
 
     if(test == "regression_sigmoidal"):
         return an.regression('cpu', list(range(len(data))), data, ['sig'])
+
+def push_to_database(apikey, competition, results):
+
+    for team in results:
+
+        d.push_team_data(apikey, competition, team, results[team])
 
 def metricsloop(group_data, observations, database, tests): # listener based metrics update
 
