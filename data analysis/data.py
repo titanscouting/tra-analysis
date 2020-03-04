@@ -53,3 +53,9 @@ def get_data_formatted(apikey, competition):
         except:
             pass
     return out
+
+def push_team_data(apikey, competition, team_num, data):
+    client = pymongo.MongoClient(apikey)
+    db = client.arthur_data_processing
+    mdata = db.team_tests
+    mdata.replace_one({"competition" : competition, "team": team_num}, {"_id": competition+str(team_num)+"am", "competition" : competition, "team" : team_num, "data" : data}, True)
