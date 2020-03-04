@@ -1,16 +1,17 @@
 import requests
 import pymongo
 import pandas as pd
-def req_event_matches(eventkey,apikey):
-    headers={'X-TBA-Auth-Key':apikey}
-    r=requests.get('https://www.thebluealliance.com/api/v3/event/'+eventkey+'/matches/simple', headers=headers)
-    return r
-def get_match_data(request):
-    if request.status_code == 200:
-        x=[]
-        for i in sorted(request.json(), key=lambda i: i['actual_time']):
-            x.append([[i['alliances']['red']['team_keys'], i['alliances']['blue']['team_keys']],i['winning_alliance']])
-        return x
+import time
+
+def pull_new_tba_matches(apikey, competition, cutoff = time_last_upd):
+    api_key= apikey 
+    x=requests.get("https://www.thebluealliance.com/api/v3/event/"+competition+"/matches/simple", headers={"X-TBA-Auth_Key":api_key})
+    out = []
+    for i in x.json():
+        if (i["actual_time"]-cutoff >= 0 and i["comp_level"] == "qm"):
+            out.append({"match" : i['match_number'], "blue" : list(map(lambda x: int(x[3:]), i['alliances']['blue']['team_keys'])), "red" : list(map(lambda x: int(x[3:]), i['alliances']['red']['team_keys'])), "winner": i["winning_alliance"]})
+    time_last_upd = time.time()
+    return out
 
 def get_team_match_data(apikey, competition, team_num):
     client = pymongo.MongoClient(apikey)
@@ -54,8 +55,14 @@ def get_data_formatted(apikey, competition):
             pass
     return out
 
-def push_team_data(apikey, competition, team_num, data):
+def push_team_tests_data(apikey, competition, team_num, data, dbname = "data_processing", colname = "team_tests"):
     client = pymongo.MongoClient(apikey)
-    db = client.data_processing
-    mdata = db.team_tests
+    db = client[dbname]
+    mdata = db[colname]
+    mdata.replace_one({"competition" : competition, "team": team_num}, {"_id": competition+str(team_num)+"am", "competition" : competition, "team" : team_num, "data" : data}, True)
+
+def push_team_metrics_data(apikey, competition, team_num, data, dbname = "data_processing", colname = "team_metrics"):
+    client = pymongo.MongoClient(apikey)
+    db = client[dbname]
+    mdata = db[colname]
     mdata.replace_one({"competition" : competition, "team": team_num}, {"_id": competition+str(team_num)+"am", "competition" : competition, "team" : team_num, "data" : data}, True)
