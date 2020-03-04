@@ -57,9 +57,12 @@ __all__ = [
 
 from analysis import analysis as an
 import data as d
+import time
 
 def main():
     while(True):
+        current_time = time.time()
+        print("time is: " + time)
         print("loading config")
         competition, config = load_config("config.csv")
         print("config loaded")
@@ -73,7 +76,7 @@ def main():
         results = simpleloop(data, config)
         print("finished tests")
         print("pushing to database")
-        push_to_database(apikey, competition, results)
+        push_to_database(apikey, competition, results, None)
         print("pushed to database")
 
 def load_config(file):
@@ -124,16 +127,17 @@ def simplestats(data, test):
     if(test == "regression_sigmoidal"):
         return an.regression('cpu', list(range(len(data))), data, ['sig'])
 
-def push_to_database(apikey, competition, results):
+def push_to_database(apikey, competition, results, metrics):
 
     for team in results:
 
-        d.push_team_data(apikey, competition, team, results[team])
+        d.push_team_tests_data(apikey, competition, team, results[team])
 
 def metricsloop(group_data, observations, database, tests): # listener based metrics update
 
     pass
 
+"""
 class database:
 
     data = {}
@@ -196,5 +200,5 @@ class database:
     def load_database(self, location):
 
         data = pickle.load(open(location, "rb"))
-
+"""
 main()
