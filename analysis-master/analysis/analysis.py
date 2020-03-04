@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.12.003"
+__version__ = "1.1.12.004"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.12.004:
+        - renamed gliko to glicko
     1.1.12.003:
         - removed depreciated code
     1.1.12.002:
@@ -235,7 +237,7 @@ __all__ = [
     'histo_analysis',
     'regression',
     'elo',
-    'gliko2',
+    'glicko2',
     'trueskill',
     'RegressionMetrics',
     'ClassificationMetrics',
@@ -249,7 +251,7 @@ __all__ = [
     'random_forest_classifier',
     'random_forest_regressor',
     'Regression',
-    'Gliko2',
+    'Glicko2',
     # all statistics functions left out due to integration in other functions
 ]
 
@@ -390,9 +392,9 @@ def elo(starting_score, opposing_score, observed, N, K):
     return starting_score + K*(np.sum(observed) - np.sum(expected))
 
 @jit(forceobj=True)
-def gliko2(starting_score, starting_rd, starting_vol, opposing_score, opposing_rd, observations):
+def glicko2(starting_score, starting_rd, starting_vol, opposing_score, opposing_rd, observations):
 
-    player = Gliko2(rating = starting_score, rd = starting_rd, vol = starting_vol)
+    player = Glicko2(rating = starting_score, rd = starting_rd, vol = starting_vol)
 
     player.update_player([x for x in opposing_score], [x for x in opposing_rd], observations)
 
@@ -852,7 +854,7 @@ class Regression:
                     optim.step()
             return kernel
 
-class Gliko2:
+class Glicko2:
 
     _tau = 0.5
 
