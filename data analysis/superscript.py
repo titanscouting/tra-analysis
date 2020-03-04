@@ -69,8 +69,8 @@ def main():
 def load_config(file):
     config_vector = {}
     file = an.load_csv(file)
-    for line in file[2:]:
-        config_vector[line[0]] = line[2:]
+    for line in file[1:]:
+        config_vector[line[0]] = line[1:]
 
     return (file[0][0], config_vector)
 
@@ -81,8 +81,11 @@ def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
         for variable in data[team]:
             test_vector = {}
             variable_data = data[team][variable]
-            for test in tests[variable]:
-                test_vector[test] = simplestats(variable_data, test)           
+            if(variable in tests):
+                for test in tests[variable]:
+                    test_vector[test] = simplestats(variable_data, test)
+            else:
+                pass      
             variable_vector[variable] = test_vector
         return_vector[team] = variable_vector
 
@@ -90,7 +93,7 @@ def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
 
 def simplestats(data, test):
 
-    if(test == "simple_stats"):
+    if(test == "basic_stats"):
         return an.basic_stats(data)
 
     if(test == "historical_analysis"):
