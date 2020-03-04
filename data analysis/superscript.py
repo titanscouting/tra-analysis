@@ -3,10 +3,12 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.1.000"
+__version__ = "0.0.1.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.1.001:
+        - cleaned up imports
     0.0.1.000:
         - tested working, can push to database
     0.0.0.009:
@@ -54,9 +56,6 @@ __all__ = [
 # imports:
 
 from analysis import analysis as an
-from numba import jit
-import numpy as np
-import pickle
 import data as d
 try:
     from analysis import trueskill as Trueskill
