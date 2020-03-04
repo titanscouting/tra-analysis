@@ -61,4 +61,4 @@ def push_team_metrics_data(apikey, competition, team_num, data, dbname = "data_p
     client = pymongo.MongoClient(apikey)
     db = client[dbname]
     mdata = db[colname]
-    mdata.replace_one({"competition" : competition, "team": team_num}, {"_id": competition+str(team_num)+"am", "competition" : competition, "team" : team_num, "data" : data}, True)
+    mdata.replace_one({"competition" : competition, "team": team_num}, {"_id": competition+str(team_num)+"am", "competition" : competition, "team" : team_num, "metrics" : data}, True)
