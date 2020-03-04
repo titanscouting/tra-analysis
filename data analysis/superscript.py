@@ -3,10 +3,13 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.0.008"
+__version__ = "0.0.0.009"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.0.009:
+        - tested working
+        - prints out stats for the time being, will push to database later
     0.0.0.008:
         - added data import
         - removed tba import
@@ -64,6 +67,7 @@ def main():
         apikey = an.load_csv("keys.txt")[0][0]
         data = d.get_data_formatted(apikey, competition)
         results = simpleloop(data, config)
+        #print(data)
         print(results)
 
 def load_config(file):
