@@ -60,7 +60,7 @@ import data as d
 try:
     from analysis import trueskill as Trueskill
 except:
-    import trueskill as Trueskill
+    import trueskill as Trueskilll
 
 def main():
     while(True):
