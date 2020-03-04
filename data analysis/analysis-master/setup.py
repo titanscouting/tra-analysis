@@ -3,10 +3,10 @@ import setuptools
 setuptools.setup(
     name="analysis", # Replace with your own username
     version="1.0.0.000",
-    author="",
-    author_email="",
-    description="analysis package developed by TitanScouting and The Red Alliance",
-    long_description="analysis package developed by TitanScouting and The Red Alliance",
+    author="The Titan Scouting Team",
+    author_email="titanscout2022@gmail.com",
+    description="analysis package developed by Titan Scouting for The Red Alliance",
+    long_description="",
     long_description_content_type="text/markdown",
     url="https://github.com/titanscout2022/tr2022-strategy",
     packages=setuptools.find_packages(),
