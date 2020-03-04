@@ -62,19 +62,24 @@ import time
 def main():
     while(True):
         current_time = time.time()
-        print("time is: " + time)
+        print("time: " + time)
+
         print("loading config")
         competition, config = load_config("config.csv")
         print("config loaded")
+
         print("loading database keys")
         apikey = an.load_csv("keys.txt")[0][0]
         print("loaded keys")
+
         print("loading data")
         data = d.get_data_formatted(apikey, competition)
         print("loaded data")
+
         print("running tests")
         results = simpleloop(data, config)
         print("finished tests")
+        
         print("pushing to database")
         push_to_database(apikey, competition, results, None)
         print("pushed to database")
