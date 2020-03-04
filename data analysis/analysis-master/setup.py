@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(
-    name="tra-analysis", # Replace with your own username
+    name="analysis", # Replace with your own username
     version="1.0.0.000",
     author="The Titan Scouting Team",
     author_email="titanscout2022@gmail.com",
