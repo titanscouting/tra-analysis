@@ -3,10 +3,12 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.1.002"
+__version__ = "0.0.1.003"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.1.003:
+        - working
     0.0.1.002:
         - started implement of metrics
     0.0.1.001:
@@ -61,12 +63,19 @@ from analysis import analysis as an
 import data as d
 import time
 
-main()
+def testing():
+
+    competition, config = load_config("config.csv")
+
+    apikey = an.load_csv("keys.txt")[0][0]
+    tbakey = an.load_csv("keys.txt")[1][0]
+
+    metricsloop(tbakey, apikey, "2020mokc", 1583084980)
 
 def main():
     while(True):
         current_time = time.time()
-        print("time: " + time)
+        print("time: " + str(current_time))
 
         print("loading config")
         competition, config = load_config("config.csv")
@@ -147,8 +156,56 @@ def push_to_database(apikey, competition, results, metrics):
 
         d.push_team_tests_data(apikey, competition, team, results[team])
 
-def metricsloop(apikey, competition, timestamp): # listener based metrics update
+def metricsloop(tbakey, apikey, competition, timestamp): # listener based metrics update
 
-    matches = d.pull_new_tba_matches(apikey, competition, timestamp)
+    matches = d.pull_new_tba_matches(tbakey, competition, timestamp)
+
+    red = load_metrics(apikey, competition, matches, "red")
+    blu = load_metrics(apikey, competition, matches, "blue")
 
     return
+
+def load_metrics(apikey, competition, matches, group_name):
+
+    for match in matches:
+
+        for team in match[group_name]:
+
+            group = {}
+
+            db_data = d.get_team_metrics_data(apikey, competition, team)
+
+            if d.get_team_metrics_data(apikey, competition, team) == None:
+
+                elo = {"score": 1500, "N": 1500, "K": 1500}
+                gl2 = {"score": 1500, "rd": 250, "vol": 0.06}
+                ts = {"mu": 25, "sigma": 25/3}
+
+                d.push_team_metrics_data(apikey, competition, team, {"elo":elo, "gliko2":gl2,"trueskill":ts})
+
+                group[team] = {"elo": elo, "gl2": gl2, "ts": ts}
+
+            else:
+
+                metrics = db_data["metrics"]
+                elo = metrics["elo"]
+                gl2 = metrics["gliko2"]
+                ts = metrics["trueskill"]
+
+                group[team] = {"elo": elo, "gl2": gl2, "ts": ts}
+
+    return group
+
+testing()
+
+"""
+Metrics Defaults:
+
+elo starting score = 1500
+elo N = 1500
+elo K = 32
+
+gl2 starting score = 1500
+gl2 starting rd = 350
+gl2 starting vol = 0.06
+"""
