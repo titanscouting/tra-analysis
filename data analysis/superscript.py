@@ -163,6 +163,14 @@ def metricsloop(tbakey, apikey, competition, timestamp): # listener based metric
     red = load_metrics(apikey, competition, matches, "red")
     blu = load_metrics(apikey, competition, matches, "blue")
 
+    elo_red_total = 0
+    elo_blu_total = 0
+
+    gl2_red_total = 0
+    gl2_blu_total + 0
+
+    for team in red:
+
     return
 
 def load_metrics(apikey, competition, matches, group_name):
@@ -177,7 +185,7 @@ def load_metrics(apikey, competition, matches, group_name):
 
             if d.get_team_metrics_data(apikey, competition, team) == None:
 
-                elo = {"score": 1500, "N": 1500, "K": 1500}
+                elo = {"score": 1500}
                 gl2 = {"score": 1500, "rd": 250, "vol": 0.06}
                 ts = {"mu": 25, "sigma": 25/3}
 
@@ -202,8 +210,8 @@ testing()
 Metrics Defaults:
 
 elo starting score = 1500
-elo N = 1500
-elo K = 32
+elo N = 400
+elo K = 24
 
 gl2 starting score = 1500
 gl2 starting rd = 350
