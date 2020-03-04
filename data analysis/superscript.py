@@ -3,10 +3,12 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.1.001"
+__version__ = "0.0.1.002"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.1.002:
+        - started implement of metrics
     0.0.1.001:
         - cleaned up imports
     0.0.1.000:
@@ -59,6 +61,8 @@ from analysis import analysis as an
 import data as d
 import time
 
+main()
+
 def main():
     while(True):
         current_time = time.time()
@@ -70,6 +74,7 @@ def main():
 
         print("loading database keys")
         apikey = an.load_csv("keys.txt")[0][0]
+        tbakey = an.load_csv("keys.txt")[1][0]
         print("loaded keys")
 
         print("loading data")
@@ -79,6 +84,10 @@ def main():
         print("running tests")
         results = simpleloop(data, config)
         print("finished tests")
+
+        print("running metrics")
+        metrics = metricsloop(apikey, competition, current_time)
+        print("finished metrics")
         
         print("pushing to database")
         push_to_database(apikey, competition, results, None)
@@ -138,72 +147,8 @@ def push_to_database(apikey, competition, results, metrics):
 
         d.push_team_tests_data(apikey, competition, team, results[team])
 
-def metricsloop(group_data, observations, database, tests): # listener based metrics update
+def metricsloop(apikey, competition, timestamp): # listener based metrics update
 
-    pass
+    matches = d.pull_new_tba_matches(apikey, competition, timestamp)
 
-"""
-class database:
-
-    data = {}
-
-    elo_starting_score = 1500
-    N = 1500
-    K = 32
-
-    gl2_starting_score = 1500
-    gl2_starting_rd = 350
-    gl2_starting_vol = 0.06
-
-    def __init__(self, team_lookup):
-        super().__init__()
-
-        for team in team_lookup:
-
-            elo = elo_starting_score
-            gl2 = {"score": gl2_starting_score, "rd": gl2_starting_rd, "vol": gl2_starting_vol}
-            ts = Trueskill.Rating()
-
-            data[str(team)] = {"elo": elo, "gl2": gl2, "ts": ts}            
-
-    def get_team(self, team):
-
-        return data[team]
-
-    def get_elo(self, team):
-
-        return data[team]["elo"]
-
-    def get_gl2(self, team):
-
-        return data[team]["gl2"]
-
-    def get_ts(self, team):
-
-        return data[team]["ts"]
-
-    def set_team(self, team, ndata):
-
-        data[team] = ndata
-
-    def set_elo(self, team, nelo):
-
-        data[team]["elo"] = nelo
-
-    def set_gl2(self, team, ngl2):
-
-        data[team]["gl2"] = ngl2
-
-    def set_ts(self, team, nts):
-
-        data[team]["ts"] = nts
-
-    def save_database(self, location):
-
-        pickle.dump(data, open(location, "wb"))
-
-    def load_database(self, location):
-
-        data = pickle.load(open(location, "rb"))
-"""
-main()
+    return
