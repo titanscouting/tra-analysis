@@ -67,7 +67,6 @@ def main():
         apikey = an.load_csv("keys.txt")[0][0]
         data = d.get_data_formatted(apikey, competition)
         results = simpleloop(data, config)
-        #print(data)
         print(results)
 
 def load_config(file):
