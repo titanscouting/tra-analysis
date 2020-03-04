@@ -10,9 +10,9 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/titanscout2022/tr2022-strategy",
     packages=setuptools.find_packages(),
+    license = "GNU General Public License v3.0",
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: GNU General Public License v3.0",
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
