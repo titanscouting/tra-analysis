@@ -3,10 +3,14 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.0.007"
+__version__ = "0.0.0.008"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.0.008:
+        - added data import
+        - removed tba import
+        - finished main method
     0.0.0.007:
         - added load_config
         - optimized simpleloop for readibility
@@ -48,7 +52,7 @@ from analysis import analysis as an
 from numba import jit
 import numpy as np
 import pickle
-import tba
+import data as d
 try:
     from analysis import trueskill as Trueskill
 except:
@@ -56,16 +60,19 @@ except:
 
 def main():
     while(True):
-        config = load_config("config.csv")
-        simpleloop(data, config)
+        competition, config = load_config("config.csv")
+        apikey = an.load_csv("keys.txt")[0][0]
+        data = d.get_data_formatted(apikey, competition)
+        results = simpleloop(data, config)
+        print(results)
 
 def load_config(file):
     config_vector = {}
     file = an.load_csv(file)
-    for line in file:
-        config_vector[line[0]] = line[1:]
+    for line in file[2:]:
+        config_vector[line[0]] = line[2:]
 
-    return config_vector
+    return (file[0][0], config_vector)
 
 def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
     return_vector = {}
