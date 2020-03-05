@@ -7,10 +7,14 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.13.000"
+__version__ = "1.1.13.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.13.001:
+        - bug fix with linear regression not returning a proper value
+        - cleaned up regression
+        - fixed bug with polynomial regressions
     1.1.13.000:
         - fixed all regressions to now properly work
     1.1.12.006:
@@ -343,28 +347,27 @@ def histo_analysis(hist_data):
 
         return None
 
-def regression(ndevice, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterations = 10000, lr = 0.01, _iterations_ply = 10000, lr_ply = 0.01): # inputs, outputs expects N-D array 
+def regression(inputs, outputs, args): # inputs, outputs expects N-D array 
 
     regressions = []
-    Regression().set_device(ndevice)
 
     if 'lin' in args: # formula: ax + b
 
         try:
 
-            X = np.array(inputs).reshape(-1,1)
+            X = np.array(inputs)
             y = np.array(outputs)
 
-            model = sklearn.linear_model.LinearRegression().fit(X, y)
+            def func(x, a, b):
 
-            ret = model.coef_.flatten().tolist()
-            ret.append(model.intercept_)
+                return a * x + b
 
-            regressions.append((ret, model.score(X,y)))
+            popt, pcov = scipy.optimize.curve_fit(func, X, y)
+
+            regressions.append((popt.flatten().tolist(), None))
 
         except Exception as e:
 
-            print(e)
             pass
 
     if 'log' in args: # formula: a log (b(x + c)) + d
@@ -383,8 +386,7 @@ def regression(ndevice, inputs, outputs, args, loss = torch.nn.MSELoss(), _itera
             regressions.append((popt.flatten().tolist(), None))
 
         except Exception as e:
-
-            print(e)
+            
             pass
 
     if 'exp' in args: # formula: a e ^ (b(x + c)) + d
@@ -404,10 +406,12 @@ def regression(ndevice, inputs, outputs, args, loss = torch.nn.MSELoss(), _itera
 
         except Exception as e:
 
-            print(e)
             pass
 
     if 'ply' in args: # formula: a + bx^1 + cx^2 + dx^3 + ...
+        
+        inputs = [inputs]
+        outputs = [outputs]
 
         plys = []
         limit = len(outputs[0])
@@ -443,8 +447,7 @@ def regression(ndevice, inputs, outputs, args, loss = torch.nn.MSELoss(), _itera
             regressions.append((popt.flatten().tolist(), None))
 
         except Exception as e:
-
-            print(e)
+           
             pass
 
     return regressions
