@@ -62,3 +62,15 @@ def push_team_metrics_data(apikey, competition, team_num, data, dbname = "data_p
     db = client[dbname]
     mdata = db[colname]
     mdata.replace_one({"competition" : competition, "team": team_num}, {"_id": competition+str(team_num)+"am", "competition" : competition, "team" : team_num, "metrics" : data}, True)
+
+def get_analysis_flags(apikey, flag):
+    client = pymongo.MongoClient(apikey)
+    db = client.data_processing
+    mdata = db.flags
+    return mdata.find_one({flag:{"$exists":True}})
+
+def set_analysis_flags(apikey, flag, data):
+    client = pymongo.MongoClient(apikey)
+    db = client.data_processing
+    mdata = db.flags
+    return mdata.replace_one({flag:{"$exists":True}}, data, True)
