@@ -3,10 +3,12 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.1.003"
+__version__ = "0.0.1.004"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.1.004:
+        - finished metrics implement, trueskill is bugged
     0.0.1.003:
         - working
     0.0.1.002:
@@ -63,44 +65,35 @@ from analysis import analysis as an
 import data as d
 import time
 
-def testing():
-
-    competition, config = load_config("config.csv")
-
-    apikey = an.load_csv("keys.txt")[0][0]
-    tbakey = an.load_csv("keys.txt")[1][0]
-
-    metricsloop(tbakey, apikey, "2020mokc", 1583084980)
-
 def main():
     while(True):
         current_time = time.time()
         print("time: " + str(current_time))
 
-        print("loading config")
+        print(" loading config")
         competition, config = load_config("config.csv")
-        print("config loaded")
+        print(" config loaded")
 
-        print("loading database keys")
+        print(" loading database keys")
         apikey = an.load_csv("keys.txt")[0][0]
         tbakey = an.load_csv("keys.txt")[1][0]
-        print("loaded keys")
+        print(" loaded keys")
 
-        print("loading data")
+        print(" loading data")
         data = d.get_data_formatted(apikey, competition)
-        print("loaded data")
+        print(" loaded data")
 
-        print("running tests")
+        print(" running tests")
         results = simpleloop(data, config)
-        print("finished tests")
+        print(" finished tests")
 
-        print("running metrics")
-        metrics = metricsloop(apikey, competition, current_time)
-        print("finished metrics")
+        print(" running metrics")
+        metrics = metricsloop(tbakey, apikey, competition, 0)
+        print(" finished metrics")
         
-        print("pushing to database")
-        push_to_database(apikey, competition, results, None)
-        print("pushed to database")
+        print(" pushing to database")
+        push_to_database(apikey, competition, results, metrics)
+        print(" pushed to database")
 
 def load_config(file):
     config_vector = {}
@@ -111,6 +104,7 @@ def load_config(file):
     return (file[0][0], config_vector)
 
 def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
+
     return_vector = {}
     for team in data:
         variable_vector = {}
@@ -156,6 +150,10 @@ def push_to_database(apikey, competition, results, metrics):
 
         d.push_team_tests_data(apikey, competition, team, results[team])
 
+    for team in metrics:
+
+        d.push_team_metrics_data(apikey, competition, team, metrics[team])
+
 def metricsloop(tbakey, apikey, competition, timestamp): # listener based metrics update
 
     elo_N = 400
@@ -164,6 +162,9 @@ def metricsloop(tbakey, apikey, competition, timestamp): # listener based metric
     matches = d.pull_new_tba_matches(tbakey, competition, timestamp)
 
     return_vector = {}
+
+    red = {}
+    blu = {}
 
     for match in matches:
 
@@ -207,21 +208,21 @@ def metricsloop(tbakey, apikey, competition, timestamp): # listener based metric
 
         if(match["winner"] == "red"):
 
-            observations = {"red": 1, "blue": 0}
+            observations = {"red": 1, "blu": 0}
 
         elif(match["winner"] == "blue"):
 
-            observations = {"red": 0, "blue": 1}
+            observations = {"red": 0, "blu": 1}
 
         else:
 
-            observations = {"red": 0.5, "blue": 0.5}
+            observations = {"red": 0.5, "blu": 0.5}
 
-        red_elo_delta = an.elo(red_elo["score"], blu_elo["score"], [observations["red"], observations["blue"]], elo_N, elo_K) - red_elo["score"]
-        blu_elo_delta = an.elo(blu_elo["score"], red_elo["score"], [observations["blue"], observations["red"]], elo_N, elo_K) - blu_elo["score"]
+        red_elo_delta = an.elo(red_elo["score"], blu_elo["score"], observations["red"], elo_N, elo_K) - red_elo["score"]
+        blu_elo_delta = an.elo(blu_elo["score"], red_elo["score"], observations["blu"], elo_N, elo_K) - blu_elo["score"]
 
-        new_red_gl2_score, new_red_gl2_rd, new_red_gl2_vol = an.glicko2(red_gl2["score"], red_gl2["rd"], red_gl2["vol"], [blu_gl2["score"]], [blu_gl2["rd"]], [observations["red"], observations["blue"]])
-        new_blu_gl2_score, new_blu_gl2_rd, new_blu_gl2_vol = an.glicko2(blu_gl2["score"], blu_gl2["rd"], blu_gl2["vol"], [red_gl2["score"]], [red_gl2["rd"]], [observations["blue"], observations["red"]])
+        new_red_gl2_score, new_red_gl2_rd, new_red_gl2_vol = an.glicko2(red_gl2["score"], red_gl2["rd"], red_gl2["vol"], [blu_gl2["score"]], [blu_gl2["rd"]], [observations["red"], observations["blu"]])
+        new_blu_gl2_score, new_blu_gl2_rd, new_blu_gl2_vol = an.glicko2(blu_gl2["score"], blu_gl2["rd"], blu_gl2["vol"], [red_gl2["score"]], [red_gl2["rd"]], [observations["blu"], observations["red"]])
 
         red_gl2_delta = {"score": new_red_gl2_score - red_gl2["score"], "rd": new_red_gl2_rd - red_gl2["rd"], "vol": new_red_gl2_vol - red_gl2["vol"]}
         blu_gl2_delta = {"score": new_blu_gl2_score - blu_gl2["score"], "rd": new_blu_gl2_rd - blu_gl2["rd"], "vol": new_blu_gl2_vol - blu_gl2["vol"]}
@@ -242,6 +243,32 @@ def metricsloop(tbakey, apikey, competition, timestamp): # listener based metric
             blu[team]["gl2"]["rd"] = blu[team]["gl2"]["rd"] + blu_gl2_delta["rd"]
             blu[team]["gl2"]["vol"] = blu[team]["gl2"]["vol"] + blu_gl2_delta["vol"]
 
+        """ not functional for now
+        red_trueskill = []
+        blu_trueskill = []
+
+        red_ts_team_lookup = []
+        blu_ts_team_lookup = []
+
+        for team in red:
+
+            red_trueskill.append((red[team]["ts"]["mu"], red[team]["ts"]["sigma"]))
+            red_ts_team_lookup.append(team)
+
+        for team in blu:
+
+            blu_trueskill.append((blu[team]["ts"]["mu"], blu[team]["ts"]["sigma"]))
+            blu_ts_team_lookup.append(team)
+
+        print(red_trueskill)
+        print(blu_trueskill)
+
+        results = an.trueskill([red_trueskill, blu_trueskill], [observations["red"], observations["blu"]])
+
+        print(results)
+
+        """
+
     return_vector.update(red)
     return_vector.update(blu)
 
@@ -249,9 +276,9 @@ def metricsloop(tbakey, apikey, competition, timestamp): # listener based metric
 
 def load_metrics(apikey, competition, match, group_name):
 
-    for team in match[group_name]:
+    group = {}
 
-        group = {}
+    for team in match[group_name]:
 
         db_data = d.get_team_metrics_data(apikey, competition, team)
 
@@ -276,7 +303,7 @@ def load_metrics(apikey, competition, match, group_name):
 
     return group
 
-testing()
+main()
 
 """
 Metrics Defaults:

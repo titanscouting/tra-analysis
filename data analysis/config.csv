@@ -1,6 +1,6 @@
 2020ilch
-balls-blocked,basic_stats
-balls-collected,basic_stats
-balls-lower,basic_stats
-balls-started,basic_stats
-balls-upper,basic_stats
+balls-blocked,basic_stats, historical_analysis, regression_linear, regression_logarithmic, regression_exponential, regression_polynomial, regression_sigmoidal
+balls-collected,basic_stats, historical_analysis, regression_linear, regression_logarithmic, regression_exponential, regression_polynomial, regression_sigmoidal
+balls-lower,basic_stats, historical_analysis, regression_linear, regression_logarithmic, regression_exponential, regression_polynomial, regression_sigmoidal
+balls-started,basic_stats, historical_analysis, regression_linear, regression_logarithmic, regression_exponential, regression_polynomial, regression_sigmoidal
+balls-upper,basic_stats, historical_analysis, regression_linear, regression_logarithmic, regression_exponential, regression_polynomial, regression_sigmoidal
