@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.12.004"
+__version__ = "1.1.12.005"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.12.005:
+        - fixed numba issues by removing numba  from elo, glicko2 and trueskill
     1.1.12.004:
         - renamed gliko to glicko
     1.1.12.003:
@@ -384,14 +386,12 @@ def regression(ndevice, inputs, outputs, args, loss = torch.nn.MSELoss(), _itera
 
     return regressions
 
-@jit(nopython=True)
 def elo(starting_score, opposing_score, observed, N, K):
 
     expected = 1/(1+10**((np.array(opposing_score) - starting_score)/N))
 
     return starting_score + K*(np.sum(observed) - np.sum(expected))
 
-@jit(forceobj=True)
 def glicko2(starting_score, starting_rd, starting_vol, opposing_score, opposing_rd, observations):
 
     player = Glicko2(rating = starting_score, rd = starting_rd, vol = starting_vol)
@@ -400,7 +400,6 @@ def glicko2(starting_score, starting_rd, starting_vol, opposing_score, opposing_
 
     return (player.rating, player.rd, player.vol)
 
-@jit(forceobj=True)
 def trueskill(teams_data, observations): # teams_data is array of array of tuples ie. [[(mu, sigma), (mu, sigma), (mu, sigma)], [(mu, sigma), (mu, sigma), (mu, sigma)]]
 
     team_ratings = []
