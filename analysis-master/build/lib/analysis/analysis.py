@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.12.006"
+__version__ = "1.1.13.000"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.13.000:
+        - fixed all regressions to now properly work
     1.1.12.006:
         - fixed bg with a division by zero in histo_analysis
     1.1.12.005:
@@ -268,6 +270,8 @@ import numba
 from numba import jit
 import numpy as np
 import math
+import scipy
+from scipy import *
 import sklearn
 from sklearn import *
 import torch
@@ -346,24 +350,62 @@ def regression(ndevice, inputs, outputs, args, loss = torch.nn.MSELoss(), _itera
 
     if 'lin' in args: # formula: ax + b
 
-        model = Regression().SGDTrain(Regression.LinearRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor([outputs]).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
-        params = model[0].parameters
-        params[:] = map(lambda x: x.item(), params)
-        regressions.append((params, model[1][::-1][0]))
+        try:
+
+            X = np.array(inputs).reshape(-1,1)
+            y = np.array(outputs)
+
+            model = sklearn.linear_model.LinearRegression().fit(X, y)
+
+            ret = model.coef_.flatten().tolist()
+            ret.append(model.intercept_)
+
+            regressions.append((ret, model.score(X,y)))
+
+        except Exception as e:
+
+            print(e)
+            pass
 
     if 'log' in args: # formula: a log (b(x + c)) + d
 
-        model = Regression().SGDTrain(Regression.LogRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
-        params = model[0].parameters
-        params[:] = map(lambda x: x.item(), params)
-        regressions.append((params, model[1][::-1][0]))
+        try:
+
+            X = np.array(inputs)
+            y = np.array(outputs)
+
+            def func(x, a, b, c, d):
+
+                return a * np.log(b*(x + c)) + d
+
+            popt, pcov = scipy.optimize.curve_fit(func, X, y)
+
+            regressions.append((popt.flatten().tolist(), None))
+
+        except Exception as e:
+
+            print(e)
+            pass
 
     if 'exp' in args: # formula: a e ^ (b(x + c)) + d
 
-        model = Regression().SGDTrain(Regression.ExpRegKernel(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
-        params = model[0].parameters
-        params[:] = map(lambda x: x.item(), params)
-        regressions.append((params, model[1][::-1][0]))
+        try:
+
+            X = np.array(inputs)
+            y = np.array(outputs)
+
+            def func(x, a, b, c, d):
+
+                return a * np.exp(b*(x + c)) + d
+
+            popt, pcov = scipy.optimize.curve_fit(func, X, y)
+
+            regressions.append((popt.flatten().tolist(), None))
+
+        except Exception as e:
+
+            print(e)
+            pass
 
     if 'ply' in args: # formula: a + bx^1 + cx^2 + dx^3 + ...
 
@@ -385,12 +427,25 @@ def regression(ndevice, inputs, outputs, args, loss = torch.nn.MSELoss(), _itera
 
         regressions.append(plys)
 
-    if 'sig' in args: # formula: a sig (b(x + c)) + d | sig() = 1/(1 + e ^ -x)
+    if 'sig' in args: # formula: a tanh (b(x + c)) + d
 
-        model = Regression().SGDTrain(Regression.SigmoidalRegKernelArthur(len(inputs)), torch.tensor(inputs).to(torch.float).to(device), torch.tensor(outputs).to(torch.float).to(device), iterations=_iterations, learning_rate=lr, return_losses=True)
-        params = model[0].parameters
-        params[:] = map(lambda x: x.item(), params)
-        regressions.append((params, model[1][::-1][0]))
+        try:
+
+            X = np.array(inputs)
+            y = np.array(outputs)
+
+            def func(x, a, b, c, d):
+
+                return a * np.tanh(b*(x + c)) + d
+
+            popt, pcov = scipy.optimize.curve_fit(func, X, y)
+
+            regressions.append((popt.flatten().tolist(), None))
+
+        except Exception as e:
+
+            print(e)
+            pass
 
     return regressions
 
