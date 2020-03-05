@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.12.005"
+__version__ = "1.1.12.006"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.12.006:
+        - fixed bg with a division by zero in histo_analysis
     1.1.12.005:
         - fixed numba issues by removing numba  from elo, glicko2 and trueskill
     1.1.12.004:
@@ -323,13 +325,19 @@ def z_normalize(array, *args):
 # expects 2d array of [x,y]
 def histo_analysis(hist_data):
 
-    hist_data = np.array(hist_data)
-    derivative = np.array(len(hist_data) - 1, dtype = float)
-    t = np.diff(hist_data)
-    derivative = t[1] / t[0]
-    np.sort(derivative)
+    if(len(hist_data[0]) > 2):
 
-    return basic_stats(derivative)[0], basic_stats(derivative)[3]
+        hist_data = np.array(hist_data)
+        derivative = np.array(len(hist_data) - 1, dtype = float)
+        t = np.diff(hist_data)
+        derivative = t[1] / t[0]
+        np.sort(derivative)
+
+        return basic_stats(derivative)[0], basic_stats(derivative)[3]
+
+    else:
+
+        return None
 
 def regression(ndevice, inputs, outputs, args, loss = torch.nn.MSELoss(), _iterations = 10000, lr = 0.01, _iterations_ply = 10000, lr_ply = 0.01): # inputs, outputs expects N-D array 
 
