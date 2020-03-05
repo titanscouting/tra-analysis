@@ -3,10 +3,16 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.1.004"
+__version__ = "0.0.2.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.2.001:
+        - minor stability patches
+        - implemented db syncing for timestamps
+        - fixed bugs
+    0.0.2.000:
+        - finalized testing and small fixes
     0.0.1.004:
         - finished metrics implement, trueskill is bugged
     0.0.1.003:
@@ -67,6 +73,7 @@ import time
 
 def main():
     while(True):
+
         current_time = time.time()
         print("time: " + str(current_time))
 
@@ -79,6 +86,19 @@ def main():
         tbakey = an.load_csv("keys.txt")[1][0]
         print(" loaded keys")
 
+        previous_time = d.get_analysis_flags(apikey, "latest_update")
+
+        if(previous_time == None):
+
+            d.set_analysis_flags(apikey, "latest_update", 0)
+            previous_time = 0
+
+        else:
+
+            previous_time = previous_time["latest_update"]
+
+        print(" analysis backtimed to: " + str(previous_time))
+
         print(" loading data")
         data = d.get_data_formatted(apikey, competition)
         print(" loaded data")
@@ -88,8 +108,10 @@ def main():
         print(" finished tests")
 
         print(" running metrics")
-        metrics = metricsloop(tbakey, apikey, competition, 0)
+        metrics = metricsloop(tbakey, apikey, competition, previous_time)
         print(" finished metrics")
+
+        d.set_analysis_flags(apikey, "latest_update", {"latest_update":current_time})
         
         print(" pushing to database")
         push_to_database(apikey, competition, results, metrics)
@@ -127,22 +149,22 @@ def simplestats(data, test):
         return an.basic_stats(data)
 
     if(test == "historical_analysis"):
-        return an.histo_analysis(data)
+        return an.histo_analysis([list(range(len(data))), data])
 
     if(test == "regression_linear"):
-        return an.regression('cpu', list(range(len(data))), data, ['lin'])
+        return an.regression('cpu', [list(range(len(data)))], [data], ['lin'], _iterations = 5000)
 
     if(test == "regression_logarithmic"):
-        return an.regression('cpu', list(range(len(data))), data, ['log'])
+        return an.regression('cpu', [list(range(len(data)))], [data], ['log'], _iterations = 5000)
 
     if(test == "regression_exponential"):
-        return an.regression('cpu', list(range(len(data))), data, ['exp'])
+        return an.regression('cpu', [list(range(len(data)))], [data], ['exp'], _iterations = 5000)
 
     if(test == "regression_polynomial"):
-        return an.regression('cpu', list(range(len(data))), data, ['ply'])
+        return an.regression('cpu', [list(range(len(data)))], [data], ['ply'], _iterations = 5000)
 
     if(test == "regression_sigmoidal"):
-        return an.regression('cpu', list(range(len(data))), data, ['sig'])
+        return an.regression('cpu', [list(range(len(data)))], [data], ['sig'], _iterations = 5000)
 
 def push_to_database(apikey, competition, results, metrics):
 
