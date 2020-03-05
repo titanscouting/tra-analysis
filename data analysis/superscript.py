@@ -70,8 +70,10 @@ __all__ = [
 from analysis import analysis as an
 import data as d
 import time
+import warnings
 
 def main():
+    warnings.filterwarnings("ignore")
     while(True):
 
         current_time = time.time()
@@ -152,19 +154,19 @@ def simplestats(data, test):
         return an.histo_analysis([list(range(len(data))), data])
 
     if(test == "regression_linear"):
-        return an.regression('cpu', [list(range(len(data)))], [data], ['lin'], _iterations = 5000)
+        return an.regression(list(range(len(data))), data, ['lin'])
 
     if(test == "regression_logarithmic"):
-        return an.regression('cpu', [list(range(len(data)))], [data], ['log'], _iterations = 5000)
+        return an.regression(list(range(len(data))), data, ['log'])
 
     if(test == "regression_exponential"):
-        return an.regression('cpu', [list(range(len(data)))], [data], ['exp'], _iterations = 5000)
+        return an.regression(list(range(len(data))), data, ['exp'])
 
     if(test == "regression_polynomial"):
-        return an.regression('cpu', [list(range(len(data)))], [data], ['ply'], _iterations = 5000)
+        return an.regression(list(range(len(data))), data, ['ply'])
 
     if(test == "regression_sigmoidal"):
-        return an.regression('cpu', [list(range(len(data)))], [data], ['sig'], _iterations = 5000)
+        return an.regression(list(range(len(data))), data, ['sig'])
 
 def push_to_database(apikey, competition, results, metrics):
 
