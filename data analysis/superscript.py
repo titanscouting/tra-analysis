@@ -158,49 +158,121 @@ def push_to_database(apikey, competition, results, metrics):
 
 def metricsloop(tbakey, apikey, competition, timestamp): # listener based metrics update
 
+    elo_N = 400
+    elo_K = 24
+
     matches = d.pull_new_tba_matches(tbakey, competition, timestamp)
 
-    red = load_metrics(apikey, competition, matches, "red")
-    blu = load_metrics(apikey, competition, matches, "blue")
-
-    elo_red_total = 0
-    elo_blu_total = 0
-
-    gl2_red_total = 0
-    gl2_blu_total + 0
-
-    for team in red:
-
-    return
-
-def load_metrics(apikey, competition, matches, group_name):
+    return_vector = {}
 
     for match in matches:
 
-        for team in match[group_name]:
+        red = load_metrics(apikey, competition, match, "red")
+        blu = load_metrics(apikey, competition, match, "blue")
 
-            group = {}
+        elo_red_total = 0
+        elo_blu_total = 0
 
-            db_data = d.get_team_metrics_data(apikey, competition, team)
+        gl2_red_score_total = 0
+        gl2_blu_score_total = 0
 
-            if d.get_team_metrics_data(apikey, competition, team) == None:
+        gl2_red_rd_total = 0
+        gl2_blu_rd_total = 0
 
-                elo = {"score": 1500}
-                gl2 = {"score": 1500, "rd": 250, "vol": 0.06}
-                ts = {"mu": 25, "sigma": 25/3}
+        gl2_red_vol_total = 0
+        gl2_blu_vol_total = 0
 
-                d.push_team_metrics_data(apikey, competition, team, {"elo":elo, "gliko2":gl2,"trueskill":ts})
+        for team in red:
 
-                group[team] = {"elo": elo, "gl2": gl2, "ts": ts}
+            elo_red_total += red[team]["elo"]["score"]
 
-            else:
+            gl2_red_score_total += red[team]["gl2"]["score"]
+            gl2_red_rd_total += red[team]["gl2"]["rd"]
+            gl2_red_vol_total += red[team]["gl2"]["vol"]
 
-                metrics = db_data["metrics"]
-                elo = metrics["elo"]
-                gl2 = metrics["gliko2"]
-                ts = metrics["trueskill"]
+        for team in blu:
 
-                group[team] = {"elo": elo, "gl2": gl2, "ts": ts}
+            elo_blu_total += blu[team]["elo"]["score"]
+
+            gl2_blu_score_total += blu[team]["gl2"]["score"]
+            gl2_blu_rd_total += blu[team]["gl2"]["rd"]
+            gl2_blu_vol_total += blu[team]["gl2"]["vol"]
+
+        red_elo = {"score": elo_red_total / len(red)}
+        blu_elo = {"score": elo_blu_total / len(blu)}
+
+        red_gl2 = {"score": gl2_red_score_total / len(red), "rd": gl2_red_rd_total / len(red), "vol": gl2_red_vol_total / len(red)}
+        blu_gl2 = {"score": gl2_blu_score_total / len(blu), "rd": gl2_blu_rd_total / len(blu), "vol": gl2_blu_vol_total / len(blu)}
+
+
+        if(match["winner"] == "red"):
+
+            observations = {"red": 1, "blue": 0}
+
+        elif(match["winner"] == "blue"):
+
+            observations = {"red": 0, "blue": 1}
+
+        else:
+
+            observations = {"red": 0.5, "blue": 0.5}
+
+        red_elo_delta = an.elo(red_elo["score"], blu_elo["score"], [observations["red"], observations["blue"]], elo_N, elo_K) - red_elo["score"]
+        blu_elo_delta = an.elo(blu_elo["score"], red_elo["score"], [observations["blue"], observations["red"]], elo_N, elo_K) - blu_elo["score"]
+
+        new_red_gl2_score, new_red_gl2_rd, new_red_gl2_vol = an.glicko2(red_gl2["score"], red_gl2["rd"], red_gl2["vol"], [blu_gl2["score"]], [blu_gl2["rd"]], [observations["red"], observations["blue"]])
+        new_blu_gl2_score, new_blu_gl2_rd, new_blu_gl2_vol = an.glicko2(blu_gl2["score"], blu_gl2["rd"], blu_gl2["vol"], [red_gl2["score"]], [red_gl2["rd"]], [observations["blue"], observations["red"]])
+
+        red_gl2_delta = {"score": new_red_gl2_score - red_gl2["score"], "rd": new_red_gl2_rd - red_gl2["rd"], "vol": new_red_gl2_vol - red_gl2["vol"]}
+        blu_gl2_delta = {"score": new_blu_gl2_score - blu_gl2["score"], "rd": new_blu_gl2_rd - blu_gl2["rd"], "vol": new_blu_gl2_vol - blu_gl2["vol"]}
+
+        for team in red:
+
+            red[team]["elo"]["score"] = red[team]["elo"]["score"] + red_elo_delta
+
+            red[team]["gl2"]["score"] = red[team]["gl2"]["score"] + red_gl2_delta["score"]
+            red[team]["gl2"]["rd"] = red[team]["gl2"]["rd"] + red_gl2_delta["rd"]
+            red[team]["gl2"]["vol"] = red[team]["gl2"]["vol"] + red_gl2_delta["vol"]
+
+        for team in blu:
+
+            blu[team]["elo"]["score"] = blu[team]["elo"]["score"] + blu_elo_delta
+
+            blu[team]["gl2"]["score"] = blu[team]["gl2"]["score"] + blu_gl2_delta["score"]
+            blu[team]["gl2"]["rd"] = blu[team]["gl2"]["rd"] + blu_gl2_delta["rd"]
+            blu[team]["gl2"]["vol"] = blu[team]["gl2"]["vol"] + blu_gl2_delta["vol"]
+
+    return_vector.update(red)
+    return_vector.update(blu)
+
+    return return_vector
+
+def load_metrics(apikey, competition, match, group_name):
+
+    for team in match[group_name]:
+
+        group = {}
+
+        db_data = d.get_team_metrics_data(apikey, competition, team)
+
+        if d.get_team_metrics_data(apikey, competition, team) == None:
+
+            elo = {"score": 1500}
+            gl2 = {"score": 1500, "rd": 250, "vol": 0.06}
+            ts = {"mu": 25, "sigma": 25/3}
+
+            d.push_team_metrics_data(apikey, competition, team, {"elo":elo, "gliko2":gl2,"trueskill":ts})
+
+            group[team] = {"elo": elo, "gl2": gl2, "ts": ts}
+
+        else:
+
+            metrics = db_data["metrics"]
+            elo = metrics["elo"]
+            gl2 = metrics["gliko2"]
+            ts = metrics["trueskill"]
+
+            group[team] = {"elo": elo, "gl2": gl2, "ts": ts}
 
     return group
 
