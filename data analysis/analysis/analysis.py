@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.13.003"
+__version__ = "1.1.13.004"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.13.004:
+        - small fixes to regression to improve performance
     1.1.13.003:
         - filtered nans from regression
     1.1.13.002:
@@ -348,11 +350,9 @@ def histo_analysis(hist_data):
 
 def regression(inputs, outputs, args): # inputs, outputs expects N-D array 
 
-    inputs = np.array(inputs)
-    outputs = np.array(outputs)
+    X = np.array(inputs)
+    y = np.array(outputs)
 
-    inputs = inputs[np.isfinite(inputs)]
-    outputs = outputs[np.isfinite(outputs)]
     regressions = []
 
     if 'lin' in args: # formula: ax + b

@@ -3,10 +3,13 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.4.000"
+__version__ = "0.0.4.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.4.001:
+        - fixed bug where X range for regression was determined before sanitization
+        - better sanitized data
     0.0.4.000:
         - fixed spelling issue in __changelog__
         - addressed nan bug in regression
@@ -76,6 +79,7 @@ __all__ = [
 
 from analysis import analysis as an
 import data as d
+import numpy as np
 import matplotlib.pyplot as plt
 import time
 import warnings
@@ -150,6 +154,8 @@ def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
             variable_data = data[team][variable]
             if(variable in tests):
                 for test in tests[variable]:
+                    print(team)
+                    print(variable)
                     test_vector[test] = simplestats(variable_data, test)
             else:
                 pass      
@@ -160,26 +166,30 @@ def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
 
 def simplestats(data, test):
 
+    data = np.array(data)
+    data = data[np.isfinite(data)]
+    ranges = list(range(len(data)))
+
     if(test == "basic_stats"):
         return an.basic_stats(data)
 
     if(test == "historical_analysis"):
-        return an.histo_analysis([list(range(len(data))), data])
+        return an.histo_analysis([ranges, data])
 
     if(test == "regression_linear"):
-        return an.regression(list(range(len(data))), data, ['lin'])
+        return an.regression(ranges, data, ['lin'])
 
     if(test == "regression_logarithmic"):
-        return an.regression(list(range(len(data))), data, ['log'])
+        return an.regression(ranges, data, ['log'])
 
     if(test == "regression_exponential"):
-        return an.regression(list(range(len(data))), data, ['exp'])
+        return an.regression(ranges, data, ['exp'])
 
     if(test == "regression_polynomial"):
-        return an.regression(list(range(len(data))), data, ['ply'])
+        return an.regression(ranges, data, ['ply'])
 
     if(test == "regression_sigmoidal"):
-        return an.regression(list(range(len(data))), data, ['sig'])
+        return an.regression(ranges, data, ['sig'])
 
 def push_to_database(apikey, competition, results, pit):
 
