@@ -348,16 +348,16 @@ def histo_analysis(hist_data):
 
 def regression(inputs, outputs, args): # inputs, outputs expects N-D array 
 
-    inputs = inputs[~np.isnan(inputs)]
-    outputs = outputs[~np.isnan(outputs)]
+    inputs = np.array(inputs)
+    outputs = np.array(outputs)
+
+    inputs = inputs[np.isfinite(inputs)]
+    outputs = outputs[np.isfinite(outputs)]
     regressions = []
 
     if 'lin' in args: # formula: ax + b
 
         try:
-
-            X = np.array(inputs)
-            y = np.array(outputs)
 
             def func(x, a, b):
 
@@ -375,9 +375,6 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
         try:
 
-            X = np.array(inputs)
-            y = np.array(outputs)
-
             def func(x, a, b, c, d):
 
                 return a * np.log(b*(x + c)) + d
@@ -392,10 +389,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
     if 'exp' in args: # formula: a e ^ (b(x + c)) + d
 
-        try:
-
-            X = np.array(inputs)
-            y = np.array(outputs)
+        try:        
 
             def func(x, a, b, c, d):
 
@@ -411,8 +405,8 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
     if 'ply' in args: # formula: a + bx^1 + cx^2 + dx^3 + ...
         
-        inputs = [inputs]
-        outputs = [outputs]
+        inputs = np.array([inputs])
+        outputs = np.array([outputs])
 
         plys = []
         limit = len(outputs[0])
@@ -434,10 +428,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
     if 'sig' in args: # formula: a tanh (b(x + c)) + d
 
-        try:
-
-            X = np.array(inputs)
-            y = np.array(outputs)
+        try:        
 
             def func(x, a, b, c, d):
 
