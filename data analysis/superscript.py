@@ -324,15 +324,13 @@ def load_metrics(apikey, competition, match, group_name):
             gl2 = {"score": 1500, "rd": 250, "vol": 0.06}
             ts = {"mu": 25, "sigma": 25/3}
 
-            d.push_team_metrics_data(apikey, competition, team, {"elo":elo, "gl2":gl2,"trueskill":ts})
+            #d.push_team_metrics_data(apikey, competition, team, {"elo":elo, "gl2":gl2,"trueskill":ts})
 
             group[team] = {"elo": elo, "gl2": gl2, "ts": ts}
 
         else:
 
             metrics = db_data["metrics"]
-
-            #print(metrics)
 
             elo = metrics["elo"]
             gl2 = metrics["gl2"]
