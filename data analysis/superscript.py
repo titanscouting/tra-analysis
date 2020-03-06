@@ -154,8 +154,6 @@ def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
             variable_data = data[team][variable]
             if(variable in tests):
                 for test in tests[variable]:
-                    print(team)
-                    print(variable)
                     test_vector[test] = simplestats(variable_data, test)
             else:
                 pass      
