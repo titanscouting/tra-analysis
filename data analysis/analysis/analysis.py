@@ -348,8 +348,8 @@ def histo_analysis(hist_data):
 
 def regression(inputs, outputs, args): # inputs, outputs expects N-D array 
 
-    inputs = inputs[~np.isnan(x)]
-    outputs = outputs[~np.isnan(x)]
+    inputs = inputs[~np.isnan(inputs)]
+    outputs = outputs[~np.isnan(outputs)]
     regressions = []
 
     if 'lin' in args: # formula: ax + b
