@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.13.002"
+__version__ = "1.1.13.003"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.13.003:
+        - filtered nans from regression
     1.1.13.002:
         - removed torch requirement, and moved Regression back to regression.py
     1.1.13.001:
@@ -346,6 +348,8 @@ def histo_analysis(hist_data):
 
 def regression(inputs, outputs, args): # inputs, outputs expects N-D array 
 
+    inputs = inputs[~numpy.isnan(x)]
+    outputs = outputs[~numpy.isnan(x)]
     regressions = []
 
     if 'lin' in args: # formula: ax + b
