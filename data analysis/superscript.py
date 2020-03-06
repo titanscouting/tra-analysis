@@ -205,7 +205,6 @@ def metricsloop(tbakey, apikey, competition, timestamp): # listener based metric
     red = load_metrics(apikey, competition, match, "red")
     blu = load_metrics(apikey, competition, match, "blue")
 
-
     for match in matches:
  
         elo_red_total = 0
