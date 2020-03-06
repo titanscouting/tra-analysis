@@ -332,7 +332,7 @@ def load_metrics(apikey, competition, match, group_name):
 
             metrics = db_data["metrics"]
             elo = metrics["elo"]
-            gl2 = metrics["gliko2"]
+            gl2 = metrics["gl2"]
             ts = metrics["trueskill"]
 
             group[team] = {"elo": elo, "gl2": gl2, "ts": ts}
