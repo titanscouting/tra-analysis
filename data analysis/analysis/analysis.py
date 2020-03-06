@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.13.001"
+__version__ = "1.1.13.002"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.13.002:
+        - removed torch requirement, and moved Regression back to regression.py
     1.1.13.001:
         - bug fix with linear regression not returning a proper value
         - cleaned up regression

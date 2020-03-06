@@ -3,11 +3,16 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.3.000"
+__version__ = "0.0.4.000"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
-    0.0.3.00:
+    0.0.4.000:
+        - fixed spelling issue in __changelog__
+        - addressed nan bug in regression
+        - fixed errors on line 335 with metrics calling incorrect key "glicko2"
+        - fixed errors in metrics computing 
+    0.0.3.000:
         - added analysis to pit data
     0.0.2.001:
         - minor stability patches
@@ -124,7 +129,7 @@ def main():
         d.set_analysis_flags(apikey, "latest_update", {"latest_update":current_time})
         
         print(" pushing to database")
-        push_to_database(apikey, competition, results, metrics, pit)
+        push_to_database(apikey, competition, results, pit)
         print(" pushed to database")
 
 def load_config(file):
