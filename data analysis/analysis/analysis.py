@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.13.004"
+__version__ = "1.1.13.005"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.13.005:
+        - cleaned up package
     1.1.13.004:
         - small fixes to regression to improve performance
     1.1.13.003:
@@ -245,7 +247,6 @@ __author__ = (
 )
 
 __all__ = [
-    '_init_device',
     'load_csv',
     'basic_stats',
     'z_score',
@@ -266,7 +267,6 @@ __all__ = [
     'SVM',
     'random_forest_classifier',
     'random_forest_regressor',
-    'Regression',
     'Glicko2',
     # all statistics functions left out due to integration in other functions
 ]
@@ -279,7 +279,6 @@ import csv
 import numba
 from numba import jit
 import numpy as np
-import math
 import scipy
 from scipy import *
 import sklearn
