@@ -114,7 +114,7 @@ def main():
         print(" finished tests")
 
         print(" running metrics")
-        metrics = metricsloop(tbakey, apikey, competition, previous_time)
+        metricsloop(tbakey, apikey, competition, previous_time)
         print(" finished metrics")
 
         print(" running pit analysis")
@@ -176,15 +176,11 @@ def simplestats(data, test):
     if(test == "regression_sigmoidal"):
         return an.regression(list(range(len(data))), data, ['sig'])
 
-def push_to_database(apikey, competition, results, metrics, pit):
+def push_to_database(apikey, competition, results, pit):
 
     for team in results:
 
         d.push_team_tests_data(apikey, competition, team, results[team])
-
-    for team in temp_vector:
-
-        d.push_team_metrics_data(apikey, competition, team, temp_vector[team])
 
     for variable in pit:
 
@@ -202,10 +198,10 @@ def metricsloop(tbakey, apikey, competition, timestamp): # listener based metric
     red = {}
     blu = {}
 
-    red = load_metrics(apikey, competition, match, "red")
-    blu = load_metrics(apikey, competition, match, "blue")
-
     for match in matches:
+
+        red = load_metrics(apikey, competition, match, "red")
+        blu = load_metrics(apikey, competition, match, "blue")
  
         elo_red_total = 0
         elo_blu_total = 0
@@ -279,6 +275,14 @@ def metricsloop(tbakey, apikey, competition, timestamp): # listener based metric
             blu[team]["gl2"]["rd"] = blu[team]["gl2"]["rd"] + blu_gl2_delta["rd"]
             blu[team]["gl2"]["vol"] = blu[team]["gl2"]["vol"] + blu_gl2_delta["vol"]
 
+        temp_vector = {}
+        temp_vector.update(red)
+        temp_vector.update(blu)
+
+        for team in temp_vector:
+
+            d.push_team_metrics_data(apikey, competition, team, temp_vector[team])
+
         """ not functional for now
         red_trueskill = []
         blu_trueskill = []
@@ -304,11 +308,6 @@ def metricsloop(tbakey, apikey, competition, timestamp): # listener based metric
         print(results)
 
         """
-
-    return_vector.update(red)
-    return_vector.update(blue)
-
-    return return_vector
 
 def load_metrics(apikey, competition, match, group_name):
 
