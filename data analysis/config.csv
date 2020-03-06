@@ -4,3 +4,10 @@ balls-collected,basic_stats,historical_analysis,regression_linear,regression_log
 balls-lower,basic_stats,historical_analysis,regression_linear,regression_logarithmic,regression_exponential,regression_polynomial,regression_sigmoidal
 balls-started,basic_stats,historical_analyss,regression_linear,regression_logarithmic,regression_exponential,regression_polynomial,regression_sigmoidal
 balls-upper,basic_stats,historical_analysis,regression_linear,regression_logarithmic,regression_exponential,regression_polynomial,regression_sigmoidal
+wheel-mechanism
+low-balls
+high-balls
+wheel-success
+strategic-focus
+climb-mechanism
+attitude

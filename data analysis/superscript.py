@@ -3,10 +3,12 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.2.001"
+__version__ = "0.0.3.000"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.3.00:
+        - added analysis to pit data
     0.0.2.001:
         - minor stability patches
         - implemented db syncing for timestamps
@@ -69,6 +71,7 @@ __all__ = [
 
 from analysis import analysis as an
 import data as d
+import matplotlib.pyplot as plt
 import time
 import warnings
 
@@ -102,7 +105,8 @@ def main():
         print(" analysis backtimed to: " + str(previous_time))
 
         print(" loading data")
-        data = d.get_data_formatted(apikey, competition)
+        data = d.get_match_data_formatted(apikey, competition)
+        pit_data = d.pit = d.get_pit_data_formatted(apikey, competition)
         print(" loaded data")
 
         print(" running tests")
@@ -113,10 +117,14 @@ def main():
         metrics = metricsloop(tbakey, apikey, competition, previous_time)
         print(" finished metrics")
 
+        print(" running pit analysis")
+        pit = pitloop(pit_data, config)
+        print(" finished pit analysis")
+
         d.set_analysis_flags(apikey, "latest_update", {"latest_update":current_time})
         
         print(" pushing to database")
-        push_to_database(apikey, competition, results, metrics)
+        push_to_database(apikey, competition, results, metrics, pit)
         print(" pushed to database")
 
 def load_config(file):
@@ -168,7 +176,7 @@ def simplestats(data, test):
     if(test == "regression_sigmoidal"):
         return an.regression(list(range(len(data))), data, ['sig'])
 
-def push_to_database(apikey, competition, results, metrics):
+def push_to_database(apikey, competition, results, metrics, pit):
 
     for team in results:
 
@@ -177,6 +185,10 @@ def push_to_database(apikey, competition, results, metrics):
     for team in metrics:
 
         d.push_team_metrics_data(apikey, competition, team, metrics[team])
+
+    for variable in pit:
+
+        d.push_team_pit_data(apikey, competition, variable, pit[variable])
 
 def metricsloop(tbakey, apikey, competition, timestamp): # listener based metrics update
 
@@ -326,6 +338,18 @@ def load_metrics(apikey, competition, match, group_name):
             group[team] = {"elo": elo, "gl2": gl2, "ts": ts}
 
     return group
+
+def pitloop(pit, tests):
+
+    return_vector = {}
+    for team in pit:
+        for variable in pit[team]:
+            if(variable in tests):
+                if(not variable in return_vector):
+                    return_vector[variable] = []
+                return_vector[variable].append(pit[team][variable])
+
+    return return_vector
 
 main()
 
