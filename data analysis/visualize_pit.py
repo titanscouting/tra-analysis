@@ -34,7 +34,7 @@ import numpy as np
 
 
 # %%
-fig, ax = plt.subplots(1, len(pit), sharey=True, figsize=(20,10))
+fig, ax = plt.subplots(1, len(pit), sharey=True, figsize=(80,15))
 
 i = 0
 

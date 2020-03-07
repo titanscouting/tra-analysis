@@ -3,11 +3,19 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.3.000"
+__version__ = "0.0.4.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
-    0.0.3.00:
+    0.0.4.001:
+        - fixed bug where X range for regression was determined before sanitization
+        - better sanitized data
+    0.0.4.000:
+        - fixed spelling issue in __changelog__
+        - addressed nan bug in regression
+        - fixed errors on line 335 with metrics calling incorrect key "glicko2"
+        - fixed errors in metrics computing 
+    0.0.3.000:
         - added analysis to pit data
     0.0.2.001:
         - minor stability patches
@@ -71,6 +79,7 @@ __all__ = [
 
 from analysis import analysis as an
 import data as d
+import numpy as np
 import matplotlib.pyplot as plt
 import time
 import warnings
@@ -114,7 +123,7 @@ def main():
         print(" finished tests")
 
         print(" running metrics")
-        metrics = metricsloop(tbakey, apikey, competition, previous_time)
+        metricsloop(tbakey, apikey, competition, previous_time)
         print(" finished metrics")
 
         print(" running pit analysis")
@@ -124,7 +133,7 @@ def main():
         d.set_analysis_flags(apikey, "latest_update", {"latest_update":current_time})
         
         print(" pushing to database")
-        push_to_database(apikey, competition, results, metrics, pit)
+        push_to_database(apikey, competition, results, pit)
         print(" pushed to database")
 
 def load_config(file):
@@ -155,36 +164,36 @@ def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
 
 def simplestats(data, test):
 
+    data = np.array(data)
+    data = data[np.isfinite(data)]
+    ranges = list(range(len(data)))
+
     if(test == "basic_stats"):
         return an.basic_stats(data)
 
     if(test == "historical_analysis"):
-        return an.histo_analysis([list(range(len(data))), data])
+        return an.histo_analysis([ranges, data])
 
     if(test == "regression_linear"):
-        return an.regression(list(range(len(data))), data, ['lin'])
+        return an.regression(ranges, data, ['lin'])
 
     if(test == "regression_logarithmic"):
-        return an.regression(list(range(len(data))), data, ['log'])
+        return an.regression(ranges, data, ['log'])
 
     if(test == "regression_exponential"):
-        return an.regression(list(range(len(data))), data, ['exp'])
+        return an.regression(ranges, data, ['exp'])
 
     if(test == "regression_polynomial"):
-        return an.regression(list(range(len(data))), data, ['ply'])
+        return an.regression(ranges, data, ['ply'])
 
     if(test == "regression_sigmoidal"):
-        return an.regression(list(range(len(data))), data, ['sig'])
+        return an.regression(ranges, data, ['sig'])
 
-def push_to_database(apikey, competition, results, metrics, pit):
+def push_to_database(apikey, competition, results, pit):
 
     for team in results:
 
         d.push_team_tests_data(apikey, competition, team, results[team])
-
-    for team in metrics:
-
-        d.push_team_metrics_data(apikey, competition, team, metrics[team])
 
     for variable in pit:
 
@@ -206,7 +215,7 @@ def metricsloop(tbakey, apikey, competition, timestamp): # listener based metric
 
         red = load_metrics(apikey, competition, match, "red")
         blu = load_metrics(apikey, competition, match, "blue")
-
+ 
         elo_red_total = 0
         elo_blu_total = 0
 
@@ -279,6 +288,14 @@ def metricsloop(tbakey, apikey, competition, timestamp): # listener based metric
             blu[team]["gl2"]["rd"] = blu[team]["gl2"]["rd"] + blu_gl2_delta["rd"]
             blu[team]["gl2"]["vol"] = blu[team]["gl2"]["vol"] + blu_gl2_delta["vol"]
 
+        temp_vector = {}
+        temp_vector.update(red)
+        temp_vector.update(blu)
+
+        for team in temp_vector:
+
+            d.push_team_metrics_data(apikey, competition, team, temp_vector[team])
+
         """ not functional for now
         red_trueskill = []
         blu_trueskill = []
@@ -305,11 +322,6 @@ def metricsloop(tbakey, apikey, competition, timestamp): # listener based metric
 
         """
 
-    return_vector.update(red)
-    return_vector.update(blu)
-
-    return return_vector
-
 def load_metrics(apikey, competition, match, group_name):
 
     group = {}
@@ -324,16 +336,17 @@ def load_metrics(apikey, competition, match, group_name):
             gl2 = {"score": 1500, "rd": 250, "vol": 0.06}
             ts = {"mu": 25, "sigma": 25/3}
 
-            d.push_team_metrics_data(apikey, competition, team, {"elo":elo, "gliko2":gl2,"trueskill":ts})
+            #d.push_team_metrics_data(apikey, competition, team, {"elo":elo, "gl2":gl2,"trueskill":ts})
 
             group[team] = {"elo": elo, "gl2": gl2, "ts": ts}
 
         else:
 
             metrics = db_data["metrics"]
+
             elo = metrics["elo"]
-            gl2 = metrics["gliko2"]
-            ts = metrics["trueskill"]
+            gl2 = metrics["gl2"]
+            ts = metrics["ts"]
 
             group[team] = {"elo": elo, "gl2": gl2, "ts": ts}
 
