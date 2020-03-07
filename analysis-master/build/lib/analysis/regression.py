@@ -1,27 +1,28 @@
 # Titan Robotics Team 2022: CUDA-based Regressions Module
 # Written by Arthur Lu & Jacob Levine
 # Notes:
-#    this should be imported as a python module using 'import regression'
-#    this should be included in the local directory or environment variable
-#    this module is cuda-optimized and vectorized (except for one small part)
+#   this module has been automatically inegrated into analysis.py, and should be callable as a class from the package
+#   this module is cuda-optimized and vectorized (except for one small part)
 # setup:
 
-__version__ = "1.0.0.002"
+__version__ = "1.0.0.003"
 
-# changelog should be viewed using print(regression.__changelog__)
+# changelog should be viewed using print(analysis.regression.__changelog__)
 __changelog__ = """
-    1.0.0.002:
-        -Added more parameters to log, exponential, polynomial
-        -Added SigmoidalRegKernelArthur, because Arthur apparently needs
-        to train the scaling and shifting of sigmoids
-
-    1.0.0.001:
-        -initial release, with linear, log, exponential, polynomial, and sigmoid kernels
-        -already vectorized (except for polynomial generation) and CUDA-optimized
+1.0.0.003:
+    - bug fixes
+1.0.0.002:
+    -Added more parameters to log, exponential, polynomial
+    -Added SigmoidalRegKernelArthur, because Arthur apparently needs
+    to train the scaling and shifting of sigmoids
+1.0.0.001:
+    -initial release, with linear, log, exponential, polynomial, and sigmoid kernels
+    -already vectorized (except for polynomial generation) and CUDA-optimized
 """
 
 __author__ = (
     "Jacob Levine <jlevine@imsa.edu>",
+    "Arthur Lu <learthurgo@gmail.com>"
 )
 
 __all__ = [
@@ -39,35 +40,13 @@ __all__ = [
     'CustomTrain'
 ]
 
-
-# imports (just one for now):
-
-import torch
+global device
 
 device = "cuda:0" if torch.torch.cuda.is_available() else "cpu"
 
 #todo: document completely
 
-def factorial(n):
-    if n==0:
-        return 1
-    else:
-        return n*factorial(n-1)
-def num_poly_terms(num_vars, power):
-    if power == 0:
-        return 0
-    return int(factorial(num_vars+power-1) / factorial(power) / factorial(num_vars-1)) + num_poly_terms(num_vars, power-1)
-
-def take_all_pwrs(vec,pwr):
-    #todo: vectorize (kinda)
-    combins=torch.combinations(vec, r=pwr, with_replacement=True)
-    out=torch.ones(combins.size()[0])
-    for i in torch.t(combins):
-        out *= i
-    return torch.cat(out,take_all_pwrs(vec, pwr-1))
-
-def set_device(new_device):
-    global device
+def set_device(self, new_device):
     device=new_device
 
 class LinearRegKernel():
@@ -154,20 +133,39 @@ class PolyRegKernel():
     power=None
     def __init__(self, num_vars, power):
         self.power=power
-        num_terms=num_poly_terms(num_vars, power)
+        num_terms=self.num_poly_terms(num_vars, power)
         self.weights=torch.rand(num_terms, requires_grad=True, device=device)
         self.bias=torch.rand(1, requires_grad=True, device=device)
         self.parameters=[self.weights,self.bias]
+    def num_poly_terms(self,num_vars, power):
+        if power == 0:
+            return 0
+        return int(self.factorial(num_vars+power-1) / self.factorial(power) / self.factorial(num_vars-1)) + self.num_poly_terms(num_vars, power-1)
+    def factorial(self,n):
+        if n==0:
+            return 1
+        else:
+            return n*self.factorial(n-1)
+    def take_all_pwrs(self, vec, pwr):
+        #todo: vectorize (kinda)
+        combins=torch.combinations(vec, r=pwr, with_replacement=True)
+        out=torch.ones(combins.size()[0]).to(device).to(torch.float)
+        for i in torch.t(combins).to(device).to(torch.float):
+            out *= i
+        if pwr == 1:
+            return out
+        else:
+            return torch.cat((out,self.take_all_pwrs(vec, pwr-1)))
     def forward(self,mtx):
         #TODO: Vectorize the last part
         cols=[]
         for i in torch.t(mtx):
-            cols.append(take_all_pwrs(i,self.power))
+            cols.append(self.take_all_pwrs(i,self.power))
         new_mtx=torch.t(torch.stack(cols))
         long_bias=self.bias.repeat([1,mtx.size()[1]])
         return torch.matmul(self.weights,new_mtx)+long_bias
 
-def SGDTrain(kernel, data, ground, loss=torch.nn.MSELoss(), iterations=1000, learning_rate=.1, return_losses=False):
+def SGDTrain(self, kernel, data, ground, loss=torch.nn.MSELoss(), iterations=1000, learning_rate=.1, return_losses=False):
     optim=torch.optim.SGD(kernel.parameters, lr=learning_rate)
     data_cuda=data.to(device)
     ground_cuda=ground.to(device)
@@ -192,7 +190,7 @@ def SGDTrain(kernel, data, ground, loss=torch.nn.MSELoss(), iterations=1000, lea
                 optim.step()
         return kernel
 
-def CustomTrain(kernel, optim, data, ground, loss=torch.nn.MSELoss(), iterations=1000, return_losses=False):
+def CustomTrain(self, kernel, optim, data, ground, loss=torch.nn.MSELoss(), iterations=1000, return_losses=False):
     data_cuda=data.to(device)
     ground_cuda=ground.to(device)
     if (return_losses):
