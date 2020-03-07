@@ -7,10 +7,18 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.13.001"
+__version__ = "1.1.13.005"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.13.005:
+        - cleaned up package
+    1.1.13.004:
+        - small fixes to regression to improve performance
+    1.1.13.003:
+        - filtered nans from regression
+    1.1.13.002:
+        - removed torch requirement, and moved Regression back to regression.py
     1.1.13.001:
         - bug fix with linear regression not returning a proper value
         - cleaned up regression
@@ -239,7 +247,6 @@ __author__ = (
 )
 
 __all__ = [
-    '_init_device',
     'load_csv',
     'basic_stats',
     'z_score',
@@ -260,7 +267,6 @@ __all__ = [
     'SVM',
     'random_forest_classifier',
     'random_forest_regressor',
-    'Regression',
     'Glicko2',
     # all statistics functions left out due to integration in other functions
 ]
@@ -273,12 +279,10 @@ import csv
 import numba
 from numba import jit
 import numpy as np
-import math
 import scipy
 from scipy import *
 import sklearn
 from sklearn import *
-import torch
 try:
     from analysis import trueskill as Trueskill
 except:
@@ -286,10 +290,6 @@ except:
 
 class error(ValueError):
     pass
-
-def _init_device():  # initiates computation device for ANNs
-    device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
-    return device
 
 def load_csv(filepath):
     with open(filepath, newline='') as csvfile:
@@ -349,14 +349,14 @@ def histo_analysis(hist_data):
 
 def regression(inputs, outputs, args): # inputs, outputs expects N-D array 
 
+    X = np.array(inputs)
+    y = np.array(outputs)
+
     regressions = []
 
     if 'lin' in args: # formula: ax + b
 
         try:
-
-            X = np.array(inputs)
-            y = np.array(outputs)
 
             def func(x, a, b):
 
@@ -374,9 +374,6 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
         try:
 
-            X = np.array(inputs)
-            y = np.array(outputs)
-
             def func(x, a, b, c, d):
 
                 return a * np.log(b*(x + c)) + d
@@ -391,10 +388,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
     if 'exp' in args: # formula: a e ^ (b(x + c)) + d
 
-        try:
-
-            X = np.array(inputs)
-            y = np.array(outputs)
+        try:        
 
             def func(x, a, b, c, d):
 
@@ -410,8 +404,8 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
     if 'ply' in args: # formula: a + bx^1 + cx^2 + dx^3 + ...
         
-        inputs = [inputs]
-        outputs = [outputs]
+        inputs = np.array([inputs])
+        outputs = np.array([outputs])
 
         plys = []
         limit = len(outputs[0])
@@ -433,10 +427,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
     if 'sig' in args: # formula: a tanh (b(x + c)) + d
 
-        try:
-
-            X = np.array(inputs)
-            y = np.array(outputs)
+        try:        
 
             def func(x, a, b, c, d):
 
@@ -699,225 +690,6 @@ def random_forest_regressor(data, outputs, test_size, n_estimators="warn", crite
     predictions = kernel.predict(data_test)
 
     return kernel, RegressionMetrics(predictions, outputs_test)
-
-class Regression:
-
-    # Titan Robotics Team 2022: CUDA-based Regressions Module
-    # Written by Arthur Lu & Jacob Levine
-    # Notes:
-    #   this module has been automatically inegrated into analysis.py, and should be callable as a class from the package
-    #   this module is cuda-optimized and vectorized (except for one small part)
-    # setup:
-
-    __version__ = "1.0.0.003"
-
-    # changelog should be viewed using print(analysis.regression.__changelog__)
-    __changelog__ = """
-    1.0.0.003:
-        - bug fixes
-    1.0.0.002:
-        -Added more parameters to log, exponential, polynomial
-        -Added SigmoidalRegKernelArthur, because Arthur apparently needs
-        to train the scaling and shifting of sigmoids
-
-    1.0.0.001:
-        -initial release, with linear, log, exponential, polynomial, and sigmoid kernels
-        -already vectorized (except for polynomial generation) and CUDA-optimized
-    """
-
-    __author__ = (
-        "Jacob Levine <jlevine@imsa.edu>",
-        "Arthur Lu <learthurgo@gmail.com>"
-    )
-
-    __all__ = [
-        'factorial',
-        'take_all_pwrs',
-        'num_poly_terms',
-        'set_device',
-        'LinearRegKernel',
-        'SigmoidalRegKernel',
-        'LogRegKernel',
-        'PolyRegKernel',
-        'ExpRegKernel',
-        'SigmoidalRegKernelArthur',
-        'SGDTrain',
-        'CustomTrain'
-    ]
-
-    global device
-
-    device = "cuda:0" if torch.torch.cuda.is_available() else "cpu"
-
-    #todo: document completely
-
-    def set_device(self, new_device):
-        device=new_device
-
-    class LinearRegKernel():
-        parameters= []
-        weights=None
-        bias=None
-        def __init__(self, num_vars):
-            self.weights=torch.rand(num_vars, requires_grad=True, device=device)
-            self.bias=torch.rand(1, requires_grad=True, device=device)
-            self.parameters=[self.weights,self.bias]
-        def forward(self,mtx):
-            long_bias=self.bias.repeat([1,mtx.size()[1]])
-            return torch.matmul(self.weights,mtx)+long_bias
-
-    class SigmoidalRegKernel():
-        parameters= []
-        weights=None
-        bias=None
-        sigmoid=torch.nn.Sigmoid()
-        def __init__(self, num_vars):
-            self.weights=torch.rand(num_vars, requires_grad=True, device=device)
-            self.bias=torch.rand(1, requires_grad=True, device=device)
-            self.parameters=[self.weights,self.bias]
-        def forward(self,mtx):
-            long_bias=self.bias.repeat([1,mtx.size()[1]])
-            return self.sigmoid(torch.matmul(self.weights,mtx)+long_bias)
-
-    class SigmoidalRegKernelArthur():
-        parameters= []
-        weights=None
-        in_bias=None
-        scal_mult=None
-        out_bias=None
-        sigmoid=torch.nn.Sigmoid()
-        def __init__(self, num_vars):
-            self.weights=torch.rand(num_vars, requires_grad=True, device=device)
-            self.in_bias=torch.rand(1, requires_grad=True, device=device)
-            self.scal_mult=torch.rand(1, requires_grad=True, device=device)
-            self.out_bias=torch.rand(1, requires_grad=True, device=device)
-            self.parameters=[self.weights,self.in_bias, self.scal_mult, self.out_bias]
-        def forward(self,mtx):
-            long_in_bias=self.in_bias.repeat([1,mtx.size()[1]])
-            long_out_bias=self.out_bias.repeat([1,mtx.size()[1]])
-            return (self.scal_mult*self.sigmoid(torch.matmul(self.weights,mtx)+long_in_bias))+long_out_bias
-
-    class LogRegKernel():
-        parameters= []
-        weights=None
-        in_bias=None
-        scal_mult=None
-        out_bias=None
-        def __init__(self, num_vars):
-            self.weights=torch.rand(num_vars, requires_grad=True, device=device)
-            self.in_bias=torch.rand(1, requires_grad=True, device=device)
-            self.scal_mult=torch.rand(1, requires_grad=True, device=device)
-            self.out_bias=torch.rand(1, requires_grad=True, device=device)
-            self.parameters=[self.weights,self.in_bias, self.scal_mult, self.out_bias]
-        def forward(self,mtx):
-            long_in_bias=self.in_bias.repeat([1,mtx.size()[1]])
-            long_out_bias=self.out_bias.repeat([1,mtx.size()[1]])
-            return (self.scal_mult*torch.log(torch.matmul(self.weights,mtx)+long_in_bias))+long_out_bias
-
-    class ExpRegKernel():
-        parameters= []
-        weights=None
-        in_bias=None
-        scal_mult=None
-        out_bias=None
-        def __init__(self, num_vars):
-            self.weights=torch.rand(num_vars, requires_grad=True, device=device)
-            self.in_bias=torch.rand(1, requires_grad=True, device=device)
-            self.scal_mult=torch.rand(1, requires_grad=True, device=device)
-            self.out_bias=torch.rand(1, requires_grad=True, device=device)
-            self.parameters=[self.weights,self.in_bias, self.scal_mult, self.out_bias]
-        def forward(self,mtx):
-            long_in_bias=self.in_bias.repeat([1,mtx.size()[1]])
-            long_out_bias=self.out_bias.repeat([1,mtx.size()[1]])
-            return (self.scal_mult*torch.exp(torch.matmul(self.weights,mtx)+long_in_bias))+long_out_bias
-
-    class PolyRegKernel():
-        parameters= []
-        weights=None
-        bias=None
-        power=None
-        def __init__(self, num_vars, power):
-            self.power=power
-            num_terms=self.num_poly_terms(num_vars, power)
-            self.weights=torch.rand(num_terms, requires_grad=True, device=device)
-            self.bias=torch.rand(1, requires_grad=True, device=device)
-            self.parameters=[self.weights,self.bias]
-        def num_poly_terms(self,num_vars, power):
-            if power == 0:
-                return 0
-            return int(self.factorial(num_vars+power-1) / self.factorial(power) / self.factorial(num_vars-1)) + self.num_poly_terms(num_vars, power-1)
-        def factorial(self,n):
-            if n==0:
-                return 1
-            else:
-                return n*self.factorial(n-1)
-        def take_all_pwrs(self, vec, pwr):
-            #todo: vectorize (kinda)
-            combins=torch.combinations(vec, r=pwr, with_replacement=True)
-            out=torch.ones(combins.size()[0]).to(device).to(torch.float)
-            for i in torch.t(combins).to(device).to(torch.float):
-                out *= i
-            if pwr == 1:
-                return out
-            else:
-                return torch.cat((out,self.take_all_pwrs(vec, pwr-1)))
-        def forward(self,mtx):
-            #TODO: Vectorize the last part
-            cols=[]
-            for i in torch.t(mtx):
-                cols.append(self.take_all_pwrs(i,self.power))
-            new_mtx=torch.t(torch.stack(cols))
-            long_bias=self.bias.repeat([1,mtx.size()[1]])
-            return torch.matmul(self.weights,new_mtx)+long_bias
-
-    def SGDTrain(self, kernel, data, ground, loss=torch.nn.MSELoss(), iterations=1000, learning_rate=.1, return_losses=False):
-        optim=torch.optim.SGD(kernel.parameters, lr=learning_rate)
-        data_cuda=data.to(device)
-        ground_cuda=ground.to(device)
-        if (return_losses):
-            losses=[]
-            for i in range(iterations):
-                with torch.set_grad_enabled(True):
-                    optim.zero_grad()
-                    pred=kernel.forward(data_cuda)
-                    ls=loss(pred,ground_cuda)
-                    losses.append(ls.item())
-                    ls.backward()
-                    optim.step()
-            return [kernel,losses]
-        else:
-            for i in range(iterations):
-                with torch.set_grad_enabled(True):
-                    optim.zero_grad()
-                    pred=kernel.forward(data_cuda)
-                    ls=loss(pred,ground_cuda)
-                    ls.backward()
-                    optim.step()
-            return kernel
-
-    def CustomTrain(self, kernel, optim, data, ground, loss=torch.nn.MSELoss(), iterations=1000, return_losses=False):
-        data_cuda=data.to(device)
-        ground_cuda=ground.to(device)
-        if (return_losses):
-            losses=[]
-            for i in range(iterations):
-                with torch.set_grad_enabled(True):
-                    optim.zero_grad()
-                    pred=kernel.forward(data)
-                    ls=loss(pred,ground)
-                    losses.append(ls.item())
-                    ls.backward()
-                    optim.step()
-            return [kernel,losses]
-        else:
-            for i in range(iterations):
-                with torch.set_grad_enabled(True):
-                    optim.zero_grad()
-                    pred=kernel.forward(data_cuda)
-                    ls=loss(pred,ground_cuda)
-                    ls.backward()
-                    optim.step()
-            return kernel
 
 class Glicko2:
 
