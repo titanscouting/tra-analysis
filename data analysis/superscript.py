@@ -208,8 +208,6 @@ def metricsloop(tbakey, apikey, competition, timestamp): # listener based metric
 
     matches = d.pull_new_tba_matches(tbakey, competition, timestamp)
 
-    return_vector = {}
-
     red = {}
     blu = {}
 
