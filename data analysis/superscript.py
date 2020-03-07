@@ -3,10 +3,12 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.4.001"
+__version__ = "0.0.4.002"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.4.002:
+        - removed unessasary code
     0.0.4.001:
         - fixed bug where X range for regression was determined before sanitization
         - better sanitized data
@@ -295,32 +297,6 @@ def metricsloop(tbakey, apikey, competition, timestamp): # listener based metric
         for team in temp_vector:
 
             d.push_team_metrics_data(apikey, competition, team, temp_vector[team])
-
-        """ not functional for now
-        red_trueskill = []
-        blu_trueskill = []
-
-        red_ts_team_lookup = []
-        blu_ts_team_lookup = []
-
-        for team in red:
-
-            red_trueskill.append((red[team]["ts"]["mu"], red[team]["ts"]["sigma"]))
-            red_ts_team_lookup.append(team)
-
-        for team in blu:
-
-            blu_trueskill.append((blu[team]["ts"]["mu"], blu[team]["ts"]["sigma"]))
-            blu_ts_team_lookup.append(team)
-
-        print(red_trueskill)
-        print(blu_trueskill)
-
-        results = an.trueskill([red_trueskill, blu_trueskill], [observations["red"], observations["blu"]])
-
-        print(results)
-
-        """
 
 def load_metrics(apikey, competition, match, group_name):
 
