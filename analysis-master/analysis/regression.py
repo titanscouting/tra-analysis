@@ -5,19 +5,22 @@
 #   this module is cuda-optimized and vectorized (except for one small part)
 # setup:
 
-__version__ = "1.0.0.003"
+__version__ = "1.0.0.004"
 
 # changelog should be viewed using print(analysis.regression.__changelog__)
 __changelog__ = """
-1.0.0.003:
-    - bug fixes
-1.0.0.002:
-    -Added more parameters to log, exponential, polynomial
-    -Added SigmoidalRegKernelArthur, because Arthur apparently needs
-    to train the scaling and shifting of sigmoids
-1.0.0.001:
-    -initial release, with linear, log, exponential, polynomial, and sigmoid kernels
-    -already vectorized (except for polynomial generation) and CUDA-optimized
+    1.0.0.004:
+        - bug fixes
+        - fixed changelog
+    1.0.0.003:
+        - bug fixes
+    1.0.0.002:
+        -Added more parameters to log, exponential, polynomial
+        -Added SigmoidalRegKernelArthur, because Arthur apparently needs
+        to train the scaling and shifting of sigmoids
+    1.0.0.001:
+        -initial release, with linear, log, exponential, polynomial, and sigmoid kernels
+        -already vectorized (except for polynomial generation) and CUDA-optimized
 """
 
 __author__ = (
@@ -39,6 +42,8 @@ __all__ = [
     'SGDTrain',
     'CustomTrain'
 ]
+
+import torch
 
 global device
 

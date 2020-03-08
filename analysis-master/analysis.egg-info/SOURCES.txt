@@ -8,4 +8,5 @@ analysis/visualization.py
 analysis.egg-info/PKG-INFO
 analysis.egg-info/SOURCES.txt
 analysis.egg-info/dependency_links.txt
+analysis.egg-info/requires.txt
 analysis.egg-info/top_level.txt

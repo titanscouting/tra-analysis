@@ -7,10 +7,20 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.13.001"
+__version__ = "1.1.13.006"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.13.006:
+        - cleaned up imports
+    1.1.13.005:
+        - cleaned up package
+    1.1.13.004:
+        - small fixes to regression to improve performance
+    1.1.13.003:
+        - filtered nans from regression
+    1.1.13.002:
+        - removed torch requirement, and moved Regression back to regression.py
     1.1.13.001:
         - bug fix with linear regression not returning a proper value
         - cleaned up regression
@@ -239,7 +249,6 @@ __author__ = (
 )
 
 __all__ = [
-    '_init_device',
     'load_csv',
     'basic_stats',
     'z_score',
@@ -260,7 +269,6 @@ __all__ = [
     'SVM',
     'random_forest_classifier',
     'random_forest_regressor',
-    'Regression',
     'Glicko2',
     # all statistics functions left out due to integration in other functions
 ]
@@ -273,15 +281,11 @@ import csv
 import numba
 from numba import jit
 import numpy as np
-import math
 import scipy
 from scipy import *
 import sklearn
 from sklearn import *
-try:
-    from analysis import trueskill as Trueskill
-except:
-    import trueskill as Trueskill
+from analysis import trueskill as Trueskill
 
 class error(ValueError):
     pass
@@ -344,14 +348,14 @@ def histo_analysis(hist_data):
 
 def regression(inputs, outputs, args): # inputs, outputs expects N-D array 
 
+    X = np.array(inputs)
+    y = np.array(outputs)
+
     regressions = []
 
     if 'lin' in args: # formula: ax + b
 
         try:
-
-            X = np.array(inputs)
-            y = np.array(outputs)
 
             def func(x, a, b):
 
@@ -369,9 +373,6 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
         try:
 
-            X = np.array(inputs)
-            y = np.array(outputs)
-
             def func(x, a, b, c, d):
 
                 return a * np.log(b*(x + c)) + d
@@ -386,10 +387,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
     if 'exp' in args: # formula: a e ^ (b(x + c)) + d
 
-        try:
-
-            X = np.array(inputs)
-            y = np.array(outputs)
+        try:        
 
             def func(x, a, b, c, d):
 
@@ -405,8 +403,8 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
     if 'ply' in args: # formula: a + bx^1 + cx^2 + dx^3 + ...
         
-        inputs = [inputs]
-        outputs = [outputs]
+        inputs = np.array([inputs])
+        outputs = np.array([outputs])
 
         plys = []
         limit = len(outputs[0])
@@ -428,10 +426,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
     if 'sig' in args: # formula: a tanh (b(x + c)) + d
 
-        try:
-
-            X = np.array(inputs)
-            y = np.array(outputs)
+        try:        
 
             def func(x, a, b, c, d):
 
