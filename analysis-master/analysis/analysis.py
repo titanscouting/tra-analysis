@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.13.005"
+__version__ = "1.1.13.006"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.13.006:
+        - cleaned up imports
     1.1.13.005:
         - cleaned up package
     1.1.13.004:
@@ -283,10 +285,7 @@ import scipy
 from scipy import *
 import sklearn
 from sklearn import *
-try:
-    from analysis import trueskill as Trueskill
-except:
-    import trueskill as Trueskill
+from analysis import trueskill as Trueskill
 
 class error(ValueError):
     pass
