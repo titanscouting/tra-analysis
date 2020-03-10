@@ -81,9 +81,10 @@ __all__ = [
 
 from analysis import analysis as an
 import data as d
-from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
+from os import system, name
+from pathlib import Path
 import time
 import warnings
 
@@ -92,17 +93,16 @@ def main():
     while(True):
 
         current_time = time.time()
-        print("time: " + str(current_time))
+        print("[OK] time: " + str(current_time))
 
-        print(" loading config")
+        start = time.time()
         config = load_config(Path("config/stats.config"))
         competition = an.load_csv(Path("config/competition.config"))[0][0]
-        print(" config loaded")
+        print("[OK] configs loaded")
 
-        print(" loading database keys")
         apikey = an.load_csv(Path("config/keys.config"))[0][0]
         tbakey = an.load_csv(Path("config/keys.config"))[1][0]
-        print(" loaded keys")
+        print("[OK] loaded keys")
 
         previous_time = d.get_analysis_flags(apikey, "latest_update")
 
@@ -115,30 +115,47 @@ def main():
 
             previous_time = previous_time["latest_update"]
 
-        print(" analysis backtimed to: " + str(previous_time))
+        print("[OK] analysis backtimed to: " + str(previous_time))
 
-        print(" loading data")
+        print("[OK] loading data")
+        start = time.time()
         data = d.get_match_data_formatted(apikey, competition)
         pit_data = d.pit = d.get_pit_data_formatted(apikey, competition)
-        print(" loaded data")
+        print("[OK] loaded data in " + str(time.time() - start) + " seconds")
 
-        print(" running tests")
+        print("[OK] running tests")
+        start = time.time()
         results = simpleloop(data, config)
-        print(" finished tests")
+        print("[OK] finished tests in " + str(time.time() - start) + " seconds")
 
-        print(" running metrics")
+        print("[OK] running metrics")
+        start = time.time()
         metricsloop(tbakey, apikey, competition, previous_time)
-        print(" finished metrics")
+        print("[OK] finished metrics in " + str(time.time() - start) + " seconds")
 
-        print(" running pit analysis")
+        print("[OK] running pit analysis")
+        start = time.time()
         pit = pitloop(pit_data, config)
-        print(" finished pit analysis")
+        print("[OK] finished pit analysis in " + str(time.time() - start) + " seconds")
 
         d.set_analysis_flags(apikey, "latest_update", {"latest_update":current_time})
         
-        print(" pushing to database")
+        print("[OK] pushing to database")
+        start = time.time()
         push_to_database(apikey, competition, results, pit)
-        print(" pushed to database")
+        print("[OK] pushed to database in " + str(time.time() - start) + " seconds")
+
+        clear()
+
+def clear(): 
+    
+    # for windows 
+    if name == 'nt': 
+        _ = system('cls') 
+  
+    # for mac and linux(here, os.name is 'posix') 
+    else: 
+        _ = system('clear')
 
 def load_config(file):
     config_vector = {}
