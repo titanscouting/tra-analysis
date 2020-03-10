@@ -1,4 +1,0 @@
-sandstormCrossBonus,strongMediumTeleop,fillChoiceTeleop,cargoSuccessTeleop,contrubution,functional,lowRocketSuccessTeleop,startingHatch,nTG6cThsi9TB9mTkcwuo5bKEo9B3,size,speed,hiRocketSuccessTeleop,strategy,match,fillChoice,endingHab,teamDBRef,strongMedium,sandstormCross
-,,,,,,,,"{'notes': '', 'contribution': 'Great', 'fillChoice': 'Cargo', 'strategy': 'ball in cargo ship ', 'strongMedium': 'Ball', 'cargoSuccessTeleop': 'High', 'teamDBRef': 'team-2451', 'speed': 'Medium', 'hiRocketSuccessTeleop': '', 'size': 'Large', 'match': 'match-23', 'fillChoiceTeleop': 'Cargo', 'strongMediumTeleop': 'Ball', 'endingHab': 'None', 'functional': 'Yes', 'lowRocketSuccessTeleop': '', 'startingHatch': 'Hab II'}",,,,,,,,,,
-L2,Hatch,High Rocket,Mid,Strong,Yes,High,Hab II,,Small,Medium,High,"Cargo ship, then rocket hatch",match-35,Cargo,L1,team-2451,Ball,L2
-L1,Neither,Cargo,High,Equal,Yes,N/A,Hab I,,Medium,Ludicrous,N/A,,match-41,Cargo,None,team-2451,Ball,L1
