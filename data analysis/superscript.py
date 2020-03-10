@@ -3,10 +3,12 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.4.002"
+__version__ = "0.0.5.000"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.5.000:
+        improved user interface
     0.0.4.002:
         - removed unessasary code
     0.0.4.001:
@@ -83,6 +85,8 @@ from analysis import analysis as an
 import data as d
 import numpy as np
 import matplotlib.pyplot as plt
+from os import system, name
+from pathlib import Path
 import time
 import warnings
 
@@ -91,16 +95,16 @@ def main():
     while(True):
 
         current_time = time.time()
-        print("time: " + str(current_time))
+        print("[OK] time: " + str(current_time))
 
-        print(" loading config")
-        competition, config = load_config("config.csv")
-        print(" config loaded")
+        start = time.time()
+        config = load_config(Path("config/stats.config"))
+        competition = an.load_csv(Path("config/competition.config"))[0][0]
+        print("[OK] configs loaded")
 
-        print(" loading database keys")
-        apikey = an.load_csv("keys.txt")[0][0]
-        tbakey = an.load_csv("keys.txt")[1][0]
-        print(" loaded keys")
+        apikey = an.load_csv(Path("config/keys.config"))[0][0]
+        tbakey = an.load_csv(Path("config/keys.config"))[1][0]
+        print("[OK] loaded keys")
 
         previous_time = d.get_analysis_flags(apikey, "latest_update")
 
@@ -113,38 +117,55 @@ def main():
 
             previous_time = previous_time["latest_update"]
 
-        print(" analysis backtimed to: " + str(previous_time))
+        print("[OK] analysis backtimed to: " + str(previous_time))
 
-        print(" loading data")
+        print("[OK] loading data")
+        start = time.time()
         data = d.get_match_data_formatted(apikey, competition)
         pit_data = d.pit = d.get_pit_data_formatted(apikey, competition)
-        print(" loaded data")
+        print("[OK] loaded data in " + str(time.time() - start) + " seconds")
 
-        print(" running tests")
+        print("[OK] running tests")
+        start = time.time()
         results = simpleloop(data, config)
-        print(" finished tests")
+        print("[OK] finished tests in " + str(time.time() - start) + " seconds")
 
-        print(" running metrics")
+        print("[OK] running metrics")
+        start = time.time()
         metricsloop(tbakey, apikey, competition, previous_time)
-        print(" finished metrics")
+        print("[OK] finished metrics in " + str(time.time() - start) + " seconds")
 
-        print(" running pit analysis")
+        print("[OK] running pit analysis")
+        start = time.time()
         pit = pitloop(pit_data, config)
-        print(" finished pit analysis")
+        print("[OK] finished pit analysis in " + str(time.time() - start) + " seconds")
 
         d.set_analysis_flags(apikey, "latest_update", {"latest_update":current_time})
         
-        print(" pushing to database")
+        print("[OK] pushing to database")
+        start = time.time()
         push_to_database(apikey, competition, results, pit)
-        print(" pushed to database")
+        print("[OK] pushed to database in " + str(time.time() - start) + " seconds")
+
+        clear()
+
+def clear(): 
+    
+    # for windows 
+    if name == 'nt': 
+        _ = system('cls') 
+  
+    # for mac and linux(here, os.name is 'posix') 
+    else: 
+        _ = system('clear')
 
 def load_config(file):
     config_vector = {}
     file = an.load_csv(file)
-    for line in file[1:]:
+    for line in file:
         config_vector[line[0]] = line[1:]
 
-    return (file[0][0], config_vector)
+    return config_vector
 
 def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
 
