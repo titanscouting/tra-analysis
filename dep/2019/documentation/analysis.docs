@@ -1,0 +1,178 @@
+Doccumentation of python module: analysis.py
+
+revision version: 1.0.8.003
+
+
+
+analysis.py{
+
+	analysis.py should be imported as a python module using "import analysis" in the tr2022 directory, or using "from tr2022 import analysis" if tr2022 modules are installed in the python Libs directory
+
+	analysis.py is a module designed for statistical analyses and artifician neural network analyses
+
+	functions{
+
+
+		_init_device{
+
+
+			initiates device for tensor flow with either a cuda device (device specified via the "arg" argument) or cpu (ignored "arg" argument)
+
+			usage{
+
+				analysis._init_device("cuda", arg) , where arg is the cuda device number
+
+				analysis._init_device("cpu", 0) , which initiates the cpu as the tensorflow device
+
+			}
+
+			
+
+		}
+
+		load_csv{
+
+			loads a csv file as a 2 dimentional array
+
+			usage{
+
+				analysis.load_csv(filepath) , where filepath is the path to the csv file to be loaded
+
+			}
+
+		}
+
+		basic_stats{
+
+			performs basic stats such as mean, median, mode, standard deviation, and varaince on a set of data
+
+			the function can do stats on a 1 dimentional array, or on a specified row or column in a 2 dimentional array
+
+			the method in which it does the statistics is specified by the "method" argument
+
+			usage{
+
+				analysis.basic_stats(data, "1d", 0) , where data is a 1 dimentional array
+
+				analysis.basic_stats(data, "row", rownum) , where data is a 2 dimentional array and "rownum" is the row to run statistics on
+
+				analysis.basic_stats(data, "column", columnnum) , where data is a 2 dimentional array and "columnnum" is the column to run statistics on 
+
+			}
+
+		}
+
+		z_score{
+
+			returns the z score of a point relative to the population mean and standard deviation
+
+			usage{
+
+				analysis.z_score(datapoint, mean, stdev) , where "datapoint" is the specific data point to assign a z score, mean is the mean of the entire data set, and stdev is the standard deviation of the data set
+
+			}
+
+		}
+
+		z_normalize{
+
+			used in other functions, not important
+
+		}
+
+		stdev_z_split{
+
+			used in other functions, not important
+
+		}
+
+		histo_analysis{
+
+			returns an analysis of historical data, the analysis predicts a range of possible next data poins given historical data
+
+			usage{
+
+				analysis.histo_analysis(data, delta, low, high) , where data is the historical data to be predicted, delta are the steps (in standard deviations) that the predictor uses, and the low and high bounds are the ranges of standard deviations that the function predicts within
+
+			}
+
+		}
+
+		poly_regression{
+
+			used in other functions, not important
+
+		}
+
+		log_regression{
+
+			used in other functions, not important
+
+		}
+
+		exp_regression{
+
+			used in other functions, not important
+
+		}
+
+		tanh_regression{
+
+			used in other functions, not important
+
+		}
+
+		r_squared{
+
+			used in other functions
+
+			returns the r^2 score of a curve and corresponding data
+
+		}
+
+		rms{
+
+			used in other functions
+
+			returns the root mean squared score of a curve and corresponding data
+
+		}
+
+		calc_overfit{
+
+			used in other functions, not important
+
+		}
+
+		optimize_regression{
+
+			returns a list of possible regressions given the x and y coordinates of the data
+
+			usage{
+
+				analysis.optimize_regression(x, y, range, resolution) , where x and y are the x and y values of each data point, range is the range of polynomial equations tried, and resolution is the detail of bases used for exponential and logorithmic regressions
+			}
+
+		}
+
+		select_best_regression{
+
+			takes a list of equations and returns the best equation, either based on minimizing overfit or based on maximizing root mean squareds
+
+		}
+
+		p_value{
+
+			returns the p value of two data sets
+
+		}
+
+		basic_analysis{
+
+			runs every stat on a given file
+
+		}
+		
+	}
+
+}
