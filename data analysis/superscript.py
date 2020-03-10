@@ -81,6 +81,7 @@ __all__ = [
 
 from analysis import analysis as an
 import data as d
+from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 import time
@@ -94,12 +95,13 @@ def main():
         print("time: " + str(current_time))
 
         print(" loading config")
-        competition, config = load_config("config.csv")
+        config = load_config(Path("config/stats.config"))
+        competition = an.load_csv(Path("config/competition.config"))[0][0]
         print(" config loaded")
 
         print(" loading database keys")
-        apikey = an.load_csv("keys.txt")[0][0]
-        tbakey = an.load_csv("keys.txt")[1][0]
+        apikey = an.load_csv(Path("config/keys.config"))[0][0]
+        tbakey = an.load_csv(Path("config/keys.config"))[1][0]
         print(" loaded keys")
 
         previous_time = d.get_analysis_flags(apikey, "latest_update")
@@ -141,10 +143,10 @@ def main():
 def load_config(file):
     config_vector = {}
     file = an.load_csv(file)
-    for line in file[1:]:
+    for line in file:
         config_vector[line[0]] = line[1:]
 
-    return (file[0][0], config_vector)
+    return config_vector
 
 def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
 
