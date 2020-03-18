@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.13.006"
+__version__ = "1.1.13.007"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.13.007:
+        - fixed bug with trueskill
     1.1.13.006:
         - cleaned up imports
     1.1.13.005:
@@ -461,13 +463,13 @@ def trueskill(teams_data, observations): # teams_data is array of array of tuple
     team_ratings = []
 
     for team in teams_data:
-        team_temp = []
+        team_temp = ()
         for player in team:
             player = Trueskill.Rating(player[0], player[1])
-            team_temp.append(player)
+            team_temp = team_temp + (player,)
         team_ratings.append(team_temp)
 
-    return Trueskill.rate(teams_data, observations)
+    return Trueskill.rate(team_ratings, ranks=observations)
 
 class RegressionMetrics():
 
