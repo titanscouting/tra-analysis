@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(
-    name="analysis", # Replace with your own username
+    name="analysis"
     version="1.0.0.009",
     author="The Titan Scouting Team",
     author_email="titanscout2022@gmail.com",
