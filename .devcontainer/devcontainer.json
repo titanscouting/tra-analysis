@@ -19,5 +19,8 @@
 		"python.linting.pylintPath": "/usr/local/py-utils/bin/pylint",
 		"python.testing.pytestPath": "/usr/local/py-utils/bin/pytest"
 	},
+	"extensions": [
+		"mhutchie.git-graph",
+	],
 	"postCreateCommand": "pip install -r analysis-master/analysis-amd64/requirements.txt"
 }
