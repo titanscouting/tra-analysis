@@ -1,7 +1,7 @@
 {
     "name": "TRA Analysis Development Environment",
     "build": {
-		"dockerfile": "../analysis-master/analysis-amd64/docker/Dockerfile-vscode",
+		"dockerfile": "Dockerfile",
     },
     "settings": { 
 		"terminal.integrated.shell.linux": "/bin/bash",
