@@ -1,4 +1,4 @@
 FROM python
 WORKDIR ~/
-COPY . .
-RUN cd
+COPY ./ ./
+CMD ["bash"]
