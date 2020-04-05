@@ -19,4 +19,5 @@
 		"python.linting.pylintPath": "/usr/local/py-utils/bin/pylint",
 		"python.testing.pytestPath": "/usr/local/py-utils/bin/pytest"
 	},
+	"postCreateCommand": "pip install -r analysis-master/analysis-amd64/requirements.txt"
 }
