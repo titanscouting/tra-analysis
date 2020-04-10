@@ -1,6 +1,7 @@
 setup.py
 analysis/__init__.py
 analysis/analysis.py
+analysis/glicko2.py
 analysis/regression.py
 analysis/titanlearn.py
 analysis/trueskill.py
