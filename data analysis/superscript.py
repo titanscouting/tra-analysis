@@ -3,12 +3,15 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.5.000"
+__version__ = "0.0.5.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.5.001:
+        - text fixes
+        - removed matplotlib requirement
     0.0.5.000:
-        improved user interface
+        - improved user interface
     0.0.4.002:
         - removed unessasary code
     0.0.4.001:
@@ -84,7 +87,6 @@ __all__ = [
 from analysis import analysis as an
 import data as d
 import numpy as np
-import matplotlib.pyplot as plt
 from os import system, name
 from pathlib import Path
 import time
