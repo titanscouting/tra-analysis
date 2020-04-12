@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.1.13.008"
+__version__ = "1.1.13.009"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.1.13.009:
+        - moved elo, glicko2, trueskill functions under class Metrics
     1.1.13.008:
         - moved Glicko2 to a seperate package
     1.1.13.007:
@@ -446,32 +448,34 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
     return regressions
 
-def elo(starting_score, opposing_score, observed, N, K):
+class Metrics:
 
-    expected = 1/(1+10**((np.array(opposing_score) - starting_score)/N))
+    def elo(starting_score, opposing_score, observed, N, K):
 
-    return starting_score + K*(np.sum(observed) - np.sum(expected))
+        expected = 1/(1+10**((np.array(opposing_score) - starting_score)/N))
 
-def glicko2(starting_score, starting_rd, starting_vol, opposing_score, opposing_rd, observations):
+        return starting_score + K*(np.sum(observed) - np.sum(expected))
 
-    player = Glicko2.Glicko2(rating = starting_score, rd = starting_rd, vol = starting_vol)
+    def glicko2(starting_score, starting_rd, starting_vol, opposing_score, opposing_rd, observations):
 
-    player.update_player([x for x in opposing_score], [x for x in opposing_rd], observations)
+        player = Glicko2.Glicko2(rating = starting_score, rd = starting_rd, vol = starting_vol)
 
-    return (player.rating, player.rd, player.vol)
+        player.update_player([x for x in opposing_score], [x for x in opposing_rd], observations)
 
-def trueskill(teams_data, observations): # teams_data is array of array of tuples ie. [[(mu, sigma), (mu, sigma), (mu, sigma)], [(mu, sigma), (mu, sigma), (mu, sigma)]]
+        return (player.rating, player.rd, player.vol)
 
-    team_ratings = []
+    def trueskill(teams_data, observations): # teams_data is array of array of tuples ie. [[(mu, sigma), (mu, sigma), (mu, sigma)], [(mu, sigma), (mu, sigma), (mu, sigma)]]
 
-    for team in teams_data:
-        team_temp = ()
-        for player in team:
-            player = Trueskill.Rating(player[0], player[1])
-            team_temp = team_temp + (player,)
-        team_ratings.append(team_temp)
+        team_ratings = []
 
-    return Trueskill.rate(team_ratings, ranks=observations)
+        for team in teams_data:
+            team_temp = ()
+            for player in team:
+                player = Trueskill.Rating(player[0], player[1])
+                team_temp = team_temp + (player,)
+            team_ratings.append(team_temp)
+
+        return Trueskill.rate(team_ratings, ranks=observations)
 
 class RegressionMetrics():
 
@@ -563,24 +567,25 @@ def decisiontree(data, labels, test_size = 0.3, criterion = "gini", splitter = "
 
     return model, metrics
 
-@jit(forceobj=True)
-def knn_classifier(data, labels, test_size = 0.3, algorithm='auto', leaf_size=30, metric='minkowski', metric_params=None, n_jobs=None, n_neighbors=5, p=2, weights='uniform'): #expects *2d data and 1d labels post-scaling
+class KNN:
 
-    data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
-    model = sklearn.neighbors.KNeighborsClassifier()
-    model.fit(data_train, labels_train)
-    predictions = model.predict(data_test)
+    def knn_classifier(data, labels, test_size = 0.3, algorithm='auto', leaf_size=30, metric='minkowski', metric_params=None, n_jobs=None, n_neighbors=5, p=2, weights='uniform'): #expects *2d data and 1d labels post-scaling
 
-    return model, ClassificationMetrics(predictions, labels_test)
+        data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
+        model = sklearn.neighbors.KNeighborsClassifier()
+        model.fit(data_train, labels_train)
+        predictions = model.predict(data_test)
 
-def knn_regressor(data, outputs, test_size, n_neighbors = 5, weights = "uniform", algorithm = "auto", leaf_size = 30, p = 2, metric = "minkowski", metric_params = None, n_jobs = None):
+        return model, ClassificationMetrics(predictions, labels_test)
 
-    data_train, data_test, outputs_train, outputs_test = sklearn.model_selection.train_test_split(data, outputs, test_size=test_size, random_state=1)
-    model = sklearn.neighbors.KNeighborsRegressor(n_neighbors = n_neighbors, weights = weights, algorithm = algorithm, leaf_size = leaf_size, p = p, metric = metric, metric_params = metric_params, n_jobs = n_jobs)
-    model.fit(data_train, outputs_train)
-    predictions = model.predict(data_test)
+    def knn_regressor(data, outputs, test_size, n_neighbors = 5, weights = "uniform", algorithm = "auto", leaf_size = 30, p = 2, metric = "minkowski", metric_params = None, n_jobs = None):
 
-    return model, RegressionMetrics(predictions, outputs_test)
+        data_train, data_test, outputs_train, outputs_test = sklearn.model_selection.train_test_split(data, outputs, test_size=test_size, random_state=1)
+        model = sklearn.neighbors.KNeighborsRegressor(n_neighbors = n_neighbors, weights = weights, algorithm = algorithm, leaf_size = leaf_size, p = p, metric = metric, metric_params = metric_params, n_jobs = n_jobs)
+        model.fit(data_train, outputs_train)
+        predictions = model.predict(data_test)
+
+        return model, RegressionMetrics(predictions, outputs_test)
 
 class NaiveBayes:
 

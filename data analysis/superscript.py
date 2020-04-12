@@ -3,10 +3,12 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.5.001"
+__version__ = "0.0.5.002"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    0.0.5.002:
+        - made changes due to refactoring of analysis
     0.0.5.001:
         - text fixes
         - removed matplotlib requirement
@@ -286,11 +288,11 @@ def metricsloop(tbakey, apikey, competition, timestamp): # listener based metric
 
             observations = {"red": 0.5, "blu": 0.5}
 
-        red_elo_delta = an.elo(red_elo["score"], blu_elo["score"], observations["red"], elo_N, elo_K) - red_elo["score"]
-        blu_elo_delta = an.elo(blu_elo["score"], red_elo["score"], observations["blu"], elo_N, elo_K) - blu_elo["score"]
+        red_elo_delta = an.Metrics.elo(red_elo["score"], blu_elo["score"], observations["red"], elo_N, elo_K) - red_elo["score"]
+        blu_elo_delta = an.Metrics.elo(blu_elo["score"], red_elo["score"], observations["blu"], elo_N, elo_K) - blu_elo["score"]
 
-        new_red_gl2_score, new_red_gl2_rd, new_red_gl2_vol = an.glicko2(red_gl2["score"], red_gl2["rd"], red_gl2["vol"], [blu_gl2["score"]], [blu_gl2["rd"]], [observations["red"], observations["blu"]])
-        new_blu_gl2_score, new_blu_gl2_rd, new_blu_gl2_vol = an.glicko2(blu_gl2["score"], blu_gl2["rd"], blu_gl2["vol"], [red_gl2["score"]], [red_gl2["rd"]], [observations["blu"], observations["red"]])
+        new_red_gl2_score, new_red_gl2_rd, new_red_gl2_vol = an.Metrics.glicko2(red_gl2["score"], red_gl2["rd"], red_gl2["vol"], [blu_gl2["score"]], [blu_gl2["rd"]], [observations["red"], observations["blu"]])
+        new_blu_gl2_score, new_blu_gl2_rd, new_blu_gl2_vol = an.Metrics.glicko2(blu_gl2["score"], blu_gl2["rd"], blu_gl2["vol"], [red_gl2["score"]], [red_gl2["rd"]], [observations["blu"], observations["red"]])
 
         red_gl2_delta = {"score": new_red_gl2_score - red_gl2["score"], "rd": new_red_gl2_rd - red_gl2["rd"], "vol": new_red_gl2_vol - red_gl2["vol"]}
         blu_gl2_delta = {"score": new_blu_gl2_score - blu_gl2["score"], "rd": new_blu_gl2_rd - blu_gl2["rd"], "vol": new_blu_gl2_vol - blu_gl2["vol"]}
