@@ -1,16 +1,18 @@
 # Titan Robotics Team 2022: Data Analysis Module
 # Written by Arthur Lu & Jacob Levine
 # Notes:
-#    this should be imported as a python module using 'import analysis'
+#    this should be imported as a python module using 'from analysis import analysis'
 #    this should be included in the local directory or environment variable
 #    this module has been optimized for multhreaded computing
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.2.0.000"
+__version__ = "1.2.0.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.2.0.001:
+        - fixed docs
     1.2.0.000:
         - cleaned up wild card imports with scipy and sklearn
         - added CorrelationTests class
