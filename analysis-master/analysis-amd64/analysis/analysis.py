@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.2.0.001"
+__version__ = "1.2.0.002"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.2.0.002:
+        - fixed docs
     1.2.0.001:
         - fixed docs
     1.2.0.000:
@@ -283,6 +285,8 @@ __all__ = [
     'SVM',
     'random_forest_classifier',
     'random_forest_regressor',
+    'CorrelationTests',
+    'RegressionTests',
     # all statistics functions left out due to integration in other functions
 ]
 
