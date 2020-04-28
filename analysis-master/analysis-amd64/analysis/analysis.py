@@ -7,10 +7,14 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.2.0.002"
+__version__ = "1.2.0.003"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    1.2.0.003:
+        - bug fixes with CorrelationTests and StatisticalTests
+        - moved glicko2 and trueskill to the metrics subpackage
+        - moved elo to a new metrics subpackage
     1.2.0.002:
         - fixed docs
     1.2.0.001:
@@ -295,7 +299,8 @@ __all__ = [
 # imports (now in alphabetical order! v 1.0.3.006):
 
 import csv
-from analysis import glicko2 as Glicko2
+from analysis.metrics import elo as Elo
+from analysis.metrics import glicko2 as Glicko2
 import numba
 from numba import jit
 import numpy as np
@@ -303,7 +308,7 @@ import scipy
 from scipy import optimize, stats
 import sklearn
 from sklearn import preprocessing, pipeline, linear_model, metrics, cluster, decomposition, tree, neighbors, naive_bayes, svm, model_selection, ensemble
-from analysis import trueskill as Trueskill
+from analysis.metrics import trueskill as Trueskill
 
 class error(ValueError):
     pass
@@ -464,9 +469,7 @@ class Metrics:
 
     def elo(starting_score, opposing_score, observed, N, K):
 
-        expected = 1/(1+10**((np.array(opposing_score) - starting_score)/N))
-
-        return starting_score + K*(np.sum(observed) - np.sum(expected))
+        return Elo.calculate(starting_score, opposing_score, observed, N, K)
 
     def glicko2(starting_score, starting_rd, starting_vol, opposing_score, opposing_rd, observations):
 
@@ -830,7 +833,7 @@ class StatisticalTests:
         results = scipy.stats.friedmanchisquare(*args)
         return {"chisquared-value": results[0], "p-value": results[1]}
 
-    def bm-wtest(x, y, alternative = 'two-sided', distribution = 't', nan_policy = 'propagate'):
+    def bm_wtest(x, y, alternative = 'two-sided', distribution = 't', nan_policy = 'propagate'):
 
         results = scipy.stats.brunnermunzel(x, y, alternative = alternative, distribution = distribution, nan_policy = nan_policy)
         return {"w-value": results[0], "p-value": results[1]}
@@ -857,7 +860,7 @@ class StatisticalTests:
 
     def levene_variance(*args, center = 'median', proportiontocut = 0.05):
 
-        results = scipy.stats.levene(*args center = center, proportiontocut = proportiontocut)
+        results = scipy.stats.levene(*args, center = center, proportiontocut = proportiontocut)
         return {"w-value": results[0], "p-value": results[1]}
 
     def sw_normality(x):
@@ -871,7 +874,7 @@ class StatisticalTests:
 
     def ad_onesample(x, dist = 'norm'):
 
-        results = scipy.stats.anderson(x, dist = dist):
+        results = scipy.stats.anderson(x, dist = dist)
         return {"d-value": results[0], "critical-values": results[1], "significance-value": results[2]}
     
     def ad_ksample(samples, midrank = True):
@@ -886,12 +889,12 @@ class StatisticalTests:
 
     def fk_variance(*args, center = 'median', proportiontocut = 0.05):
 
-        results = scipy.stats.fligner(*args center = center, proportiontocut = proportiontocut)
+        results = scipy.stats.fligner(*args, center = center, proportiontocut = proportiontocut)
         return {"h-value": results[0], "p-value": results[1]} # unknown if the statistic is an h value
 
     def mood_mediantest(*args, ties = 'below', correction = True, lambda_ = 1, nan_policy = 'propagate'):
 
-        results = scipy.stats.median_test(*args, ties = ties, correction = correction, lambda_ = lambda_, nan_policy = nan_policy)*
+        results = scipy.stats.median_test(*args, ties = ties, correction = correction, lambda_ = lambda_, nan_policy = nan_policy)
         return {"chisquared-value": results[0], "p-value": results[1], "m-value": results[2], "table": results[3]}
 
     def mood_equalscale(x, y, axis = 0):
