@@ -21,6 +21,7 @@
 	},
 	"extensions": [
 		"mhutchie.git-graph",
+		"donjayamanne.jupyter",
 	],
 	"postCreateCommand": "pip install -r analysis-master/analysis-amd64/requirements.txt"
 }
