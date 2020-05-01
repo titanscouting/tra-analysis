@@ -1,0 +1,15 @@
+setup.py
+analysis/__init__.py
+analysis/analysis.py
+analysis/regression.py
+analysis/titanlearn.py
+analysis/visualization.py
+analysis.egg-info/PKG-INFO
+analysis.egg-info/SOURCES.txt
+analysis.egg-info/dependency_links.txt
+analysis.egg-info/requires.txt
+analysis.egg-info/top_level.txt
+analysis/metrics/__init__.py
+analysis/metrics/elo.py
+analysis/metrics/glicko2.py
+analysis/metrics/trueskill.py
