@@ -361,7 +361,7 @@ def z_normalize(array, *args):
 	for arg in args:
 		array = sklearn.preprocessing.normalize(array, axis = arg)
 
-   return array
+	return array
 
 @jit(forceobj=True)
 # expects 2d array of [x,y]
