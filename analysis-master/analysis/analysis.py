@@ -7,10 +7,18 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.2.0.004"
+__version__ = "1.2.0.005"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	1.2.0.005:
+		- moved random_forrest_regressor and random_forrest_classifier to RandomForrest class
+		- renamed Metrics to Metric
+		- renamed RegressionMetrics to RegressionMetric
+		- renamed ClassificationMetrics to ClassificationMetric
+		- renamed CorrelationTests to CorrelationTest
+		- renamed StatisticalTests to StatisticalTest
+		- reflected rafactoring to all mentions of above classes/functions
 	1.2.0.004:
 		- fixed __all__ to reflected the correct functions and classes
 		- fixed CorrelationTests and StatisticalTests class functions to require self invocation
@@ -282,19 +290,18 @@ __all__ = [
 	'z_normalize',
 	'histo_analysis',
 	'regression',
-	'Metrics',
-	'RegressionMetrics',
-	'ClassificationMetrics',
+	'Metric',
+	'RegressionMetric',
+	'ClassificationMetric',
 	'kmeans',
 	'pca',
 	'decisiontree',
 	'KNN',
 	'NaiveBayes',
 	'SVM',
-	'random_forest_classifier',
-	'random_forest_regressor',
-	'CorrelationTests',
-	'StatisticalTests',
+	'RandomForrest',
+	'CorrelationTest',
+	'StatisticalTest',
 	# all statistics functions left out due to integration in other functions
 ]
 
@@ -470,7 +477,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
 	return regressions
 
-class Metrics:
+class Metric:
 
 	def elo(self, starting_score, opposing_score, observed, N, K):
 
@@ -497,7 +504,7 @@ class Metrics:
 
 		return Trueskill.rate(team_ratings, ranks=observations)
 
-class RegressionMetrics():
+class RegressionMetric():
 
 	def __new__(cls, predictions, targets):
 
@@ -515,7 +522,7 @@ class RegressionMetrics():
 
 		return math.sqrt(sklearn.metrics.mean_squared_error(targets, predictions))
 
-class ClassificationMetrics():
+class ClassificationMetric():
 
 	def __new__(cls, predictions, targets):
 
@@ -583,7 +590,7 @@ def decisiontree(data, labels, test_size = 0.3, criterion = "gini", splitter = "
 	model = sklearn.tree.DecisionTreeClassifier(criterion = criterion, splitter = splitter, max_depth = max_depth)
 	model = model.fit(data_train,labels_train)
 	predictions = model.predict(data_test)
-	metrics = ClassificationMetrics(predictions, labels_test)
+	metrics = ClassificationMetric(predictions, labels_test)
 
 	return model, metrics
 
@@ -596,7 +603,7 @@ class KNN:
 		model.fit(data_train, labels_train)
 		predictions = model.predict(data_test)
 
-		return model, ClassificationMetrics(predictions, labels_test)
+		return model, ClassificationMetric(predictions, labels_test)
 
 	def knn_regressor(self, data, outputs, test_size, n_neighbors = 5, weights = "uniform", algorithm = "auto", leaf_size = 30, p = 2, metric = "minkowski", metric_params = None, n_jobs = None):
 
@@ -605,7 +612,7 @@ class KNN:
 		model.fit(data_train, outputs_train)
 		predictions = model.predict(data_test)
 
-		return model, RegressionMetrics(predictions, outputs_test)
+		return model, RegressionMetric(predictions, outputs_test)
 
 class NaiveBayes:
 
@@ -616,7 +623,7 @@ class NaiveBayes:
 		model.fit(data_train, labels_train)
 		predictions = model.predict(data_test)
 
-		return model, ClassificationMetrics(predictions, labels_test)
+		return model, ClassificationMetric(predictions, labels_test)
 
 	def multinomial(self, data, labels, test_size = 0.3, alpha=1.0, fit_prior=True, class_prior=None):
 
@@ -625,7 +632,7 @@ class NaiveBayes:
 		model.fit(data_train, labels_train)
 		predictions = model.predict(data_test)
 
-		return model, ClassificationMetrics(predictions, labels_test)
+		return model, ClassificationMetric(predictions, labels_test)
 
 	def bernoulli(self, data, labels, test_size = 0.3, alpha=1.0, binarize=0.0, fit_prior=True, class_prior=None):
 
@@ -634,7 +641,7 @@ class NaiveBayes:
 		model.fit(data_train, labels_train)
 		predictions = model.predict(data_test)
 
-		return model, ClassificationMetrics(predictions, labels_test)
+		return model, ClassificationMetric(predictions, labels_test)
 
 	def complement(self, data, labels, test_size = 0.3, alpha=1.0, fit_prior=True, class_prior=None, norm=False):
 
@@ -643,7 +650,7 @@ class NaiveBayes:
 		model.fit(data_train, labels_train)
 		predictions = model.predict(data_test)
 
-		return model, ClassificationMetrics(predictions, labels_test)
+		return model, ClassificationMetric(predictions, labels_test)
 
 class SVM:
 
@@ -693,33 +700,35 @@ class SVM:
 
 		predictions = kernel.predict(test_data)
 
-		return ClassificationMetrics(predictions, test_outputs)
+		return ClassificationMetric(predictions, test_outputs)
 
 	def eval_regression(self, kernel, test_data, test_outputs):
 
 		predictions = kernel.predict(test_data)
 
-		return RegressionMetrics(predictions, test_outputs)
+		return RegressionMetric(predictions, test_outputs)
 
-def random_forest_classifier(data, labels, test_size, n_estimators="warn", criterion="gini", max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features="auto", max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False, class_weight=None):
+class RandomForrest:
 
-	data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
-	kernel = sklearn.ensemble.RandomForestClassifier(n_estimators = n_estimators, criterion = criterion, max_depth = max_depth, min_samples_split = min_samples_split, min_samples_leaf = min_samples_leaf, min_weight_fraction_leaf = min_weight_fraction_leaf, max_leaf_nodes = max_leaf_nodes, min_impurity_decrease = min_impurity_decrease, bootstrap = bootstrap, oob_score = oob_score, n_jobs = n_jobs, random_state = random_state, verbose = verbose, warm_start = warm_start, class_weight = class_weight)
-	kernel.fit(data_train, labels_train)
-	predictions = kernel.predict(data_test)
+	def random_forest_classifier(self, data, labels, test_size, n_estimators="warn", criterion="gini", max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features="auto", max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False, class_weight=None):
 
-	return kernel, ClassificationMetrics(predictions, labels_test)
+		data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
+		kernel = sklearn.ensemble.RandomForestClassifier(n_estimators = n_estimators, criterion = criterion, max_depth = max_depth, min_samples_split = min_samples_split, min_samples_leaf = min_samples_leaf, min_weight_fraction_leaf = min_weight_fraction_leaf, max_leaf_nodes = max_leaf_nodes, min_impurity_decrease = min_impurity_decrease, bootstrap = bootstrap, oob_score = oob_score, n_jobs = n_jobs, random_state = random_state, verbose = verbose, warm_start = warm_start, class_weight = class_weight)
+		kernel.fit(data_train, labels_train)
+		predictions = kernel.predict(data_test)
 
-def random_forest_regressor(data, outputs, test_size, n_estimators="warn", criterion="mse", max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features="auto", max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False):
+		return kernel, ClassificationMetric(predictions, labels_test)
 
-	data_train, data_test, outputs_train, outputs_test = sklearn.model_selection.train_test_split(data, outputs, test_size=test_size, random_state=1)
-	kernel = sklearn.ensemble.RandomForestRegressor(n_estimators = n_estimators, criterion = criterion, max_depth = max_depth, min_samples_split = min_samples_split, min_weight_fraction_leaf = min_weight_fraction_leaf, max_features = max_features, max_leaf_nodes = max_leaf_nodes, min_impurity_decrease = min_impurity_decrease, min_impurity_split = min_impurity_split, bootstrap = bootstrap, oob_score = oob_score, n_jobs = n_jobs, random_state = random_state, verbose = verbose, warm_start = warm_start)
-	kernel.fit(data_train, outputs_train)
-	predictions = kernel.predict(data_test)
+	def random_forest_regressor(self, data, outputs, test_size, n_estimators="warn", criterion="mse", max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features="auto", max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False):
 
-	return kernel, RegressionMetrics(predictions, outputs_test)
+		data_train, data_test, outputs_train, outputs_test = sklearn.model_selection.train_test_split(data, outputs, test_size=test_size, random_state=1)
+		kernel = sklearn.ensemble.RandomForestRegressor(n_estimators = n_estimators, criterion = criterion, max_depth = max_depth, min_samples_split = min_samples_split, min_weight_fraction_leaf = min_weight_fraction_leaf, max_features = max_features, max_leaf_nodes = max_leaf_nodes, min_impurity_decrease = min_impurity_decrease, min_impurity_split = min_impurity_split, bootstrap = bootstrap, oob_score = oob_score, n_jobs = n_jobs, random_state = random_state, verbose = verbose, warm_start = warm_start)
+		kernel.fit(data_train, outputs_train)
+		predictions = kernel.predict(data_test)
 
-class CorrelationTests:
+		return kernel, RegressionMetric(predictions, outputs_test)
+
+class CorrelationTest:
 
 	def anova_oneway(self, *args): #expects arrays of samples
 
@@ -756,7 +765,7 @@ class CorrelationTests:
 		results = scipy.stats.multiscale_graphcorr(x, y, compute_distance = compute_distance, reps = reps, workers = workers, is_twosamp = is_twosamp, random_state = random_state)
 		return {"k-value": results[0], "p-value": results[1], "data": results[2]} # unsure if MGC test returns a k value
 
-class StatisticalTests:
+class StatisticalTest:
 
 	def ttest_onesample(self, a, popmean, axis = 0, nan_policy = 'propagate'):
 
