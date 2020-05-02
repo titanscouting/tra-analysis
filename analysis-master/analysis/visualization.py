@@ -10,25 +10,25 @@ __version__ = "1.0.0.000"
 
 #changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
-    1.0.0.000:
-        - created visualization.py
-        - added graphloss()
-        - added imports
+	1.0.0.000:
+		- created visualization.py
+		- added graphloss()
+		- added imports
 """
 
 __author__ = (
-    "Arthur Lu <arthurlu@ttic.edu>,"
-    "Jacob Levine <jlevine@ttic.edu>,"
-    )
+	"Arthur Lu <arthurlu@ttic.edu>,"
+	"Jacob Levine <jlevine@ttic.edu>,"
+	)
 
 __all__ = [
-    'graphloss',
-    ]
+	'graphloss',
+	]
 
 import matplotlib.pyplot as plt
 
 def graphloss(losses):
 
-    x = range(0, len(losses))
-    plt.plot(x, losses)
-    plt.show()
+	x = range(0, len(losses))
+	plt.plot(x, losses)
+	plt.show()
