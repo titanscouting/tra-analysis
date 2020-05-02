@@ -357,9 +357,9 @@ def z_score(point, mean, stdev):
 @jit(forceobj=True)
 def z_normalize(array, *args):
 
-   array = np.array(array)
-   for arg in args:
-	   array = sklearn.preprocessing.normalize(array, axis = arg)
+	array = np.array(array)
+	for arg in args:
+		array = sklearn.preprocessing.normalize(array, axis = arg)
 
    return array
 
