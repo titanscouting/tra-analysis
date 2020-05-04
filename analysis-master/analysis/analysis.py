@@ -7,10 +7,15 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.2.0.006"
+__version__ = "1.2.1.000"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	1.2.1.000:
+		- added ArrayTest class
+		- added elementwise mean, median, standard deviation, variance, min, max functions to ArrayTest class
+		- added elementwise_stats to ArrayTest which encapsulates elementwise statistics
+		- appended to __all__ to reflect changes
 	1.2.0.006:
 		- renamed func functions in regression to lin, log, exp, and sig 
 	1.2.0.005:
@@ -304,6 +309,7 @@ __all__ = [
 	'RandomForrest',
 	'CorrelationTest',
 	'StatisticalTest',
+	'ArrayTest',
 	# all statistics functions left out due to integration in other functions
 ]
 
@@ -932,3 +938,40 @@ class StatisticalTest:
 
 		results = scipy.stats.normaltest(a, axis = axis, nan_policy = nan_policy)
 		return {"z-score": results[0], "p-value": results[1]}
+		
+class ArrayTest(): # tests on nd arrays independent of basic_stats
+	
+	def elementwise_mean(self, *args): # expects arrays that are size normalized
+
+		return np.mean([*args], axis = 0)
+
+	def elementwise_median(self, *args):
+
+		return np.median([*args], axis = 0)
+
+	def elementwise_stdev(self, *args):
+
+		return np.std([*args], axis = 0)
+
+	def elementwise_variance(self, *args):
+
+		return np.var([*args], axis = 0)
+
+	def elementwise_npmin(self, *args):
+
+		return np.amin([*args], axis = 0)
+
+	def elementwise_npmax(self, *args):
+
+		return np.amax([*args], axis = 0)
+
+	def elementwise_stats(self, *args):
+
+		_mean = self.elementwise_mean(*args)
+		_median = self.elementwise_median(*args)
+		_stdev = self.elementwise_stdev(*args)
+		_variance = self.elementwise_variance(*args)
+		_min = self.elementwise_npmin(*args)
+		_max = self.elementwise_npmax(*args)
+
+		return _mean, _median, _stdev, _variance, _min, _max
