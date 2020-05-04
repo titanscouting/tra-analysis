@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.2.0.005"
+__version__ = "1.2.0.006"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	1.2.0.006:
+		- renamed func functions in regression to lin, log, exp, and sig 
 	1.2.0.005:
 		- moved random_forrest_regressor and random_forrest_classifier to RandomForrest class
 		- renamed Metrics to Metric
@@ -392,11 +394,11 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
 		try:
 
-			def func(x, a, b):
+			def lin(x, a, b):
 
 				return a * x + b
 
-			popt, pcov = scipy.optimize.curve_fit(func, X, y)
+			popt, pcov = scipy.optimize.curve_fit(lin, X, y)
 
 			regressions.append((popt.flatten().tolist(), None))
 
@@ -408,11 +410,11 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
 		try:
 
-			def func(x, a, b, c, d):
+			def log(x, a, b, c, d):
 
 				return a * np.log(b*(x + c)) + d
 
-			popt, pcov = scipy.optimize.curve_fit(func, X, y)
+			popt, pcov = scipy.optimize.curve_fit(log, X, y)
 
 			regressions.append((popt.flatten().tolist(), None))
 
@@ -424,11 +426,11 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
 		try:        
 
-			def func(x, a, b, c, d):
+			def exp(x, a, b, c, d):
 
 				return a * np.exp(b*(x + c)) + d
 
-			popt, pcov = scipy.optimize.curve_fit(func, X, y)
+			popt, pcov = scipy.optimize.curve_fit(exp, X, y)
 
 			regressions.append((popt.flatten().tolist(), None))
 
@@ -463,11 +465,11 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
 		try:        
 
-			def func(x, a, b, c, d):
+			def sig(x, a, b, c, d):
 
 				return a * np.tanh(b*(x + c)) + d
 
-			popt, pcov = scipy.optimize.curve_fit(func, X, y)
+			popt, pcov = scipy.optimize.curve_fit(sig, X, y)
 
 			regressions.append((popt.flatten().tolist(), None))
 
