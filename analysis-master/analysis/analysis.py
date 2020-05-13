@@ -984,7 +984,7 @@ class ArrayTest(): # tests on nd arrays independent of basic_stats
 
 		a = np.atleast_1d(np.linalg.norm(array))
 		a[a==0] = 1
-		return array / np.expand_dims(a)
+		return array / np.expand_dims(a, -1)
 
 	def add(self, *args):
 
