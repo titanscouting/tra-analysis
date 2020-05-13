@@ -50,14 +50,17 @@ In order for a PR to be accepted it needs to pass this list of requirements:
 
 ### Format of the commit message
 
-Every commit message should describe what was changed, under which context and, if applicable, the GitHub issue it relates to:
+Every commit message should describe what was changed, under which context and, if applicable, the issue it relates to (mentioning a GitHub issue number when applicable):
 
+For small changes, or changes to a testing or personal branch, the commit message should be a short changelog entry
+
+For larger changes or for changes on branches that are more widely used, the commit message should simply reference an entry to some other changelog system. It is encouraged to use some sort of versioning system to log changes. Example commit messages:
 ```
-superscript.py: pitloop,fix crash. Fixes #2
+superscript.py v 2.0.5.006
 ```
 
 The format can be described more formally as follows:
 
 ```
-<package>: <subpackage>, <what changed>. [Fixes #<issue-number>]
+<package> v <version number>
 ```
