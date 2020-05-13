@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.2.1.001"
+__version__ = "1.2.1.002"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	1.2.1.002:
+		- renamed ArrayTest class to Array
 	1.2.1.001:
 		- added add, mul, neg, and inv functions to ArrayTest class
 		- added normalize function to ArrayTest class
@@ -943,7 +945,7 @@ class StatisticalTest:
 		results = scipy.stats.normaltest(a, axis = axis, nan_policy = nan_policy)
 		return {"z-score": results[0], "p-value": results[1]}
 		
-class ArrayTest(): # tests on nd arrays independent of basic_stats
+class Array(): # tests on nd arrays independent of basic_stats
 	
 	def elementwise_mean(self, *args): # expects arrays that are size normalized
 
@@ -984,7 +986,7 @@ class ArrayTest(): # tests on nd arrays independent of basic_stats
 
 		a = np.atleast_1d(np.linalg.norm(array))
 		a[a==0] = 1
-		return array / np.expand_dims(a)
+		return array / np.expand_dims(a, -1)
 
 	def add(self, *args):
 
