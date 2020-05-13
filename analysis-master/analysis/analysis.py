@@ -990,7 +990,7 @@ class ArrayTest(): # tests on nd arrays independent of basic_stats
 
 		temp = np.array([])
 
-		for a in *args:
+		for a in args:
 			temp += a
 		
 		return temp
@@ -999,7 +999,7 @@ class ArrayTest(): # tests on nd arrays independent of basic_stats
 
 		temp = np.array([])
 
-		for a in *args:
+		for a in args:
 			temp *= a
 		
 		return temp
