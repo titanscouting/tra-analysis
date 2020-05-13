@@ -7,10 +7,14 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.2.1.000"
+__version__ = "1.2.1.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	1.2.1.001:
+		- added add, mul, neg, and inv functions to ArrayTest class
+		- added normalize function to ArrayTest class
+		- added dot and cross functions to ArrayTest class
 	1.2.1.000:
 		- added ArrayTest class
 		- added elementwise mean, median, standard deviation, variance, min, max functions to ArrayTest class
@@ -975,3 +979,43 @@ class ArrayTest(): # tests on nd arrays independent of basic_stats
 		_max = self.elementwise_npmax(*args)
 
 		return _mean, _median, _stdev, _variance, _min, _max
+
+	def normalize(self, array):
+
+		a = np.atleast_1d(np.linalg.norm(array))
+		a[a==0] = 1
+		return array / np.expand_dims(a)
+
+	def add(self, *args):
+
+		temp = np.array([])
+
+		for a in *args:
+			temp += a
+		
+		return temp
+
+	def mul(self, *args):
+
+		temp = np.array([])
+
+		for a in *args:
+			temp *= a
+		
+		return temp
+
+	def neg(self, array):
+		
+		return -array
+
+	def inv(self, array):
+
+		return 1/array
+
+	def dot(self, a, b):
+
+		return np.dot(a, b)
+
+	def cross(self, a, b):
+
+		return np.cross(a, b)
