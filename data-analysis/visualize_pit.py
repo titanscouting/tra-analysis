@@ -1,12 +1,7 @@
-# To add a new cell, type '# %%'
-# To add a new markdown cell, type '# %% [markdown]'
-# %%
 import matplotlib.pyplot as plt
 import data as d
 import pymongo
 
-
-# %%
 def get_pit_variable_data(apikey, competition):
 	client = pymongo.MongoClient(apikey)
 	db = client.data_processing
@@ -14,8 +9,6 @@ def get_pit_variable_data(apikey, competition):
 	out = {}
 	return mdata.find()
 
-
-# %%
 def get_pit_variable_formatted(apikey, competition):
 	temp = get_pit_variable_data(apikey, competition)
 	out = {}
@@ -23,17 +16,11 @@ def get_pit_variable_formatted(apikey, competition):
 		out[i["variable"]] = i["data"]
 	return out
 
-
-# %%
 pit = get_pit_variable_formatted("mongodb+srv://api-user-new:titanscout2022@2022-scouting-4vfuu.mongodb.net/test?authSource=admin&replicaSet=2022-scouting-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true", "2020ilch")
 
-
-# %%
 import matplotlib.pyplot as plt
 import numpy as np
 
-
-# %%
 fig, ax = plt.subplots(1, len(pit), sharey=True, figsize=(80,15))
 
 i = 0
@@ -52,8 +39,3 @@ for variable in pit:
 	i+=1
 
 plt.show()
-
-
-# %%
-
-
