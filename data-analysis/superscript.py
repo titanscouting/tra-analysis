@@ -3,10 +3,21 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.5.002"
+__version__ = "0.0.6.000"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	0.0.6.000:
+		- removed main function
+		- changed load_config function
+		- added save_config function
+		- added load_match function
+		- renamed simpleloop to matchloop
+		- moved simplestats function inside matchloop
+		- renamed load_metrics to load_metric
+		- renamed metricsloop to metricloop
+		- split push to database functions amon push_match, push_metric, push_pit
+		- moved
 	0.0.5.002:
 		- made changes due to refactoring of analysis
 	0.0.5.001:
@@ -77,101 +88,91 @@ __author__ = (
 )
 
 __all__ = [
-	"main", 
 	"load_config",
-	"simpleloop",
-	"simplestats",
-	"metricsloop"
+	"save_config",
+	"get_prevoius_time",
+	"load_match",
+	"matchloop",
+	"load_metric",
+	"metricloop",
+	"load_pit",
+	"pitloop",
+	"push_match",
+	"push_metric",
+	"push_pit",
 ]
 
 # imports:
 
 from analysis import analysis as an
 import data as d
+import json
 import numpy as np
 from os import system, name
 from pathlib import Path
 import time
 import warnings
 
-def main():
-	warnings.filterwarnings("ignore")
-	while(True):
-
-		current_time = time.time()
-		print("[OK] time: " + str(current_time))
-
-		start = time.time()
-		config = load_config(Path("config/stats.config"))
-		competition = an.load_csv(Path("config/competition.config"))[0][0]
-		print("[OK] configs loaded")
-
-		apikey = an.load_csv(Path("config/keys.config"))[0][0]
-		tbakey = an.load_csv(Path("config/keys.config"))[1][0]
-		print("[OK] loaded keys")
-
-		previous_time = d.get_analysis_flags(apikey, "latest_update")
-
-		if(previous_time == None):
-
-			d.set_analysis_flags(apikey, "latest_update", 0)
-			previous_time = 0
-
-		else:
-
-			previous_time = previous_time["latest_update"]
-
-		print("[OK] analysis backtimed to: " + str(previous_time))
-
-		print("[OK] loading data")
-		start = time.time()
-		data = d.get_match_data_formatted(apikey, competition)
-		pit_data = d.pit = d.get_pit_data_formatted(apikey, competition)
-		print("[OK] loaded data in " + str(time.time() - start) + " seconds")
-
-		print("[OK] running tests")
-		start = time.time()
-		results = simpleloop(data, config)
-		print("[OK] finished tests in " + str(time.time() - start) + " seconds")
-
-		print("[OK] running metrics")
-		start = time.time()
-		metricsloop(tbakey, apikey, competition, previous_time)
-		print("[OK] finished metrics in " + str(time.time() - start) + " seconds")
-
-		print("[OK] running pit analysis")
-		start = time.time()
-		pit = pitloop(pit_data, config)
-		print("[OK] finished pit analysis in " + str(time.time() - start) + " seconds")
-
-		d.set_analysis_flags(apikey, "latest_update", {"latest_update":current_time})
-		
-		print("[OK] pushing to database")
-		start = time.time()
-		push_to_database(apikey, competition, results, pit)
-		print("[OK] pushed to database in " + str(time.time() - start) + " seconds")
-
-		clear()
-
-def clear(): 
-	
-	# for windows 
-	if name == 'nt': 
-		_ = system('cls') 
-  
-	# for mac and linux(here, os.name is 'posix') 
-	else: 
-		_ = system('clear')
-
 def load_config(file):
+
 	config_vector = {}
-	file = an.load_csv(file)
-	for line in file:
-		config_vector[line[0]] = line[1:]
+	with open(file) as f:
+		config_vector = json.load(f)
 
 	return config_vector
 
-def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
+def save_config(file, config_vector):
+
+	with open(file) as f:
+		json.dump(config_vector, f)
+
+def get_previous_time(apikey):
+
+	previous_time = d.get_analysis_flags(apikey, "latest_update")
+
+	if(previous_time == None):
+
+		d.set_analysis_flags(apikey, "latest_update", 0)
+		previous_time = 0
+
+	else:
+
+		previous_time = previous_time["latest_update"]
+
+	return previous_time
+
+def load_match(apikey, competition):
+
+	return d.get_match_data_formatted(apikey, competition)
+
+def matchloop(apikey, competition, data, tests): # expects 3D array with [Team][Variable][Match]
+
+	def simplestats(data, test):
+
+		data = np.array(data)
+		data = data[np.isfinite(data)]
+		ranges = list(range(len(data)))
+
+		if(test == "basic_stats"):
+			return an.basic_stats(data)
+
+		if(test == "historical_analysis"):
+			return an.histo_analysis([ranges, data])
+
+		if(test == "regression_linear"):
+			return an.regression(ranges, data, ['lin'])
+
+		if(test == "regression_logarithmic"):
+			return an.regression(ranges, data, ['log'])
+
+		if(test == "regression_exponential"):
+			return an.regression(ranges, data, ['exp'])
+
+		if(test == "regression_polynomial"):
+			return an.regression(ranges, data, ['ply'])
+
+		if(test == "regression_sigmoidal"):
+			return an.regression(ranges, data, ['sig'])
 
 	return_vector = {}
 	for team in data:
@@ -187,46 +188,51 @@ def simpleloop(data, tests): # expects 3D array with [Team][Variable][Match]
 			variable_vector[variable] = test_vector
 		return_vector[team] = variable_vector
 
-	return return_vector
+	push_match(apikey, competition, return_vector)
 
-def simplestats(data, test):
+def load_metric(apikey, competition, match, group_name):
 
-	data = np.array(data)
-	data = data[np.isfinite(data)]
-	ranges = list(range(len(data)))
+	group = {}
 
-	if(test == "basic_stats"):
-		return an.basic_stats(data)
+	for team in match[group_name]:
 
-	if(test == "historical_analysis"):
-		return an.histo_analysis([ranges, data])
+		db_data = d.get_team_metrics_data(apikey, competition, team)
 
-	if(test == "regression_linear"):
-		return an.regression(ranges, data, ['lin'])
+		if d.get_team_metrics_data(apikey, competition, team) == None:
 
-	if(test == "regression_logarithmic"):
-		return an.regression(ranges, data, ['log'])
+			elo = {"score": 1500}
+			gl2 = {"score": 1500, "rd": 250, "vol": 0.06}
+			ts = {"mu": 25, "sigma": 25/3}
 
-	if(test == "regression_exponential"):
-		return an.regression(ranges, data, ['exp'])
+			#d.push_team_metrics_data(apikey, competition, team, {"elo":elo, "gl2":gl2,"trueskill":ts})
 
-	if(test == "regression_polynomial"):
-		return an.regression(ranges, data, ['ply'])
+			group[team] = {"elo": elo, "gl2": gl2, "ts": ts}
 
-	if(test == "regression_sigmoidal"):
-		return an.regression(ranges, data, ['sig'])
+		else:
 
-def push_to_database(apikey, competition, results, pit):
+			metrics = db_data["metrics"]
 
-	for team in results:
+			elo = metrics["elo"]
+			gl2 = metrics["gl2"]
+			ts = metrics["ts"]
 
-		d.push_team_tests_data(apikey, competition, team, results[team])
+			group[team] = {"elo": elo, "gl2": gl2, "ts": ts}
 
-	for variable in pit:
+	return group
 
-		d.push_team_pit_data(apikey, competition, variable, pit[variable])
+def metricloop(tbakey, apikey, competition, timestamp): # listener based metrics update
 
-def metricsloop(tbakey, apikey, competition, timestamp): # listener based metrics update
+	"""
+	Metrics Defaults:
+
+	elo starting score = 1500
+	elo N = 400
+	elo K = 24
+
+	gl2 starting score = 1500
+	gl2 starting rd = 350
+	gl2 starting vol = 0.06
+	"""
 
 	elo_N = 400
 	elo_K = 24
@@ -238,8 +244,8 @@ def metricsloop(tbakey, apikey, competition, timestamp): # listener based metric
 
 	for match in matches:
 
-		red = load_metrics(apikey, competition, match, "red")
-		blu = load_metrics(apikey, competition, match, "blue")
+		red = load_metric(apikey, competition, match, "red")
+		blu = load_metric(apikey, competition, match, "blue")
  
 		elo_red_total = 0
 		elo_blu_total = 0
@@ -288,8 +294,8 @@ def metricsloop(tbakey, apikey, competition, timestamp): # listener based metric
 
 			observations = {"red": 0.5, "blu": 0.5}
 
-		red_elo_delta = an.Metrics.elo(red_elo["score"], blu_elo["score"], observations["red"], elo_N, elo_K) - red_elo["score"]
-		blu_elo_delta = an.Metrics.elo(blu_elo["score"], red_elo["score"], observations["blu"], elo_N, elo_K) - blu_elo["score"]
+		red_elo_delta = an.metrics.elo(red_elo["score"], blu_elo["score"], observations["red"], elo_N, elo_K) - red_elo["score"]
+		blu_elo_delta = an.metrics.elo(blu_elo["score"], red_elo["score"], observations["blu"], elo_N, elo_K) - blu_elo["score"]
 
 		new_red_gl2_score, new_red_gl2_rd, new_red_gl2_vol = an.Metrics.glicko2(red_gl2["score"], red_gl2["rd"], red_gl2["vol"], [blu_gl2["score"]], [blu_gl2["rd"]], [observations["red"], observations["blu"]])
 		new_blu_gl2_score, new_blu_gl2_rd, new_blu_gl2_vol = an.Metrics.glicko2(blu_gl2["score"], blu_gl2["rd"], blu_gl2["vol"], [red_gl2["score"]], [red_gl2["rd"]], [observations["blu"], observations["red"]])
@@ -317,41 +323,13 @@ def metricsloop(tbakey, apikey, competition, timestamp): # listener based metric
 		temp_vector.update(red)
 		temp_vector.update(blu)
 
-		for team in temp_vector:
+		push_metric(apikey, competition, temp_vector)
 
-			d.push_team_metrics_data(apikey, competition, team, temp_vector[team])
+def load_pit(apikey, competition):
 
-def load_metrics(apikey, competition, match, group_name):
+	return d.get_pit_data_formatted(apikey, competition)
 
-	group = {}
-
-	for team in match[group_name]:
-
-		db_data = d.get_team_metrics_data(apikey, competition, team)
-
-		if d.get_team_metrics_data(apikey, competition, team) == None:
-
-			elo = {"score": 1500}
-			gl2 = {"score": 1500, "rd": 250, "vol": 0.06}
-			ts = {"mu": 25, "sigma": 25/3}
-
-			#d.push_team_metrics_data(apikey, competition, team, {"elo":elo, "gl2":gl2,"trueskill":ts})
-
-			group[team] = {"elo": elo, "gl2": gl2, "ts": ts}
-
-		else:
-
-			metrics = db_data["metrics"]
-
-			elo = metrics["elo"]
-			gl2 = metrics["gl2"]
-			ts = metrics["ts"]
-
-			group[team] = {"elo": elo, "gl2": gl2, "ts": ts}
-
-	return group
-
-def pitloop(pit, tests):
+def pitloop(apikey, competition, pit, tests):
 
 	return_vector = {}
 	for team in pit:
@@ -361,18 +339,22 @@ def pitloop(pit, tests):
 					return_vector[variable] = []
 				return_vector[variable].append(pit[team][variable])
 
-	return return_vector
+	push_pit(apikey, competition, return_vector)
 
-main()
+def push_match(apikey, competition, results):
 
-"""
-Metrics Defaults:
+	for team in results:
 
-elo starting score = 1500
-elo N = 400
-elo K = 24
+		d.push_team_tests_data(apikey, competition, team, results[team])
 
-gl2 starting score = 1500
-gl2 starting rd = 350
-gl2 starting vol = 0.06
-"""
+def push_metric(apikey, competition, metric):
+
+	for team in metric:
+
+			d.push_team_metrics_data(apikey, competition, team, metric[team])
+
+def push_pit(apikey, competition, pit):
+
+	for variable in pit:
+
+		d.push_team_pit_data(apikey, competition, variable, pit[variable])
