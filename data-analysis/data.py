@@ -34,30 +34,6 @@ def get_team_metrics_data(apikey, competition, team_num):
 	mdata = db.team_metrics
 	return mdata.find_one({"competition" : competition, "team": team_num})
 
-def unkeyify_2l(layered_dict):
-	out = {}
-	for i in layered_dict.keys():
-		add = []
-		sortkey = []
-		for j in layered_dict[i].keys():
-			add.append([j,layered_dict[i][j]])
-		add.sort(key = lambda x: x[0])
-		out[i] = list(map(lambda x: x[1], add))
-	return out
-
-def get_match_data_formatted(apikey, competition):
-	client = pymongo.MongoClient(apikey)
-	db = client.data_scouting
-	mdata = db.teamlist
-	x=mdata.find_one({"competition":competition})
-	out = {}
-	for i in x:
-		try:
-			out[int(i)] = unkeyify_2l(get_team_match_data(apikey, competition, int(i)).transpose().to_dict())
-		except:
-			pass
-	return out
-
 def get_pit_data_formatted(apikey, competition):
 	client = pymongo.MongoClient(apikey)
 	db = client.data_scouting
@@ -100,3 +76,27 @@ def set_analysis_flags(apikey, flag, data):
 	db = client.data_processing
 	mdata = db.flags
 	return mdata.replace_one({flag:{"$exists":True}}, data, True)
+
+def unkeyify_2l(layered_dict):
+	out = {}
+	for i in layered_dict.keys():
+		add = []
+		sortkey = []
+		for j in layered_dict[i].keys():
+			add.append([j,layered_dict[i][j]])
+		add.sort(key = lambda x: x[0])
+		out[i] = list(map(lambda x: x[1], add))
+	return out
+
+def get_match_data_formatted(apikey, competition):
+	client = pymongo.MongoClient(apikey)
+	db = client.data_scouting
+	mdata = db.teamlist
+	x=mdata.find_one({"competition":competition})
+	out = {}
+	for i in x:
+		try:
+			out[int(i)] = unkeyify_2l(get_team_match_data(apikey, competition, int(i)).transpose().to_dict())
+		except:
+			pass
+	return out
