@@ -1,0 +1,36 @@
+{
+	"competition": "2020ilch",
+	"keys":{
+		"database":"mongodb+srv://api-user-new:titanscout2022@2022-scouting-4vfuu.mongodb.net/test?authSource=admin&replicaSet=2022-scouting-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true",
+		"tba":"UDvKmPjPRfwwUdDX1JxbmkyecYBJhCtXeyVk9vmO2i7K0Zn4wqQPMfzuEINXJ7e5"
+	},
+	"statistics":{
+		"match":{
+			"balls-blocked":["basic_stats","historical_analysis","regression_linear","regression_logarithmic","regression_exponential","regression_polynomial","regression_sigmoidal"],
+			"balls-collected":["basic_stats","historical_analysis","regression_linear","regression_logarithmic","regression_exponential","regression_polynomial","regression_sigmoidal"],
+			"balls-lower-teleop":["basic_stats","historical_analysis","regression_linear","regression_logarithmic","regression_exponential","regression_polynomial","regression_sigmoidal"],
+			"balls-lower-auto":["basic_stats","historical_analysis","regression_linear","regression_logarithmic","regression_exponential","regression_polynomial","regression_sigmoidal"],
+			"balls-started":["basic_stats","historical_analyss","regression_linear","regression_logarithmic","regression_exponential","regression_polynomial","regression_sigmoidal"],
+			"balls-upper-teleop":["basic_stats","historical_analysis","regression_linear","regression_logarithmic","regression_exponential","regression_polynomial","regression_sigmoidal"],
+			"balls-upper-auto":["basic_stats","historical_analysis","regression_linear","regression_logarithmic","regression_exponential","regression_polynomial","regression_sigmoidal"]
+
+		},
+		"pit":{
+			"wheel-mechanism":true,
+			"low-balls":true,
+			"high-balls":true,
+			"wheel-success":true,
+			"strategic-focus":true,
+			"climb-mechanism":true,
+			"attitude":true
+		},
+		"metric": {
+			"elo": {
+				"N":400,
+				"K":24
+			},
+			"gl2": true,
+			"ts": true
+		}
+	}
+}
