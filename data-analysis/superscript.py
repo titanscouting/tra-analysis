@@ -3,10 +3,13 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.6.000"
+__version__ = "0.0.6.001"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	0.0.6.001:
+		- bug fixes with analysis.Metric() calls
+		- modified metric functions to use config.json defined default values
 	0.0.6.000:
 		- removed main function
 		- changed load_config function
@@ -90,7 +93,7 @@ __author__ = (
 __all__ = [
 	"load_config",
 	"save_config",
-	"get_prevoius_time",
+	"get_previous_time",
 	"load_match",
 	"matchloop",
 	"load_metric",
@@ -190,7 +193,7 @@ def matchloop(apikey, competition, data, tests): # expects 3D array with [Team][
 
 	push_match(apikey, competition, return_vector)
 
-def load_metric(apikey, competition, match, group_name):
+def load_metric(apikey, competition, match, group_name, metrics):
 
 	group = {}
 
@@ -200,11 +203,9 @@ def load_metric(apikey, competition, match, group_name):
 
 		if d.get_team_metrics_data(apikey, competition, team) == None:
 
-			elo = {"score": 1500}
-			gl2 = {"score": 1500, "rd": 250, "vol": 0.06}
-			ts = {"mu": 25, "sigma": 25/3}
-
-			#d.push_team_metrics_data(apikey, competition, team, {"elo":elo, "gl2":gl2,"trueskill":ts})
+			elo = {"score": metrics["elo"]["score"]}
+			gl2 = {"score": metrics["gl2"]["score"], "rd": metrics["gl2"]["rd"], "vol": metrics["gl2"]["vol"]}
+			ts = {"mu": metrics["ts"]["mu"], "sigma": metrics["ts"]["sigma"]}
 
 			group[team] = {"elo": elo, "gl2": gl2, "ts": ts}
 
@@ -220,22 +221,10 @@ def load_metric(apikey, competition, match, group_name):
 
 	return group
 
-def metricloop(tbakey, apikey, competition, timestamp): # listener based metrics update
+def metricloop(tbakey, apikey, competition, timestamp, metrics): # listener based metrics update
 
-	"""
-	Metrics Defaults:
-
-	elo starting score = 1500
-	elo N = 400
-	elo K = 24
-
-	gl2 starting score = 1500
-	gl2 starting rd = 350
-	gl2 starting vol = 0.06
-	"""
-
-	elo_N = 400
-	elo_K = 24
+	elo_N = metrics["elo"]["N"]
+	elo_K = metrics["elo"]["K"]
 
 	matches = d.pull_new_tba_matches(tbakey, competition, timestamp)
 
@@ -244,8 +233,8 @@ def metricloop(tbakey, apikey, competition, timestamp): # listener based metrics
 
 	for match in matches:
 
-		red = load_metric(apikey, competition, match, "red")
-		blu = load_metric(apikey, competition, match, "blue")
+		red = load_metric(apikey, competition, match, "red", metrics)
+		blu = load_metric(apikey, competition, match, "blue", metrics)
  
 		elo_red_total = 0
 		elo_blu_total = 0
@@ -294,11 +283,11 @@ def metricloop(tbakey, apikey, competition, timestamp): # listener based metrics
 
 			observations = {"red": 0.5, "blu": 0.5}
 
-		red_elo_delta = an.metrics.elo(red_elo["score"], blu_elo["score"], observations["red"], elo_N, elo_K) - red_elo["score"]
-		blu_elo_delta = an.metrics.elo(blu_elo["score"], red_elo["score"], observations["blu"], elo_N, elo_K) - blu_elo["score"]
+		red_elo_delta = an.Metric().elo(red_elo["score"], blu_elo["score"], observations["red"], elo_N, elo_K) - red_elo["score"]
+		blu_elo_delta = an.Metric().elo(blu_elo["score"], red_elo["score"], observations["blu"], elo_N, elo_K) - blu_elo["score"]
 
-		new_red_gl2_score, new_red_gl2_rd, new_red_gl2_vol = an.Metrics.glicko2(red_gl2["score"], red_gl2["rd"], red_gl2["vol"], [blu_gl2["score"]], [blu_gl2["rd"]], [observations["red"], observations["blu"]])
-		new_blu_gl2_score, new_blu_gl2_rd, new_blu_gl2_vol = an.Metrics.glicko2(blu_gl2["score"], blu_gl2["rd"], blu_gl2["vol"], [red_gl2["score"]], [red_gl2["rd"]], [observations["blu"], observations["red"]])
+		new_red_gl2_score, new_red_gl2_rd, new_red_gl2_vol = an.Metric().glicko2(red_gl2["score"], red_gl2["rd"], red_gl2["vol"], [blu_gl2["score"]], [blu_gl2["rd"]], [observations["red"], observations["blu"]])
+		new_blu_gl2_score, new_blu_gl2_rd, new_blu_gl2_vol = an.Metric().glicko2(blu_gl2["score"], blu_gl2["rd"], blu_gl2["vol"], [red_gl2["score"]], [red_gl2["rd"]], [observations["blu"], observations["red"]])
 
 		red_gl2_delta = {"score": new_red_gl2_score - red_gl2["score"], "rd": new_red_gl2_rd - red_gl2["rd"], "vol": new_red_gl2_vol - red_gl2["vol"]}
 		blu_gl2_delta = {"score": new_blu_gl2_score - blu_gl2["score"], "rd": new_blu_gl2_rd - blu_gl2["rd"], "vol": new_blu_gl2_vol - blu_gl2["vol"]}

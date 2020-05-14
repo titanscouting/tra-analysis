@@ -15,15 +15,6 @@
 			"balls-upper-auto":["basic_stats","historical_analysis","regression_linear","regression_logarithmic","regression_exponential","regression_polynomial","regression_sigmoidal"]
 
 		},
-		"pit":{
-			"wheel-mechanism":true,
-			"low-balls":true,
-			"high-balls":true,
-			"wheel-success":true,
-			"strategic-focus":true,
-			"climb-mechanism":true,
-			"attitude":true
-		},
 		"metric":{
 			"elo":{
 				"score":1500,
@@ -39,6 +30,15 @@
 				"mu":25,
 				"sigma":8.33
 			}
+		},
+		"pit":{
+			"wheel-mechanism":true,
+			"low-balls":true,
+			"high-balls":true,
+			"wheel-success":true,
+			"strategic-focus":true,
+			"climb-mechanism":true,
+			"attitude":true
 		}
 	}
 }
