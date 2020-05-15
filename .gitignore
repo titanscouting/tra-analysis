@@ -24,4 +24,5 @@ analysis-master/analysis/__pycache__/
 data analysis/__pycache__/
 analysis-master/analysis.egg-info/
 analysis-master/build/
-analysis-master/metrics/__pycache__
+analysis-master/metrics/
+data analysis/config-pop.json
