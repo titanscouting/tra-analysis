@@ -7,10 +7,23 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.2.0.005"
+__version__ = "1.2.1.002"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	1.2.1.002:
+		- renamed ArrayTest class to Array
+	1.2.1.001:
+		- added add, mul, neg, and inv functions to ArrayTest class
+		- added normalize function to ArrayTest class
+		- added dot and cross functions to ArrayTest class
+	1.2.1.000:
+		- added ArrayTest class
+		- added elementwise mean, median, standard deviation, variance, min, max functions to ArrayTest class
+		- added elementwise_stats to ArrayTest which encapsulates elementwise statistics
+		- appended to __all__ to reflect changes
+	1.2.0.006:
+		- renamed func functions in regression to lin, log, exp, and sig 
 	1.2.0.005:
 		- moved random_forrest_regressor and random_forrest_classifier to RandomForrest class
 		- renamed Metrics to Metric
@@ -302,6 +315,7 @@ __all__ = [
 	'RandomForrest',
 	'CorrelationTest',
 	'StatisticalTest',
+	'ArrayTest',
 	# all statistics functions left out due to integration in other functions
 ]
 
@@ -357,11 +371,11 @@ def z_score(point, mean, stdev):
 @jit(forceobj=True)
 def z_normalize(array, *args):
 
-   array = np.array(array)
-   for arg in args:
-	   array = sklearn.preprocessing.normalize(array, axis = arg)
+	array = np.array(array)
+	for arg in args:
+		array = sklearn.preprocessing.normalize(array, axis = arg)
 
-   return array
+	return array
 
 @jit(forceobj=True)
 # expects 2d array of [x,y]
@@ -392,11 +406,11 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
 		try:
 
-			def func(x, a, b):
+			def lin(x, a, b):
 
 				return a * x + b
 
-			popt, pcov = scipy.optimize.curve_fit(func, X, y)
+			popt, pcov = scipy.optimize.curve_fit(lin, X, y)
 
 			regressions.append((popt.flatten().tolist(), None))
 
@@ -408,11 +422,11 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
 		try:
 
-			def func(x, a, b, c, d):
+			def log(x, a, b, c, d):
 
 				return a * np.log(b*(x + c)) + d
 
-			popt, pcov = scipy.optimize.curve_fit(func, X, y)
+			popt, pcov = scipy.optimize.curve_fit(log, X, y)
 
 			regressions.append((popt.flatten().tolist(), None))
 
@@ -424,11 +438,11 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
 		try:        
 
-			def func(x, a, b, c, d):
+			def exp(x, a, b, c, d):
 
 				return a * np.exp(b*(x + c)) + d
 
-			popt, pcov = scipy.optimize.curve_fit(func, X, y)
+			popt, pcov = scipy.optimize.curve_fit(exp, X, y)
 
 			regressions.append((popt.flatten().tolist(), None))
 
@@ -463,11 +477,11 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
 		try:        
 
-			def func(x, a, b, c, d):
+			def sig(x, a, b, c, d):
 
 				return a * np.tanh(b*(x + c)) + d
 
-			popt, pcov = scipy.optimize.curve_fit(func, X, y)
+			popt, pcov = scipy.optimize.curve_fit(sig, X, y)
 
 			regressions.append((popt.flatten().tolist(), None))
 
@@ -930,3 +944,80 @@ class StatisticalTest:
 
 		results = scipy.stats.normaltest(a, axis = axis, nan_policy = nan_policy)
 		return {"z-score": results[0], "p-value": results[1]}
+		
+class Array(): # tests on nd arrays independent of basic_stats
+	
+	def elementwise_mean(self, *args): # expects arrays that are size normalized
+
+		return np.mean([*args], axis = 0)
+
+	def elementwise_median(self, *args):
+
+		return np.median([*args], axis = 0)
+
+	def elementwise_stdev(self, *args):
+
+		return np.std([*args], axis = 0)
+
+	def elementwise_variance(self, *args):
+
+		return np.var([*args], axis = 0)
+
+	def elementwise_npmin(self, *args):
+
+		return np.amin([*args], axis = 0)
+
+	def elementwise_npmax(self, *args):
+
+		return np.amax([*args], axis = 0)
+
+	def elementwise_stats(self, *args):
+
+		_mean = self.elementwise_mean(*args)
+		_median = self.elementwise_median(*args)
+		_stdev = self.elementwise_stdev(*args)
+		_variance = self.elementwise_variance(*args)
+		_min = self.elementwise_npmin(*args)
+		_max = self.elementwise_npmax(*args)
+
+		return _mean, _median, _stdev, _variance, _min, _max
+
+	def normalize(self, array):
+
+		a = np.atleast_1d(np.linalg.norm(array))
+		a[a==0] = 1
+		return array / np.expand_dims(a, -1)
+
+	def add(self, *args):
+
+		temp = np.array([])
+
+		for a in args:
+			temp += a
+		
+		return temp
+
+	def mul(self, *args):
+
+		temp = np.array([])
+
+		for a in args:
+			temp *= a
+		
+		return temp
+
+	def neg(self, array):
+		
+		return -array
+
+	def inv(self, array):
+
+		return 1/array
+
+	def dot(self, a, b):
+
+		return np.dot(a, b)
+
+	def cross(self, a, b):
+
+		return np.cross(a, b)
