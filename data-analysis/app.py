@@ -48,7 +48,7 @@ def get_pit_enable():
 def set_match_enable():
 	if str(flask.request.data.get('text', '')) == "True":
 		match_enable = True
-	else if str(flask.request.data.get('text', '')) == "False":
+	elif str(flask.request.data.get('text', '')) == "False":
 		match_enable = False
 	else:
 		return "False"
@@ -58,7 +58,7 @@ def set_match_enable():
 def set_metric_enable():
 	if str(flask.request.data.get('text', '')) == "True":
 		metric_enable = True
-	else if str(flask.request.data.get('text', '')) == "False":
+	elif str(flask.request.data.get('text', '')) == "False":
 		metric_enable = False
 	else:
 		return "False"
@@ -68,7 +68,7 @@ def set_metric_enable():
 def set_pit_enable():
 	if str(flask.request.data.get('text', '')) == "True":
 		pit_enable = True
-	else if str(flask.request.data.get('text', '')) == "False":
+	elif str(flask.request.data.get('text', '')) == "False":
 		pit_enable = False
 	else:
 		return "False"
