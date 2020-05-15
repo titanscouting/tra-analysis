@@ -21,6 +21,7 @@ data-analysis/test.ipynb
 data-analysis/visualize_pit.ipynb
 data-analysis/config/keys.config
 analysis-master/analysis/__pycache__/
+analysis-master/analysis/metrics/__pycache__/
 data-analysis/__pycache__/
 analysis-master/analysis.egg-info/
 analysis-master/build/
