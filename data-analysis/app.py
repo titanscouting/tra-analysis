@@ -3,6 +3,10 @@ import json
 import superscript as su
 import threading
 
+__author__ = (
+	"Arthur Lu <learthurgo@gmail.com>",
+)
+
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
