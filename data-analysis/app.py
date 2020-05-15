@@ -79,6 +79,7 @@ def get_config():
 	return config
 
 @app.route('/set-config', methods=['PUT'])
+def set_config():
 	config = json.loads(str(flask.request.data.get('text', '')))
 	su.save_config("config.json", config)
 	return "True"
