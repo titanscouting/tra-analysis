@@ -3,10 +3,13 @@
 # Notes:
 # setup:
 
-__version__ = "0.0.6.001"
+__version__ = "0.0.6.002"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	0.0.6.002:
+		- integrated get_team_rankings.py as get_team_metrics() function
+		- integrated visualize_pit.py as graph_pit_histogram() function
 	0.0.6.001:
 		- bug fixes with analysis.Metric() calls
 		- modified metric functions to use config.json defined default values
@@ -113,6 +116,7 @@ import json
 import numpy as np
 from os import system, name
 from pathlib import Path
+import matplotlib.pyplot as plt
 import time
 import warnings
 
@@ -347,3 +351,55 @@ def push_pit(apikey, competition, pit):
 	for variable in pit:
 
 		d.push_team_pit_data(apikey, competition, variable, pit[variable])
+
+def get_team_metrics(apikey, tbakey, competition):
+
+	metrics = d.get_metrics_data_formatted(apikey, competition)
+
+	elo = {}
+	gl2 = {}
+
+	for team in metrics:
+
+		elo[team] = metrics[team]["metrics"]["elo"]["score"]
+		gl2[team] = metrics[team]["metrics"]["gl2"]["score"]
+
+	elo = {k: v for k, v in sorted(elo.items(), key=lambda item: item[1])}
+	gl2 = {k: v for k, v in sorted(gl2.items(), key=lambda item: item[1])}
+
+	elo_ranked = []
+
+	for team in elo:
+
+		elo_ranked.append({"team": str(team), "elo": str(elo[team])})
+
+	gl2_ranked = []
+
+	for team in gl2:
+
+		gl2_ranked.append({"team": str(team), "gl2": str(gl2[team])})
+
+	return {"elo-ranks": elo_ranked, "glicko2-ranks": gl2_ranked}
+
+def graph_pit_histogram(apikey, competition, figsize=(80,15)):
+
+	pit = d.get_pit_variable_formatted(apikey, competition)
+
+	fig, ax = plt.subplots(1, len(pit), sharey=True, figsize=figsize)
+
+	i = 0
+
+	for variable in pit:
+
+		ax[i].hist(pit[variable])
+		ax[i].invert_xaxis()
+
+		ax[i].set_xlabel('')
+		ax[i].set_ylabel('Frequency')
+		ax[i].set_title(variable)
+
+		plt.yticks(np.arange(len(pit[variable])))
+
+		i+=1
+
+	plt.show()
