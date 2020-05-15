@@ -7,12 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.2.2.000"
+__version__ = "1.2.1.003"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
-	1.2.2.000:
-		- changed output of regressions to function strings instead of list of coefficients
+	1.2.1.003:
+		- fixed __all__
 	1.2.1.002:
 		- renamed ArrayTest class to Array
 	1.2.1.001:
@@ -317,7 +317,7 @@ __all__ = [
 	'RandomForrest',
 	'CorrelationTest',
 	'StatisticalTest',
-	'ArrayTest',
+	'Array',
 	# all statistics functions left out due to integration in other functions
 ]
 
