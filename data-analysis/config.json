@@ -1,7 +1,7 @@
 {
 	"competition": "2020ilch",
 	"keys":{
-		"database":"mongodb+srv://api-user-new:titanscout2022@2022-scouting-4vfuu.mongodb.net/test?authSource=admin&replicaSet=2022-scouting-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true",
+		"database":"",
 		"tba":"UDvKmPjPRfwwUdDX1JxbmkyecYBJhCtXeyVk9vmO2i7K0Zn4wqQPMfzuEINXJ7e5"
 	},
 	"statistics":{
