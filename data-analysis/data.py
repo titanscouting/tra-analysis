@@ -8,7 +8,7 @@ def pull_new_tba_matches(apikey, competition, cutoff):
 	x=requests.get("https://www.thebluealliance.com/api/v3/event/"+competition+"/matches/simple", headers={"X-TBA-Auth_Key":api_key})
 	out = []
 	for i in x.json():
-		if (i["actual_time"] != None and i["actual_time"]-cutoff >= 0 and i["comp_level"] == "qm"):
+		if i["actual_time"] != None and i["actual_time"]-cutoff >= 0 and i["comp_level"] == "qm":
 			out.append({"match" : i['match_number'], "blue" : list(map(lambda x: int(x[3:]), i['alliances']['blue']['team_keys'])), "red" : list(map(lambda x: int(x[3:]), i['alliances']['red']['team_keys'])), "winner": i["winning_alliance"]})
 	return out
 

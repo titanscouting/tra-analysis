@@ -137,7 +137,7 @@ def get_previous_time(apikey):
 
 	previous_time = d.get_analysis_flags(apikey, "latest_update")
 
-	if(previous_time == None):
+	if previous_time == None:
 
 		d.set_analysis_flags(apikey, "latest_update", 0)
 		previous_time = 0
@@ -160,25 +160,25 @@ def matchloop(apikey, competition, data, tests): # expects 3D array with [Team][
 		data = data[np.isfinite(data)]
 		ranges = list(range(len(data)))
 
-		if(test == "basic_stats"):
+		if test == "basic_stats":
 			return an.basic_stats(data)
 
-		if(test == "historical_analysis"):
+		if test == "historical_analysis":
 			return an.histo_analysis([ranges, data])
 
-		if(test == "regression_linear"):
+		if test == "regression_linear":
 			return an.regression(ranges, data, ['lin'])
 
-		if(test == "regression_logarithmic"):
+		if test == "regression_logarithmic":
 			return an.regression(ranges, data, ['log'])
 
-		if(test == "regression_exponential"):
+		if test == "regression_exponential":
 			return an.regression(ranges, data, ['exp'])
 
-		if(test == "regression_polynomial"):
+		if test == "regression_polynomial":
 			return an.regression(ranges, data, ['ply'])
 
-		if(test == "regression_sigmoidal"):
+		if test == "regression_sigmoidal":
 			return an.regression(ranges, data, ['sig'])
 
 	return_vector = {}
@@ -187,7 +187,7 @@ def matchloop(apikey, competition, data, tests): # expects 3D array with [Team][
 		for variable in data[team]:
 			test_vector = {}
 			variable_data = data[team][variable]
-			if(variable in tests):
+			if variable in tests:
 				for test in tests[variable]:
 					test_vector[test] = simplestats(variable_data, test)
 			else:
@@ -275,11 +275,11 @@ def metricloop(tbakey, apikey, competition, timestamp, metrics): # listener base
 		blu_gl2 = {"score": gl2_blu_score_total / len(blu), "rd": gl2_blu_rd_total / len(blu), "vol": gl2_blu_vol_total / len(blu)}
 
 
-		if(match["winner"] == "red"):
+		if match["winner"] == "red":
 
 			observations = {"red": 1, "blu": 0}
 
-		elif(match["winner"] == "blue"):
+		elif match["winner"] == "blue":
 
 			observations = {"red": 0, "blu": 1}
 
@@ -327,8 +327,8 @@ def pitloop(apikey, competition, pit, tests):
 	return_vector = {}
 	for team in pit:
 		for variable in pit[team]:
-			if(variable in tests):
-				if(not variable in return_vector):
+			if variable in tests:
+				if not variable in return_vector:
 					return_vector[variable] = []
 				return_vector[variable].append(pit[team][variable])
 

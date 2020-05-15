@@ -383,7 +383,7 @@ def z_normalize(array, *args):
 # expects 2d array of [x,y]
 def histo_analysis(hist_data):
 
-	if(len(hist_data[0]) > 2):
+	if len(hist_data[0]) > 2:
 
 		hist_data = np.array(hist_data)
 		derivative = np.array(len(hist_data) - 1, dtype = float)
