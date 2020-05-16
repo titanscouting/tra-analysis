@@ -1,4 +1,3 @@
-import flask
 import json
 import superscript as su
 import threading
