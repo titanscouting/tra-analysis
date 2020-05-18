@@ -23,9 +23,9 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Change to superscript directory
+    - defaults: Change to analysis directory
       run: |
-        cd /analysis-master/
+        working-directory: /analysis-master/
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
