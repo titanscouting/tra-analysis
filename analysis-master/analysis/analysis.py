@@ -13,6 +13,7 @@ __version__ = "1.2.1.003"
 __changelog__ = """changelog:
 	1.2.1.003:
 		- changed output of basic_stats and histo_analysis to libraries
+		- fixed __all__
 	1.2.1.002:
 		- renamed ArrayTest class to Array
 	1.2.1.001:
@@ -317,7 +318,7 @@ __all__ = [
 	'RandomForrest',
 	'CorrelationTest',
 	'StatisticalTest',
-	'ArrayTest',
+	'Array',
 	# all statistics functions left out due to integration in other functions
 ]
 
@@ -414,7 +415,8 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
 			popt, pcov = scipy.optimize.curve_fit(lin, X, y)
 
-			regressions.append((popt.flatten().tolist(), None))
+			coeffs = popt.flatten().tolist()
+			regressions.append(str(coeffs[0]) + "*x+" + str(coeffs[1]))
 
 		except Exception as e:
 
@@ -430,7 +432,8 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
 			popt, pcov = scipy.optimize.curve_fit(log, X, y)
 
-			regressions.append((popt.flatten().tolist(), None))
+			coeffs = popt.flatten().tolist()
+			regressions.append(str(coeffs[0]) + "*log(" + str(coeffs[1]) + "*(x+" + str(coeffs[2]) + "))+" + str(coeffs[3]))
 
 		except Exception as e:
 			
@@ -446,7 +449,8 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
 			popt, pcov = scipy.optimize.curve_fit(exp, X, y)
 
-			regressions.append((popt.flatten().tolist(), None))
+			coeffs = popt.flatten().tolist()
+			regressions.append(str(coeffs[0]) + "*e^(" + str(coeffs[1]) + "*(x+" + str(coeffs[2]) + "))+" + str(coeffs[3]))
 
 		except Exception as e:
 
@@ -468,10 +472,14 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
 			params = model.steps[1][1].intercept_.tolist()
 			params = np.append(params, model.steps[1][1].coef_[0].tolist()[1::])
-			params.flatten()
-			params = params.tolist()
-			
-			plys.append(params)
+			params = params.flatten().tolist()
+
+			temp = ""
+			counter = 0
+			for param in params:
+				temp += "(" + str(param) + "*x^" + str(counter) + ")"
+				counter += 1
+			plys.append(temp)
 
 		regressions.append(plys)
 
@@ -485,7 +493,8 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 
 			popt, pcov = scipy.optimize.curve_fit(sig, X, y)
 
-			regressions.append((popt.flatten().tolist(), None))
+			coeffs = popt.flatten().tolist()
+			regressions.append(str(coeffs[0]) + "*tanh(" + str(coeffs[1]) + "*(x+" + str(coeffs[2]) + "))+" + str(coeffs[3]))
 
 		except Exception as e:
 		   
