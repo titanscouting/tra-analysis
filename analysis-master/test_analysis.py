@@ -6,7 +6,7 @@ def test_():
 	y_data_ccd = [1, 5, 7, 8.5, 8.66]
 	assert an.basic_stats(test_data_linear) == {"mean": 5.2, "median": 6.0, "standard-deviation": 2.85657137141714, "variance": 8.16, "minimum": 1.0, "maximum": 9.0}
 	assert an.z_score(3.2, 6, 1.5) == -1.8666666666666665
-	assert an.z_normalize(test_data_linear).tolist() == [5.2, 6.0, 2.85657137141714, 8.16, 1.0, 9.0]
+	assert an.z_normalize([test_data_linear], 0).tolist() == [[0.07537783614444091, 0.22613350843332272, 0.45226701686664544, 0.5276448530110863, 0.6784005252999682]]
 	assert all(isinstance(item, str) for item in an.regression(test_data_linear, y_data_ccu, ["lin"])) == True
 	assert all(isinstance(item, str) for item in an.regression(test_data_linear, y_data_ccd, ["log"])) == True
 	assert all(isinstance(item, str) for item in an.regression(test_data_linear, y_data_ccu, ["exp"])) == True
