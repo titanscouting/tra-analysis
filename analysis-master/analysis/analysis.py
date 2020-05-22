@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.2.1.003"
+__version__ = "1.2.1.004"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	1.2.1.004:
+		- added sort and search functions to Array class
 	1.2.1.003:
 		- changed output of basic_stats and histo_analysis to libraries
 		- fixed __all__
@@ -1032,3 +1034,46 @@ class Array(): # tests on nd arrays independent of basic_stats
 	def cross(self, a, b):
 
 		return np.cross(a, b)
+
+	def sort(self, array):
+		array_length = len(array)
+		if array_length <= 1:
+			return array
+		middle_index = int(array_length / 2)
+		left = array[0:middle_index]
+		right = array[middle_index:]
+		left = self.sort(left)
+		right = self.sort(right)
+		return self.__merge(left, right)
+
+
+	def __merge(self, left, right):
+		sorted_list = []
+		left = left[:]
+		right = right[:]
+		while len(left) > 0 or len(right) > 0:
+			if len(left) > 0 and len(right) > 0:
+				if left[0] <= right[0]:
+					sorted_list.append(left.pop(0))
+				else:
+					sorted_list.append(right.pop(0))
+			elif len(left) > 0:
+				sorted_list.append(left.pop(0))
+			elif len(right) > 0:
+				sorted_list.append(right.pop(0))
+		return sorted_list
+
+	def search(self, arr, x):
+		return self.__search(arr, 0, len(arr) - 1, x)
+
+	def __search(self, arr, low, high, x): 
+		if high >= low: 
+			mid = (high + low) // 2
+			if arr[mid] == x: 
+				return mid 
+			elif arr[mid] > x: 
+				return binary_search(arr, low, mid - 1, x) 
+			else: 
+				return binary_search(arr, mid + 1, high, x) 
+		else:
+			return -1
