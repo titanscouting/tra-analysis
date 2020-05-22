@@ -12,6 +12,7 @@ __version__ = "1.2.1.003"
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
 	1.2.1.003:
+		- changed output of basic_stats and histo_analysis to libraries
 		- fixed __all__
 	1.2.1.002:
 		- renamed ArrayTest class to Array
@@ -360,7 +361,7 @@ def basic_stats(data):
 	_min = npmin(data_t)
 	_max = npmax(data_t)
 
-	return _mean, _median, _stdev, _variance, _min, _max
+	return {"mean": _mean, "median": _median, "standard-deviation": _stdev, "variance": _variance, "minimum": _min, "maximum": _max}
 
 # returns z score with inputs of point, mean and standard deviation of spread
 @jit(forceobj=True)
@@ -383,7 +384,7 @@ def z_normalize(array, *args):
 # expects 2d array of [x,y]
 def histo_analysis(hist_data):
 
-	if(len(hist_data[0]) > 2):
+	if len(hist_data[0]) > 2:
 
 		hist_data = np.array(hist_data)
 		derivative = np.array(len(hist_data) - 1, dtype = float)
@@ -391,7 +392,7 @@ def histo_analysis(hist_data):
 		derivative = t[1] / t[0]
 		np.sort(derivative)
 
-		return basic_stats(derivative)[0], basic_stats(derivative)[3]
+		return {"mean": basic_stats(derivative)["mean"], "deviation": basic_stats(derivative)["standard-deviation"]}
 
 	else:
 
