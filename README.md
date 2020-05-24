@@ -2,7 +2,7 @@
 Titan Robotics 2022 Strategy Team Repository for Data Analysis Tools. Included with these tools are the backend data analysis engine formatted as a python package, associated binaries for the analysis package, and premade scripts that can be pulled directly from this repository and will integrate with other Red Alliance applications to quickly deploy FRC scouting tools.
 # Getting Started
 ## Prerequisites
-* Python >= 3.7
+* Python >= 3.6
 * Pip which can be installed by running `python -m pip install -U pip` after installing python
 ## Installing
 There are a few different services/packages that can be installed. Installation instructions are seperated by scenario and are ordered from least complex to most. 
