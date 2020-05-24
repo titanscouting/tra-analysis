@@ -31,3 +31,4 @@ data-analysis/__pycache__/
 analysis-master/__pycache__/
 analysis-master/.pytest_cache/
 data-analysis/.pytest_cache/
+data-analysis/test.py
