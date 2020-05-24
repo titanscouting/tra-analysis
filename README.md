@@ -36,13 +36,13 @@ Although any modern 64 bit platform should be supported, the following platforms
 * AMD64 (Tested on Zen 1, Zen +, and Zen 2)
 * Intel 64/x86_64/x64 (Tested on Kaby Lake)
 * ARM64 (Tested on Broadcom BCM2836 SoC, Broadcom BCM2711 SoC)
-## 
+### 
 The following OSes have been tested to be working:
 * Linux Kernel 3.16, 4.4, 4.15, 4.19, 5.4
 	* Ubuntu 16.04, 18.04, 20.04
 	* Debian (and Debian derivaives) Jessie, Buster
 * Windows 7, 10
-## 
+### 
 The following python versions are supported:
 * python 3.6 (not tested)
 * python 3.7
