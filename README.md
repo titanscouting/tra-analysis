@@ -32,15 +32,18 @@ Download the `.whl` file from the releases page. Then install the wheel file by 
 Navigating to `analysis-master/`, running `./build.sh` will build the analysis package from `analysis-master/analysis/`. The built wheel files are stored in `analysis-master/dist/`.
 ## Config
 # Supported Platforms
+## 
 Although any modern 64 bit platform should be supported, the following platforms have been tested to be working:
 * AMD64 (Tested on Zen 1, Zen +, and Zen 2)
 * Intel 64/x86_64/x64 (Tested on Kaby Lake)
 * ARM64 (Tested on Broadcom BCM2836 SoC, Broadcom BCM2711 SoC)
+## 
 The following OSes have been tested to be working:
 * Linux Kernel 3.16, 4.4, 4.15, 4.19, 5.4
 	* Ubuntu 16.04, 18.04, 20.04
 	* Debian (and Debian derivaives) Jessie, Buster
 * Windows 7, 10
+## 
 The following python versions are supported:
 * python 3.6 (not tested)
 * python 3.7
