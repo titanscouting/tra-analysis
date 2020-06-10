@@ -23,5 +23,5 @@
 		"mhutchie.git-graph",
 		"donjayamanne.jupyter",
 	],
-	"postCreateCommand": "pip install -r analysis-master/requirements.txt"
+	"postCreateCommand": "pip install -r analysis-master/requirements.txt && pip install -r data-analysis/requirements.txt && pip install analysis-master/dist/latest.whl"
 }
