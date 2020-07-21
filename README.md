@@ -48,6 +48,7 @@ The following python versions are supported:
 * python 3.7
 * python 3.8
 # Contributing
+Read our included contributing guidelines (`CONTRIBUTING.md`) for more information and feel free to reach out to any current maintainer for more information. 
 # Build Statuses
 ![Analysis Unit Tests](https://github.com/titanscout2022/red-alliance-analysis/workflows/Analysis%20Unit%20Tests/badge.svg)
 ![Superscript Unit Tests](https://github.com/titanscout2022/red-alliance-analysis/workflows/Superscript%20Unit%20Tests/badge.svg?branch=master)
