@@ -8,7 +8,7 @@ with open("requirements.txt", 'r') as file:
 
 setuptools.setup(
 	name="analysis",
-	version="1.0.0.012",
+	version="1.12",
 	author="The Titan Scouting Team",
 	author_email="titanscout2022@gmail.com",
 	description="analysis package developed by Titan Scouting for The Red Alliance",
@@ -17,7 +17,7 @@ setuptools.setup(
 	url="https://github.com/titanscout2022/tr2022-strategy",
 	packages=setuptools.find_packages(),
 	install_requires=requirements,
-	license = "GNU General Public License v3.0",
+	license = "BSD 3-Clause License",
 	classifiers=[
 		"Programming Language :: Python :: 3",
 		"Operating System :: OS Independent",
