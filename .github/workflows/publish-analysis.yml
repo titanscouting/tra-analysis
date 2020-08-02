@@ -32,4 +32,4 @@ jobs:
       with:
         user: __token__
         password: ${{ secrets.PYPI_TOKEN }}
-        packages_dir: dist/analysis-latest-py3-none-any.whl
+        packages_dir: dist/*
