@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "2.2.0"
+__version__ = "2.2.1"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	2.2.1:
+		changed all references to parent package analysis to tra_analysis
 	2.2.0:
 		- added Sort class
 		- added several array sorting functions to Sort class including:
@@ -345,8 +347,8 @@ __all__ = [
 # imports (now in alphabetical order! v 0.3.006):
 
 import csv
-from analysis.metrics import elo as Elo
-from analysis.metrics import glicko2 as Glicko2
+from tra_analysis.metrics import elo as Elo
+from tra_analysis.metrics import glicko2 as Glicko2
 import math
 import numba
 from numba import jit
@@ -355,7 +357,7 @@ import scipy
 from scipy import optimize, stats
 import sklearn
 from sklearn import preprocessing, pipeline, linear_model, metrics, cluster, decomposition, tree, neighbors, naive_bayes, svm, model_selection, ensemble
-from analysis.metrics import trueskill as Trueskill
+from tra_analysis.metrics import trueskill as Trueskill
 import warnings
 
 class error(ValueError):
