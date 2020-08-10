@@ -1,7 +1,7 @@
 # Titan Robotics Team 2022: Data Analysis Module
-# Written by Arthur Lu & Jacob Levine
+# Written by Arthur Lu, Jacob Levine, and Dev Singh
 # Notes:
-#    this should be imported as a python module using 'from analysis import analysis'
+#    this should be imported as a python module using 'from tra_analysis import analysis'
 #    this should be included in the local directory or environment variable
 #    this module has been optimized for multhreaded computing
 #    current benchmark of optimization: 1.33 times faster
@@ -74,17 +74,17 @@ __changelog__ = """changelog:
 		- added StatisticalTests class
 		- added several correlation tests to CorrelationTests
 		- added several statistical tests to StatisticalTests
-	13.9:
+	1.13.9:
 		- moved elo, glicko2, trueskill functions under class Metrics
-	13.8:
+	1.13.8:
 		- moved Glicko2 to a seperate package
-	13.7:
+	1.13.7:
 		- fixed bug with trueskill
-	13.6:
+	1.13.6:
 		- cleaned up imports
-	13.5:
+	1.13.5:
 		- cleaned up package
-	13.4:
+	1.13.4:
 		- small fixes to regression to improve performance
 	1.13.3:
 		- filtered nans from regression
