@@ -34,3 +34,5 @@ data-analysis/.pytest_cache/
 analysis-master/tra_analysis.egg-info
 analysis-master/tra_analysis/__pycache__
 analysis-master/tra_analysis/.ipynb_checkpoints
+.pytest_cache
+analysis-master/tra_analysis/metrics/__pycache__
