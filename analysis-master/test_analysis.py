@@ -1,5 +1,5 @@
-from analysis import analysis as an
-from analysis import metrics
+from tra_analysis import analysis as an
+from tra_analysis import metrics
 
 def test_():
 	test_data_linear = [1, 3, 6, 7, 9]

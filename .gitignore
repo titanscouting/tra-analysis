@@ -32,3 +32,9 @@ analysis-master/__pycache__/
 analysis-master/.pytest_cache/
 data-analysis/.pytest_cache/
 data-analysis/test.py
+analysis-master/tra_analysis.egg-info
+analysis-master/tra_analysis/__pycache__
+analysis-master/tra_analysis/.ipynb_checkpoints
+.pytest_cache
+analysis-master/tra_analysis/metrics/__pycache__
+analysis-master/dist
