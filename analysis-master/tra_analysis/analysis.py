@@ -1,5 +1,5 @@
 # Titan Robotics Team 2022: Data Analysis Module
-# Written by Arthur Lu & Jacob Levine
+# Written by Arthur Lu, Jacob Levine, and Dev Singh
 # Notes:
 #    this should be imported as a python module using 'from tra_analysis import analysis'
 #    this should be included in the local directory or environment variable
@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "1.2.2.000"
+__version__ = "2.0.2"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	2.0.2:
+		- rename analysis imports to tra_analysis for PyPI publishing
 	1.2.2.000:
 		- added Sort class
 		- added several array sorting functions to Sort class including:

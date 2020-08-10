@@ -11,7 +11,7 @@ setuptools.setup(
 	version="2.0.2",
 	author="The Titan Scouting Team",
 	author_email="titanscout2022@gmail.com",
-	description="analysis package developed by Titan Scouting for The Red Alliance",
+	description="Analysis package developed by Titan Scouting for The Red Alliance",
 	long_description="",
 	long_description_content_type="text/markdown",
 	url="https://github.com/titanscout2022/tr2022-strategy",
