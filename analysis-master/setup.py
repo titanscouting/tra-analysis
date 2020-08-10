@@ -8,7 +8,7 @@ with open("requirements.txt", 'r') as file:
 
 setuptools.setup(
 	name="tra_analysis",
-	version="2.0.1",
+	version="2.0.2",
 	author="The Titan Scouting Team",
 	author_email="titanscout2022@gmail.com",
 	description="analysis package developed by Titan Scouting for The Red Alliance",
