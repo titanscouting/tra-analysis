@@ -4,11 +4,8 @@
 name: Upload Analysis Package
 
 on:
-  push:
-    branches: [ publish-analysis ]
-  pull_request:
-    branches: [ publish-analysis ]
-
+  tags:
+    - v*
 jobs:
   deploy:
 
