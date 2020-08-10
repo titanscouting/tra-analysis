@@ -24,17 +24,17 @@ jobs:
       with:
         python-version: '3.x'
     - name: Install dependencies
+      working-directory: ${{env.working-directory}}
       run: |
         python -m pip install --upgrade pip
         pip install setuptools wheel twine
-      working-directory: ${{env.working-directory}}
     - name: Build package
+      working-directory: ${{env.working-directory}}
       run: |
         python setup.py sdist bdist_wheel
-      working-directory: ${{env.working-directory}}
     - name: Publish package to PyPI
+      working-directory: ${{env.working-directory}}
       uses: pypa/gh-action-pypi-publish@master
       with:
         user: __token__
         password: ${{ secrets.PYPI_TOKEN }}
-      working-directory: ${{env.working-directory}}
