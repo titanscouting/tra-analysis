@@ -5,7 +5,7 @@ name: Upload Analysis Package
 
 on:
   release:
-    types: [published, created, edited]
+    types: [published, edited]
 jobs:
   deploy:
 
