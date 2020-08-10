@@ -4,9 +4,8 @@
 name: Upload Analysis Package
 
 on:
-  push:
-    tags:
-      - v*
+  release:
+    types: [published, created, edited]
 jobs:
   deploy:
 
