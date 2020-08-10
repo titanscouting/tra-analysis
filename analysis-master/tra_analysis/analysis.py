@@ -1,7 +1,7 @@
 # Titan Robotics Team 2022: Data Analysis Module
 # Written by Arthur Lu & Jacob Levine
 # Notes:
-#    this should be imported as a python module using 'from analysis import analysis'
+#    this should be imported as a python module using 'from tra_analysis import analysis'
 #    this should be included in the local directory or environment variable
 #    this module has been optimized for multhreaded computing
 #    current benchmark of optimization: 1.33 times faster
@@ -345,8 +345,8 @@ __all__ = [
 # imports (now in alphabetical order! v 1.0.3.006):
 
 import csv
-from analysis.metrics import elo as Elo
-from analysis.metrics import glicko2 as Glicko2
+from tra_analysis.metrics import elo as Elo
+from tra_analysis.metrics import glicko2 as Glicko2
 import math
 import numba
 from numba import jit
@@ -355,7 +355,7 @@ import scipy
 from scipy import optimize, stats
 import sklearn
 from sklearn import preprocessing, pipeline, linear_model, metrics, cluster, decomposition, tree, neighbors, naive_bayes, svm, model_selection, ensemble
-from analysis.metrics import trueskill as Trueskill
+from tra_analysis.metrics import trueskill as Trueskill
 import warnings
 
 class error(ValueError):

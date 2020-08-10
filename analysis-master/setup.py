@@ -7,8 +7,8 @@ with open("requirements.txt", 'r') as file:
 		requirements.append(line)
 
 setuptools.setup(
-	name="analysis",
-	version="1.0.0.012",
+	name="tra_analysis",
+	version="2.0.0",
 	author="The Titan Scouting Team",
 	author_email="titanscout2022@gmail.com",
 	description="analysis package developed by Titan Scouting for The Red Alliance",
