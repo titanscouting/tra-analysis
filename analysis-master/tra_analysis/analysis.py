@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "2.0.2"
+__version__ = "2.0.3"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	2.0.3: 
+		- burn for pypi release
 	2.0.2:
 		- rename analysis imports to tra_analysis for PyPI publishing
 	1.2.2.000:
