@@ -7,15 +7,13 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "2.0.3"
+__version__ = "2.2.1"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
-	2.0.3: 
-		- burn for pypi release
-	2.0.2:
-		- rename analysis imports to tra_analysis for PyPI publishing
-	1.2.2.000:
+	2.2.1:
+		changed all references to parent package analysis to tra_analysis
+	2.2.0:
 		- added Sort class
 		- added several array sorting functions to Sort class including:
 			- quick sort
@@ -31,25 +29,25 @@ __changelog__ = """changelog:
 		- tested all sorting algorithms with both lists and numpy arrays
 		- depreciated sort function from Array class
 		- added warnings as an import
-	1.2.1.004:
+	2.1.4:
 		- added sort and search functions to Array class
-	1.2.1.003:
+	2.1.3:
 		- changed output of basic_stats and histo_analysis to libraries
 		- fixed __all__
-	1.2.1.002:
+	2.1.2:
 		- renamed ArrayTest class to Array
-	1.2.1.001:
+	2.1.1:
 		- added add, mul, neg, and inv functions to ArrayTest class
 		- added normalize function to ArrayTest class
 		- added dot and cross functions to ArrayTest class
-	1.2.1.000:
+	2.1.0:
 		- added ArrayTest class
 		- added elementwise mean, median, standard deviation, variance, min, max functions to ArrayTest class
 		- added elementwise_stats to ArrayTest which encapsulates elementwise statistics
 		- appended to __all__ to reflect changes
-	1.2.0.006:
+	2.0.6:
 		- renamed func functions in regression to lin, log, exp, and sig 
-	1.2.0.005:
+	2.0.5:
 		- moved random_forrest_regressor and random_forrest_classifier to RandomForrest class
 		- renamed Metrics to Metric
 		- renamed RegressionMetrics to RegressionMetric
@@ -57,166 +55,166 @@ __changelog__ = """changelog:
 		- renamed CorrelationTests to CorrelationTest
 		- renamed StatisticalTests to StatisticalTest
 		- reflected rafactoring to all mentions of above classes/functions
-	1.2.0.004:
+	2.0.4:
 		- fixed __all__ to reflected the correct functions and classes
 		- fixed CorrelationTests and StatisticalTests class functions to require self invocation
 		- added missing math import
 		- fixed KNN class functions to require self invocation
 		- fixed Metrics class functions to require self invocation
 		- various spelling fixes in CorrelationTests and StatisticalTests
-	1.2.0.003:
+	2.0.3:
 		- bug fixes with CorrelationTests and StatisticalTests
 		- moved glicko2 and trueskill to the metrics subpackage
 		- moved elo to a new metrics subpackage
-	1.2.0.002:
+	2.0.2:
 		- fixed docs
-	1.2.0.001:
+	2.0.1:
 		- fixed docs
-	1.2.0.000:
+	2.0.0:
 		- cleaned up wild card imports with scipy and sklearn
 		- added CorrelationTests class
 		- added StatisticalTests class
 		- added several correlation tests to CorrelationTests
 		- added several statistical tests to StatisticalTests
-	1.1.13.009:
+	1.13.9:
 		- moved elo, glicko2, trueskill functions under class Metrics
-	1.1.13.008:
+	1.13.8:
 		- moved Glicko2 to a seperate package
-	1.1.13.007:
+	1.13.7:
 		- fixed bug with trueskill
-	1.1.13.006:
+	1.13.6:
 		- cleaned up imports
-	1.1.13.005:
+	1.13.5:
 		- cleaned up package
-	1.1.13.004:
+	1.13.4:
 		- small fixes to regression to improve performance
-	1.1.13.003:
+	1.13.3:
 		- filtered nans from regression
-	1.1.13.002:
+	1.13.2:
 		- removed torch requirement, and moved Regression back to regression.py
-	1.1.13.001:
+	1.13.1:
 		- bug fix with linear regression not returning a proper value
 		- cleaned up regression
 		- fixed bug with polynomial regressions
-	1.1.13.000:
+	1.13.0:
 		- fixed all regressions to now properly work
-	1.1.12.006:
+	1.12.6:
 		- fixed bg with a division by zero in histo_analysis
-	1.1.12.005:
+	1.12.5:
 		- fixed numba issues by removing numba  from elo, glicko2 and trueskill
-	1.1.12.004:
+	1.12.4:
 		- renamed gliko to glicko
-	1.1.12.003:
+	1.12.3:
 		- removed depreciated code
-	1.1.12.002:
+	1.12.2:
 		- removed team first time trueskill instantiation in favor of integration in superscript.py
-	1.1.12.001:
+	1.12.1:
 		- improved readibility of regression outputs by stripping tensor data
 		- used map with lambda to acheive the improved readibility
 		- lost numba jit support with regression, and generated_jit hangs at execution
 		- TODO: reimplement correct numba integration in regression
-	1.1.12.000:
+	1.12.0:
 		- temporarily fixed polynomial regressions by using sklearn's PolynomialFeatures
-	1.1.11.010:
+	1.11.010:
 		- alphabeticaly ordered import lists
-	1.1.11.009:
+	1.11.9:
 		- bug fixes
-	1.1.11.008:
+	1.11.8:
 		- bug fixes
-	1.1.11.007:
+	1.11.7:
 		- bug fixes
-	1.1.11.006:
+	1.11.6:
 		- tested min and max
 		- bug fixes 
-	1.1.11.005:
+	1.11.5:
 		- added min and max in basic_stats
-	1.1.11.004:
+	1.11.4:
 		- bug fixes
-	1.1.11.003:
+	1.11.3:
 		- bug fixes
-	1.1.11.002:
+	1.11.2:
 		- consolidated metrics
 		- fixed __all__
-	1.1.11.001:
+	1.11.1:
 		- added test/train split to RandomForestClassifier and RandomForestRegressor
-	1.1.11.000:
+	1.11.0:
 		- added RandomForestClassifier and RandomForestRegressor
 		- note: untested
-	1.1.10.000:
+	1.10.0:
 		- added numba.jit to remaining functions
-	1.1.9.002:
+	1.9.2:
 		- kernelized PCA and KNN
-	1.1.9.001:
+	1.9.1:
 		- fixed bugs with SVM and NaiveBayes
-	1.1.9.000:
+	1.9.0:
 		- added SVM class, subclasses, and functions
 		- note: untested
-	1.1.8.000:
+	1.8.0:
 		- added NaiveBayes classification engine
 		- note: untested
-	1.1.7.000:
+	1.7.0:
 		- added knn()
 		- added confusion matrix to decisiontree()
-	1.1.6.002:
+	1.6.2:
 		- changed layout of __changelog to be vscode friendly
-	1.1.6.001:
+	1.6.1:
 		- added additional hyperparameters to decisiontree()
-	1.1.6.000:
+	1.6.0:
 		- fixed __version__
 		- fixed __all__ order
 		- added decisiontree()
-	1.1.5.003:
+	1.5.3:
 		- added pca
-	1.1.5.002:
+	1.5.2:
 		- reduced import list
 		- added kmeans clustering engine
-	1.1.5.001:
+	1.5.1:
 		- simplified regression by using .to(device)
-	1.1.5.000:
+	1.5.0:
 		- added polynomial regression to regression(); untested
-	1.1.4.000:
+	1.4.0:
 		- added trueskill()
-	1.1.3.002:
+	1.3.2:
 		- renamed regression class to Regression, regression_engine() to regression gliko2_engine class to Gliko2
-	1.1.3.001:
+	1.3.1:
 		- changed glicko2() to return tuple instead of array
-	1.1.3.000:
+	1.3.0:
 		- added glicko2_engine class and glicko()
 		- verified glicko2() accuracy
-	1.1.2.003:
+	1.2.3:
 		- fixed elo()
-	1.1.2.002:
+	1.2.2:
 		- added elo()
 		- elo() has bugs to be fixed
-	1.1.2.001:
+	1.2.1:
 		- readded regrression import
-	1.1.2.000:
+	1.2.0:
 		- integrated regression.py as regression class
 		- removed regression import
 		- fixed metadata for regression class
 		- fixed metadata for analysis class
-	1.1.1.001:
+	1.1.1:
 		- regression_engine() bug fixes, now actaully regresses
-	1.1.1.000:
+	1.1.0:
 		- added regression_engine()
 		- added all regressions except polynomial
-	1.1.0.007:
+	1.0.7:
 		- updated _init_device()
-	1.1.0.006:
+	1.0.6:
 		- removed useless try statements
-	1.1.0.005:
+	1.0.5:
 		- removed impossible outcomes
-	1.1.0.004:
+	1.0.4:
 		- added performance metrics (r^2, mse, rms)
-	1.1.0.003:
+	1.0.3:
 		- resolved nopython mode for mean, median, stdev, variance
-	1.1.0.002:
+	1.0.2:
 		- snapped (removed) majority of uneeded imports
 		- forced object mode (bad) on all jit
 		- TODO: stop numba complaining about not being able to compile in nopython mode
-	1.1.0.001:
+	1.0.1:
 		- removed from sklearn import * to resolve uneeded wildcard imports
-	1.1.0.000:
+	1.0.0:
 		- removed c_entities,nc_entities,obstacles,objectives from __all__
 		- applied numba.jit to all functions
 		- depreciated and removed stdev_z_split
@@ -225,93 +223,93 @@ __changelog__ = """changelog:
 		- depreciated and removed all nonessential functions (basic_analysis, benchmark, strip_data)
 		- optimized z_normalize using sklearn.preprocessing.normalize
 		- TODO: implement kernel/function based pytorch regression optimizer
-	1.0.9.000:
+	0.9.0:
 		- refactored
 		- numpyed everything
 		- removed stats in favor of numpy functions
-	1.0.8.005:
+	0.8.5:
 		- minor fixes
-	1.0.8.004:
+	0.8.4:
 		- removed a few unused dependencies
-	1.0.8.003:
+	0.8.3:
 		- added p_value function
-	1.0.8.002:
-		- updated __all__ correctly to contain changes made in v 1.0.8.000 and v 1.0.8.001
-	1.0.8.001:
+	0.8.2:
+		- updated __all__ correctly to contain changes made in v 0.8.0 and v 0.8.1
+	0.8.1:
 		- refactors
 		- bugfixes
-	1.0.8.000:
+	0.8.0:
 		- depreciated histo_analysis_old
 		- depreciated debug
 		- altered basic_analysis to take array data instead of filepath
 		- refactor
 		- optimization
-	1.0.7.002:
+	0.7.2:
 		- bug fixes
-	1.0.7.001:
+	0.7.1:
 		- bug fixes
-	1.0.7.000:
+	0.7.0:
 		- added tanh_regression (logistical regression)
 		- bug fixes
-	1.0.6.005:
+	0.6.5:
 		- added z_normalize function to normalize dataset
 		- bug fixes
-	1.0.6.004:
+	0.6.4:
 		- bug fixes
-	1.0.6.003:
+	0.6.3:
 		- bug fixes
-	1.0.6.002:
+	0.6.2:
 		- bug fixes
-	1.0.6.001:
+	0.6.1:
 		- corrected __all__ to contain all of the functions
-	1.0.6.000:
+	0.6.0:
 		- added calc_overfit, which calculates two measures of overfit, error and performance
 		- added calculating overfit to optimize_regression
-	1.0.5.000:
+	0.5.0:
 		- added optimize_regression function, which is a sample function to find the optimal regressions
 		- optimize_regression function filters out some overfit funtions (functions with r^2 = 1)
 		- planned addition: overfit detection in the optimize_regression function
-	1.0.4.002:
+	0.4.2:
 		- added __changelog__
 		- updated debug function with log and exponential regressions
-	1.0.4.001:
+	0.4.1:
 		- added log regressions
 		- added exponential regressions
 		- added log_regression and exp_regression to __all__
-	1.0.3.008:
+	0.3.8:
 		- added debug function to further consolidate functions
-	1.0.3.007:
+	0.3.7:
 		- added builtin benchmark function
 		- added builtin random (linear) data generation function
 		- added device initialization (_init_device)
-	1.0.3.006:
+	0.3.6:
 		- reorganized the imports list to be in alphabetical order
 		- added search and regurgitate functions to c_entities, nc_entities, obstacles, objectives
-	1.0.3.005:
+	0.3.5:
 		- major bug fixes
 		- updated historical analysis
 		- depreciated old historical analysis
-	1.0.3.004:
+	0.3.4:
 		- added __version__, __author__, __all__
 		- added polynomial regression
 		- added root mean squared function
 		- added r squared function
-	1.0.3.003:
+	0.3.3:
 		- bug fixes
 		- added c_entities
-	1.0.3.002:
+	0.3.2:
 		- bug fixes
 		- added nc_entities, obstacles, objectives
 		- consolidated statistics.py to analysis.py
-	1.0.3.001:
+	0.3.1:
 		- compiled 1d, column, and row basic stats into basic stats function
-	1.0.3.000:
+	0.3.0:
 		- added historical analysis function
-	1.0.2.xxx:
+	0.2.x:
 		- added z score test
-	1.0.1.xxx:
+	0.1.x:
 		- major bug fixes
-	1.0.0.xxx:
+	0.0.x:
 		- added loading csv
 		- added 1d, column, row basic stats
 """
@@ -346,7 +344,7 @@ __all__ = [
 
 # now back to your regularly scheduled programming:
 
-# imports (now in alphabetical order! v 1.0.3.006):
+# imports (now in alphabetical order! v 0.3.006):
 
 import csv
 from tra_analysis.metrics import elo as Elo
