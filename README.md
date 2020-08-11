@@ -3,7 +3,10 @@ Titan Robotics 2022 Strategy Team Repository for Data Analysis Tools. Included w
 # Getting Started
 ## Prerequisites
 * Python >= 3.6
-* Pip which can be installed by running `python -m pip install -U pip` after installing python
+* Pip which can be installed by running\
+`curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py`\
+`python get-pip.py`\
+after installing python, or with a package manager on linux. Refer to the [pip installation instructions](https://pip.pypa.io/en/stable/installing/) for more information.
 ## Installing
 ### Standard Platforms
 For the latest version of tra-analysis, run `pip install tra-analysis` or `pip install tra_analysis`. The requirements for tra-analysis should be automatically installed.
