@@ -21,7 +21,8 @@
 	},
 	"extensions": [
 		"mhutchie.git-graph",
-		"donjayamanne.jupyter",
+		"ms-python.python",
+		"waderyan.gitblame"
 	],
-	"postCreateCommand": "pip install tra-analysis"
+	"postCreateCommand": "apt install vim -y && pip install -r data-analysis/requirements.txt && pip install -r analysis-master/requirements.txt && pip install tra-analysis"
 }
