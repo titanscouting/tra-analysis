@@ -23,5 +23,5 @@
 		"mhutchie.git-graph",
 		"donjayamanne.jupyter",
 	],
-	"postCreateCommand": "pip install -r analysis-master/requirements.txt"
+	"postCreateCommand": "pip install tra-analysis"
 }

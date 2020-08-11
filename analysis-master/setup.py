@@ -17,7 +17,7 @@ setuptools.setup(
 	url="https://github.com/titanscout2022/tr2022-strategy",
 	packages=setuptools.find_packages(),
 	install_requires=requirements,
-	license = "GNU General Public License v3.0",
+	license = "BSD 3-Clause License",
 	classifiers=[
 		"Programming Language :: Python :: 3",
 		"Operating System :: OS Independent",
