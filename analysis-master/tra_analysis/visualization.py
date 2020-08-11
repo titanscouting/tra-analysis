@@ -6,13 +6,13 @@
 #    fancy
 # setup:
 
-__version__ = "1.0.0.001"
+__version__ = "0.0.1"
 
 #changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
-	1.0.0.001:
+	0.0.1:
 		- added graphhistogram function as a fragment of visualize_pit.py
-	1.0.0.000:
+	0.0.0:
 		- created visualization.py
 		- added graphloss()
 		- added imports

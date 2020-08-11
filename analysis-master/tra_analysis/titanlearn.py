@@ -7,23 +7,23 @@
 #    this module learns from its mistakes far faster than 2022's captains
 # setup:
 
-__version__ = "2.0.1.001"
+__version__ = "1.1.1"
 
 #changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
-	2.0.1.001:
+	1.1.1:
 		- removed matplotlib import
 		- removed graphloss()
-	2.0.1.000:
+	1.1.0:
 		- added net, dataset, dataloader, and stdtrain template definitions
 		- added graphloss function
-	2.0.0.001:
+	1.0.1:
 		- added clear functions
-	2.0.0.000:
+	1.0.0:
 		- complete rewrite planned
 		- depreciated 1.0.0.xxx versions
 		- added simple training loop
-	1.0.0.xxx:
+	0.0.x:
 		-added generation of ANNS, basic SGD training
 """
 
