@@ -5,35 +5,15 @@ Titan Robotics 2022 Strategy Team Repository for Data Analysis Tools. Included w
 * Python >= 3.6
 * Pip which can be installed by running `python -m pip install -U pip` after installing python
 ## Installing
-There are a few different services/packages that can be installed. Installation instructions are seperated by scenario and are ordered from least complex to most. 
-### Linux (Most Distros)/Windows ｜ TRA Service plus GUI, Analysis Package
-Portable application files are avaliable on the releases page. 
-* Download the `.zip` or `.tar.gz` files from the releases page. If you want the GUI version, be sure to download the one marked with GUI.
-* Unzip the files and save the folder somewhere safe.
-* Navigate to the unzipped folder and run:
-	* Windows: `TRA-GUI.bat` .
-	* Linux: `TRA-GUI.sh`.
-### Linux (Most Distros)/Windows ｜ TRA Service, Analysis Package
-Service application files are avaliable on the releases page.
-* Download the `.zip` or `tar.gz` files from from the releases page. If you want the Service version, be sure to download the one that is not marked with GUI. The GUI version will also contain the service application.
-* Unzip the files and save the folder somewhere safe.
-* Navigate to the unzipped folder and run:
-	* Windows: `TRA.bat`.
-	* Linux: `TRA.sh`.
-### Linux (Most Distros) CLI-Only ｜ TRA Service, Analysis Package
-Service application files are avaliable on the releases page.
-* Download the `.zip` or `tar.gz` files from from the releases page with `wget https://github.com/titanscout2022/red-alliance-analysis/releases/download/latest/TRA.tar.gz`. If you want the Service version, be sure to download the one that is not marked with GUI. The GUI version will also contain the service application.
-* Unzip the files with `tar -xzf TRA.tar.gz` .
-* Navigate to the unzipped folder with `cd TRA/` and run `./TRA.sh`.
-### Installing Only the Analysis Package
-Make sure that python an pip are already installed. 
-Download the `.whl` file from the releases page. Then install the wheel file by running `pip install [name of the .whl file]`.
-### Installing Only the Analysis Package From Source
-Navigating to `analysis-master/`, running `./build.sh` will build the analysis package from `analysis-master/analysis/`. The built wheel files are stored in `analysis-master/dist/`.
-## Config
+### Standard Platforms
+For the latest version of tra-analysis, run `pip install tra-analysis` or `pip install tra_analysis`. The requirements for tra-analysis should be automatically installed.
+### Exotic Platforms (Android)
+[Termux](https://termux.com/) is recommended for a linux environemnt on Android. Consult the [documentation]() for advice on installing the prerequisites. After installing the prerequisites, the package should be installed normally with `pip install tra-analysis` or `pip install tra_analysis`. 
+## Use
+tra-analysis operates like any other python package. Consult the [documentation]() for more information.
 # Supported Platforms
 Although any modern 64 bit platform should be supported, the following platforms have been tested to be working:
-* AMD64 (Tested on Zen 1, Zen +, and Zen 2)
+* AMD64 (Tested on Zen, Zen+, and Zen 2)
 * Intel 64/x86_64/x64 (Tested on Kaby Lake)
 * ARM64 (Tested on Broadcom BCM2836 SoC, Broadcom BCM2711 SoC)
 ### 
