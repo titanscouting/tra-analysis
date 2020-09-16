@@ -38,3 +38,4 @@ analysis-master/tra_analysis/.ipynb_checkpoints
 .pytest_cache
 analysis-master/tra_analysis/metrics/__pycache__
 analysis-master/dist
+data-analysis/config/
