@@ -7,12 +7,15 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "2.2.1"
+__version__ = "2.2.2"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	2.2.2:
+		- fixed 2.2.1 changelog entry
+		- changed regression to return dictionary
 	2.2.1:
-		changed all references to parent package analysis to tra_analysis
+		- changed all references to parent package analysis to tra_analysis
 	2.2.0:
 		- added Sort class
 		- added several array sorting functions to Sort class including:
@@ -424,7 +427,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 	X = np.array(inputs)
 	y = np.array(outputs)
 
-	regressions = []
+	regressions = {}
 
 	if 'lin' in args: # formula: ax + b
 
@@ -437,7 +440,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 			popt, pcov = scipy.optimize.curve_fit(lin, X, y)
 
 			coeffs = popt.flatten().tolist()
-			regressions.append(str(coeffs[0]) + "*x+" + str(coeffs[1]))
+			regressions["lin"] = (str(coeffs[0]) + "*x+" + str(coeffs[1]))
 
 		except Exception as e:
 
@@ -454,7 +457,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 			popt, pcov = scipy.optimize.curve_fit(log, X, y)
 
 			coeffs = popt.flatten().tolist()
-			regressions.append(str(coeffs[0]) + "*log(" + str(coeffs[1]) + "*(x+" + str(coeffs[2]) + "))+" + str(coeffs[3]))
+			regressions["log"] = (str(coeffs[0]) + "*log(" + str(coeffs[1]) + "*(x+" + str(coeffs[2]) + "))+" + str(coeffs[3]))
 
 		except Exception as e:
 			
@@ -471,7 +474,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 			popt, pcov = scipy.optimize.curve_fit(exp, X, y)
 
 			coeffs = popt.flatten().tolist()
-			regressions.append(str(coeffs[0]) + "*e^(" + str(coeffs[1]) + "*(x+" + str(coeffs[2]) + "))+" + str(coeffs[3]))
+			regressions["exp"] = (str(coeffs[0]) + "*e^(" + str(coeffs[1]) + "*(x+" + str(coeffs[2]) + "))+" + str(coeffs[3]))
 
 		except Exception as e:
 
@@ -482,7 +485,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 		inputs = np.array([inputs])
 		outputs = np.array([outputs])
 
-		plys = []
+		plys = {}
 		limit = len(outputs[0])
 
 		for i in range(2, limit):
@@ -500,9 +503,9 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 			for param in params:
 				temp += "(" + str(param) + "*x^" + str(counter) + ")"
 				counter += 1
-			plys.append(temp)
+			plys["x^" + str(i)] = (temp)
 
-		regressions.append(plys)
+		regressions["ply"] = (plys)
 
 	if 'sig' in args: # formula: a tanh (b(x + c)) + d
 
@@ -515,7 +518,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 			popt, pcov = scipy.optimize.curve_fit(sig, X, y)
 
 			coeffs = popt.flatten().tolist()
-			regressions.append(str(coeffs[0]) + "*tanh(" + str(coeffs[1]) + "*(x+" + str(coeffs[2]) + "))+" + str(coeffs[3]))
+			regressions["sig"] = (str(coeffs[0]) + "*tanh(" + str(coeffs[1]) + "*(x+" + str(coeffs[2]) + "))+" + str(coeffs[3]))
 
 		except Exception as e:
 		   
