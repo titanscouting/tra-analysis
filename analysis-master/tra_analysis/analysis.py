@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "2.2.3"
+__version__ = "2.3.0"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	2.3.0:
+		- overhauled Array class
 	2.2.3:
 		- fixed spelling of RandomForest
 		- made n_neighbors required for KNN
@@ -786,7 +788,7 @@ class CorrelationTest:
 	def anova_oneway(self, *args): #expects arrays of samples
 
 		results = scipy.stats.f_oneway(*args)
-		return {"F-value": results[0], "p-value": results[1]}
+		return {"f-value": results[0], "p-value": results[1]}
 
 	def pearson(self, x, y):
 
@@ -985,41 +987,74 @@ class StatisticalTest:
 		return {"z-score": results[0], "p-value": results[1]}
 		
 class Array(): # tests on nd arrays independent of basic_stats
+
+	def __init__(self, narray):
+
+		self.array = np.array(narray)
+
+	def __str__(self):
+
+		return str(self.array)
 	
-	def elementwise_mean(self, *args): # expects arrays that are size normalized
+	def elementwise_mean(self, *args, axis = 0): # expects arrays that are size normalized
+		if len(*args) == 0:
+			return np.mean(self.array, axis = axis)
+		else:
+			return np.mean([*args], axis = axis)
 
-		return np.mean([*args], axis = 0)
+	def elementwise_median(self, *args, axis = 0):
 
-	def elementwise_median(self, *args):
+		if len(*args) == 0:
+			return np.median(self.array, axis = axis)
+		else:
+			return np.median([*args], axis = axis)
 
-		return np.median([*args], axis = 0)
+	def elementwise_stdev(self, *args, axis = 0):
 
-	def elementwise_stdev(self, *args):
+		if len(*args) == 0:
+			return np.std(self.array, axis = axis)
+		else:
+			return np.std([*args], axis = axis)
 
-		return np.std([*args], axis = 0)
+	def elementwise_variance(self, *args, axis = 0):
 
-	def elementwise_variance(self, *args):
+		if len(*args) == 0:
+			return np.var(self.array, axis = axis)
+		else:
+			return np.var([*args], axis = axis)
 
-		return np.var([*args], axis = 0)
+	def elementwise_npmin(self, *args, axis = 0):
 
-	def elementwise_npmin(self, *args):
+		if len(*args) == 0:
+			return np.amin(self.array, axis = axis)
+		else:
+			return np.amin([*args], axis = axis)
 
-		return np.amin([*args], axis = 0)
+	def elementwise_npmax(self, *args, axis = 0):
 
-	def elementwise_npmax(self, *args):
+		if len(*args) == 0:
+			return np.amax(self.array, axis = axis)
+		else:
+			return np.amax([*args], axis = axis)
 
-		return np.amax([*args], axis = 0)
+	def elementwise_stats(self, *args, axis = 0):
 
-	def elementwise_stats(self, *args):
-
-		_mean = self.elementwise_mean(*args)
-		_median = self.elementwise_median(*args)
-		_stdev = self.elementwise_stdev(*args)
-		_variance = self.elementwise_variance(*args)
-		_min = self.elementwise_npmin(*args)
-		_max = self.elementwise_npmax(*args)
+		_mean = self.elementwise_mean(*args, axis = axis)
+		_median = self.elementwise_median(*args, axis = axis)
+		_stdev = self.elementwise_stdev(*args, axis = axis)
+		_variance = self.elementwise_variance(*args, axis = axis)
+		_min = self.elementwise_npmin(*args, axis = axis)
+		_max = self.elementwise_npmax(*args, axis = axis)
 
 		return _mean, _median, _stdev, _variance, _min, _max
+
+	def __getitem__(self, key):
+
+		return self.array[key]
+
+	def __setitem__(self, key, value):
+
+		self.array[key] == value
 
 	def normalize(self, array):
 
@@ -1027,39 +1062,37 @@ class Array(): # tests on nd arrays independent of basic_stats
 		a[a==0] = 1
 		return array / np.expand_dims(a, -1)
 
-	def add(self, *args):
+	def __add__(self, other):
 
-		temp = np.array([])
+		return self.array + other
 
-		for a in args:
-			temp += a
+	def __sub__(self, other):
+
+		return self.array - other
+
+	def __neg__(self):
 		
-		return temp
+		return -self.array
 
-	def mul(self, *args):
+	def __abs__(self):
 
-		temp = np.array([])
+		return abs(self.array)
 
-		for a in args:
-			temp *= a
-		
-		return temp
+	def __invert__(self):
 
-	def neg(self, array):
-		
-		return -array
+		return 1/self.array
 
-	def inv(self, array):
+	def __mul__(self, other):
 
-		return 1/array
+		return self.array.dot(other)
 
-	def dot(self, a, b):
+	def __rmul__(self, other):
 
-		return np.dot(a, b)
+		return self.array.dot(other)
 
-	def cross(self, a, b):
+	def cross(self, other):
 
-		return np.cross(a, b)
+		return np.cross(self.array, b)
 
 	def sort(self, array): # depreciated
 		warnings.warn("Array.sort has been depreciated in favor of Sort")
