@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "2.3.0"
+__version__ = "2.3.1"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	2.3.1:
+		- fixed bugs in Array class
 	2.3.0:
 		- overhauled Array class
 	2.2.3:
@@ -1064,11 +1066,11 @@ class Array(): # tests on nd arrays independent of basic_stats
 
 	def __add__(self, other):
 
-		return self.array + other
+		return self.array + other.array
 
 	def __sub__(self, other):
 
-		return self.array - other
+		return self.array - other.array
 
 	def __neg__(self):
 		
@@ -1084,15 +1086,15 @@ class Array(): # tests on nd arrays independent of basic_stats
 
 	def __mul__(self, other):
 
-		return self.array.dot(other)
+		return self.array.dot(other.array)
 
 	def __rmul__(self, other):
 
-		return self.array.dot(other)
+		return self.array.dot(other.array)
 
 	def cross(self, other):
 
-		return np.cross(self.array, b)
+		return np.cross(self.array, other.array)
 
 	def sort(self, array): # depreciated
 		warnings.warn("Array.sort has been depreciated in favor of Sort")
