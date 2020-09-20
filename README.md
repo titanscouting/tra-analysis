@@ -11,9 +11,9 @@ after installing python, or with a package manager on linux. Refer to the [pip i
 ### Standard Platforms
 For the latest version of tra-analysis, run `pip install tra-analysis` or `pip install tra_analysis`. The requirements for tra-analysis should be automatically installed.
 ### Exotic Platforms (Android)
-[Termux](https://termux.com/) is recommended for a linux environemnt on Android. Consult the [documentation](https://titanscouting.github.io/analysis/installation#exotic-platforms-android) for advice on installing the prerequisites. After installing the prerequisites, the package should be installed normally with `pip install tra-analysis` or `pip install tra_analysis`. 
+[Termux](https://termux.com/) is recommended for a linux environemnt on Android. Consult the [documentation](https://titanscouting.github.io/analysis/general/installation#exotic-platforms-android) for advice on installing the prerequisites. After installing the prerequisites, the package should be installed normally with `pip install tra-analysis` or `pip install tra_analysis`. 
 ## Use
-tra-analysis operates like any other python package. Consult the [documentation](https://titanscouting.github.io/analysis/) for more information.
+tra-analysis operates like any other python package. Consult the [documentation](https://titanscouting.github.io/analysis/tra_analysis/) for more information.
 # Supported Platforms
 Although any modern 64 bit platform should be supported, the following platforms have been tested to be working:
 * AMD64 (Tested on Zen, Zen+, and Zen 2)
