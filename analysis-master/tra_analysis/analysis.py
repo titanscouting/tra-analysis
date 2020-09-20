@@ -7,12 +7,23 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "2.2.1"
+__version__ = "2.3.1"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	2.3.1:
+		- fixed bugs in Array class
+	2.3.0:
+		- overhauled Array class
+	2.2.3:
+		- fixed spelling of RandomForest
+		- made n_neighbors required for KNN
+		- made n_classifiers required for SVM
+	2.2.2:
+		- fixed 2.2.1 changelog entry
+		- changed regression to return dictionary
 	2.2.1:
-		changed all references to parent package analysis to tra_analysis
+		- changed all references to parent package analysis to tra_analysis
 	2.2.0:
 		- added Sort class
 		- added several array sorting functions to Sort class including:
@@ -424,7 +435,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 	X = np.array(inputs)
 	y = np.array(outputs)
 
-	regressions = []
+	regressions = {}
 
 	if 'lin' in args: # formula: ax + b
 
@@ -437,7 +448,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 			popt, pcov = scipy.optimize.curve_fit(lin, X, y)
 
 			coeffs = popt.flatten().tolist()
-			regressions.append(str(coeffs[0]) + "*x+" + str(coeffs[1]))
+			regressions["lin"] = (str(coeffs[0]) + "*x+" + str(coeffs[1]))
 
 		except Exception as e:
 
@@ -454,7 +465,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 			popt, pcov = scipy.optimize.curve_fit(log, X, y)
 
 			coeffs = popt.flatten().tolist()
-			regressions.append(str(coeffs[0]) + "*log(" + str(coeffs[1]) + "*(x+" + str(coeffs[2]) + "))+" + str(coeffs[3]))
+			regressions["log"] = (str(coeffs[0]) + "*log(" + str(coeffs[1]) + "*(x+" + str(coeffs[2]) + "))+" + str(coeffs[3]))
 
 		except Exception as e:
 			
@@ -471,7 +482,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 			popt, pcov = scipy.optimize.curve_fit(exp, X, y)
 
 			coeffs = popt.flatten().tolist()
-			regressions.append(str(coeffs[0]) + "*e^(" + str(coeffs[1]) + "*(x+" + str(coeffs[2]) + "))+" + str(coeffs[3]))
+			regressions["exp"] = (str(coeffs[0]) + "*e^(" + str(coeffs[1]) + "*(x+" + str(coeffs[2]) + "))+" + str(coeffs[3]))
 
 		except Exception as e:
 
@@ -482,7 +493,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 		inputs = np.array([inputs])
 		outputs = np.array([outputs])
 
-		plys = []
+		plys = {}
 		limit = len(outputs[0])
 
 		for i in range(2, limit):
@@ -500,9 +511,9 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 			for param in params:
 				temp += "(" + str(param) + "*x^" + str(counter) + ")"
 				counter += 1
-			plys.append(temp)
+			plys["x^" + str(i)] = (temp)
 
-		regressions.append(plys)
+		regressions["ply"] = (plys)
 
 	if 'sig' in args: # formula: a tanh (b(x + c)) + d
 
@@ -515,7 +526,7 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 			popt, pcov = scipy.optimize.curve_fit(sig, X, y)
 
 			coeffs = popt.flatten().tolist()
-			regressions.append(str(coeffs[0]) + "*tanh(" + str(coeffs[1]) + "*(x+" + str(coeffs[2]) + "))+" + str(coeffs[3]))
+			regressions["sig"] = (str(coeffs[0]) + "*tanh(" + str(coeffs[1]) + "*(x+" + str(coeffs[2]) + "))+" + str(coeffs[3]))
 
 		except Exception as e:
 		   
@@ -642,7 +653,7 @@ def decisiontree(data, labels, test_size = 0.3, criterion = "gini", splitter = "
 
 class KNN:
 
-	def knn_classifier(self, data, labels, test_size = 0.3, algorithm='auto', leaf_size=30, metric='minkowski', metric_params=None, n_jobs=None, n_neighbors=5, p=2, weights='uniform'): #expects *2d data and 1d labels post-scaling
+	def knn_classifier(self, data, labels, n_neighbors, test_size = 0.3, algorithm='auto', leaf_size=30, metric='minkowski', metric_params=None, n_jobs=None, p=2, weights='uniform'): #expects *2d data and 1d labels post-scaling
 
 		data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
 		model = sklearn.neighbors.KNeighborsClassifier()
@@ -651,7 +662,7 @@ class KNN:
 
 		return model, ClassificationMetric(predictions, labels_test)
 
-	def knn_regressor(self, data, outputs, test_size, n_neighbors = 5, weights = "uniform", algorithm = "auto", leaf_size = 30, p = 2, metric = "minkowski", metric_params = None, n_jobs = None):
+	def knn_regressor(self, data, outputs, n_neighbors, test_size = 0.3, weights = "uniform", algorithm = "auto", leaf_size = 30, p = 2, metric = "minkowski", metric_params = None, n_jobs = None):
 
 		data_train, data_test, outputs_train, outputs_test = sklearn.model_selection.train_test_split(data, outputs, test_size=test_size, random_state=1)
 		model = sklearn.neighbors.KNeighborsRegressor(n_neighbors = n_neighbors, weights = weights, algorithm = algorithm, leaf_size = leaf_size, p = p, metric = metric, metric_params = metric_params, n_jobs = n_jobs)
@@ -754,9 +765,9 @@ class SVM:
 
 		return RegressionMetric(predictions, test_outputs)
 
-class RandomForrest:
+class RandomForest:
 
-	def random_forest_classifier(self, data, labels, test_size, n_estimators="warn", criterion="gini", max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features="auto", max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False, class_weight=None):
+	def random_forest_classifier(self, data, labels, test_size, n_estimators, criterion="gini", max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features="auto", max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False, class_weight=None):
 
 		data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
 		kernel = sklearn.ensemble.RandomForestClassifier(n_estimators = n_estimators, criterion = criterion, max_depth = max_depth, min_samples_split = min_samples_split, min_samples_leaf = min_samples_leaf, min_weight_fraction_leaf = min_weight_fraction_leaf, max_leaf_nodes = max_leaf_nodes, min_impurity_decrease = min_impurity_decrease, bootstrap = bootstrap, oob_score = oob_score, n_jobs = n_jobs, random_state = random_state, verbose = verbose, warm_start = warm_start, class_weight = class_weight)
@@ -765,7 +776,7 @@ class RandomForrest:
 
 		return kernel, ClassificationMetric(predictions, labels_test)
 
-	def random_forest_regressor(self, data, outputs, test_size, n_estimators="warn", criterion="mse", max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features="auto", max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False):
+	def random_forest_regressor(self, data, outputs, test_size, n_estimators, criterion="mse", max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features="auto", max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False):
 
 		data_train, data_test, outputs_train, outputs_test = sklearn.model_selection.train_test_split(data, outputs, test_size=test_size, random_state=1)
 		kernel = sklearn.ensemble.RandomForestRegressor(n_estimators = n_estimators, criterion = criterion, max_depth = max_depth, min_samples_split = min_samples_split, min_weight_fraction_leaf = min_weight_fraction_leaf, max_features = max_features, max_leaf_nodes = max_leaf_nodes, min_impurity_decrease = min_impurity_decrease, min_impurity_split = min_impurity_split, bootstrap = bootstrap, oob_score = oob_score, n_jobs = n_jobs, random_state = random_state, verbose = verbose, warm_start = warm_start)
@@ -779,7 +790,7 @@ class CorrelationTest:
 	def anova_oneway(self, *args): #expects arrays of samples
 
 		results = scipy.stats.f_oneway(*args)
-		return {"F-value": results[0], "p-value": results[1]}
+		return {"f-value": results[0], "p-value": results[1]}
 
 	def pearson(self, x, y):
 
@@ -978,41 +989,74 @@ class StatisticalTest:
 		return {"z-score": results[0], "p-value": results[1]}
 		
 class Array(): # tests on nd arrays independent of basic_stats
+
+	def __init__(self, narray):
+
+		self.array = np.array(narray)
+
+	def __str__(self):
+
+		return str(self.array)
 	
-	def elementwise_mean(self, *args): # expects arrays that are size normalized
+	def elementwise_mean(self, *args, axis = 0): # expects arrays that are size normalized
+		if len(*args) == 0:
+			return np.mean(self.array, axis = axis)
+		else:
+			return np.mean([*args], axis = axis)
 
-		return np.mean([*args], axis = 0)
+	def elementwise_median(self, *args, axis = 0):
 
-	def elementwise_median(self, *args):
+		if len(*args) == 0:
+			return np.median(self.array, axis = axis)
+		else:
+			return np.median([*args], axis = axis)
 
-		return np.median([*args], axis = 0)
+	def elementwise_stdev(self, *args, axis = 0):
 
-	def elementwise_stdev(self, *args):
+		if len(*args) == 0:
+			return np.std(self.array, axis = axis)
+		else:
+			return np.std([*args], axis = axis)
 
-		return np.std([*args], axis = 0)
+	def elementwise_variance(self, *args, axis = 0):
 
-	def elementwise_variance(self, *args):
+		if len(*args) == 0:
+			return np.var(self.array, axis = axis)
+		else:
+			return np.var([*args], axis = axis)
 
-		return np.var([*args], axis = 0)
+	def elementwise_npmin(self, *args, axis = 0):
 
-	def elementwise_npmin(self, *args):
+		if len(*args) == 0:
+			return np.amin(self.array, axis = axis)
+		else:
+			return np.amin([*args], axis = axis)
 
-		return np.amin([*args], axis = 0)
+	def elementwise_npmax(self, *args, axis = 0):
 
-	def elementwise_npmax(self, *args):
+		if len(*args) == 0:
+			return np.amax(self.array, axis = axis)
+		else:
+			return np.amax([*args], axis = axis)
 
-		return np.amax([*args], axis = 0)
+	def elementwise_stats(self, *args, axis = 0):
 
-	def elementwise_stats(self, *args):
-
-		_mean = self.elementwise_mean(*args)
-		_median = self.elementwise_median(*args)
-		_stdev = self.elementwise_stdev(*args)
-		_variance = self.elementwise_variance(*args)
-		_min = self.elementwise_npmin(*args)
-		_max = self.elementwise_npmax(*args)
+		_mean = self.elementwise_mean(*args, axis = axis)
+		_median = self.elementwise_median(*args, axis = axis)
+		_stdev = self.elementwise_stdev(*args, axis = axis)
+		_variance = self.elementwise_variance(*args, axis = axis)
+		_min = self.elementwise_npmin(*args, axis = axis)
+		_max = self.elementwise_npmax(*args, axis = axis)
 
 		return _mean, _median, _stdev, _variance, _min, _max
+
+	def __getitem__(self, key):
+
+		return self.array[key]
+
+	def __setitem__(self, key, value):
+
+		self.array[key] == value
 
 	def normalize(self, array):
 
@@ -1020,39 +1064,37 @@ class Array(): # tests on nd arrays independent of basic_stats
 		a[a==0] = 1
 		return array / np.expand_dims(a, -1)
 
-	def add(self, *args):
+	def __add__(self, other):
 
-		temp = np.array([])
+		return self.array + other.array
 
-		for a in args:
-			temp += a
+	def __sub__(self, other):
+
+		return self.array - other.array
+
+	def __neg__(self):
 		
-		return temp
+		return -self.array
 
-	def mul(self, *args):
+	def __abs__(self):
 
-		temp = np.array([])
+		return abs(self.array)
 
-		for a in args:
-			temp *= a
-		
-		return temp
+	def __invert__(self):
 
-	def neg(self, array):
-		
-		return -array
+		return 1/self.array
 
-	def inv(self, array):
+	def __mul__(self, other):
 
-		return 1/array
+		return self.array.dot(other.array)
 
-	def dot(self, a, b):
+	def __rmul__(self, other):
 
-		return np.dot(a, b)
+		return self.array.dot(other.array)
 
-	def cross(self, a, b):
+	def cross(self, other):
 
-		return np.cross(a, b)
+		return np.cross(self.array, other.array)
 
 	def sort(self, array): # depreciated
 		warnings.warn("Array.sort has been depreciated in favor of Sort")
