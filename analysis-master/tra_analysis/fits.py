@@ -19,7 +19,7 @@ __author__ = (
 __all__ = [
 	'CircleFit'
 ]
-import numba
+
 import numpy as np
 
 class CircleFit:
