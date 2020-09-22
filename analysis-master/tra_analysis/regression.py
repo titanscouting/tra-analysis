@@ -48,12 +48,15 @@ __all__ = [
 ]
 
 import torch
-import cupy as cp
 import numpy as np
+
 
 global device
 
 device = "cuda:0" if torch.torch.cuda.is_available() else "cpu"
+
+if device !== "cpu":
+	import cupy as cp
 
 #todo: document completely
 
