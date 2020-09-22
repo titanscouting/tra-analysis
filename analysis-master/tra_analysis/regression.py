@@ -279,7 +279,7 @@ class CircleFit:
 		# Calculate the distances from center (xc_1, yc_1)
 		Ri_1     = self.ournp.sqrt((x-xc_1)**2 + (y-yc_1)**2)
 		R_1      = self.ournp.mean(Ri_1)
-		# calcualte residual error
+		# calculate residual error
 		residu_1 = self.ournp.sum((Ri_1-R_1)**2)
 		return xc_1, yc_1, R_1, residu_1
 	def HyperFit(self):
