@@ -5,10 +5,12 @@
 #   this module is cuda-optimized (as appropriate) and vectorized (except for one small part)
 # setup:
 
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 # changelog should be viewed using print(analysis.regression.__changelog__)
 __changelog__ = """
+	0.0.5:
+		- add circle fitting with LSC and HyperFit
 	0.0.4:
 		- bug fixes
 		- fixed changelog
@@ -41,7 +43,8 @@ __all__ = [
 	'ExpRegKernel',
 	'SigmoidalRegKernelArthur',
 	'SGDTrain',
-	'CustomTrain'
+	'CustomTrain',
+	'CircleFit'
 ]
 
 import torch
@@ -279,3 +282,6 @@ class CircleFit:
 		# calcualte residual error
 		residu_1 = self.ournp.sum((Ri_1-R_1)**2)
 		return xc_1, yc_1, R_1, residu_1
+	def HyperFit(self):
+		raise AttributeError("HyperFit not yet implemented")
+		pass
