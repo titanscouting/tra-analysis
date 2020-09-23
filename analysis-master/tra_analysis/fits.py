@@ -9,7 +9,7 @@ __version__ = "0.0.1"
 # changelog should be viewed using print(analysis.fits.__changelog__)
 __changelog__ = """changelog:
 	0.0.1:
-		- initial release, add circle fitting with LSC and HyperFit
+		- initial release, add circle fitting with LSC
 """
 
 __author__ = (
@@ -23,7 +23,7 @@ __all__ = [
 import numpy as np
 
 class CircleFit:
-	"""Class to fit data to a circle using both the Least Square Circle (LSC) method and the HyperFit method"""
+	"""Class to fit data to a circle using the Least Square Circle (LSC) method"""
 	# For more information on the LSC method, see: 
 	# http://www.dtcenter.org/sites/default/files/community-code/met/docs/write-ups/circle_fit.pdf
 	def __init__(self, x, y, xy=None):
@@ -83,6 +83,3 @@ class CircleFit:
 		# calculate residual error
 		residu_1 = self.ournp.sum((Ri_1-R_1)**2)
 		return (xc_1, yc_1, R_1, residu_1)
-	def HyperFit(self):
-		raise AttributeError("HyperFit not yet implemented")
-		pass
