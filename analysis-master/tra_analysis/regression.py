@@ -1,16 +1,15 @@
 # Titan Robotics Team 2022: CUDA-based Regressions Module
+# Not actively maintained, may be removed in future release
 # Written by Arthur Lu & Jacob Levine
 # Notes:
 #   this module has been automatically inegrated into analysis.py, and should be callable as a class from the package
 #   this module is cuda-optimized (as appropriate) and vectorized (except for one small part)
 # setup:
 
-__version__ = "0.0.5"
+__version__ = "0.0.4"
 
 # changelog should be viewed using print(analysis.regression.__changelog__)
 __changelog__ = """
-	0.0.5:
-		- add circle fitting with LSC and HyperFit
 	0.0.4:
 		- bug fixes
 		- fixed changelog
@@ -28,7 +27,6 @@ __changelog__ = """
 __author__ = (
 	"Jacob Levine <jlevine@imsa.edu>",
 	"Arthur Lu <learthurgo@gmail.com>",
-	"Dev Singh <dev@devksingh.com>"
 )
 
 __all__ = [
