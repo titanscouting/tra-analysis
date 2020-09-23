@@ -33,8 +33,8 @@ class CircleFit:
 			y = np.array(y)
 		if type(xy) == list:
 			xy = np.array(xy)
-		if data != None: 
-			self.coords = data
+		if xy != None: 
+			self.coords = xy
 			self.ournp = np #todo: implement cupy correctly
 		else: 
 			# following block combines x and y into one array if not already done
