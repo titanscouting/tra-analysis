@@ -38,7 +38,7 @@ class CircleFit:
 			self.ournp = np #todo: implement cupy correctly
 		else: 
 			# following block combines x and y into one array if not already done
-			self.coords = self.ournp.vstack(([x_data.T], [y_data.T])).T
+			self.coords = self.ournp.vstack(([x.T], [y.T])).T
 	def calc_R(x, y, xc, yc):
 		"""Returns distance between center and point"""
 		return self.ournp.sqrt((x-xc)**2 + (y-yc)**2)
@@ -48,8 +48,8 @@ class CircleFit:
 		return Ri - Ri.mean()
 	def LSC(self):
 		"""Fits given data to a circle and returns the center, radius, and variance"""
-		x = coords[:, 0]
-		y = coords[:, 1]
+		x = self.coords[:, 0]
+		y = self.coords[:, 1]
 		# guessing at a center
 		x_m = self.ournp.mean(x)
 		y_m = self.ournp.mean(y)
