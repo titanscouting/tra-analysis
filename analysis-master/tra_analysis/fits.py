@@ -27,6 +27,12 @@ class CircleFit:
 	# For more information on the LSC method, see: 
 	# http://www.dtcenter.org/sites/default/files/community-code/met/docs/write-ups/circle_fit.pdf
 	def __init__(self, x, y, xy=None):
+        if type(x) == list:
+            x = np.array(x)
+        if type(y) == list:
+            y = np.array(y)
+        if type(xy) == list:
+            xy = np.array(xy)
 		if data != None: 
 			self.coords = data
 			self.ournp = np #todo: implement cupy correctly
@@ -76,7 +82,7 @@ class CircleFit:
 		R_1      = self.ournp.mean(Ri_1)
 		# calculate residual error
 		residu_1 = self.ournp.sum((Ri_1-R_1)**2)
-		return xc_1, yc_1, R_1, residu_1
+		return (xc_1, yc_1, R_1, residu_1)
 	def HyperFit(self):
 		raise AttributeError("HyperFit not yet implemented")
 		pass
