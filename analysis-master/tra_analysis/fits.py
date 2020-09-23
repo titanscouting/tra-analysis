@@ -27,6 +27,7 @@ class CircleFit:
 	# For more information on the LSC method, see: 
 	# http://www.dtcenter.org/sites/default/files/community-code/met/docs/write-ups/circle_fit.pdf
 	def __init__(self, x, y, xy=None):
+		self.ournp = np #todo: implement cupy correctly
 		if type(x) == list:
 			x = np.array(x)
 		if type(y) == list:
@@ -35,7 +36,6 @@ class CircleFit:
 			xy = np.array(xy)
 		if xy != None: 
 			self.coords = xy
-			self.ournp = np #todo: implement cupy correctly
 		else: 
 			# following block combines x and y into one array if not already done
 			self.coords = self.ournp.vstack(([x.T], [y.T])).T
