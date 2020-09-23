@@ -27,12 +27,12 @@ class CircleFit:
 	# For more information on the LSC method, see: 
 	# http://www.dtcenter.org/sites/default/files/community-code/met/docs/write-ups/circle_fit.pdf
 	def __init__(self, x, y, xy=None):
-        if type(x) == list:
-            x = np.array(x)
-        if type(y) == list:
-            y = np.array(y)
-        if type(xy) == list:
-            xy = np.array(xy)
+		if type(x) == list:
+			x = np.array(x)
+		if type(y) == list:
+			y = np.array(y)
+		if type(xy) == list:
+			xy = np.array(xy)
 		if data != None: 
 			self.coords = data
 			self.ournp = np #todo: implement cupy correctly
@@ -43,9 +43,9 @@ class CircleFit:
 		"""Returns distance between center and point"""
 		return self.ournp.sqrt((x-xc)**2 + (y-yc)**2)
 	def f(c, x, y):
-    	"""Returns distance between point and circle at c"""
-    	Ri = calc_R(x, y, *c)
-    	return Ri - Ri.mean()
+		"""Returns distance between point and circle at c"""
+		Ri = calc_R(x, y, *c)
+		return Ri - Ri.mean()
 	def LSC(self):
 		"""Fits given data to a circle and returns the center, radius, and variance"""
 		x = coords[:, 0]
