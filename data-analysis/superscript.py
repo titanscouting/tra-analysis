@@ -3,10 +3,18 @@
 # Notes:
 # setup:
 
-__version__ = "0.7.0"
+__version__ = "0.8.2"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	0.8.2:
+		- readded while true to main function
+		- added more thread config options
+	0.8.1:
+		- optimized matchloop further by bypassing GIL
+	0.8.0:
+		- added multithreading to matchloop
+		- tweaked user log
 	0.7.0:
 		- finished implementing main function
 	0.6.2:
@@ -114,15 +122,24 @@ __all__ = [
 
 from tra_analysis import analysis as an
 import data as d
+from collections import defaultdict
 import json
+import math
 import numpy as np
+import os
 from os import system, name
 from pathlib import Path
+from multiprocessing import Pool
 import matplotlib.pyplot as plt
+from concurrent.futures import ThreadPoolExecutor
 import time
 import warnings
 
+global exec_threads
+
 def main():
+
+	global exec_threads
 
 	warnings.filterwarnings("ignore")
 
@@ -138,6 +155,23 @@ def main():
 		metrics_tests = config["statistics"]["metric"]
 		print("[OK] configs loaded")
 
+		print("[OK] starting threads")
+		cfg_max_threads = config["max-threads"]
+		sys_max_threads = os.cpu_count()
+		if cfg_max_threads > -sys_max_threads and cfg_max_threads < 0 :
+			alloc_processes = sys_max_threads + cfg_max_threads
+		elif cfg_max_threads > 0 and cfg_max_threads < 1:
+			alloc_processes = math.floor(cfg_max_threads * sys_max_threads)
+		elif cfg_max_threads > 1 and cfg_max_threads <= sys_max_threads:
+			alloc_processes = cfg_max_threads
+		elif cfg_max_threads == 0:
+			alloc_processes = sys_max_threads
+		else:
+			print("[Err] Invalid number of processes, must be between -" + str(sys_max_threads) + " and " + str(sys_max_threads))
+			exit()
+		exec_threads = Pool(processes = alloc_processes)
+		print("[OK] " + str(alloc_processes) + " threads started")
+
 		apikey = config["key"]["database"]
 		tbakey = config["key"]["tba"]
 		print("[OK] loaded keys")
@@ -151,15 +185,15 @@ def main():
 		pit_data = load_pit(apikey, competition)
 		print("[OK] loaded data in " + str(time.time() - start) + " seconds")
 
-		print("[OK] running tests")
+		print("[OK] running match stats")
 		start = time.time()
 		matchloop(apikey, competition, match_data, match_tests)
-		print("[OK] finished tests in " + str(time.time() - start) + " seconds")
+		print("[OK] finished match stats in " + str(time.time() - start) + " seconds")
 
-		print("[OK] running metrics")
+		print("[OK] running team metrics")
 		start = time.time()
 		metricloop(tbakey, apikey, competition, previous_time, metrics_tests)
-		print("[OK] finished metrics in " + str(time.time() - start) + " seconds")
+		print("[OK] finished team metrics in " + str(time.time() - start) + " seconds")
 
 		print("[OK] running pit analysis")
 		start = time.time()
@@ -217,48 +251,78 @@ def load_match(apikey, competition):
 
 	return d.get_match_data_formatted(apikey, competition)
 
+def simplestats(data_test):
+
+	data = np.array(data_test[0])
+	data = data[np.isfinite(data)]
+	ranges = list(range(len(data)))
+
+	test = data_test[1]
+
+	if test == "basic_stats":
+		return an.basic_stats(data)
+
+	if test == "historical_analysis":
+		return an.histo_analysis([ranges, data])
+
+	if test == "regression_linear":
+		return an.regression(ranges, data, ['lin'])
+
+	if test == "regression_logarithmic":
+		return an.regression(ranges, data, ['log'])
+
+	if test == "regression_exponential":
+		return an.regression(ranges, data, ['exp'])
+
+	if test == "regression_polynomial":
+		return an.regression(ranges, data, ['ply'])
+
+	if test == "regression_sigmoidal":
+		return an.regression(ranges, data, ['sig'])
+
 def matchloop(apikey, competition, data, tests): # expects 3D array with [Team][Variable][Match]
 
-	def simplestats(data, test):
+	global exec_threads
 
-		data = np.array(data)
-		data = data[np.isfinite(data)]
-		ranges = list(range(len(data)))
-
-		if test == "basic_stats":
-			return an.basic_stats(data)
-
-		if test == "historical_analysis":
-			return an.histo_analysis([ranges, data])
-
-		if test == "regression_linear":
-			return an.regression(ranges, data, ['lin'])
-
-		if test == "regression_logarithmic":
-			return an.regression(ranges, data, ['log'])
-
-		if test == "regression_exponential":
-			return an.regression(ranges, data, ['exp'])
-
-		if test == "regression_polynomial":
-			return an.regression(ranges, data, ['ply'])
-
-		if test == "regression_sigmoidal":
-			return an.regression(ranges, data, ['sig'])
+	class AutoVivification(dict):
+		def __getitem__(self, item):
+			try:
+				return dict.__getitem__(self, item)
+			except KeyError:
+				value = self[item] = type(self)()
+				return value
 
 	return_vector = {}
+	
+	team_filtered = []
+	variable_filtered = []
+	variable_data = []
+	test_filtered = []
+	result_filtered = []
+	return_vector = AutoVivification()
+
 	for team in data:
-		variable_vector = {}
+
 		for variable in data[team]:
-			test_vector = {}
-			variable_data = data[team][variable]
+
 			if variable in tests:
+
 				for test in tests[variable]:
-					test_vector[test] = simplestats(variable_data, test)
-			else:
-				pass      
-			variable_vector[variable] = test_vector
-		return_vector[team] = variable_vector
+
+					team_filtered.append(team)
+					variable_filtered.append(variable)
+					variable_data.append((data[team][variable], test))
+					test_filtered.append(test)
+
+	result_filtered = exec_threads.map(simplestats, variable_data)
+	i = 0
+
+	result_filtered = list(result_filtered)
+
+	for result in result_filtered:
+
+		return_vector[team_filtered[i]][variable_filtered[i]][test_filtered[i]] = result
+		i += 1
 
 	push_match(apikey, competition, return_vector)
 
