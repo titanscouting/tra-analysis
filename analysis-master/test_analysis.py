@@ -1,8 +1,11 @@
 from tra_analysis import analysis as an
 from tra_analysis import metrics
+from tra_analysis import fits
 
 def test_():
 	test_data_linear = [1, 3, 6, 7, 9]
+	x_data_circular = []
+	y_data_circular = []
 	y_data_ccu = [1, 3, 7, 14, 21]
 	y_data_ccd = [1, 5, 7, 8.5, 8.66]
 	test_data_scrambled = [-32, 34, 19, 72, -65, -11, -43, 6, 85, -17, -98, -26, 12, 20, 9, -92, -40, 98, -78, 17, -20, 49, 93, -27, -24, -66, 40, 84, 1, -64, -68, -25, -42, -46, -76, 43, -3, 30, -14, -34, -55, -13, 41, -30, 0, -61, 48, 23, 60, 87, 80, 77, 53, 73, 79, 24, -52, 82, 8, -44, 65, 47, -77, 94, 7, 37, -79, 36, -94, 91, 59, 10, 97, -38, -67, 83, 54, 31, -95, -63, 16, -45, 21, -12, 66, -48, -18, -96, -90, -21, -83, -74, 39, 64, 69, -97, 13, 55, 27, -39]
@@ -29,3 +32,4 @@ def test_():
 	assert all(a == b for a, b in zip(an.Sort().bubblesort(test_data_scrambled), test_data_sorted))
 	assert all(a == b for a, b in zip(an.Sort().cyclesort(test_data_scrambled), test_data_sorted))
 	assert all(a == b for a, b in zip(an.Sort().cocktailsort(test_data_scrambled), test_data_sorted))
+	assert fits.CircleFit(x=[0,0,-1,1], y=[1, -1, 0, 0]).LSC() == (0.0, 0.0, 1.0, 0.0)

@@ -1,8 +1,9 @@
 # Titan Robotics Team 2022: CUDA-based Regressions Module
+# Not actively maintained, may be removed in future release
 # Written by Arthur Lu & Jacob Levine
 # Notes:
 #   this module has been automatically inegrated into analysis.py, and should be callable as a class from the package
-#   this module is cuda-optimized and vectorized (except for one small part)
+#   this module is cuda-optimized (as appropriate) and vectorized (except for one small part)
 # setup:
 
 __version__ = "0.0.4"
@@ -25,7 +26,7 @@ __changelog__ = """
 
 __author__ = (
 	"Jacob Levine <jlevine@imsa.edu>",
-	"Arthur Lu <learthurgo@gmail.com>"
+	"Arthur Lu <learthurgo@gmail.com>",
 )
 
 __all__ = [
@@ -40,14 +41,15 @@ __all__ = [
 	'ExpRegKernel',
 	'SigmoidalRegKernelArthur',
 	'SGDTrain',
-	'CustomTrain'
+	'CustomTrain',
+	'CircleFit'
 ]
 
 import torch
 
 global device
 
-device = "cuda:0" if torch.torch.cuda.is_available() else "cpu"
+device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
 #todo: document completely
 
