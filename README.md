@@ -17,7 +17,7 @@ tra-analysis operates like any other python package. Consult the [documentation]
 # Supported Platforms
 Although any modern 64 bit platform should be supported, the following platforms have been tested to be working:
 * AMD64 (Tested on Zen, Zen+, and Zen 2)
-* Intel 64/x86_64/x64 (Tested on Kaby Lake)
+* Intel 64/x86_64/x64 (Tested on Kaby Lake, Ice Lake)
 * ARM64 (Tested on Broadcom BCM2836 SoC, Broadcom BCM2711 SoC)
 ### 
 The following OSes have been tested to be working:
