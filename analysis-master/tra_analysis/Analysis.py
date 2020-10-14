@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "3.0.0"
+__version__ = "3.0.1"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	3.0.1:
+		- removed numba dependency and calls
 	3.0.0:
 		- exported several submodules to their own files while preserving backwards compatibility:
 			- Array
@@ -376,8 +378,6 @@ import csv
 from tra_analysis.metrics import elo as Elo
 from tra_analysis.metrics import glicko2 as Glicko2
 import math
-import numba
-from numba import jit
 import numpy as np
 import scipy
 from scipy import optimize, stats
@@ -409,7 +409,6 @@ def load_csv(filepath):
 	return file_array
 
 # expects 1d array
-@jit(forceobj=True)
 def basic_stats(data):
 
 	data_t = np.array(data).astype(float)
@@ -424,14 +423,12 @@ def basic_stats(data):
 	return {"mean": _mean, "median": _median, "standard-deviation": _stdev, "variance": _variance, "minimum": _min, "maximum": _max}
 
 # returns z score with inputs of point, mean and standard deviation of spread
-@jit(forceobj=True)
 def z_score(point, mean, stdev):
 	score = (point - mean) / stdev
 	
 	return score
 
 # expects 2d array, normalizes across all axes
-@jit(forceobj=True)
 def z_normalize(array, *args):
 
 	array = np.array(array)
@@ -440,7 +437,6 @@ def z_normalize(array, *args):
 
 	return array
 
-@jit(forceobj=True)
 # expects 2d array of [x,y]
 def histo_analysis(hist_data):
 
@@ -589,37 +585,30 @@ class Metric:
 
 		return Trueskill.rate(team_ratings, ranks=observations)
 
-@jit(nopython=True)
 def mean(data):
 
 	return np.mean(data)
 
-@jit(nopython=True)
 def median(data):
 
 	return np.median(data)
 
-@jit(nopython=True)
 def stdev(data):
 
 	return np.std(data)
 
-@jit(nopython=True)
 def variance(data):
 
 	return np.var(data)
 
-@jit(nopython=True)
 def npmin(data):
 
 	return np.amin(data)
 
-@jit(nopython=True)
 def npmax(data):
 
 	return np.amax(data)
 
-@jit(forceobj=True)
 def kmeans(data, n_clusters=8, init="k-means++", n_init=10, max_iter=300, tol=0.0001, precompute_distances="auto", verbose=0, random_state=None, copy_x=True, n_jobs=None, algorithm="auto"):
 
 	kernel = sklearn.cluster.KMeans(n_clusters = n_clusters, init = init, n_init = n_init, max_iter = max_iter, tol = tol, precompute_distances = precompute_distances, verbose = verbose, random_state = random_state, copy_x = copy_x, n_jobs = n_jobs, algorithm = algorithm)
@@ -629,14 +618,12 @@ def kmeans(data, n_clusters=8, init="k-means++", n_init=10, max_iter=300, tol=0.
 
 	return centers, predictions
 
-@jit(forceobj=True)
 def pca(data, n_components = None, copy = True, whiten = False, svd_solver = "auto", tol = 0.0, iterated_power = "auto", random_state = None):
 
 	kernel = sklearn.decomposition.PCA(n_components = n_components, copy = copy, whiten = whiten, svd_solver = svd_solver, tol = tol, iterated_power = iterated_power, random_state = random_state)
 
 	return kernel.fit_transform(data)
 
-@jit(forceobj=True)
 def decisiontree(data, labels, test_size = 0.3, criterion = "gini", splitter = "default", max_depth = None): #expects *2d data and 1d labels
 
 	data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
