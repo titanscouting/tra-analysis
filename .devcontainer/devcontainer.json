@@ -24,5 +24,5 @@
 		"ms-python.python",
 		"waderyan.gitblame"
 	],
-	"postCreateCommand": "apt install vim -y ; pip install --no-cache-dir -r data-analysis/requirements.txt ; pip install --no-cache-dir -r analysis-master/requirements.txt ; pip install --no-cache-dir pylint ; pip install --no-cache-dir tra-analysis"
+	"postCreateCommand": "apt install vim -y ; pip install -r data-analysis/requirements.txt ; pip install -r analysis-master/requirements.txt ; pip install --no-cache-dir pylint ; pip install --no-cache-dir tra-analysis"
 }
