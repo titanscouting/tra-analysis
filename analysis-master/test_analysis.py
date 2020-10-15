@@ -1,6 +1,15 @@
-from tra_analysis import analysis as an
-from tra_analysis import metrics
-from tra_analysis import fits
+from tra_analysis import Analysis as an
+from tra_analysis import Array
+from tra_analysis import ClassificationMetric
+from tra_analysis import CorrelationTest
+from tra_analysis import Fit
+from tra_analysis import KNN
+from tra_analysis import NaiveBayes
+from tra_analysis import RandomForest
+from tra_analysis import RegressionMetric
+from tra_analysis import Sort
+from tra_analysis import StatisticalTest
+from tra_analysis import SVM
 
 def test_():
 	test_data_linear = [1, 3, 6, 7, 9]
@@ -21,15 +30,15 @@ def test_():
 	assert an.Metric().elo(1500, 1500, [1, 0], 400, 24) == 1512.0
 	assert an.Metric().glicko2(1500, 250, 0.06, [1500, 1400], [250, 240], [1, 0]) == (1478.864307445517, 195.99122679202452, 0.05999602937563585)
 	#assert an.Metric().trueskill([[(25, 8.33), (24, 8.25), (32, 7.5)], [(25, 8.33), (25, 8.33), (21, 6.5)]], [1, 0]) == [(metrics.trueskill.Rating(mu=21.346, sigma=7.875), metrics.trueskill.Rating(mu=20.415, sigma=7.808), metrics.trueskill.Rating(mu=29.037, sigma=7.170)), (metrics.trueskill.Rating(mu=28.654, sigma=7.875), metrics.trueskill.Rating(mu=28.654, sigma=7.875), metrics.trueskill.Rating(mu=23.225, sigma=6.287))]
-	assert all(a == b for a, b in zip(an.Sort().quicksort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(an.Sort().mergesort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(an.Sort().introsort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(an.Sort().heapsort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(an.Sort().insertionsort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(an.Sort().timsort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(an.Sort().selectionsort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(an.Sort().shellsort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(an.Sort().bubblesort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(an.Sort().cyclesort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(an.Sort().cocktailsort(test_data_scrambled), test_data_sorted))
-	assert fits.CircleFit(x=[0,0,-1,1], y=[1, -1, 0, 0]).LSC() == (0.0, 0.0, 1.0, 0.0)
+	assert all(a == b for a, b in zip(Sort.quicksort(test_data_scrambled), test_data_sorted))
+	assert all(a == b for a, b in zip(Sort.mergesort(test_data_scrambled), test_data_sorted))
+	assert all(a == b for a, b in zip(Sort.heapsort(test_data_scrambled), test_data_sorted))
+	assert all(a == b for a, b in zip(Sort.introsort(test_data_scrambled), test_data_sorted))
+	assert all(a == b for a, b in zip(Sort.insertionsort(test_data_scrambled), test_data_sorted))
+	assert all(a == b for a, b in zip(Sort.timsort(test_data_scrambled), test_data_sorted))
+	assert all(a == b for a, b in zip(Sort.selectionsort(test_data_scrambled), test_data_sorted))
+	assert all(a == b for a, b in zip(Sort.shellsort(test_data_scrambled), test_data_sorted))
+	assert all(a == b for a, b in zip(Sort.bubblesort(test_data_scrambled), test_data_sorted))
+	assert all(a == b for a, b in zip(Sort.cyclesort(test_data_scrambled), test_data_sorted))
+	assert all(a == b for a, b in zip(Sort.cocktailsort(test_data_scrambled), test_data_sorted))
+	assert Fit.CircleFit(x=[0,0,-1,1], y=[1, -1, 0, 0]).LSC() == (0.0, 0.0, 1.0, 0.0)

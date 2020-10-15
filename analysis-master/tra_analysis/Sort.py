@@ -19,6 +19,8 @@ __author__ = (
 __all__ = [
 ]
 
+import numpy as np
+
 def quicksort(a):
 
 	def sort(array):
