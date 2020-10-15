@@ -1,5 +1,5 @@
 # Titan Robotics Team 2022: tra_analysis package
-# Written by Arthur Lu, Jacob Levine, and Dev Singh
+# Written by Arthur Lu, Jacob Levine, Dev Singh, and James Pan
 # Notes:
 #    this should be imported as a python package using 'import tra_analysis'
 #    this should be included in the local directory or environment variable
@@ -20,6 +20,7 @@ __author__ = (
 	"Arthur Lu <learthurgo@gmail.com>",
     "Jacob Levine <jlevine@imsa.edu>",
     "Dev Singh <dev@devksingh.com>",
+    "James Pan <zpan@imsa.edu>"
 )
 
 __all__ = [

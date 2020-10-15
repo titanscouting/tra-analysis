@@ -1,5 +1,5 @@
 # Titan Robotics Team 2022: Sort submodule
-# Written by Arthur Lu
+# Written by Arthur Lu and James Pan
 # Notes:
 #    this should be imported as a python module using 'from tra_analysis import Sort'
 # setup:
@@ -14,6 +14,7 @@ __changelog__ = """changelog:
 
 __author__ = (
 	"Arthur Lu <learthurgo@gmail.com>",
+	"James Pan <zpan@imsa.edu>"
 )
 
 __all__ = [
