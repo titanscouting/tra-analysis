@@ -1,5 +1,7 @@
 source ~/.bashrc
 shopt -s expand_aliases
+apt-get install software-properties-common
+apt-add-repository universe
 apt update -y
 apt upgrade -y
 apt-get install python3.7-dev -y
