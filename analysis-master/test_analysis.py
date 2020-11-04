@@ -1,3 +1,5 @@
+import numpy as np
+
 from tra_analysis import Analysis as an
 from tra_analysis import Array
 from tra_analysis import ClassificationMetric
@@ -35,7 +37,6 @@ def test_():
 	assert an.Metric().glicko2(1500, 250, 0.06, [1500, 1400], [250, 240], [1, 0]) == (1478.864307445517, 195.99122679202452, 0.05999602937563585)
 	#assert an.Metric().trueskill([[(25, 8.33), (24, 8.25), (32, 7.5)], [(25, 8.33), (25, 8.33), (21, 6.5)]], [1, 0]) == [(metrics.trueskill.Rating(mu=21.346, sigma=7.875), metrics.trueskill.Rating(mu=20.415, sigma=7.808), metrics.trueskill.Rating(mu=29.037, sigma=7.170)), (metrics.trueskill.Rating(mu=28.654, sigma=7.875), metrics.trueskill.Rating(mu=28.654, sigma=7.875), metrics.trueskill.Rating(mu=23.225, sigma=6.287))]
 
-	#Not working because no *args gives an error
 	assert test_data_array.elementwise_mean() == 5.2
 	assert test_data_array.elementwise_median() == 6.0
 	assert test_data_array.elementwise_stdev() == 2.85657137141714
@@ -44,7 +45,6 @@ def test_():
 	assert test_data_array.elementwise_npmax() == 9
 	assert test_data_array.elementwise_stats() == (5.2, 6.0, 2.85657137141714, 8.16, 1, 9)
 
-	#Not working because CorrelationTest functions still have self in the arguments
 	assert CorrelationTest.anova_oneway(test_data_linear, test_data_linear2) == {"f-value": 0.05825242718446602, "p-value": 0.8153507906592907}
 	assert CorrelationTest.pearson(test_data_linear, test_data_linear2) == {"r-value":0.9153061540753286, "p-value": 0.02920895440940874}
 	assert CorrelationTest.spearman(test_data_linear, test_data_linear2) == {"r-value":0.9746794344808964, "p-value":0.004818230468198537}
