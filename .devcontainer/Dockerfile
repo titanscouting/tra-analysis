@@ -1,7 +1,5 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 WORKDIR /
-RUN echo "alias python=python3.7" >> ~/.bashrc
-RUN echo "alias pip=pip3" >> ~/.bashrc
 RUN apt-get -y update
-RUN apt-get install -y python3.7 python3.7-dev git python3-pip libgl1-mesa-dev build-essential
+RUN apt-get install -y python3 python3-dev git python3-pip python3-kivy python-is-python3 libgl1-mesa-dev build-essential
 RUN pip3 install pymongo pandas numpy scipy scikit-learn matplotlib pylint kivy
