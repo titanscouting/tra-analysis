@@ -11,7 +11,7 @@ __version__ = "2.1.0-alpha.2"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
-    2.1.0-alpha.1:
+    2.1.0-alpha.2:
         - updated SVM import
     2.1.0-alpha.1:
         - moved multiple submodules under analysis to their own modules/files
