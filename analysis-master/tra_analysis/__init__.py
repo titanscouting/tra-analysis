@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "2.1.0-alpha.1"
+__version__ = "2.1.0-alpha.2"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+    2.1.0-alpha.2:
+        - updated SVM import
     2.1.0-alpha.1:
         - moved multiple submodules under analysis to their own modules/files
         - added header, __version__, __changelog__, __author__, __all__ (unpopulated)
@@ -37,4 +39,4 @@ from . import RandomForest
 from .RegressionMetric import RegressionMetric
 from . import Sort
 from . import StatisticalTest
-from .SVM import SVM
+from . import SVM

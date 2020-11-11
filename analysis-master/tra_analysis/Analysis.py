@@ -397,7 +397,7 @@ from .RandomForest_obj import RandomForest
 from .RegressionMetric import RegressionMetric
 from .Sort_obj import Sort
 from .StatisticalTest_obj import StatisticalTest
-from .SVM import SVM
+from . import SVM
 
 class error(ValueError):
 	pass
