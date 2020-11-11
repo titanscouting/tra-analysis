@@ -1,4 +1,5 @@
 import numpy as np
+from sklearn import metrics
 
 from tra_analysis import Analysis as an
 from tra_analysis import Array
@@ -45,6 +46,12 @@ def test_():
 	assert test_data_array.elementwise_npmax() == 9
 	assert test_data_array.elementwise_stats() == (5.2, 6.0, 2.85657137141714, 8.16, 1, 9)
 
+	classif_metric = ClassificationMetric(test_data_linear2, test_data_linear)
+	assert classif_metric[0].all() == metrics.confusion_matrix(test_data_linear, test_data_linear2).all()
+	assert classif_metric[1] == metrics.classification_report(test_data_linear, test_data_linear2)
+
+	assert Fit.CircleFit(x=[0,0,-1,1], y=[1, -1, 0, 0]).LSC() == (0.0, 0.0, 1.0, 0.0)
+
 	assert CorrelationTest.anova_oneway(test_data_linear, test_data_linear2) == {"f-value": 0.05825242718446602, "p-value": 0.8153507906592907}
 	assert CorrelationTest.pearson(test_data_linear, test_data_linear2) == {"r-value":0.9153061540753286, "p-value": 0.02920895440940874}
 	assert CorrelationTest.spearman(test_data_linear, test_data_linear2) == {"r-value":0.9746794344808964, "p-value":0.004818230468198537}
@@ -52,7 +59,7 @@ def test_():
 	assert CorrelationTest.kendall(test_data_linear, test_data_linear2) == {"tau":0.9486832980505137, "p-value":0.022977401503206086}
 	assert CorrelationTest.kendall_weighted(test_data_linear, test_data_linear2) == {"tau":0.9750538072369643, "p-value":np.nan}
 	#assert CorrelationTest.mgc()
-
+	
 	assert all(a == b for a, b in zip(Sort.quicksort(test_data_scrambled), test_data_sorted))
 	assert all(a == b for a, b in zip(Sort.mergesort(test_data_scrambled), test_data_sorted))
 	assert all(a == b for a, b in zip(Sort.heapsort(test_data_scrambled), test_data_sorted))
@@ -65,4 +72,3 @@ def test_():
 	assert all(a == b for a, b in zip(Sort.cyclesort(test_data_scrambled), test_data_sorted))
 	assert all(a == b for a, b in zip(Sort.cocktailsort(test_data_scrambled), test_data_sorted))
 	
-	assert Fit.CircleFit(x=[0,0,-1,1], y=[1, -1, 0, 0]).LSC() == (0.0, 0.0, 1.0, 0.0)
