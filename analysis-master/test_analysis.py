@@ -82,32 +82,32 @@ def test_():
 	
 	assert Fit.CircleFit(x=[0,0,-1,1], y=[1, -1, 0, 0]).LSC() == (0.0, 0.0, 1.0, 0.0)
 
-	#svm(test_data_2D_pairs, test_labels_2D_pairs, validation_data_2D_pairs, validation_labels_2D_pairs)
+	svm(test_data_2D_pairs, test_labels_2D_pairs, validation_data_2D_pairs, validation_labels_2D_pairs)
 
 def svm(data, labels, test_data, test_labels):
 
 	lin_kernel = SVM.PrebuiltKernel.Linear()
-	ply_kernel = SVM.PrebuiltKernel.Polynomial()
-	rbf_kernel = SVM.PrebuiltKernel.RBF()
-	sig_kernel = SVM.PrebuiltKernel.Sigmoid()
+	#ply_kernel = SVM.PrebuiltKernel.Polynomial(3, 0)
+	rbf_kernel = SVM.PrebuiltKernel.RBF('scale')
+	sig_kernel = SVM.PrebuiltKernel.Sigmoid(0)
 
 	lin_kernel = SVM.fit(lin_kernel, data, labels)
-	ply_kernel = SVM.fit(ply_kernel, data, labels)
+	#ply_kernel = SVM.fit(ply_kernel, data, labels)
 	rbf_kernel = SVM.fit(rbf_kernel, data, labels)
 	sig_kernel = SVM.fit(sig_kernel, data, labels)
 
-	for i in range(test_data):
+	for i in range(len(test_data)):
 
-		assert lin_kernel.predict([test_data[i]]).tolist() == [test[i]]
+		assert lin_kernel.predict([test_data[i]]).tolist() == [test_labels[i]]
 
-	for i in range(test_data):
+	#for i in range(len(test_data)):
 
-		assert ply_kernel.predict([test_data[i]]).tolist() == [test[i]]
+	#	assert ply_kernel.predict([test_data[i]]).tolist() == [test_labels[i]]
 
-	for i in range(test_data):
+	for i in range(len(test_data)):
 
-		assert rbf_kernel.predict([test_data[i]]).tolist() == [test[i]]
+		assert rbf_kernel.predict([test_data[i]]).tolist() == [test_labels[i]]
 
-	for i in range(test_data):
+	for i in range(len(test_data)):
 
-		assert sig_kernel.predict([test_data[i]]).tolist() == [test[i]]
+		assert sig_kernel.predict([test_data[i]]).tolist() == [test_labels[i]]
