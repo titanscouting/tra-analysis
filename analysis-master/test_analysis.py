@@ -80,13 +80,11 @@ def test_():
 	assert all(a == b for a, b in zip(Sort.cyclesort(test_data_scrambled), test_data_sorted))
 	assert all(a == b for a, b in zip(Sort.cocktailsort(test_data_scrambled), test_data_sorted))
 	
-<<<<<<< HEAD
-=======
 	assert Fit.CircleFit(x=[0,0,-1,1], y=[1, -1, 0, 0]).LSC() == (0.0, 0.0, 1.0, 0.0)
 
-	SVM(test_data_2D_pairs, test_labels_2D_pairs, validation_data_2D_pairs, validation_labels_2D_pairs)
+	#svm(test_data_2D_pairs, test_labels_2D_pairs, validation_data_2D_pairs, validation_labels_2D_pairs)
 
-def SVM(data, labels, test_data, test_labels):
+def svm(data, labels, test_data, test_labels):
 
 	lin_kernel = SVM.PrebuiltKernel.Linear()
 	ply_kernel = SVM.PrebuiltKernel.Polynomial()
@@ -113,4 +111,3 @@ def SVM(data, labels, test_data, test_labels):
 	for i in range(test_data):
 
 		assert sig_kernel.predict([test_data[i]]).tolist() == [test[i]]
->>>>>>> 1eec0fd94a134af845324cf09bc01042b3e94f9e
