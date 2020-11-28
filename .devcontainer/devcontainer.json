@@ -24,5 +24,5 @@
 		"ms-python.python",
 		"waderyan.gitblame"
 	],
-	"postCreateCommand": "/usr/bin/pip3 install -r /workspaces/red-alliance-analysis/data-analysis/requirements.txt && /usr/bin/pip3 install -r /workspaces/red-alliance-analysis/analysis-master/requirements.txt && /usr/bin/pip3 install --no-cache-dir pylint"
+	"postCreateCommand": "/usr/bin/pip3 install -r /workspaces/red-alliance-analysis/data-analysis/requirements.txt && /usr/bin/pip3 install -r /workspaces/red-alliance-analysis/analysis-master/requirements.txt && /usr/bin/pip3 install --no-cache-dir pylint && pip3 install pytest"
 }
