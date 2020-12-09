@@ -1,26 +1,4 @@
-# Titan Robotics Team 2022: Expression submodule
-# Written by Arthur Lu
-# Notes:
-#    this should be imported as a python module using 'from tra_analysis import equation'
-# 	 adapted from https://github.com/pyparsing/pyparsing/blob/master/examples/fourFn.py
-# setup:
-
 from __future__ import division
-
-__version__ = "0.0.2-alpha"
-
-__changelog__ = """changelog:
-	0.0.2-alpha:
-		- wrote BNF using pyparsing and uses a BNF metasyntax
-		- renamed this submodule parser
-	0.0.1-alpha:
-		- took items from equation.ipynb and ported here
-"""
-
-__author__ = (
-	"Arthur Lu <learthurgo@gmail.com>",
-)
-
 from pyparsing import (Literal, CaselessLiteral, Word, Combine, Group, Optional, ZeroOrMore, Forward, nums, alphas, oneOf)
 from . import py2
 import math
