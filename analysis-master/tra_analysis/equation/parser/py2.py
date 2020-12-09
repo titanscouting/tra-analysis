@@ -10,7 +10,7 @@ __version__ = "1.0.0"
 
 __changelog__ = """changelog:
 	1.0.0:
-        - added cmp function
+	- added cmp function
 """
 
 __author__ = (

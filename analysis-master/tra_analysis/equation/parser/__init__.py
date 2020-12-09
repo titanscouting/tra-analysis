@@ -2,14 +2,13 @@
 # Written by Arthur Lu
 # Notes:
 #    this should be imported as a python module using 'from tra_analysis.Equation import parser'
-# 	 adapted from https://github.com/pyparsing/pyparsing/blob/master/examples/fourFn.py
 # setup:
 
 __version__ = "0.0.4-alpha"
 
 __changelog__ = """changelog:
 	0.0.4-alpha:
-		- moved individual parsers to their own filespar
+		- moved individual parsers to their own files
 	0.0.3-alpha:
 		- readded old regex based parser as RegexInplaceParser
 	0.0.2-alpha:
@@ -25,8 +24,11 @@ __author__ = (
 
 __all__ = {
 	"BNF",
-	"RegexInplaceParser"
+	"RegexInplaceParser",
+	"HybridExpressionParser"
 }
 
 from .BNF import BNF as BNF
 from .RegexInplaceParser import RegexInplaceParser as RegexInplaceParser
+from .Hybrid import HybridExpressionParser
+from .Hybrid_Utils import equation_base, Core
