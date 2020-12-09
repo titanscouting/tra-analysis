@@ -26,7 +26,7 @@ import sklearn
 from sklearn import model_selection, neighbors
 from . import ClassificationMetric, RegressionMetric
 
-def knn_classifier(data, labels, n_neighbors=5, test_size = 0.3, algorithm='auto', leaf_size=30, metric='minkowski', metric_params=None, n_jobs=None, p=2, weights='uniform'): #expects *2d data and 1d labels post-scaling
+def knn_classifier(data, labels, n_neighbors = 5, test_size = 0.3, algorithm='auto', leaf_size=30, metric='minkowski', metric_params=None, n_jobs=None, p=2, weights='uniform'): #expects *2d data and 1d labels post-scaling
 
 	data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
 	model = sklearn.neighbors.KNeighborsClassifier(n_neighbors = n_neighbors, weights = weights, algorithm = algorithm, leaf_size = leaf_size, p = p, metric = metric, metric_params = metric_params, n_jobs = n_jobs)
@@ -35,11 +35,11 @@ def knn_classifier(data, labels, n_neighbors=5, test_size = 0.3, algorithm='auto
 
 	return model, ClassificationMetric(predictions, labels_test)
 
-def knn_regressor(data, outputs, n_neighbors=5, test_size = 0.3, weights = "uniform", algorithm = "auto", leaf_size = 30, p = 2, metric = "minkowski", metric_params = None, n_jobs = None):
+def knn_regressor(data, outputs, n_neighbors = 5, test_size = 0.3, weights = "uniform", algorithm = "auto", leaf_size = 30, p = 2, metric = "minkowski", metric_params = None, n_jobs = None):
 
 	data_train, data_test, outputs_train, outputs_test = sklearn.model_selection.train_test_split(data, outputs, test_size=test_size, random_state=1)
 	model = sklearn.neighbors.KNeighborsRegressor(n_neighbors = n_neighbors, weights = weights, algorithm = algorithm, leaf_size = leaf_size, p = p, metric = metric, metric_params = metric_params, n_jobs = n_jobs)
 	model.fit(data_train, outputs_train)
 	predictions = model.predict(data_test)
 
-	return model, RegressionMetric(predictions, outputs_test)
+	return model, RegressionMetric.RegressionMetric(predictions, outputs_test)

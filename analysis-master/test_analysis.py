@@ -1,4 +1,5 @@
 import numpy as np
+import sklearn
 from sklearn import metrics
 
 from tra_analysis import Analysis as an
@@ -30,6 +31,8 @@ def test_():
 	test_data_sorted = [-98, -97, -96, -95, -94, -92, -90, -83, -79, -78, -77, -76, -74, -68, -67, -66, -65, -64, -63, -61, -55, -52, -48, -46, -45, -44, -43, -42, -40, -39, -38, -34, -32, -30, -27, -26, -25, -24, -21, -20, -18, -17, -14, -13, -12, -11, -3, 0, 1, 6, 7, 8, 9, 10, 12, 13, 16, 17, 19, 20, 21, 23, 24, 27, 30, 31, 34, 36, 37, 39, 40, 41, 43, 47, 48, 49, 53, 54, 55, 59, 60, 64, 65, 66, 69, 72, 73, 77, 79, 80, 82, 83, 84, 85, 87, 91, 93, 94, 97, 98]
 	
 	test_data_2D_pairs = np.array([[-1, -1], [-2, -1], [1, 1], [2, 1]])
+	test_data_2D_positive = np.array([[23, 51], [21, 32], [15, 25], [17, 31]])
+	test_output = np.array([1, 3, 4, 5])
 	test_labels_2D_pairs = np.array([1, 1, 2, 2])
 	validation_data_2D_pairs = np.array([[-0.8, -1], [0.8, 1.2]])
 	validation_labels_2D_pairs = np.array([1, 2])
@@ -58,16 +61,37 @@ def test_():
 	assert classif_metric[0].all() == metrics.confusion_matrix(test_data_linear, test_data_linear2).all()
 	assert classif_metric[1] == metrics.classification_report(test_data_linear, test_data_linear2)
 
-	assert Fit.CircleFit(x=[0,0,-1,1], y=[1, -1, 0, 0]).LSC() == (0.0, 0.0, 1.0, 0.0)
-
 	assert CorrelationTest.anova_oneway(test_data_linear, test_data_linear2) == {"f-value": 0.05825242718446602, "p-value": 0.8153507906592907}
-	assert CorrelationTest.pearson(test_data_linear, test_data_linear2) == {"r-value":0.9153061540753286, "p-value": 0.02920895440940874}
+	assert CorrelationTest.pearson(test_data_linear, test_data_linear2) == {'r-value': 0.9153061540753287, 'p-value': 0.02920895440940868}
 	assert CorrelationTest.spearman(test_data_linear, test_data_linear2) == {"r-value":0.9746794344808964, "p-value":0.004818230468198537}
-	assert CorrelationTest.point_biserial(test_data_linear, test_data_linear2) == {"r-value":0.9153061540753286, "p-value":0.02920895440940874}
+	assert CorrelationTest.point_biserial(test_data_linear, test_data_linear2) == {'r-value': 0.9153061540753287, 'p-value': 0.02920895440940868}
 	assert CorrelationTest.kendall(test_data_linear, test_data_linear2) == {"tau":0.9486832980505137, "p-value":0.022977401503206086}
 	assert CorrelationTest.kendall_weighted(test_data_linear, test_data_linear2) == {"tau":0.9750538072369643, "p-value":np.nan}
 	#assert CorrelationTest.mgc()
-	
+
+	assert Fit.CircleFit(x=[0,0,-1,1], y=[1, -1, 0, 0]).LSC() == (0.0, 0.0, 1.0, 0.0)
+
+	model, metric = KNN.knn_classifier(test_data_2D_pairs, test_labels_2D_pairs, 2)
+	assert isinstance(model, sklearn.neighbors.KNeighborsClassifier)
+	assert np.array([[0,0], [2,0]]).all() == metric[0].all()
+	assert '              precision    recall  f1-score   support\n\n           1       0.00      0.00      0.00       0.0\n           2       0.00      0.00      0.00       2.0\n\n    accuracy                           0.00       2.0\n   macro avg       0.00      0.00      0.00       2.0\nweighted avg       0.00      0.00      0.00       2.0\n' == metric[1]
+	model, metric = KNN.knn_regressor(test_data_2D_pairs, test_output, 2)
+	assert isinstance(model, sklearn.neighbors.KNeighborsRegressor)
+	assert (-25.0, 6.5, 2.5495097567963922) == metric
+
+	model, metric = NaiveBayes.gaussian(test_data_2D_pairs, test_labels_2D_pairs)
+	assert isinstance(model, sklearn.naive_bayes.GaussianNB)
+	assert metric[0].all() == np.array([[0, 0], [2, 0]]).all()
+	model, metric = NaiveBayes.multinomial(test_data_2D_positive, test_labels_2D_pairs)
+	assert isinstance(model, sklearn.naive_bayes.MultinomialNB)
+	assert metric[0].all() == np.array([[0, 0], [2, 0]]).all()
+	model, metric = NaiveBayes.bernoulli(test_data_2D_pairs, test_labels_2D_pairs)
+	assert isinstance(model, sklearn.naive_bayes.BernoulliNB)
+	assert metric[0].all() == np.array([[0, 0], [2, 0]]).all()
+	model, metric = NaiveBayes.complement(test_data_2D_pairs, test_labels_2D_pairs)
+	assert isinstance(model, sklearn.naive_bayes.ComplementNB)
+	assert metric[0].all() == np.array([[0, 0], [2, 0]]).all()
+
 	assert all(a == b for a, b in zip(Sort.quicksort(test_data_scrambled), test_data_sorted))
 	assert all(a == b for a, b in zip(Sort.mergesort(test_data_scrambled), test_data_sorted))
 	assert all(a == b for a, b in zip(Sort.heapsort(test_data_scrambled), test_data_sorted))
