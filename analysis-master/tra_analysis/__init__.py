@@ -29,6 +29,7 @@ from . import Analysis
 from .Array import Array
 from .ClassificationMetric import ClassificationMetric
 from . import CorrelationTest
+from . import Equation
 from . import Fit
 from . import KNN
 from . import NaiveBayes
