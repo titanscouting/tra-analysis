@@ -17,6 +17,39 @@ __author__ = (
 )
 
 __all__ = [
+	'ttest_onesample',
+	'ttest_independent',
+	'ttest_statistic',
+	'ttest_related',
+	'ks_fitness',
+	'chisquare',
+	'powerdivergence'
+	'ks_twosample',
+	'es_twosample',
+	'mw_rank',
+	'mw_tiecorrection',
+	'rankdata',
+	'wilcoxon_ranksum',
+	'wilcoxon_signedrank,
+	'kw_htest',
+	'friedman_chisquare',
+	'bm_wtest',
+	'combine_pvalues',
+	'jb_fitness',
+	'ab_equality',
+	'bartlett_variance',
+	'levene_variance',
+	'sw_normality',
+	'shapiro',
+	'ad_onesample',
+	'ad_ksample',
+	'binomial',
+	'fk_variance',
+	'mood_mediantest',
+	'mood_equalscale',
+	'skewtest',
+	'kurtosistest',
+	'normaltest'
 ]
 
 import scipy

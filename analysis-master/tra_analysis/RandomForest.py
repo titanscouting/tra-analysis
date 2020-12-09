@@ -39,4 +39,4 @@ def random_forest_regressor(data, outputs, test_size, n_estimators, criterion="m
 	kernel.fit(data_train, outputs_train)
 	predictions = kernel.predict(data_test)
 
-	return kernel, RegressionMetric(predictions, outputs_test)
+	return kernel, RegressionMetric.RegressionMetric(predictions, outputs_test)

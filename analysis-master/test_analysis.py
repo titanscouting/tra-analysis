@@ -88,9 +88,18 @@ def test_():
 	model, metric = NaiveBayes.bernoulli(test_data_2D_pairs, test_labels_2D_pairs)
 	assert isinstance(model, sklearn.naive_bayes.BernoulliNB)
 	assert metric[0].all() == np.array([[0, 0], [2, 0]]).all()
-	model, metric = NaiveBayes.complement(test_data_2D_pairs, test_labels_2D_pairs)
+	model, metric = NaiveBayes.complement(test_data_2D_positive, test_labels_2D_pairs)
 	assert isinstance(model, sklearn.naive_bayes.ComplementNB)
 	assert metric[0].all() == np.array([[0, 0], [2, 0]]).all()
+
+	model, metric = RandomForest.random_forest_classifier(test_data_2D_pairs, test_labels_2D_pairs, 0.3, 2)
+	assert isinstance(model, sklearn.ensemble.RandomForestClassifier)
+	assert metric[0].all() == np.array([[0, 0], [2, 0]]).all()
+	model, metric = RandomForest.random_forest_regressor(test_data_2D_pairs, test_labels_2D_pairs, 0.3, 2)
+	assert isinstance(model, sklearn.ensemble.RandomForestRegressor)
+	assert metric == (0.0, 1.0, 1.0)
+
+	assert RegressionMetric.RegressionMetric(test_data_linear, test_data_linear2)== (0.7705314009661837, 3.8, 1.9493588689617927)
 
 	assert all(a == b for a, b in zip(Sort.quicksort(test_data_scrambled), test_data_sorted))
 	assert all(a == b for a, b in zip(Sort.mergesort(test_data_scrambled), test_data_sorted))
