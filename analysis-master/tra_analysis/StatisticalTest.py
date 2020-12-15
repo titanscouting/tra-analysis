@@ -4,9 +4,11 @@
 #    this should be imported as a python module using 'from tra_analysis import StatisticalTest'
 # setup:
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 __changelog__ = """changelog:
+	1.0.1:
+		- fixed typo in __all__
 	1.0.0:
 		- ported analysis.StatisticalTest() here
 		- removed classness
@@ -30,7 +32,7 @@ __all__ = [
 	'mw_tiecorrection',
 	'rankdata',
 	'wilcoxon_ranksum',
-	'wilcoxon_signedrank,
+	'wilcoxon_signedrank',
 	'kw_htest',
 	'friedman_chisquare',
 	'bm_wtest',
