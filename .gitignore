@@ -39,3 +39,6 @@ analysis-master/tra_analysis/.ipynb_checkpoints
 analysis-master/tra_analysis/metrics/__pycache__
 analysis-master/dist
 data-analysis/config/
+analysis-master/tra_analysis/equation/__pycache__/*
+analysis-master/tra_analysis/equation/parser/__pycache__/*
+analysis-master/tra_analysis/equation/parser/Hybrid_Utils/__pycache__/*

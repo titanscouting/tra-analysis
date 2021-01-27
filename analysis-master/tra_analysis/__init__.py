@@ -30,10 +30,11 @@ __author__ = (
 __all__ = [
 ]
 
-from . import Analysis
+from . import Analysis as Analysis
 from .Array import Array
 from .ClassificationMetric import ClassificationMetric
 from . import CorrelationTest
+from .equation import Expression
 from . import Fit
 from . import KNN
 from . import NaiveBayes

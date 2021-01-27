@@ -115,6 +115,7 @@ def test_():
 	assert Fit.CircleFit(x=[0,0,-1,1], y=[1, -1, 0, 0]).LSC() == (0.0, 0.0, 1.0, 0.0)
 
 	svm(test_data_2D_pairs, test_labels_2D_pairs, validation_data_2D_pairs, validation_labels_2D_pairs)
+  test_equation()
 
 def svm(data, labels, test_data, test_labels):
 
@@ -143,3 +144,50 @@ def svm(data, labels, test_data, test_labels):
 	for i in range(len(test_data)):
 
 		assert sig_kernel.predict([test_data[i]]).tolist() == [test_labels[i]]
+
+    test_equation()
+
+def test_equation():
+
+	parser = BNF()
+
+	assert parser.eval("9") == 9.0
+	assert parser.eval("-9") == -9.0
+	assert parser.eval("--9") == 9.0
+	assert parser.eval("-E") == -2.718281828459045
+	assert parser.eval("9 + 3 + 6") == 18.0
+	assert parser.eval("9 + 3 / 11") == 9.272727272727273
+	assert parser.eval("(9 + 3)") == 12.0
+	assert parser.eval("(9+3) / 11") == 1.0909090909090908
+	assert parser.eval("9 - 12 - 6") == -9.0
+	assert parser.eval("9 - (12 - 6)") == 3.0
+	assert parser.eval("2*3.14159") == 6.28318
+	assert parser.eval("3.1415926535*3.1415926535 / 10") == 0.9869604400525172
+	assert parser.eval("PI * PI / 10") == 0.9869604401089358
+	assert parser.eval("PI*PI/10") == 0.9869604401089358
+	assert parser.eval("PI^2") == 9.869604401089358
+	assert parser.eval("round(PI^2)") == 10
+	assert parser.eval("6.02E23 * 8.048") == 4.844896e+24
+	assert parser.eval("e / 3") == 0.9060939428196817
+	assert parser.eval("sin(PI/2)") == 1.0
+	assert parser.eval("10+sin(PI/4)^2") == 10.5
+	assert parser.eval("trunc(E)") == 2
+	assert parser.eval("trunc(-E)") == -2
+	assert parser.eval("round(E)") == 3
+	assert parser.eval("round(-E)") == -3
+	assert parser.eval("E^PI") == 23.140692632779263
+	assert parser.eval("exp(0)") == 1.0
+	assert parser.eval("exp(1)") == 2.718281828459045
+	assert parser.eval("2^3^2") == 512.0
+	assert parser.eval("(2^3)^2") == 64.0
+	assert parser.eval("2^3+2") == 10.0
+	assert parser.eval("2^3+5") == 13.0
+	assert parser.eval("2^9") == 512.0
+	assert parser.eval("sgn(-2)") == -1
+	assert parser.eval("sgn(0)") == 0
+	assert parser.eval("sgn(0.1)") == 1
+	assert parser.eval("sgn(cos(PI/4))") == 1
+	assert parser.eval("sgn(cos(PI/2))") == 0
+	assert parser.eval("sgn(cos(PI*3/4))") == -1
+	assert parser.eval("+(sgn(cos(PI/4)))") == 1
+	assert parser.eval("-(sgn(cos(PI/4)))") == -1
