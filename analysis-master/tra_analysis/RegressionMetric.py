@@ -16,8 +16,10 @@ __author__ = (
 )
 
 __all__ = [
+	'RegressionMetric'
 ]
 
+import numpy as np
 import sklearn
 from sklearn import metrics
 
@@ -37,4 +39,4 @@ class RegressionMetric():
 
 	def rms(self, predictions, targets):
 
-		return math.sqrt(sklearn.metrics.mean_squared_error(targets, predictions))
+		return np.sqrt(sklearn.metrics.mean_squared_error(targets, predictions))
