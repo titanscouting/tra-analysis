@@ -15,6 +15,8 @@ from tra_analysis import Sort
 from tra_analysis import StatisticalTest
 from tra_analysis import SVM
 
+from tra_analysis.equation.parser import BNF
+
 def test_():
 
 	test_data_linear = [1, 3, 6, 7, 9]
@@ -115,7 +117,7 @@ def test_():
 	assert Fit.CircleFit(x=[0,0,-1,1], y=[1, -1, 0, 0]).LSC() == (0.0, 0.0, 1.0, 0.0)
 
 	svm(test_data_2D_pairs, test_labels_2D_pairs, validation_data_2D_pairs, validation_labels_2D_pairs)
-  test_equation()
+	test_equation()
 
 def svm(data, labels, test_data, test_labels):
 
@@ -144,8 +146,6 @@ def svm(data, labels, test_data, test_labels):
 	for i in range(len(test_data)):
 
 		assert sig_kernel.predict([test_data[i]]).tolist() == [test_labels[i]]
-
-    test_equation()
 
 def test_equation():
 
