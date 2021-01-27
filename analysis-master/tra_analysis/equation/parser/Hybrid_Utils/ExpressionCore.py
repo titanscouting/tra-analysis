@@ -157,56 +157,56 @@ class Core():
 	unary_ops = {}
 	ops = {}
 	functions = {}
-	smatch = re.compile("\s*,")
-	vmatch = re.compile("\s*"
+	smatch = re.compile(r"\s*,")
+	vmatch = re.compile(r"\s*"
 						"(?:"
 							"(?P<oct>"
 								"(?P<octsign>[+-]?)"
-								"\s*0o"
+								r"\s*0o"
 								"(?P<octvalue>[0-7]+)"
 							")|(?P<hex>"
 								"(?P<hexsign>[+-]?)"
-								"\s*0x"
+								r"\s*0x"
 								"(?P<hexvalue>[0-9a-fA-F]+)"
 							")|(?P<bin>"
 								"(?P<binsign>[+-]?)"
-								"\s*0b"
+								r"\s*0b"
 								"(?P<binvalue>[01]+)"
 							")|(?P<dec>"
 								"(?P<rsign>[+-]?)"
-								"\s*"
-								"(?P<rvalue>(?:\d+\.\d+|\d+\.|\.\d+|\d+))"
+								r"\s*"
+								r"(?P<rvalue>(?:\d+\.\d+|\d+\.|\.\d+|\d+))"
 								"(?:"
 									"[Ee]"
-									"(?P<rexpoent>[+-]?\d+)"
+									r"(?P<rexpoent>[+-]?\d+)"
 								")?"
 								"(?:"
-									"\s*"
-									"(?P<sep>(?(rvalue)\+|))?"
-									"\s*"
+									r"\s*"
+									r"(?P<sep>(?(rvalue)\+|))?"
+									r"\s*"
 									"(?P<isign>(?(rvalue)(?(sep)[+-]?|[+-])|[+-]?)?)"
-									"\s*"
-									"(?P<ivalue>(?:\d+\.\d+|\d+\.|\.\d+|\d+))"
+									r"\s*"
+									r"(?P<ivalue>(?:\d+\.\d+|\d+\.|\.\d+|\d+))"
 									"(?:"
 										"[Ee]"
-										"(?P<iexpoent>[+-]?\d+)"
+										r"(?P<iexpoent>[+-]?\d+)"
 									")?"
 									"[ij]"
 								")?"
 							")"
 						")")
-	nmatch = re.compile("\s*([a-zA-Z_][a-zA-Z0-9_]*)")
-	gsmatch = re.compile('\s*(\()')
-	gematch = re.compile('\s*(\))')
+	nmatch = re.compile(r"\s*([a-zA-Z_][a-zA-Z0-9_]*)")
+	gsmatch = re.compile(r'\s*(\()')
+	gematch = re.compile(r'\s*(\))')
 
 	def recalculateFMatch(self):
 		
 		fks = sorted(self.functions.keys(), key=len, reverse=True)
 		oks = sorted(self.ops.keys(), key=len, reverse=True)
 		uks = sorted(self.unary_ops.keys(), key=len, reverse=True)
-		self.fmatch = re.compile('\s*(' + '|'.join(map(re.escape,fks)) + ')')
-		self.omatch = re.compile('\s*(' + '|'.join(map(re.escape,oks)) + ')')
-		self.umatch = re.compile('\s*(' + '|'.join(map(re.escape,uks)) + ')')
+		self.fmatch = re.compile(r'\s*(' + '|'.join(map(re.escape,fks)) + ')')
+		self.omatch = re.compile(r'\s*(' + '|'.join(map(re.escape,oks)) + ')')
+		self.umatch = re.compile(r'\s*(' + '|'.join(map(re.escape,uks)) + ')')
 
 	def addFn(self,id,str,latex,args,func):
 		self.functions[id] = {
