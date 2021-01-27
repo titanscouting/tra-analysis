@@ -30,7 +30,7 @@ __all__ = [
 	'mw_tiecorrection',
 	'rankdata',
 	'wilcoxon_ranksum',
-	'wilcoxon_signedrank,
+	'wilcoxon_signedrank',
 	'kw_htest',
 	'friedman_chisquare',
 	'bm_wtest',

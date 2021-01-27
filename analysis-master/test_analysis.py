@@ -61,12 +61,12 @@ def test_():
 	assert classif_metric[0].all() == metrics.confusion_matrix(test_data_linear, test_data_linear2).all()
 	assert classif_metric[1] == metrics.classification_report(test_data_linear, test_data_linear2)
 
-	assert CorrelationTest.anova_oneway(test_data_linear, test_data_linear2) == {"f-value": 0.05825242718446602, "p-value": 0.8153507906592907}
-	assert CorrelationTest.pearson(test_data_linear, test_data_linear2) == {'r-value': 0.9153061540753287, 'p-value': 0.02920895440940868}
-	assert CorrelationTest.spearman(test_data_linear, test_data_linear2) == {"r-value":0.9746794344808964, "p-value":0.004818230468198537}
-	assert CorrelationTest.point_biserial(test_data_linear, test_data_linear2) == {'r-value': 0.9153061540753287, 'p-value': 0.02920895440940868}
-	assert CorrelationTest.kendall(test_data_linear, test_data_linear2) == {"tau":0.9486832980505137, "p-value":0.022977401503206086}
-	assert CorrelationTest.kendall_weighted(test_data_linear, test_data_linear2) == {"tau":0.9750538072369643, "p-value":np.nan}
+	assert all(np.isclose(list(CorrelationTest.anova_oneway(test_data_linear, test_data_linear2).values()), [0.05825242718446602, 0.8153507906592907], rtol=1e-10))
+	assert all(np.isclose(list(CorrelationTest.pearson(test_data_linear, test_data_linear2).values()),  [0.9153061540753287, 0.02920895440940868], rtol=1e-10))
+	assert all(np.isclose(list(CorrelationTest.spearman(test_data_linear, test_data_linear2).values()), [0.9746794344808964, 0.004818230468198537], rtol=1e-10))
+	assert all(np.isclose(list(CorrelationTest.point_biserial(test_data_linear, test_data_linear2).values()), [0.9153061540753287, 0.02920895440940868], rtol=1e-10))
+	assert all(np.isclose(list(CorrelationTest.kendall(test_data_linear, test_data_linear2).values()), [0.9486832980505137, 0.022977401503206086], rtol=1e-10))
+	assert all(np.isclose(list(CorrelationTest.kendall_weighted(test_data_linear, test_data_linear2).values()), [0.9750538072369643, np.nan], rtol=1e-10, equal_nan=True))
 	#assert CorrelationTest.mgc()
 
 	assert Fit.CircleFit(x=[0,0,-1,1], y=[1, -1, 0, 0]).LSC() == (0.0, 0.0, 1.0, 0.0)
@@ -99,7 +99,7 @@ def test_():
 	assert isinstance(model, sklearn.ensemble.RandomForestRegressor)
 	assert metric == (0.0, 1.0, 1.0)
 
-	assert RegressionMetric.RegressionMetric(test_data_linear, test_data_linear2)== (0.7705314009661837, 3.8, 1.9493588689617927)
+	assert RegressionMetric(test_data_linear, test_data_linear2)== (0.7705314009661837, 3.8, 1.9493588689617927)
 
 	assert all(a == b for a, b in zip(Sort.quicksort(test_data_scrambled), test_data_sorted))
 	assert all(a == b for a, b in zip(Sort.mergesort(test_data_scrambled), test_data_sorted))
