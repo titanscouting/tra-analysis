@@ -27,55 +27,37 @@ class Array(): # tests on nd arrays independent of basic_stats
 
 		return str(self.array)
 	
-	def elementwise_mean(self, *args, axis = 0): # expects arrays that are size normalized
-		if len(*args) == 0:
-			return np.mean(self.array, axis = axis)
-		else:
-			return np.mean([*args], axis = axis)
+	def elementwise_mean(self, axis = 0): # expects arrays that are size normalized
 
-	def elementwise_median(self, *args, axis = 0):
+		return np.mean(self.array, axis = axis)
 
-		if len(*args) == 0:
-			return np.median(self.array, axis = axis)
-		else:
-			return np.median([*args], axis = axis)
+	def elementwise_median(self, axis = 0):
 
-	def elementwise_stdev(self, *args, axis = 0):
+		return np.median(self.array, axis = axis)
 
-		if len(*args) == 0:
-			return np.std(self.array, axis = axis)
-		else:
-			return np.std([*args], axis = axis)
+	def elementwise_stdev(self, axis = 0):
 
-	def elementwise_variance(self, *args, axis = 0):
+		return np.std(self.array, axis = axis)
 
-		if len(*args) == 0:
-			return np.var(self.array, axis = axis)
-		else:
-			return np.var([*args], axis = axis)
+	def elementwise_variance(self, axis = 0):
 
-	def elementwise_npmin(self, *args, axis = 0):
+		return np.var(self.array, axis = axis)
 
-		if len(*args) == 0:
-			return np.amin(self.array, axis = axis)
-		else:
-			return np.amin([*args], axis = axis)
+	def elementwise_npmin(self, axis = 0):
+		return np.amin(self.array, axis = axis)
 
-	def elementwise_npmax(self, *args, axis = 0):
 
-		if len(*args) == 0:
-			return np.amax(self.array, axis = axis)
-		else:
-			return np.amax([*args], axis = axis)
+	def elementwise_npmax(self, axis = 0):
+		return np.amax(self.array, axis = axis)
 
-	def elementwise_stats(self, *args, axis = 0):
+	def elementwise_stats(self, axis = 0):
 
-		_mean = self.elementwise_mean(*args, axis = axis)
-		_median = self.elementwise_median(*args, axis = axis)
-		_stdev = self.elementwise_stdev(*args, axis = axis)
-		_variance = self.elementwise_variance(*args, axis = axis)
-		_min = self.elementwise_npmin(*args, axis = axis)
-		_max = self.elementwise_npmax(*args, axis = axis)
+		_mean = self.elementwise_mean(axis = axis)
+		_median = self.elementwise_median(axis = axis)
+		_stdev = self.elementwise_stdev(axis = axis)
+		_variance = self.elementwise_variance(axis = axis)
+		_min = self.elementwise_npmin(axis = axis)
+		_max = self.elementwise_npmax(axis = axis)
 
 		return _mean, _median, _stdev, _variance, _min, _max
 
