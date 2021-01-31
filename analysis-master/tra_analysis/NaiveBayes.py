@@ -9,6 +9,7 @@ __version__ = "1.0.0"
 __changelog__ = """changelog:
 	1.0.0:
 		- ported analysis.NaiveBayes() here
+		- removed classness
 """
 
 __author__ = (
