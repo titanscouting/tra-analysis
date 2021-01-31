@@ -7,7 +7,7 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "3.0.0-alpha.4"
+__version__ = "3.0.0-rc1"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
