@@ -4,9 +4,11 @@
 #    this should be imported as a python module using 'from tra_analysis import Array'
 # setup:
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 __changelog__ = """changelog:
+	1.0.1:
+		- removed search and __search functions
 	1.0.0:
 		- ported analysis.Array() here
 """
@@ -119,7 +121,6 @@ class Array(): # tests on nd arrays independent of basic_stats
 		right = self.sort(right)
 		return self.__merge(left, right)
 
-
 	def __merge(self, left, right):
 		sorted_list = []
 		left = left[:]
@@ -135,18 +136,3 @@ class Array(): # tests on nd arrays independent of basic_stats
 			elif len(right) > 0:
 				sorted_list.append(right.pop(0))
 		return sorted_list
-
-	def search(self, arr, x):
-		return self.__search(arr, 0, len(arr) - 1, x)
-
-	def __search(self, arr, low, high, x): 
-		if high >= low: 
-			mid = (high + low) // 2
-			if arr[mid] == x: 
-				return mid 
-			elif arr[mid] > x: 
-				return binary_search(arr, low, mid - 1, x) 
-			else: 
-				return binary_search(arr, mid + 1, high, x) 
-		else:
-			return -1
