@@ -67,7 +67,7 @@ class Array(): # tests on nd arrays independent of basic_stats
 
 	def __setitem__(self, key, value):
 
-		self.array[key] == value
+		self.array[key] = value
 
 	def normalize(self, array):
 
