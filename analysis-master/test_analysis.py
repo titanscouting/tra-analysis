@@ -59,6 +59,14 @@ def test_():
 	assert test_data_array.elementwise_npmax() == 9
 	assert test_data_array.elementwise_stats() == (5.2, 6.0, 2.85657137141714, 8.16, 1, 9)
 
+	for i in range(len(test_data_array)):
+		assert test_data_array[i] == test_data_linear[i]
+	
+	test_data_array[0] = 100
+	expected = [100, 3, 6, 7, 9]
+	for i in range(len(test_data_array)):
+		assert test_data_array[i] == expected[i]
+
 	classif_metric = ClassificationMetric(test_data_linear2, test_data_linear)
 	assert classif_metric[0].all() == metrics.confusion_matrix(test_data_linear, test_data_linear2).all()
 	assert classif_metric[1] == metrics.classification_report(test_data_linear, test_data_linear2)

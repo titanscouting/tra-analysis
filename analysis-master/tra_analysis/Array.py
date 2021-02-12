@@ -4,9 +4,11 @@
 #    this should be imported as a python module using 'from tra_analysis import Array'
 # setup:
 
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 
 __changelog__ = """changelog:
+	1.0.2:
+		- fixed several implementation bugs with magic methods
 	1.0.1:
 		- removed search and __search functions
 	1.0.0:
@@ -18,6 +20,7 @@ __author__ = (
 )
 
 import numpy as np
+import warnings
 
 class Array(): # tests on nd arrays independent of basic_stats
 
@@ -26,6 +29,10 @@ class Array(): # tests on nd arrays independent of basic_stats
 		self.array = np.array(narray)
 
 	def __str__(self):
+
+		return str(self.array)
+
+	def __repr__(self):
 
 		return str(self.array)
 	
@@ -71,43 +78,56 @@ class Array(): # tests on nd arrays independent of basic_stats
 
 		self.array[key] = value
 
-	def normalize(self, array):
+	def __len__(self):
 
-		a = np.atleast_1d(np.linalg.norm(array))
+		return len(self.array)
+
+	def normalize(self):
+
+		a = np.atleast_1d(np.linalg.norm(self.array))
 		a[a==0] = 1
-		return array / np.expand_dims(a, -1)
+		return Array(self.array / np.expand_dims(a, -1))
 
 	def __add__(self, other):
 
-		return self.array + other.array
+		return Array(self.array + other.array)
 
 	def __sub__(self, other):
 
-		return self.array - other.array
+		return Array(self.array - other.array)
 
 	def __neg__(self):
 		
-		return -self.array
+		return Array(-self.array)
 
 	def __abs__(self):
 
-		return abs(self.array)
+		return Array(abs(self.array))
 
 	def __invert__(self):
 
-		return 1/self.array
+		return Array(1/self.array)
 
 	def __mul__(self, other):
 
-		return self.array.dot(other.array)
+		if(isinstance(other, Array)):
+			return Array(self.array.dot(other.array))
+		elif(isinstance(other, int)):
+			return Array(other * self.array)
+		else:
+			raise Exception("unsupported multiplication between Array and " + str(type(other)))
 
 	def __rmul__(self, other):
 
-		return self.array.dot(other.array)
+		return self.__mul__(other)
 
 	def cross(self, other):
 
 		return np.cross(self.array, other.array)
+
+	def transpose(self):
+
+		return Array(np.transpose(self.array))
 
 	def sort(self, array): # depreciated
 		warnings.warn("Array.sort has been depreciated in favor of Sort")
