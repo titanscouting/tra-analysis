@@ -7,13 +7,17 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "3.0.0-rc1"
+__version__ = "3.0.0-rc2"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	3.0.0-rc2:
+		- fixed __changelog__
+		- fixed __all__ of Analysis, Array, ClassificationMetric, CorrelationTest, RandomForest, Sort, SVM
+		- populated __all__
 	3.0.0-alpha.4:
 		- changed version to 3 because of significant changes
-		- added backwards compatibility inport of analysis
+		- added backwards compatibility import of analysis
 	2.1.0-alpha.3:
 		- fixed indentation in meta data
 	2.1.0-alpha.2:
@@ -31,6 +35,19 @@ __author__ = (
 )
 
 __all__ = [
+	"Analysis",
+	"Array",
+	"ClassificationMetric",
+	"CorrelationTest",
+	"Expression",
+	"Fit",
+	"KNN",
+	"NaiveBayes",
+	"RandomForest",
+	"RegressionMetric",
+	"Sort",
+	"StatisticalTest",
+	"SVM"
 ]
 
 from . import Analysis as Analysis
