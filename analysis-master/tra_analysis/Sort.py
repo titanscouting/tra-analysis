@@ -4,9 +4,11 @@
 #    this should be imported as a python module using 'from tra_analysis import Sort'
 # setup:
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 __changelog__ = """changelog:
+	1.0.1:
+		- fixed __all__
 	1.0.0:
 		- ported analysis.Sort() here
 		- removed classness
@@ -18,6 +20,17 @@ __author__ = (
 )
 
 __all__ = [
+	"quicksort",
+	"mergesort",
+	"introsort",
+	"heapsort",
+	"insertionsort",
+	"timsort",
+	"selectionsort",
+	"shellsort",
+	"bubblesort",
+	"cyclesort",
+	"cocktailsort",
 ]
 
 import numpy as np

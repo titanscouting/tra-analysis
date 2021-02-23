@@ -4,9 +4,11 @@
 #    this should be imported as a python module using 'from tra_analysis import RandomForest'
 # setup:
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 __changelog__ = """changelog:
+	1.0.1:
+		- fixed __all__
 	1.0.0:
 		- ported analysis.RandomFores() here
 		- removed classness
@@ -17,6 +19,8 @@ __author__ = (
 )
 
 __all__ = [
+	"random_forest_classifier",
+	"random_forest_regressor",
 ]
 
 import sklearn

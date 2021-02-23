@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "3.0.1"
+__version__ = "3.0.2"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	3.0.2:
+		- fixed __all__
 	3.0.1:
 		- removed numba dependency and calls
 	3.0.0:
@@ -355,18 +357,9 @@ __all__ = [
 	'histo_analysis',
 	'regression',
 	'Metric',
-	'RegressionMetric',
-	'ClassificationMetric',
 	'kmeans',
 	'pca',
 	'decisiontree',
-	'KNN',
-	'NaiveBayes',
-	'SVM',
-	'RandomForrest',
-	'CorrelationTest',
-	'StatisticalTest',
-	'Array',
 	# all statistics functions left out due to integration in other functions
 ]
 

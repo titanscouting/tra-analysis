@@ -4,9 +4,11 @@
 #    this should be imported as a python module using 'from tra_analysis import SVM'
 # setup:
 
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 
 __changelog__ = """changelog:
+	1.0.2: 
+		- fixed __all__
 	1.0.1:
 		- removed unessasary self calls
 		- removed classness
@@ -19,6 +21,12 @@ __author__ = (
 )
 
 __all__ = [
+	"CustomKernel",
+	"StandardKernel",
+	"PrebuiltKernel",
+	"fit",
+	"eval_classification",
+	"eval_regression",
 ]
 
 import sklearn

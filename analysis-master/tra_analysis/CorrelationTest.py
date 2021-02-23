@@ -4,9 +4,11 @@
 #    this should be imported as a python module using 'from tra_analysis import CorrelationTest'
 # setup:
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 __changelog__ = """changelog:
+	1.0.1:
+		- fixed __all__
 	1.0.0:
 		- ported analysis.CorrelationTest() here
 		- removed classness
@@ -17,6 +19,13 @@ __author__ = (
 )
 
 __all__ = [
+	"anova_oneway",
+	"pearson",
+	"spearman",
+	"point_biserial",
+	"kendall",
+	"kendall_weighted",
+	"mgc",
 ]
 
 import scipy

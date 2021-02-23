@@ -4,9 +4,11 @@
 #    this should be imported as a python module using 'from tra_analysis import Array'
 # setup:
 
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 
 __changelog__ = """changelog:
+	1.0.3:
+		- fixed __all__
 	1.0.2:
 		- fixed several implementation bugs with magic methods
 	1.0.1:
@@ -18,6 +20,10 @@ __changelog__ = """changelog:
 __author__ = (
 	"Arthur Lu <learthurgo@gmail.com>",
 )
+
+__all__ = [
+	"Array",
+]
 
 import numpy as np
 import warnings
