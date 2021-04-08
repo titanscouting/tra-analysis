@@ -54,6 +54,7 @@ __all__ = [
 	'normaltest'
 ]
 
+import numpy as np
 import scipy
 from scipy import stats
 
@@ -220,3 +221,21 @@ def normaltest(a, axis = 0, nan_policy = 'propogate'):
 
 	results = scipy.stats.normaltest(a, axis = axis, nan_policy = nan_policy)
 	return {"z-score": results[0], "p-value": results[1]}
+
+def tukey_pairwise_comparison(a, b):
+	
+	a_mean = sum(a)/len(a)
+	b_mean = sum(b)/len(b)
+	
+	MS_within = (sum([x ** 2 for x in a]) + sum([y ** 2 for y in b])) / (len(a) + len(b) - 2)
+	S2 = (sum([(x-a_mean)**2 for x in a]) + sum([(y-b_mean)**2 for y in b]))/(len(a) + len(b) - 1)
+	crit_q= abs(a_mean - b_mean)/np.sqrt(S2 * 2 / (len(a) + len(b)))
+	q = abs(a_mean - b_mean)/np.sqrt(MS_within / (len(a) + len(b)))
+	return q
+
+def tukey_multicomparison(*args):
+	comparison_dict = {}
+	for i in range(len(args)-1):
+		for j in range(i+1, len(args)):
+			comparison_dict["group "+ str(i+1) + " and group " + str(j+1)] = tukey_pairwise_comparison(args[i], args[j])
+	return comparison_dict
