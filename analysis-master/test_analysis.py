@@ -149,7 +149,7 @@ def test_sort():
 
 def test_statisticaltest():
 	
-	print(StatisticalTest.tukey_multicomparison([test_data_linear, test_data_linear2, test_data_linear3]))
+	#print(StatisticalTest.tukey_multicomparison([test_data_linear, test_data_linear2, test_data_linear3]))
 	assert StatisticalTest.tukey_multicomparison([test_data_linear, test_data_linear2, test_data_linear3]) == \
 		{'group 1 and group 2': [0.32571517201527916, False], 'group 1 and group 3': [0.977145516045838, False], 'group 2 and group 3': [0.6514303440305589, False]}
 	#assert all(np.isclose([i[0] for i in list(StatisticalTest.tukey_multicomparison([test_data_linear, test_data_linear2, test_data_linear3]).values],
