@@ -107,18 +107,12 @@ def test_knn():
 
 def test_naivebayes():
 
-	model, metric = NaiveBayes.gaussian(test_data_2D_pairs, test_labels_2D_pairs)
-	assert isinstance(model, sklearn.naive_bayes.GaussianNB)
-	assert metric[0].all() == np.array([[0, 0], [2, 0]]).all()
-	model, metric = NaiveBayes.multinomial(test_data_2D_positive, test_labels_2D_pairs)
-	assert isinstance(model, sklearn.naive_bayes.MultinomialNB)
-	assert metric[0].all() == np.array([[0, 0], [2, 0]]).all()
-	model, metric = NaiveBayes.bernoulli(test_data_2D_pairs, test_labels_2D_pairs)
-	assert isinstance(model, sklearn.naive_bayes.BernoulliNB)
-	assert metric[0].all() == np.array([[0, 0], [2, 0]]).all()
-	model, metric = NaiveBayes.complement(test_data_2D_positive, test_labels_2D_pairs)
-	assert isinstance(model, sklearn.naive_bayes.ComplementNB)
-	assert metric[0].all() == np.array([[0, 0], [2, 0]]).all()
+	modules = [NaiveBayes.gaussian, NaiveBayes.multinomial, NaiveBayes.bernoulli, NaiveBayes.complement]
+	sklearns = [sklearn.naive_bayes.GaussianNB, sklearn.naive_bayes.MultinomialNB, sklearn.naive_bayes.BernoulliNB, sklearn.naive_bayes.ComplementNB]
+	for m1, m2 in zip(modules, sklearns):
+		model, metric = m1(test_data_2D_pairs, test_labels_2D_pairs)
+		assert isinstance(model, m2)
+		assert metric[0].all() == np.array([[0, 0], [2, 0]]).all()
 
 def test_randomforest():
 
@@ -134,18 +128,9 @@ def test_regressionmetric():
 	assert RegressionMetric(test_data_linear, test_data_linear2)== (0.7705314009661837, 3.8, 1.9493588689617927)
 
 def test_sort():
-
-	assert all(a == b for a, b in zip(Sort.quicksort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(Sort.mergesort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(Sort.heapsort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(Sort.introsort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(Sort.insertionsort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(Sort.timsort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(Sort.selectionsort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(Sort.shellsort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(Sort.bubblesort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(Sort.cyclesort(test_data_scrambled), test_data_sorted))
-	assert all(a == b for a, b in zip(Sort.cocktailsort(test_data_scrambled), test_data_sorted))
+	sorts = [Sort.quicksort, Sort.mergesort, Sort.heapsort, Sort.introsort, Sort.insertionsort, Sort.timsort, Sort.selectionsort, Sort.shellsort, Sort.bubblesort, Sort.cyclesort, Sort.cocktailsort]
+	for sort in sorts:
+		assert all(a == b for a, b in zip(sort(test_data_scrambled), test_data_sorted))
 
 def test_statisticaltest():
 	
@@ -193,44 +178,47 @@ def test_svm():
 def test_equation():
 
 	parser = BNF()
-
-	assert parser.eval("9") == 9.0
-	assert parser.eval("-9") == -9.0
-	assert parser.eval("--9") == 9.0
-	assert parser.eval("-E") == -2.718281828459045
-	assert parser.eval("9 + 3 + 6") == 18.0
-	assert parser.eval("9 + 3 / 11") == 9.272727272727273
-	assert parser.eval("(9 + 3)") == 12.0
-	assert parser.eval("(9+3) / 11") == 1.0909090909090908
-	assert parser.eval("9 - 12 - 6") == -9.0
-	assert parser.eval("9 - (12 - 6)") == 3.0
-	assert parser.eval("2*3.14159") == 6.28318
-	assert parser.eval("3.1415926535*3.1415926535 / 10") == 0.9869604400525172
-	assert parser.eval("PI * PI / 10") == 0.9869604401089358
-	assert parser.eval("PI*PI/10") == 0.9869604401089358
-	assert parser.eval("PI^2") == 9.869604401089358
-	assert parser.eval("round(PI^2)") == 10
-	assert parser.eval("6.02E23 * 8.048") == 4.844896e+24
-	assert parser.eval("e / 3") == 0.9060939428196817
-	assert parser.eval("sin(PI/2)") == 1.0
-	assert parser.eval("10+sin(PI/4)^2") == 10.5
-	assert parser.eval("trunc(E)") == 2
-	assert parser.eval("trunc(-E)") == -2
-	assert parser.eval("round(E)") == 3
-	assert parser.eval("round(-E)") == -3
-	assert parser.eval("E^PI") == 23.140692632779263
-	assert parser.eval("exp(0)") == 1.0
-	assert parser.eval("exp(1)") == 2.718281828459045
-	assert parser.eval("2^3^2") == 512.0
-	assert parser.eval("(2^3)^2") == 64.0
-	assert parser.eval("2^3+2") == 10.0
-	assert parser.eval("2^3+5") == 13.0
-	assert parser.eval("2^9") == 512.0
-	assert parser.eval("sgn(-2)") == -1
-	assert parser.eval("sgn(0)") == 0
-	assert parser.eval("sgn(0.1)") == 1
-	assert parser.eval("sgn(cos(PI/4))") == 1
-	assert parser.eval("sgn(cos(PI/2))") == 0
-	assert parser.eval("sgn(cos(PI*3/4))") == -1
-	assert parser.eval("+(sgn(cos(PI/4)))") == 1
-	assert parser.eval("-(sgn(cos(PI/4)))") == -1
+	correctParse = {
+		"9": 9.0,
+		"-9": -9.0,
+		"--9": 9.0,
+		"-E": -2.718281828459045,
+		"9 + 3 + 6": 18.0,
+		"9 + 3 / 11": 9.272727272727273,
+		"(9 + 3)": 12.0,
+		"(9+3) / 11": 1.0909090909090908,
+		"9 - 12 - 6": -9.0,
+		"9 - (12 - 6)": 3.0,
+		"2*3.14159": 6.28318,
+		"3.1415926535*3.1415926535 / 10": 0.9869604400525172,
+		"PI * PI / 10": 0.9869604401089358,
+		"PI*PI/10": 0.9869604401089358,
+		"PI^2": 9.869604401089358,
+		"round(PI^2)": 10,
+		"6.02E23 * 8.048": 4.844896e+24,
+		"e / 3": 0.9060939428196817,
+		"sin(PI/2)": 1.0,
+		"10+sin(PI/4)^2": 10.5,
+		"trunc(E)": 2,
+		"trunc(-E)": -2,
+		"round(E)": 3,
+		"round(-E)": -3,
+		"E^PI": 23.140692632779263,
+		"exp(0)": 1.0,
+		"exp(1)": 2.718281828459045,
+		"2^3^2": 512.0,
+		"(2^3)^2": 64.0,
+		"2^3+2": 10.0,
+		"2^3+5": 13.0,
+		"2^9": 512.0,
+		"sgn(-2)": -1,
+		"sgn(0)": 0,
+		"sgn(0.1)": 1,
+		"sgn(cos(PI/4))": 1,
+		"sgn(cos(PI/2))": 0,
+		"sgn(cos(PI*3/4))": -1,
+		"+(sgn(cos(PI/4)))": 1,
+		"-(sgn(cos(PI/4)))": -1,
+	}
+	for key in list(correctParse.keys()):
+		assert parser.eval(key) == correctParse[key]
