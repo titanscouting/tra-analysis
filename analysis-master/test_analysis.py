@@ -107,12 +107,21 @@ def test_knn():
 
 def test_naivebayes():
 
-	modules = [NaiveBayes.gaussian, NaiveBayes.multinomial, NaiveBayes.bernoulli, NaiveBayes.complement]
-	sklearns = [sklearn.naive_bayes.GaussianNB, sklearn.naive_bayes.MultinomialNB, sklearn.naive_bayes.BernoulliNB, sklearn.naive_bayes.ComplementNB]
-	for m1, m2 in zip(modules, sklearns):
-		model, metric = m1(test_data_2D_pairs, test_labels_2D_pairs)
-		assert isinstance(model, m2)
-		assert metric[0].all() == np.array([[0, 0], [2, 0]]).all()
+	model, metric = NaiveBayes.gaussian(test_data_2D_pairs, test_labels_2D_pairs)
+	assert isinstance(model, sklearn.naive_bayes.GaussianNB)
+	assert metric[0].all() == np.array([[0, 0], [2, 0]]).all()
+
+	model, metric = NaiveBayes.multinomial(test_data_2D_positive, test_labels_2D_pairs)
+	assert isinstance(model, sklearn.naive_bayes.MultinomialNB)
+	assert metric[0].all() == np.array([[0, 0], [2, 0]]).all()
+
+	model, metric = NaiveBayes.bernoulli(test_data_2D_pairs, test_labels_2D_pairs)
+	assert isinstance(model, sklearn.naive_bayes.BernoulliNB)
+	assert metric[0].all() == np.array([[0, 0], [2, 0]]).all()
+
+	model, metric = NaiveBayes.complement(test_data_2D_positive, test_labels_2D_pairs)
+	assert isinstance(model, sklearn.naive_bayes.ComplementNB)
+	assert metric[0].all() == np.array([[0, 0], [2, 0]]).all()
 
 def test_randomforest():
 
