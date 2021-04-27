@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "3.0.0-rc2"
+__version__ = "3.0.0"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	3.0.0:
+		- incremented version to release 3.0.0
 	3.0.0-rc2:
 		- fixed __changelog__
 		- fixed __all__ of Analysis, Array, ClassificationMetric, CorrelationTest, RandomForest, Sort, SVM
