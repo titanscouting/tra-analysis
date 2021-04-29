@@ -4,10 +4,12 @@
 #   this module is cuda-optimized (as appropriate) and vectorized (except for one small part)
 # setup:
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 # changelog should be viewed using print(analysis.fits.__changelog__)
 __changelog__ = """changelog:
+	0.0.2:
+		- renamed module to Fit
 	0.0.1:
 		- initial release, add circle fitting with LSC
 """
