@@ -22,7 +22,6 @@ setuptools.setup(
 	classifiers=[
 		"Programming Language :: Python :: 3",
 		"Operating System :: OS Independent",
-		"Topic :: Data Analysis"
 	],
 	python_requires='>=3.6',
 	keywords="data analysis tools"
