@@ -7,10 +7,14 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "3.0.0"
+__version__ = "4.0.0-dev"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	4.0.0:
+		- deprecated all *_obj.py compatibility modules
+		- deprecated titanlearn.py
+		- deprecated visualization.py
 	3.0.0:
 		- incremented version to release 3.0.0
 	3.0.0-rc2:
@@ -53,7 +57,6 @@ __all__ = [
 ]
 
 from . import Analysis as Analysis
-from . import Analysis as analysis
 from .Array import Array
 from .ClassificationMetric import ClassificationMetric
 from . import CorrelationTest
