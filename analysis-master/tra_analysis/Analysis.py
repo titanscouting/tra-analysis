@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "3.0.2"
+__version__ = "3.0.3"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	3.0.3:
+		- fixed spelling of deprecate
 	3.0.2:
 		- fixed __all__
 	3.0.1:
@@ -58,7 +60,7 @@ __changelog__ = """changelog:
 			- cycle sort
 			- cocktail sort
 		- tested all sorting algorithms with both lists and numpy arrays
-		- depreciated sort function from Array class
+		- deprecated sort function from Array class
 		- added warnings as an import
 	2.1.4:
 		- added sort and search functions to Array class
@@ -136,7 +138,7 @@ __changelog__ = """changelog:
 	1.12.4:
 		- renamed gliko to glicko
 	1.12.3:
-		- removed depreciated code
+		- removed deprecated code
 	1.12.2:
 		- removed team first time trueskill instantiation in favor of integration in superscript.py
 	1.12.1:
@@ -248,10 +250,10 @@ __changelog__ = """changelog:
 	1.0.0:
 		- removed c_entities,nc_entities,obstacles,objectives from __all__
 		- applied numba.jit to all functions
-		- depreciated and removed stdev_z_split
+		- deprecated and removed stdev_z_split
 		- cleaned up histo_analysis to include numpy and numba.jit optimizations
-		- depreciated and removed all regression functions in favor of future pytorch optimizer
-		- depreciated and removed all nonessential functions (basic_analysis, benchmark, strip_data)
+		- deprecated and removed all regression functions in favor of future pytorch optimizer
+		- deprecated and removed all nonessential functions (basic_analysis, benchmark, strip_data)
 		- optimized z_normalize using sklearn.preprocessing.normalize
 		- TODO: implement kernel/function based pytorch regression optimizer
 	0.9.0:
@@ -270,8 +272,8 @@ __changelog__ = """changelog:
 		- refactors
 		- bugfixes
 	0.8.0:
-		- depreciated histo_analysis_old
-		- depreciated debug
+		- deprecated histo_analysis_old
+		- deprecated debug
 		- altered basic_analysis to take array data instead of filepath
 		- refactor
 		- optimization
@@ -319,7 +321,7 @@ __changelog__ = """changelog:
 	0.3.5:
 		- major bug fixes
 		- updated historical analysis
-		- depreciated old historical analysis
+		- deprecated old historical analysis
 	0.3.4:
 		- added __version__, __author__, __all__
 		- added polynomial regression
