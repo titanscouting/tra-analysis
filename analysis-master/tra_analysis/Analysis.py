@@ -599,7 +599,7 @@ def npmin(data):
 def npmax(data):
 
 	return np.amax(data)
-
+""" need to decide what to do with this function
 def kmeans(data, n_clusters=8, init="k-means++", n_init=10, max_iter=300, tol=0.0001, precompute_distances="auto", verbose=0, random_state=None, copy_x=True, n_jobs=None, algorithm="auto"):
 
 	kernel = sklearn.cluster.KMeans(n_clusters = n_clusters, init = init, n_init = n_init, max_iter = max_iter, tol = tol, precompute_distances = precompute_distances, verbose = verbose, random_state = random_state, copy_x = copy_x, n_jobs = n_jobs, algorithm = algorithm)
@@ -608,7 +608,7 @@ def kmeans(data, n_clusters=8, init="k-means++", n_init=10, max_iter=300, tol=0.
 	centers = kernel.cluster_centers_
 
 	return centers, predictions
-
+"""
 def pca(data, n_components = None, copy = True, whiten = False, svd_solver = "auto", tol = 0.0, iterated_power = "auto", random_state = None):
 
 	kernel = sklearn.decomposition.PCA(n_components = n_components, copy = copy, whiten = whiten, svd_solver = svd_solver, tol = tol, iterated_power = iterated_power, random_state = random_state)
