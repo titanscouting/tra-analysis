@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "3.0.3"
+__version__ = "3.0.4"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	3.0.4:
+		- removed -_obj imports
 	3.0.3:
 		- fixed spelling of deprecate
 	3.0.2:
@@ -385,13 +387,7 @@ import warnings
 
 from .Array import Array
 from .ClassificationMetric import ClassificationMetric
-from .CorrelationTest_obj import CorrelationTest
-from .KNN_obj import KNN
-from .NaiveBayes_obj import NaiveBayes
-from .RandomForest_obj import RandomForest
 from .RegressionMetric import RegressionMetric
-from .Sort_obj import Sort
-from .StatisticalTest_obj import StatisticalTest
 from . import SVM
 
 class error(ValueError):
