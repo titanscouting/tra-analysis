@@ -15,6 +15,7 @@ __changelog__ = """changelog:
 		- deprecated all *_obj.py compatibility modules
 		- deprecated titanlearn.py
 		- deprecated visualization.py
+		- removed matplotlib from requirements
 	3.0.0:
 		- incremented version to release 3.0.0
 	3.0.0-rc2:

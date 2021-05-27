@@ -2,5 +2,4 @@ numpy
 scipy
 scikit-learn
 six
-matplotlib
 pyparsing
