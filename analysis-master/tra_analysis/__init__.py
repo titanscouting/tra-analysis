@@ -60,6 +60,7 @@ __all__ = [
 from . import Analysis as Analysis
 from .Array import Array
 from .ClassificationMetric import ClassificationMetric
+from . import Clustering
 from . import CorrelationTest
 from .equation import Expression
 from . import Fit
