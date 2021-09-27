@@ -5,6 +5,7 @@ from sklearn import metrics
 from tra_analysis import Analysis as an
 from tra_analysis import Array
 from tra_analysis import ClassificationMetric
+from tra_analysis import Clustering
 from tra_analysis import CorrelationTest
 from tra_analysis import Fit
 from tra_analysis import KNN
@@ -231,3 +232,17 @@ def test_equation():
 	}
 	for key in list(correctParse.keys()):
 		assert parser.eval(key) == correctParse[key]
+
+def test_clustering():
+
+	normalizer = sklearn.preprocessing.Normalizer()
+
+	data = X = np.array([[1, 2], [2, 2], [2, 3], [8, 7], [8, 8], [25, 80]])
+
+	assert Clustering.dbscan(data, eps=3, min_samples=2).tolist() == [0, 0, 0, 1, 1, -1]
+	assert Clustering.dbscan(data, normalizer=normalizer, eps=3, min_samples=2).tolist() == [0, 0, 0, 0, 0, 0]
+
+	data = np.array([[1, 1], [2, 1], [1, 0], [4, 7], [3, 5], [3, 6]])
+
+	assert Clustering.spectral(data, n_clusters=2, assign_labels='discretize', random_state=0).tolist() == [1, 1, 1, 0, 0, 0]
+	assert Clustering.spectral(data, normalizer=normalizer, n_clusters=2, assign_labels='discretize', random_state=0).tolist() == [0, 1, 1, 0, 0, 0]
