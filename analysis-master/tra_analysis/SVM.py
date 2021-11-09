@@ -4,9 +4,11 @@
 #    this should be imported as a python module using 'from tra_analysis import SVM'
 # setup:
 
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 
 __changelog__ = """changelog:
+	1.0.3:
+		- optimized imports
 	1.0.2: 
 		- fixed __all__
 	1.0.1:
@@ -30,7 +32,6 @@ __all__ = [
 ]
 
 import sklearn
-from sklearn import svm
 from . import ClassificationMetric, RegressionMetric
 
 class CustomKernel:

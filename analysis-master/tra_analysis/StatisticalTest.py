@@ -4,9 +4,11 @@
 #    this should be imported as a python module using 'from tra_analysis import StatisticalTest'
 # setup:
 
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 
 __changelog__ = """changelog:
+	1.0.3:
+		- optimized imports
 	1.0.2:
 		- added tukey_multicomparison
 		- fixed styling
@@ -61,7 +63,6 @@ __all__ = [
 
 import numpy as np
 import scipy
-from scipy import stats, interpolate
 
 def ttest_onesample(a, popmean, axis = 0, nan_policy = 'propagate'):
 
@@ -279,9 +280,9 @@ def get_tukeyQcrit(k, df, alpha=0.05):
 	cv001 = c[:, 2::2]
 
 	if alpha == 0.05:
-		intp = interpolate.interp1d(crows, cv005[:,k-2])
+		intp = scipy.interpolate.interp1d(crows, cv005[:,k-2])
 	elif alpha == 0.01:
-		intp = interpolate.interp1d(crows, cv001[:,k-2])
+		intp = scipy.interpolate.interp1d(crows, cv001[:,k-2])
 	else:
 		raise ValueError('only implemented for alpha equal to 0.01 and 0.05')
 	return intp(df)

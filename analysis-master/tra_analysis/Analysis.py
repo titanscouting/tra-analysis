@@ -7,10 +7,13 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "3.0.4"
+__version__ = "3.0.5"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	3.0.5:
+		- removed extra submodule imports
+		- fixed/optimized header
 	3.0.4:
 		- removed -_obj imports
 	3.0.3:
@@ -361,7 +364,6 @@ __all__ = [
 	'histo_analysis',
 	'regression',
 	'Metric',
-	'kmeans',
 	'pca',
 	'decisiontree',
 	# all statistics functions left out due to integration in other functions
@@ -374,21 +376,14 @@ __all__ = [
 import csv
 from tra_analysis.metrics import elo as Elo
 from tra_analysis.metrics import glicko2 as Glicko2
-import math
 import numpy as np
 import scipy
-from scipy import optimize, stats
-import sklearn
-from sklearn import preprocessing, pipeline, linear_model, metrics, cluster, decomposition, tree, neighbors, naive_bayes, svm, model_selection, ensemble
+import sklearn, sklearn.cluster
 from tra_analysis.metrics import trueskill as Trueskill
-import warnings
 
 # import submodules
 
-from .Array import Array
 from .ClassificationMetric import ClassificationMetric
-from .RegressionMetric import RegressionMetric
-from . import SVM
 
 class error(ValueError):
 	pass
@@ -599,16 +594,7 @@ def npmin(data):
 def npmax(data):
 
 	return np.amax(data)
-""" need to decide what to do with this function
-def kmeans(data, n_clusters=8, init="k-means++", n_init=10, max_iter=300, tol=0.0001, precompute_distances="auto", verbose=0, random_state=None, copy_x=True, n_jobs=None, algorithm="auto"):
 
-	kernel = sklearn.cluster.KMeans(n_clusters = n_clusters, init = init, n_init = n_init, max_iter = max_iter, tol = tol, precompute_distances = precompute_distances, verbose = verbose, random_state = random_state, copy_x = copy_x, n_jobs = n_jobs, algorithm = algorithm)
-	kernel.fit(data)
-	predictions = kernel.predict(data)
-	centers = kernel.cluster_centers_
-
-	return centers, predictions
-"""
 def pca(data, n_components = None, copy = True, whiten = False, svd_solver = "auto", tol = 0.0, iterated_power = "auto", random_state = None):
 
 	kernel = sklearn.decomposition.PCA(n_components = n_components, copy = copy, whiten = whiten, svd_solver = svd_solver, tol = tol, iterated_power = iterated_power, random_state = random_state)
