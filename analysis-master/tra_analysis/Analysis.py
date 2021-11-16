@@ -380,6 +380,7 @@ import numpy as np
 import scipy
 import sklearn, sklearn.cluster
 from tra_analysis.metrics import trueskill as Trueskill
+from tra_analysis.typedef import R, List, Dict
 
 # import submodules
 
@@ -388,15 +389,27 @@ from .ClassificationMetric import ClassificationMetric
 class error(ValueError):
 	pass
 
-def load_csv(filepath):
+def load_csv(filepath: str) -> np.ndarray:
+	"""
+	Loads csv file into 2D numpy array. Does not check csv file validity.
+	parameters:
+		filepath: String path to the csv file
+	return:
+		2D numpy array of values stored in csv file
+	"""
 	with open(filepath, newline='') as csvfile:
 		file_array = np.array(list(csv.reader(csvfile)))
 		csvfile.close()
 	return file_array
 
-# expects 1d array
-def basic_stats(data):
-
+def basic_stats(data: List[R]) -> Dict[str, R]:
+	"""
+	Calculates mean, median, standard deviation, variance, minimum, maximum of a simple set of elements
+	parameters:
+		data: List representing set of unordered elements
+	return:
+		Dictionary with (mean, median, standard-deviation, variance, minimum, maximum) as keys and corresponding values
+	"""
 	data_t = np.array(data).astype(float)
 
 	_mean = mean(data_t)
@@ -408,8 +421,16 @@ def basic_stats(data):
 
 	return {"mean": _mean, "median": _median, "standard-deviation": _stdev, "variance": _variance, "minimum": _min, "maximum": _max}
 
-# returns z score with inputs of point, mean and standard deviation of spread
-def z_score(point, mean, stdev):
+def z_score(point: R, mean: R, stdev: R) -> R:
+	"""
+	Calculates z score of a specific point given mean and standard deviation of data
+	parameters:
+		point: Real value corresponding to a single point of data
+		mean: Real value corresponding to the mean of the dataset
+		stdev: Real value corresponding to the standard deviation of the dataset
+	return:
+		Real value that is the point's z score
+	"""
 	score = (point - mean) / stdev
 	
 	return score
