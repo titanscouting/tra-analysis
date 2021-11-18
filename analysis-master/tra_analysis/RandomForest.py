@@ -4,9 +4,11 @@
 #    this should be imported as a python module using 'from tra_analysis import RandomForest'
 # setup:
 
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 
 __changelog__ = """changelog:
+	1.0.2:
+		- optimized imports
 	1.0.1:
 		- fixed __all__
 	1.0.0:
@@ -23,8 +25,7 @@ __all__ = [
 	"random_forest_regressor",
 ]
 
-import sklearn
-from sklearn import ensemble, model_selection
+import sklearn, sklearn.ensemble, sklearn.naive_bayes
 from . import ClassificationMetric, RegressionMetric
 
 def random_forest_classifier(data, labels, test_size, n_estimators, criterion="gini", max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features="auto", max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False, class_weight=None):

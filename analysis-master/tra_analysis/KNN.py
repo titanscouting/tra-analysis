@@ -4,9 +4,11 @@
 #    this should be imported as a python module using 'from tra_analysis import KNN'
 # setup:
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 __changelog__ = """changelog:
+	1.0.1:
+		- optimized imports
 	1.0.0:
 		- ported analysis.KNN() here
 		- removed classness
@@ -23,7 +25,6 @@ __all__ = [
 ]
 
 import sklearn
-from sklearn import model_selection, neighbors
 from . import ClassificationMetric, RegressionMetric
 
 def knn_classifier(data, labels, n_neighbors = 5, test_size = 0.3, algorithm='auto', leaf_size=30, metric='minkowski', metric_params=None, n_jobs=None, p=2, weights='uniform'): #expects *2d data and 1d labels post-scaling
