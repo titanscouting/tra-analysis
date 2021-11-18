@@ -7,10 +7,12 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "3.0.5"
+__version__ = "3.0.6"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	3.0.6:
+		- added docstrings
 	3.0.5:
 		- removed extra submodule imports
 		- fixed/optimized header
@@ -434,7 +436,6 @@ def z_score(point, mean, stdev):
 	
 	return score
 
-# expects 2d array, normalizes across all axes
 def z_normalize(array, *args):
 	"""
 	Applies sklearn.normalize(array, axis = args) on any arraylike parseable by numpy.
@@ -450,7 +451,6 @@ def z_normalize(array, *args):
 
 	return array
 
-# expects 2d array of [x,y]
 def histo_analysis(hist_data):
 	"""
 	Calculates the mean and standard deviation of derivatives of (x,y) points. Requires at least 2 points to compute.
