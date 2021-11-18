@@ -16,6 +16,8 @@ __changelog__ = """changelog:
 		- deprecated titanlearn.py
 		- deprecated visualization.py
 		- removed matplotlib from requirements
+		- removed extra submodule imports in Analysis
+		- added typehinting, docstrings for each function
 	3.0.0:
 		- incremented version to release 3.0.0
 	3.0.0-rc2:
@@ -45,6 +47,7 @@ __all__ = [
 	"Analysis",
 	"Array",
 	"ClassificationMetric",
+	"Clustering",
 	"CorrelationTest",
 	"Expression",
 	"Fit",

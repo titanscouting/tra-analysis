@@ -4,9 +4,11 @@
 #    this should be imported as a python module using 'from tra_analysis import NaiveBayes'
 # setup:
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 __changelog__ = """changelog:
+	1.0.1:
+		- optimized imports
 	1.0.0:
 		- ported analysis.NaiveBayes() here
 		- removed classness
@@ -24,8 +26,7 @@ __all__ = [
 ]
 
 import sklearn
-from sklearn import model_selection, naive_bayes
-from . import ClassificationMetric, RegressionMetric
+from . import ClassificationMetric
 
 def gaussian(data, labels, test_size = 0.3, priors = None, var_smoothing = 1e-09):
 
