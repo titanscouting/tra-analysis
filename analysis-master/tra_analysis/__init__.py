@@ -74,5 +74,3 @@ from .RegressionMetric import RegressionMetric
 from . import Sort
 from . import StatisticalTest
 from . import SVM
-
-from . import typedef
