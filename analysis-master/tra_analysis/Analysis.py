@@ -380,7 +380,7 @@ from tra_analysis.metrics import elo as Elo
 from tra_analysis.metrics import glicko2 as Glicko2
 import numpy as np
 import scipy
-import sklearn, sklearn.cluster
+import sklearn, sklearn.cluster, sklearn.pipeline
 from tra_analysis.metrics import trueskill as Trueskill
 
 # import submodules
