@@ -153,14 +153,9 @@ def test_sort():
 		assert all(a == b for a, b in zip(sort(test_data_scrambled), test_data_sorted))
 
 def test_statisticaltest():
-	
-	#print(StatisticalTest.tukey_multicomparison([test_data_linear, test_data_linear2, test_data_linear3]))
+
 	assert StatisticalTest.tukey_multicomparison([test_data_linear, test_data_linear2, test_data_linear3]) == \
 		{'group 1 and group 2': [0.32571517201527916, False], 'group 1 and group 3': [0.977145516045838, False], 'group 2 and group 3': [0.6514303440305589, False]}
-	#assert all(np.isclose([i[0] for i in list(StatisticalTest.tukey_multicomparison([test_data_linear, test_data_linear2, test_data_linear3]).values],
-	#	[0.32571517201527916, 0.977145516045838, 0.6514303440305589]))
-	#assert [i[1] for i in StatisticalTest.tukey_multicomparison([test_data_linear, test_data_linear2, test_data_linear3]).values] == \
-	#	[False, False, False]
 
 def test_svm():
 
