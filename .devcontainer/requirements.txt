@@ -3,3 +3,6 @@ scipy
 scikit-learn
 six
 pyparsing
+
+pylint
+pytest
