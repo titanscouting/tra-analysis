@@ -4,9 +4,13 @@
 #    this should be imported as a python module using 'from tra_analysis import CorrelationTest'
 # setup:
 
-__version__ = "1.0.1"
+__version__ = "1.0.3"
 
 __changelog__ = """changelog:
+	1.0.3:
+		- generalized optional args to **kwargs
+	1.0.2:
+		- optimized imports
 	1.0.1:
 		- fixed __all__
 	1.0.0:
@@ -29,7 +33,6 @@ __all__ = [
 ]
 
 import scipy
-from scipy import stats
 
 def anova_oneway(*args): #expects arrays of samples
 
@@ -41,9 +44,9 @@ def pearson(x, y):
 	results = scipy.stats.pearsonr(x, y)
 	return {"r-value": results[0], "p-value": results[1]}
 
-def spearman(a, b = None, axis = 0, nan_policy = 'propagate'):
+def spearman(a, b = None, **kwargs):
 
-	results = scipy.stats.spearmanr(a, b = b, axis = axis, nan_policy = nan_policy)
+	results = scipy.stats.spearmanr(a, b = b, **kwargs)
 	return {"r-value": results[0], "p-value": results[1]}
 
 def point_biserial(x, y):
@@ -51,17 +54,17 @@ def point_biserial(x, y):
 	results = scipy.stats.pointbiserialr(x, y)
 	return {"r-value": results[0], "p-value": results[1]}
 
-def kendall(x, y, initial_lexsort = None, nan_policy = 'propagate', method = 'auto'):
+def kendall(x, y, **kwargs):
 
-	results = scipy.stats.kendalltau(x, y, initial_lexsort = initial_lexsort, nan_policy = nan_policy, method = method)
+	results = scipy.stats.kendalltau(x, y, **kwargs)
 	return {"tau": results[0], "p-value": results[1]}
 
-def kendall_weighted(x, y, rank = True, weigher = None, additive = True):
+def kendall_weighted(x, y, **kwargs):
 
-	results = scipy.stats.weightedtau(x, y, rank = rank, weigher = weigher, additive = additive)
+	results = scipy.stats.weightedtau(x, y, **kwargs)
 	return {"tau": results[0], "p-value": results[1]}
 
-def mgc(x, y, compute_distance = None, reps = 1000, workers = 1, is_twosamp = False, random_state = None):
+def mgc(x, y, **kwargs):
 
-	results = scipy.stats.multiscale_graphcorr(x, y, compute_distance = compute_distance, reps = reps, workers = workers, is_twosamp = is_twosamp, random_state = random_state)
+	results = scipy.stats.multiscale_graphcorr(x, y, **kwargs)
 	return {"k-value": results[0], "p-value": results[1], "data": results[2]} # unsure if MGC test returns a k value

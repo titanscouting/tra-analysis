@@ -7,10 +7,19 @@
 #    current benchmark of optimization: 1.33 times faster
 # setup:
 
-__version__ = "3.0.2"
+__version__ = "3.0.6"
 
 # changelog should be viewed using print(analysis.__changelog__)
 __changelog__ = """changelog:
+	3.0.6:
+		- added docstrings
+	3.0.5:
+		- removed extra submodule imports
+		- fixed/optimized header
+	3.0.4:
+		- removed -_obj imports
+	3.0.3:
+		- fixed spelling of deprecate
 	3.0.2:
 		- fixed __all__
 	3.0.1:
@@ -58,7 +67,7 @@ __changelog__ = """changelog:
 			- cycle sort
 			- cocktail sort
 		- tested all sorting algorithms with both lists and numpy arrays
-		- depreciated sort function from Array class
+		- deprecated sort function from Array class
 		- added warnings as an import
 	2.1.4:
 		- added sort and search functions to Array class
@@ -136,7 +145,7 @@ __changelog__ = """changelog:
 	1.12.4:
 		- renamed gliko to glicko
 	1.12.3:
-		- removed depreciated code
+		- removed deprecated code
 	1.12.2:
 		- removed team first time trueskill instantiation in favor of integration in superscript.py
 	1.12.1:
@@ -248,10 +257,10 @@ __changelog__ = """changelog:
 	1.0.0:
 		- removed c_entities,nc_entities,obstacles,objectives from __all__
 		- applied numba.jit to all functions
-		- depreciated and removed stdev_z_split
+		- deprecated and removed stdev_z_split
 		- cleaned up histo_analysis to include numpy and numba.jit optimizations
-		- depreciated and removed all regression functions in favor of future pytorch optimizer
-		- depreciated and removed all nonessential functions (basic_analysis, benchmark, strip_data)
+		- deprecated and removed all regression functions in favor of future pytorch optimizer
+		- deprecated and removed all nonessential functions (basic_analysis, benchmark, strip_data)
 		- optimized z_normalize using sklearn.preprocessing.normalize
 		- TODO: implement kernel/function based pytorch regression optimizer
 	0.9.0:
@@ -270,8 +279,8 @@ __changelog__ = """changelog:
 		- refactors
 		- bugfixes
 	0.8.0:
-		- depreciated histo_analysis_old
-		- depreciated debug
+		- deprecated histo_analysis_old
+		- deprecated debug
 		- altered basic_analysis to take array data instead of filepath
 		- refactor
 		- optimization
@@ -319,7 +328,7 @@ __changelog__ = """changelog:
 	0.3.5:
 		- major bug fixes
 		- updated historical analysis
-		- depreciated old historical analysis
+		- deprecated old historical analysis
 	0.3.4:
 		- added __version__, __author__, __all__
 		- added polynomial regression
@@ -357,7 +366,6 @@ __all__ = [
 	'histo_analysis',
 	'regression',
 	'Metric',
-	'kmeans',
 	'pca',
 	'decisiontree',
 	# all statistics functions left out due to integration in other functions
@@ -370,40 +378,39 @@ __all__ = [
 import csv
 from tra_analysis.metrics import elo as Elo
 from tra_analysis.metrics import glicko2 as Glicko2
-import math
 import numpy as np
 import scipy
-from scipy import optimize, stats
-import sklearn
-from sklearn import preprocessing, pipeline, linear_model, metrics, cluster, decomposition, tree, neighbors, naive_bayes, svm, model_selection, ensemble
+import sklearn, sklearn.cluster, sklearn.pipeline
 from tra_analysis.metrics import trueskill as Trueskill
-import warnings
 
 # import submodules
 
-from .Array import Array
 from .ClassificationMetric import ClassificationMetric
-from .CorrelationTest_obj import CorrelationTest
-from .KNN_obj import KNN
-from .NaiveBayes_obj import NaiveBayes
-from .RandomForest_obj import RandomForest
-from .RegressionMetric import RegressionMetric
-from .Sort_obj import Sort
-from .StatisticalTest_obj import StatisticalTest
-from . import SVM
 
 class error(ValueError):
 	pass
 
 def load_csv(filepath):
+	"""
+	Loads csv file into 2D numpy array. Does not check csv file validity.
+	parameters:
+		filepath: String path to the csv file
+	return:
+		2D numpy array of values stored in csv file
+	"""
 	with open(filepath, newline='') as csvfile:
 		file_array = np.array(list(csv.reader(csvfile)))
 		csvfile.close()
 	return file_array
 
-# expects 1d array
 def basic_stats(data):
-
+	"""
+	Calculates mean, median, standard deviation, variance, minimum, maximum of a simple set of elements.
+	parameters:
+		data: List representing set of unordered elements
+	return:
+		Dictionary with (mean, median, standard-deviation, variance, minimum, maximum) as keys and corresponding values
+	"""
 	data_t = np.array(data).astype(float)
 
 	_mean = mean(data_t)
@@ -415,24 +422,43 @@ def basic_stats(data):
 
 	return {"mean": _mean, "median": _median, "standard-deviation": _stdev, "variance": _variance, "minimum": _min, "maximum": _max}
 
-# returns z score with inputs of point, mean and standard deviation of spread
 def z_score(point, mean, stdev):
+	"""
+	Calculates z score of a specific point given mean and standard deviation of data.
+	parameters:
+		point: Real value corresponding to a single point of data
+		mean: Real value corresponding to the mean of the dataset
+		stdev: Real value corresponding to the standard deviation of the dataset
+	return:
+		Real value that is the point's z score
+	"""
 	score = (point - mean) / stdev
 	
 	return score
 
-# expects 2d array, normalizes across all axes
 def z_normalize(array, *args):
-
+	"""
+	Applies sklearn.normalize(array, axis = args) on any arraylike parseable by numpy.
+	parameters:
+		array: array like structure of reals aka nested indexables
+		*args: arguments relating to axis normalized against
+	return:
+		numpy array of normalized values from ArrayLike input
+	"""
 	array = np.array(array)
 	for arg in args:
 		array = sklearn.preprocessing.normalize(array, axis = arg)
 
 	return array
 
-# expects 2d array of [x,y]
 def histo_analysis(hist_data):
-
+	"""
+	Calculates the mean and standard deviation of derivatives of (x,y) points. Requires at least 2 points to compute.
+	parameters:
+		hist_data: list of real coordinate point data (x, y)
+	return:
+		Dictionary with (mean, deviation) as keys to corresponding values
+	"""
 	if len(hist_data[0]) > 2:
 
 		hist_data = np.array(hist_data)
@@ -448,7 +474,15 @@ def histo_analysis(hist_data):
 		return None
 
 def regression(inputs, outputs, args): # inputs, outputs expects N-D array 
-
+	"""
+	Applies specified regression kernels onto input, output data pairs.
+	parameters:
+		inputs: List of Reals representing independent variable values of each point
+		outputs: List of Reals representing dependent variable values of each point
+		args: List of Strings from values (lin, log, exp, ply, sig)
+	return:
+		Dictionary with keys (lin, log, exp, ply, sig) as keys to correspondiong regression models
+	"""
 	X = np.array(inputs)
 	y = np.array(outputs)
 
@@ -552,13 +586,39 @@ def regression(inputs, outputs, args): # inputs, outputs expects N-D array
 	return regressions
 
 class Metric:
-
+	"""
+	The metric class wraps the metrics models. Call without instantiation as Metric.<method>(...)
+	"""
 	def elo(self, starting_score, opposing_score, observed, N, K):
-
+		"""
+		Calculates an elo adjusted ELO score given a player's current score, opponent's score, and outcome of match.
+		reference: https://en.wikipedia.org/wiki/Elo_rating_system
+		parameters:
+			starting_score: Real value representing player's ELO score before a match
+			opposing_score: Real value representing opponent's score before the match
+			observed: Array of Real values representing multiple sequential match outcomes against the same opponent. 1 for match win, 0.5 for tie, 0 for loss.
+			N: Real value representing the normal or mean score expected (usually 1200)
+			K: R eal value representing a system constant, determines how quickly players will change scores (usually 24)
+		return:
+			Real value representing the player's new ELO score
+		"""
 		return Elo.calculate(starting_score, opposing_score, observed, N, K)
 
 	def glicko2(self, starting_score, starting_rd, starting_vol, opposing_score, opposing_rd, observations):
-
+		"""
+		Calculates an adjusted Glicko-2 score given a player's current score, multiple opponent's score, and outcome of several matches.
+		reference: http://www.glicko.net/glicko/glicko2.pdf
+		parameters:
+			starting_score: Real value representing the player's Glicko-2 score
+			starting_rd: Real value representing the player's RD
+			starting_vol: Real value representing the player's volatility
+			opposing_score: List of Real values representing multiple opponent's Glicko-2 scores
+			opposing_rd: List of Real values representing multiple opponent's RD
+			opposing_vol: List of Real values representing multiple opponent's volatility
+			observations: List of Real values representing the outcome of several matches, where each match's opponent corresponds with the opposing_score, opposing_rd, opposing_vol values of the same indesx. Outcomes can be a score, presuming greater score is better. 
+		return:
+			Tuple of 3 Real values representing the player's new score, rd, and vol
+		"""
 		player = Glicko2.Glicko2(rating = starting_score, rd = starting_rd, vol = starting_vol)
 
 		player.update_player([x for x in opposing_score], [x for x in opposing_rd], observations)
@@ -566,7 +626,15 @@ class Metric:
 		return (player.rating, player.rd, player.vol)
 
 	def trueskill(self, teams_data, observations): # teams_data is array of array of tuples ie. [[(mu, sigma), (mu, sigma), (mu, sigma)], [(mu, sigma), (mu, sigma), (mu, sigma)]]
-
+		"""
+		Calculates the score changes for multiple teams playing in a single match accoding to the trueskill algorithm.
+		reference: https://trueskill.org/
+		parameters:
+			teams_data: List of List of Tuples of 2 Real values representing multiple player ratings. List of teams, which is a List of players. Each player rating is a Tuple of 2 Real values (mu, sigma).
+			observations: List of Real values representing the match outcome. Each value in the List is the score corresponding to the team at the same index in teams_data.
+		return:
+			List of List of Tuples of 2 Real values representing new player ratings. Same structure as teams_data. 
+		"""
 		team_ratings = []
 
 		for team in teams_data:
@@ -602,23 +670,31 @@ def npmax(data):
 
 	return np.amax(data)
 
-def kmeans(data, n_clusters=8, init="k-means++", n_init=10, max_iter=300, tol=0.0001, precompute_distances="auto", verbose=0, random_state=None, copy_x=True, n_jobs=None, algorithm="auto"):
-
-	kernel = sklearn.cluster.KMeans(n_clusters = n_clusters, init = init, n_init = n_init, max_iter = max_iter, tol = tol, precompute_distances = precompute_distances, verbose = verbose, random_state = random_state, copy_x = copy_x, n_jobs = n_jobs, algorithm = algorithm)
-	kernel.fit(data)
-	predictions = kernel.predict(data)
-	centers = kernel.cluster_centers_
-
-	return centers, predictions
-
 def pca(data, n_components = None, copy = True, whiten = False, svd_solver = "auto", tol = 0.0, iterated_power = "auto", random_state = None):
-
+	"""
+	Performs a principle component analysis on the input data.
+	reference: https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
+	parameters:
+		data: Arraylike of Reals representing the set of data to perform PCA on
+		* : refer to reference for usage, parameters follow same usage
+	return:
+		Arraylike of Reals representing the set of data that has had PCA performed. The dimensionality of the Arraylike may be smaller or equal. 
+	"""
 	kernel = sklearn.decomposition.PCA(n_components = n_components, copy = copy, whiten = whiten, svd_solver = svd_solver, tol = tol, iterated_power = iterated_power, random_state = random_state)
 
 	return kernel.fit_transform(data)
 
 def decisiontree(data, labels, test_size = 0.3, criterion = "gini", splitter = "default", max_depth = None): #expects *2d data and 1d labels
-
+	"""
+	Generates a decision tree classifier fitted to the given data. 
+	reference: https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html
+	parameters:
+		data: List of values representing each data point of multiple axes
+		labels: List of values represeing the labels corresponding to the same index at data
+		* : refer to reference for usage, parameters follow same usage
+	return:
+		DecisionTreeClassifier model and corresponding classification accuracy metrics
+	"""
 	data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(data, labels, test_size=test_size, random_state=1)
 	model = sklearn.tree.DecisionTreeClassifier(criterion = criterion, splitter = splitter, max_depth = max_depth)
 	model = model.fit(data_train,labels_train)

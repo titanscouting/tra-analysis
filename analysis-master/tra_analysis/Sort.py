@@ -16,7 +16,7 @@ __changelog__ = """changelog:
 
 __author__ = (
 	"Arthur Lu <learthurgo@gmail.com>",
-	"James Pan <zpan@imsa.edu>"
+	"James Pan <zpan@imsa.edu>",
 )
 
 __all__ = [

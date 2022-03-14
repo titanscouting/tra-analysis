@@ -4,9 +4,11 @@
 #    this should be imported as a python module using 'from tra_analysis import ClassificationMetric'
 # setup:
 
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 
 __changelog__ = """changelog:
+	1.0.2:
+		- optimized imports
 	1.0.1:
 		- fixed __all__
 	1.0.0:
@@ -22,7 +24,6 @@ __all__ = [
 ]
 
 import sklearn
-from sklearn import metrics
 
 class ClassificationMetric():
 

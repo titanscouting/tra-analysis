@@ -4,9 +4,11 @@
 #    this should be imported as a python module using 'from tra_analysis import Array'
 # setup:
 
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 
 __changelog__ = """changelog:
+	1.0.4:
+		- fixed spelling of deprecate
 	1.0.3:
 		- fixed __all__
 	1.0.2:
@@ -135,8 +137,8 @@ class Array(): # tests on nd arrays independent of basic_stats
 
 		return Array(np.transpose(self.array))
 
-	def sort(self, array): # depreciated
-		warnings.warn("Array.sort has been depreciated in favor of Sort")
+	def sort(self, array): # deprecated
+		warnings.warn("Array.sort has been deprecated in favor of Sort")
 		array_length = len(array)
 		if array_length <= 1:
 			return array

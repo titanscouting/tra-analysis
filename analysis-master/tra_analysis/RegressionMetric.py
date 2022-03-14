@@ -4,9 +4,11 @@
 #    this should be imported as a python module using 'from tra_analysis import RegressionMetric'
 # setup:
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 __changelog__ = """changelog:
+	1.0.1:
+		- optimized imports
 	1.0.0:
 		- ported analysis.RegressionMetric() here
 """
@@ -21,7 +23,6 @@ __all__ = [
 
 import numpy as np
 import sklearn
-from sklearn import metrics
 
 class RegressionMetric():
 
